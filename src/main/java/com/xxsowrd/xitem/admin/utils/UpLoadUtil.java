@@ -2,11 +2,9 @@ package com.xxsowrd.xitem.admin.utils;
 
 import com.xxsowrd.xitem.admin.config.SystemConfig;
 import com.xxsowrd.xitem.admin.constant.Constant;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.boot.system.ApplicationHome;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.util.ResourceUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -14,7 +12,6 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.*;
-import java.net.URL;
 import java.net.URLEncoder;
 import java.nio.file.Files;
 import java.util.*;
@@ -26,9 +23,8 @@ import java.util.concurrent.ConcurrentHashMap;
  * @author songJian
  * @version 2018-3-29
  */
+@Slf4j
 public class UpLoadUtil {
-
-    private static final Logger logger = LoggerFactory.getLogger(UpLoadUtil.class);
 
     private static final String PATH_INFO = "/fileinfo";// 所有文件路径都会加的前缀，用作nginx转发可以减轻java压力
 
@@ -148,7 +144,7 @@ public class UpLoadUtil {
         try {
             String pathStr = ResourceUtils.getURL("").getPath() + PATH_INFO;
             Utils.hasFolder(pathStr);
-            logger.debug("uploadPath:" + pathStr);
+            log.debug("uploadPath:" + pathStr);
             return pathStr.replaceAll("\\\\", "/");
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
@@ -167,7 +163,7 @@ public class UpLoadUtil {
         } else if (type == 2) {
             String path = SystemConfig.getProperty("filepath.path") + PATH_INFO;
             Utils.hasFolder(path);
-            logger.debug("uploadPath:" + path);
+            log.debug("uploadPath:" + path);
             return path.replaceAll("\\\\", "/");
         }
         return getDPath();
@@ -191,7 +187,7 @@ public class UpLoadUtil {
         String fname = file.getOriginalFilename().toLowerCase();
         if (!Constant.COMPRESS_EX.toLowerCase().contains(FilenameUtils.getExtension(fname).toLowerCase())) {// 只允许上传指定文件
             map.put("info", 3);
-            logger.error("上传的文件格式，不是允许的格式:{}", FilenameUtils.getExtension(fname));
+            log.error("上传的文件格式，不是允许的格式:{}", FilenameUtils.getExtension(fname));
             return map;
         }
         String uuid = request.getParameter("uuid");// 上传站点标识，用于区分各站点，以便判断文件合并信息
@@ -211,7 +207,7 @@ public class UpLoadUtil {
         Integer chunk = Integer.valueOf(chunkStr);// 第几片
         int chunks = Integer.parseInt(chunksStr);// 一共分了几片
         String fileid = request.getParameter("id").toLowerCase();// 文件id（文件分片上传的时候，文件id是一样的，同一个站点不会有相同文件id，但是不同站点的id可能会相同）
-        logger.info("uuid:{},chunk:{},chunks:{}", uuid, chunk, chunks);
+        log.info("uuid:{},chunk:{},chunks:{}", uuid, chunk, chunks);
         String suffix = "";
         if (!file.isEmpty()) {
             String oldfilename = file.getOriginalFilename();
@@ -227,19 +223,19 @@ public class UpLoadUtil {
                         files.add(chunkFile);
                     }
                 }
-                logger.info("uuid:{},chunks:{},files.size:{}", uuid, chunks, files.size());
+                log.info("uuid:{},chunks:{},files.size:{}", uuid, chunks, files.size());
                 if (chunks == files.size()) {// 文件全部到齐
-                    logger.info("xxx=uuid:{},chunks:{},files.size:{},oldfilename:{}", uuid, chunks, files.size(), oldfilename);
+                    log.info("xxx=uuid:{},chunks:{},files.size:{},oldfilename:{}", uuid, chunks, files.size(), oldfilename);
                 }
             } catch (Exception e) {
-                logger.error("分片文件接收出错");
+                log.error("分片文件接收出错");
                 e.printStackTrace();
                 clearErrorFile(chunks, pathuuid, fileid, suffix);
                 map.put("info", 3);
                 return map;
             }
         } else {
-            logger.error("分片文件为空,uuid:{},fileid:{}", uuid, fileid);
+            log.error("分片文件为空,uuid:{},fileid:{}", uuid, fileid);
             map.put("info", 4);
             return map;
         }
@@ -259,14 +255,14 @@ public class UpLoadUtil {
         Map<String, Object> map = new ConcurrentHashMap<>();
         String fFileName = fileid + "." + suffix;
         try {
-            logger.info("开始合并分片文件,uuid:{},fileid:{},fFileName:{}", uuid, fileid, fFileName);
+            log.info("开始合并分片文件,uuid:{},fileid:{},fFileName:{}", uuid, fileid, fFileName);
             File destFile = new File(pathuuid + fFileName);
             OutputStream out = Files.newOutputStream(destFile.toPath());
             BufferedOutputStream bos = new BufferedOutputStream(out);
             for (int i = 0; i < chunks; i++) {// 按顺序，从第一个开始进行拼接
                 File srcFile = new File(pathuuid + i + fileid + "." + suffix);
                 if (!srcFile.exists()) {
-                    logger.error("分片丢失，chunk is null,fFileName:{}", fFileName);
+                    log.error("分片丢失，chunk is null,fFileName:{}", fFileName);
                     clearErrorFile(chunks, pathuuid, fileid, suffix);
                     map.put("info", 4);
                     return map;
@@ -284,12 +280,12 @@ public class UpLoadUtil {
             }
             bos.close();
             out.close();
-            logger.info("分片文件合并完成，fFileName：{}", fFileName);
+            log.info("分片文件合并完成，fFileName：{}", fFileName);
             map.put("info", 1);
             map.put("fileid", fileid);
             return map;
         } catch (Exception e) {
-            logger.error("分片文件合并出错，fFileName：{}", fFileName);
+            log.error("分片文件合并出错，fFileName：{}", fFileName);
             clearErrorFile(chunks, pathuuid, fileid, suffix);
             e.printStackTrace();
             map.put("info", 2);

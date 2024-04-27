@@ -1,7 +1,6 @@
 package com.xxsowrd.xitem.admin.config;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.io.ClassPathResource;
@@ -13,8 +12,8 @@ import java.io.IOException;
 import java.util.Properties;
 
 @Component
+@Slf4j
 public class SystemConfig implements CommandLineRunner {
-    private static Logger LOGGER = LoggerFactory.getLogger(SystemConfig.class);
     private static Properties props;
 
     @Value("${spring.profiles.active}")
@@ -53,7 +52,7 @@ public class SystemConfig implements CommandLineRunner {
     @Override
     public void run(String... strings) {
         try {
-            LOGGER.info("spring.profiles.active {}", appconfig);
+            log.info("spring.profiles.active {}", appconfig);
             Resource resource = new ClassPathResource("/application-" + appconfig + ".properties");
             props = PropertiesLoaderUtils.loadProperties(resource);
         } catch (IOException e) {
