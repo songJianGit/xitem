@@ -1,4 +1,4 @@
-package com.xxsowrd.xitem.config;
+package com.xxsowrd.xitem.admin.config;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -1,7 +1,7 @@
-package com.xxsowrd.xitem.utils;
+package com.xxsowrd.xitem.admin.utils;
 
-import com.xxsowrd.xitem.config.SystemConfig;
-import com.xxsowrd.xitem.constant.Constant;
+import com.xxsowrd.xitem.admin.config.SystemConfig;
+import com.xxsowrd.xitem.admin.constant.Constant;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
@@ -25,7 +25,7 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class UpLoadUtil {
 
-    private static Logger logger = LoggerFactory.getLogger(UpLoadUtil.class);
+    private static final Logger logger = LoggerFactory.getLogger(UpLoadUtil.class);
 
     public static final String PATH_INFO = "/fileinfo";// 所有文件路径都会加的前缀，用作nginx转发可以减轻java压力
 
@@ -192,7 +192,7 @@ public class UpLoadUtil {
      * @return info 0-正常返回 1-合并成功 2-合并失败 3-未知错误 4-分片丢失
      */
     public static Map<String, Object> sliceFileupload(HttpServletRequest request) {
-        Map<String, Object> map = new ConcurrentHashMap<>();
+        Map<String, Object> map = new ConcurrentHashMap<>();// TODO 换成对象
         MultipartHttpServletRequest mQuest = (MultipartHttpServletRequest) request;
         MultipartFile file = mQuest.getFile("file");// 获得上传的文件
         String fname = file.getOriginalFilename().toLowerCase();

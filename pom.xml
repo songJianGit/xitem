@@ -14,9 +14,21 @@
     <name>xitem</name>
     <description>xitem</description>
     <properties>
-        <java.version>8</java.version>
+        <java.version>1.8</java.version>
     </properties>
     <dependencies>
+
+        <dependency>
+            <groupId>p6spy</groupId>
+            <artifactId>p6spy</artifactId>
+            <version>3.9.1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.mysql</groupId>
+            <artifactId>mysql-connector-j</artifactId>
+            <version>8.2.0</version>
+        </dependency>
 
         <dependency>
             <groupId>commons-fileupload</groupId>
@@ -46,6 +58,24 @@
             <groupId>com.squareup.okhttp3</groupId>
             <artifactId>okhttp</artifactId>
             <version>4.12.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-boot-starter</artifactId>
+            <version>3.5.5</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.gitee.sunchenbin.mybatis.actable</groupId>
+            <artifactId>mybatis-enhance-actable</artifactId>
+            <version>1.5.0.RELEASE</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.baomidou</groupId>
+                    <artifactId>mybatis-plus-annotation</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <dependency>
