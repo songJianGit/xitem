@@ -6,6 +6,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.boot.system.ApplicationHome;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.util.ResourceUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -13,7 +14,9 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.*;
+import java.net.URL;
 import java.net.URLEncoder;
+import java.nio.file.Files;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -27,20 +30,26 @@ public class UpLoadUtil {
 
     private static final Logger logger = LoggerFactory.getLogger(UpLoadUtil.class);
 
-    public static final String PATH_INFO = "/fileinfo";// 所有文件路径都会加的前缀，用作nginx转发可以减轻java压力
+    private static final String PATH_INFO = "/fileinfo";// 所有文件路径都会加的前缀，用作nginx转发可以减轻java压力
 
     private static final String PATH_DEF = "/def";// 默认文件夹
 
-    public static final String PATH_TEMP = "/temp";// 临时文件夹
+    private static final String PATH_TEMP = "/temp";// 临时文件夹
 
     public static String upload(MultipartFile file) {
         return upload(file, PATH_DEF);
     }
 
+    public static String upload(MultipartFile file, String path) {
+        path = doPath(path);// 格式检查
+        path = path + getTIMEPath();
+        return uploadLocal(file, path);
+    }
+
     public static List<Map> upload(MultipartFile[] files, String path) {
         List<Map> list = new ArrayList<>();
         for (MultipartFile item : files) {
-            Map m = new HashMap();
+            Map m = new HashMap();// TODO 换成对象
             m.put("path", upload(item, path));
             m.put("name", item.getOriginalFilename());
             if (m.get("path") == null) {
@@ -51,10 +60,30 @@ public class UpLoadUtil {
         return list;
     }
 
-    public static String upload(MultipartFile file, String path) {
-        path = doPath(path);// 格式检查
-        path = path + getTIMEPath();
-        return uploadLocal(file, path);
+    /**
+     * 获取项目路径
+     *
+     * @return
+     */
+    public static String getProjectPath() {
+        String p = getPath();
+        return p.substring(0, p.length() - PATH_INFO.length());
+    }
+
+    /**
+     * 校验目录路径的格式（要前带杠杠，后不带）
+     *
+     * @param path
+     * @return
+     */
+    public static String doPath(String path) {
+        if (!path.startsWith("/")) {
+            path = "/" + path;
+        }
+        if (path.endsWith("/")) {
+            path = path.substring(0, path.length() - 1);
+        }
+        return path;
     }
 
     /**
@@ -84,19 +113,8 @@ public class UpLoadUtil {
     /**
      * 获取时间分隔字符
      */
-    public static String getTIMEPath() {
+    private static String getTIMEPath() {
         return "/" + DateUtil.now(DateUtil.sdfA4);
-    }
-
-    // 格式校验，一定要前置带杠杠，后不带
-    public static String doPath(String path) {
-        if (!path.startsWith("/")) {
-            path = "/" + path;
-        }
-        if (path.endsWith("/")) {
-            path = path.substring(0, path.length() - 1);
-        }
-        return path;
     }
 
     /**
@@ -122,62 +140,37 @@ public class UpLoadUtil {
     }
 
     /**
-     * 本地路径
+     * 不指定资源目录时，默认路径的获取
      *
-     * @param y 1-加path 0-不加paht
      * @return
      */
-    private static String getPathIN(Integer y) {
-        File path = null;
+    private static String getDPath() {
         try {
-            if (y == 0) {
-                path = new File(ResourceUtils.getURL("").getPath());
-            } else if (y == 1) {
-                path = new File(ResourceUtils.getURL("").getPath() + PATH_INFO);
-            }
+            String pathStr = ResourceUtils.getURL("").getPath() + PATH_INFO;
+            Utils.hasFolder(pathStr);
+            logger.debug("uploadPath:" + pathStr);
+            return pathStr.replaceAll("\\\\", "/");
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
-        if (!path.exists()) path.mkdirs();
-        logger.debug("uploadPath:" + path.getAbsolutePath());
-        return path.getAbsolutePath().replaceAll("\\\\", "/");
     }
 
     /**
-     * 获取项目绝对路径
+     * 获取资源路径
      *
      * @return
      */
-    public static String getProjectPath() {
-        return getPath(0);
-    }
-
     private static String getPath() {
-        return getPath(1);
-    }
-
-    /**
-     * 外部资源根路径
-     *
-     * @param y 1-加path 0-不加paht
-     * @return
-     */
-    private static String getPath(Integer y) {
-        Integer type = Integer.valueOf(SystemConfig.getProperty("filepath.type"));
+        int type = Integer.parseInt(SystemConfig.getProperty("filepath.type"));
         if (type == 1) {
-            return getPathIN(y);
+            return getDPath();
         } else if (type == 2) {
-            String path = null;
-            if (y == 0) {
-                path = SystemConfig.getProperty("filepath.path");
-            } else {
-                path = SystemConfig.getProperty("filepath.path") + PATH_INFO;
-            }
+            String path = SystemConfig.getProperty("filepath.path") + PATH_INFO;
             Utils.hasFolder(path);
             logger.debug("uploadPath:" + path);
             return path.replaceAll("\\\\", "/");
         }
-        return getPathIN(y);
+        return getDPath();
     }
 
     private static String pathuuid(String uuid) {
@@ -202,7 +195,7 @@ public class UpLoadUtil {
             return map;
         }
         String uuid = request.getParameter("uuid");// 上传站点标识，用于区分各站点，以便判断文件合并信息
-        if (uuid.indexOf(".") != -1 || uuid.indexOf("/") != -1) {// 防止遍历
+        if (uuid.contains(".") || uuid.contains("/")) {// 防止遍历攻击
             map.put("info", 3);
             return map;
         }
@@ -216,7 +209,7 @@ public class UpLoadUtil {
             chunksStr = "1";
         }
         Integer chunk = Integer.valueOf(chunkStr);// 第几片
-        Integer chunks = Integer.valueOf(chunksStr);// 一共分了几片
+        int chunks = Integer.parseInt(chunksStr);// 一共分了几片
         String fileid = request.getParameter("id").toLowerCase();// 文件id（文件分片上传的时候，文件id是一样的，同一个站点不会有相同文件id，但是不同站点的id可能会相同）
         logger.info("uuid:{},chunk:{},chunks:{}", uuid, chunk, chunks);
         String suffix = "";
@@ -268,7 +261,7 @@ public class UpLoadUtil {
         try {
             logger.info("开始合并分片文件,uuid:{},fileid:{},fFileName:{}", uuid, fileid, fFileName);
             File destFile = new File(pathuuid + fFileName);
-            OutputStream out = new FileOutputStream(destFile);
+            OutputStream out = Files.newOutputStream(destFile.toPath());
             BufferedOutputStream bos = new BufferedOutputStream(out);
             for (int i = 0; i < chunks; i++) {// 按顺序，从第一个开始进行拼接
                 File srcFile = new File(pathuuid + i + fileid + "." + suffix);
@@ -278,7 +271,7 @@ public class UpLoadUtil {
                     map.put("info", 4);
                     return map;
                 }
-                InputStream in = new FileInputStream(srcFile);
+                InputStream in = Files.newInputStream(srcFile.toPath());
                 BufferedInputStream bis = new BufferedInputStream(in);
                 byte[] bytes = new byte[1024 * 1024];
                 int len = -1;
@@ -289,8 +282,8 @@ public class UpLoadUtil {
                 in.close();
                 srcFile.delete();
             }
-            if (bos != null) bos.close();
-            if (out != null) out.close();
+            bos.close();
+            out.close();
             logger.info("分片文件合并完成，fFileName：{}", fFileName);
             map.put("info", 1);
             map.put("fileid", fileid);
@@ -345,4 +338,8 @@ public class UpLoadUtil {
         }
         return codedFilename;
     }
+
+//    public static void main(String[] args) {
+//        System.out.println("Project directory: " + getProjectPath());
+//    }
 }
