@@ -10,7 +10,6 @@ import java.io.Serializable;
 
 @TableComment("用户角色表")
 @TableName("t_sys_user_role")
-@TableCharset(MySqlCharsetConstant.UTF8MB4)
 @TableEngine(MySqlEngineConstant.InnoDB)
 public class UserInfoRole implements Serializable {
     private static final long serialVersionUID = 2268284926154065619L;

@@ -72,9 +72,9 @@
         </dependency>
 
         <dependency>
-            <groupId>com.xxsowrd.xitem</groupId>
+            <groupId>com.xxsword.xitem</groupId>
             <artifactId>mybatis-actable-upgrade</artifactId>
-            <version>1.5.1</version>
+            <version>1.5.2</version>
             <exclusions>
                 <exclusion>
                     <groupId>com.baomidou</groupId>

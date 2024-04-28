@@ -9,7 +9,6 @@ import java.io.Serializable;
 
 @TableComment("角色菜单多对多表")
 @TableName("t_sys_role_functions")
-@TableCharset(MySqlCharsetConstant.UTF8MB4)
 @TableEngine(MySqlEngineConstant.InnoDB)
 public class RoleFunctions implements Serializable {
     private static final long serialVersionUID = -928790075642942659L;

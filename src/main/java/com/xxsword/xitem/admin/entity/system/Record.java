@@ -12,7 +12,6 @@ import java.io.Serializable;
 
 @TableComment("操作日志表")
 @TableName("t_sys_record")
-@TableCharset(MySqlCharsetConstant.UTF8MB4)
 @TableEngine(MySqlEngineConstant.InnoDB)
 public class Record implements Serializable {
     private static final long serialVersionUID = -5950916385417252236L;

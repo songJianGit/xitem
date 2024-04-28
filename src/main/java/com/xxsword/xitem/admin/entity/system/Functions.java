@@ -9,7 +9,6 @@ import java.io.Serializable;
 
 @TableComment("菜单表")
 @TableName("t_sys_functions")
-@TableCharset(MySqlCharsetConstant.UTF8MB4)
 @TableEngine(MySqlEngineConstant.InnoDB)
 public class Functions extends BaseEntity implements Serializable {
     // 顶级菜单的pid信息

@@ -11,11 +11,14 @@ import java.util.Set;
 
 @TableComment("用户表")
 @TableName("t_sys_userinfo")
-@TableCharset(MySqlCharsetConstant.UTF8MB4)
 @TableEngine(MySqlEngineConstant.InnoDB)
 public class UserInfo extends BaseEntity implements Serializable {
 
     private static final long serialVersionUID = -1282638492431542107L;
+    @Column
+    @ColumnComment("用户昵称")
+    private String nickname;
+
     @Column
     @ColumnComment("用户姓名")
     private String username;
@@ -55,6 +58,14 @@ public class UserInfo extends BaseEntity implements Serializable {
 
     @TableField(exist = false)
     private Set<Role> rolelist;
+
+    public String getNickname() {
+        return nickname;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
 
     public String getUsername() {
         return username;

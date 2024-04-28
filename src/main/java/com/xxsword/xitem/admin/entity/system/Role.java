@@ -11,7 +11,6 @@ import java.util.Set;
 
 @TableComment("角色表")
 @TableName("t_sys_role")
-@TableCharset(MySqlCharsetConstant.UTF8MB4)
 @TableEngine(MySqlEngineConstant.InnoDB)
 public class Role extends BaseEntity implements Serializable {
 

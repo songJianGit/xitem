@@ -9,7 +9,6 @@ import java.io.Serializable;
 
 @TableName("t_sys_dict")
 @TableComment("字典表")
-@TableCharset(MySqlCharsetConstant.UTF8MB4)
 @TableEngine(MySqlEngineConstant.InnoDB)
 public class Dict extends BaseEntity implements Serializable {
 

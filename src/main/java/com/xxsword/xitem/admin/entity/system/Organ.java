@@ -11,7 +11,6 @@ import java.io.Serializable;
 
 @TableComment("机构表")
 @TableName("t_sys_organ")
-@TableCharset(MySqlCharsetConstant.UTF8MB4)
 @TableEngine(MySqlEngineConstant.InnoDB)
 public class Organ extends BaseEntity implements Serializable {
     // 根机构的pid信息
