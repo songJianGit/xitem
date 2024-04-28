@@ -31,9 +31,9 @@
         </dependency>
 
         <dependency>
-            <groupId>commons-fileupload</groupId>
-            <artifactId>commons-fileupload</artifactId>
-            <version>1.5</version>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>2.16.1</version>
         </dependency>
 
         <dependency>
@@ -46,11 +46,6 @@
             <groupId>joda-time</groupId>
             <artifactId>joda-time</artifactId>
             <version>2.12.7</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-freemarker</artifactId>
         </dependency>
 
         <dependency>
@@ -74,13 +69,18 @@
         <dependency>
             <groupId>com.xxsword.xitem</groupId>
             <artifactId>mybatis-actable-upgrade</artifactId>
-            <version>1.5.2</version>
+            <version>1.5.3</version>
             <exclusions>
                 <exclusion>
                     <groupId>com.baomidou</groupId>
                     <artifactId>mybatis-plus-annotation</artifactId>
                 </exclusion>
             </exclusions>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-freemarker</artifactId>
         </dependency>
 
         <dependency>
