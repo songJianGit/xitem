@@ -3,11 +3,10 @@ package com.xxsword.xitem.admin.entity.system;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.gitee.sunchenbin.mybatis.actable.annotation.*;
-import com.gitee.sunchenbin.mybatis.actable.constants.MySqlCharsetConstant;
 import com.gitee.sunchenbin.mybatis.actable.constants.MySqlEngineConstant;
 
 import java.io.Serializable;
-import java.util.Set;
+import java.util.List;
 
 @TableComment("用户表")
 @TableName("t_sys_userinfo")
@@ -57,7 +56,7 @@ public class UserInfo extends BaseEntity implements Serializable {
     private String permissionsids;
 
     @TableField(exist = false)
-    private Set<Role> rolelist;
+    private List<Role> rolelist;
 
     public String getNickname() {
         return nickname;
@@ -131,11 +130,11 @@ public class UserInfo extends BaseEntity implements Serializable {
         this.organname = organname;
     }
 
-    public Set<Role> getRolelist() {
+    public List<Role> getRolelist() {
         return rolelist;
     }
 
-    public void setRolelist(Set<Role> rolelist) {
+    public void setRolelist(List<Role> rolelist) {
         this.rolelist = rolelist;
     }
 

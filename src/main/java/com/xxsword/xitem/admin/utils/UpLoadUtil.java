@@ -169,7 +169,7 @@ public class UpLoadUtil {
         return getDPath();
     }
 
-    private static String pathuuid(String uuid) {
+    private static String pathById(String uuid) {
         return UpLoadUtil.getPath() + PATH_TEMP + "/" + uuid + "/";
     }
 
@@ -195,7 +195,7 @@ public class UpLoadUtil {
             map.put("info", 3);
             return map;
         }
-        String pathuuid = pathuuid(uuid);
+        String pathuuid = pathById(uuid);
         String chunkStr = request.getParameter("chunk");
         String chunksStr = request.getParameter("chunks");
         if (chunkStr == null) {
@@ -251,7 +251,7 @@ public class UpLoadUtil {
     // 文件合并
     public static Map<String, Object> merge(Integer chunks, String uuid, String fileid, String suffix) {
         fileid = fileid.toLowerCase();
-        String pathuuid = pathuuid(uuid);
+        String pathuuid = pathById(uuid);
         Map<String, Object> map = new ConcurrentHashMap<>();
         String fFileName = fileid + "." + suffix;
         try {
