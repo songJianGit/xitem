@@ -165,21 +165,6 @@ public class Utils {
     }
 
     /**
-     * 判断一个字符串是否能转化为double
-     *
-     * @param str
-     * @return
-     */
-    public static boolean isStringCanBeConvertedToDouble(String str) {
-        try {
-            Double.parseDouble(str);
-            return true; // 如果没有抛出异常，说明字符串可以转换为double
-        } catch (NumberFormatException e) {
-            return false; // 如果抛出了异常，说明字符串不能转换为double
-        }
-    }
-
-    /**
      * 移除字符串中的所有空白字符，包括空格（\\s+）、制表符（\t）、回车符（\r）和换行符（\n）
      *
      * @param str

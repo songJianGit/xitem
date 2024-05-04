@@ -2,6 +2,8 @@ package com.xxsword.xitem.admin.utils;
 
 import com.xxsword.xitem.admin.config.SystemConfig;
 import com.xxsword.xitem.admin.constant.Constant;
+import com.xxsword.xitem.admin.model.UpFileVO;
+import com.xxsword.xitem.admin.model.UpState;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
@@ -15,7 +17,6 @@ import java.io.*;
 import java.net.URLEncoder;
 import java.nio.file.Files;
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * 上传工具类
@@ -42,15 +43,12 @@ public class UpLoadUtil {
         return uploadLocal(file, path);
     }
 
-    public static List<Map> upload(MultipartFile[] files, String path) {
-        List<Map> list = new ArrayList<>();
+    public static List<UpFileVO> upload(MultipartFile[] files, String path) {
+        List<UpFileVO> list = new ArrayList<>();
         for (MultipartFile item : files) {
-            Map m = new HashMap();// TODO 换成对象
-            m.put("path", upload(item, path));
-            m.put("name", item.getOriginalFilename());
-            if (m.get("path") == null) {
-                m.put("path", "");
-            }
+            UpFileVO m = new UpFileVO();
+            m.setPath(upload(item, path));
+            m.setName(item.getOriginalFilename());
             list.add(m);
         }
         return list;
@@ -176,24 +174,21 @@ public class UpLoadUtil {
     /**
      * 分片文件上传,文件默认存储在temp/uuid文件夹中
      * 2020-06-29只允许上传压缩文件（Constant.COMPRESS_EX）
-     *
-     * @param request
-     * @return info 0-正常返回 1-合并成功 2-合并失败 3-未知错误 4-分片丢失
      */
-    public static Map<String, Object> sliceFileupload(HttpServletRequest request) {
-        Map<String, Object> map = new ConcurrentHashMap<>();// TODO 换成对象
+    public static UpState sliceFileupload(HttpServletRequest request) {
+        UpState upState = new UpState();
         MultipartHttpServletRequest mQuest = (MultipartHttpServletRequest) request;
         MultipartFile file = mQuest.getFile("file");// 获得上传的文件
         String fname = file.getOriginalFilename().toLowerCase();
         if (!Constant.COMPRESS_EX.toLowerCase().contains(FilenameUtils.getExtension(fname).toLowerCase())) {// 只允许上传指定文件
-            map.put("info", 3);
+            upState.setInfo(3);
             log.error("上传的文件格式，不是允许的格式:{}", FilenameUtils.getExtension(fname));
-            return map;
+            return upState;
         }
         String uuid = request.getParameter("uuid");// 上传站点标识，用于区分各站点，以便判断文件合并信息
         if (uuid.contains(".") || uuid.contains("/")) {// 防止遍历攻击
-            map.put("info", 3);
-            return map;
+            upState.setInfo(3);
+            return upState;
         }
         String pathuuid = pathById(uuid);
         String chunkStr = request.getParameter("chunk");
@@ -231,28 +226,28 @@ public class UpLoadUtil {
                 log.error("分片文件接收出错");
                 e.printStackTrace();
                 clearErrorFile(chunks, pathuuid, fileid, suffix);
-                map.put("info", 3);
-                return map;
+                upState.setInfo(3);
+                return upState;
             }
         } else {
             log.error("分片文件为空,uuid:{},fileid:{}", uuid, fileid);
-            map.put("info", 4);
-            return map;
+            upState.setInfo(4);
+            return upState;
         }
-        map.put("info", 0);
+        upState.setInfo(0);
         // 每一次成功的分片上传，都返回详细信息
-        map.put("chunks", chunks);
-        map.put("suffix", suffix);
-        map.put("uuid", uuid);
-        map.put("fileid", fileid);
-        return map;
+        upState.setChunks(chunks);
+        upState.setSuffix(suffix);
+        upState.setUuid(uuid);
+        upState.setFileid(fileid);
+        return upState;
     }
 
     // 文件合并
-    public static Map<String, Object> merge(Integer chunks, String uuid, String fileid, String suffix) {
+    public static UpState merge(Integer chunks, String uuid, String fileid, String suffix) {
         fileid = fileid.toLowerCase();
         String pathuuid = pathById(uuid);
-        Map<String, Object> map = new ConcurrentHashMap<>();
+        UpState upState = new UpState();
         String fFileName = fileid + "." + suffix;
         try {
             log.info("开始合并分片文件,uuid:{},fileid:{},fFileName:{}", uuid, fileid, fFileName);
@@ -262,14 +257,14 @@ public class UpLoadUtil {
             for (int i = 0; i < chunks; i++) {// 按顺序，从第一个开始进行拼接
                 File srcFile = new File(pathuuid + i + fileid + "." + suffix);
                 if (!srcFile.exists()) {
-                    log.error("分片丢失，chunk is null,fFileName:{}", fFileName);
+                    log.error("分片丢失，chunk is null,i:{},fFileName:{}", i, fFileName);
                     clearErrorFile(chunks, pathuuid, fileid, suffix);
-                    map.put("info", 4);
-                    return map;
+                    upState.setInfo(4);
+                    return upState;
                 }
                 InputStream in = Files.newInputStream(srcFile.toPath());
                 BufferedInputStream bis = new BufferedInputStream(in);
-                byte[] bytes = new byte[1024 * 1024];
+                byte[] bytes = new byte[1024 * 1024];// (1024 * 1024)byte=1MB
                 int len = -1;
                 while ((len = bis.read(bytes)) != -1) {
                     bos.write(bytes, 0, len);
@@ -281,15 +276,15 @@ public class UpLoadUtil {
             bos.close();
             out.close();
             log.info("分片文件合并完成，fFileName：{}", fFileName);
-            map.put("info", 1);
-            map.put("fileid", fileid);
-            return map;
+            upState.setInfo(1);
+            upState.setFileid(fileid);
+            return upState;
         } catch (Exception e) {
             log.error("分片文件合并出错，fFileName：{}", fFileName);
             clearErrorFile(chunks, pathuuid, fileid, suffix);
             e.printStackTrace();
-            map.put("info", 2);
-            return map;
+            upState.setInfo(2);
+            return upState;
         }
     }
 
