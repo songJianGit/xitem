@@ -1,15 +1,19 @@
 package com.xxsword.xitem.admin.utils;
 
+import com.xxsword.xitem.admin.constant.Constant;
+import com.xxsword.xitem.admin.domain.entity.system.UserInfo;
+
+import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.security.MessageDigest;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Utils {
-    private static final String PASSWORD_PATTERN = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).{8,}$";
 
     /**
      * 密码复杂度要求检查
@@ -18,13 +22,28 @@ public class Utils {
      * @return
      */
     public static boolean isValidPassword(String password) {
-        Pattern pattern = Pattern.compile(PASSWORD_PATTERN);
+        Pattern pattern = Pattern.compile("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).{8,}$");
         Matcher matcher = pattern.matcher(password);
         return matcher.matches();
     }
 
     public static String getuuid() {
         return UUID.randomUUID().toString().replace("-", "");
+    }
+
+    /**
+     * 获取用户
+     *
+     * @param request
+     * @return
+     */
+    public static UserInfo getUserInfo(HttpServletRequest request) {
+        Object o = request.getSession().getAttribute(Constant.USER_INFO);
+        if (o == null) {
+            return null;
+        } else {
+            return (UserInfo) o;
+        }
     }
 
     /**
@@ -159,4 +178,15 @@ public class Utils {
             return false; // 如果抛出了异常，说明字符串不能转换为double
         }
     }
+
+    /**
+     * 移除字符串中的所有空白字符，包括空格（\\s+）、制表符（\t）、回车符（\r）和换行符（\n）
+     *
+     * @param str
+     * @return
+     */
+    public static String replaceBlank(String str) {
+        return Optional.ofNullable(str).map(s -> s.replaceAll("\\s+|\\t|\\r|\\n", "")).orElse("");
+    }
+
 }

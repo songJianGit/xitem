@@ -1,8 +1,9 @@
 package com.xxsword.xitem.admin.utils;
 
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
-import com.xxsword.xitem.admin.entity.system.Functions;
-import com.xxsword.xitem.admin.entity.system.Role;
+import com.xxsword.xitem.admin.constant.Constant;
+import com.xxsword.xitem.admin.domain.entity.system.Functions;
+import com.xxsword.xitem.admin.domain.entity.system.Role;
 import com.xxsword.xitem.admin.model.TreeMenu;
 
 import java.util.*;
@@ -62,9 +63,10 @@ public class MenuUtil {
      *
      * @param sourcelist
      */
-    public static void sortList(List<Functions> sourcelist) {
+    public static List<Functions> sortList(List<Functions> sourcelist) {
         List<Functions> list = new ArrayList<>();
-        sortList(list, sourcelist, Functions.FUNCTIONS_TOP);
+        sortList(list, sourcelist, Constant.FUNCTIONS_TOP);
+        return list;
     }
 
     private static void sortList(List<Functions> list, List<Functions> sourcelist, String parentId) {
@@ -91,7 +93,7 @@ public class MenuUtil {
     private static List<TreeMenu> listTreeMenuByListFunctions(List<Functions> functionsList) {
         List<TreeMenu> menus = new ArrayList<>();
         for (Functions f : functionsList) {
-            if (Functions.FUNCTIONS_TOP.equals(f.getPid())) {// 若为顶级菜单
+            if (Constant.FUNCTIONS_TOP.equals(f.getPid())) {// 若为顶级菜单
                 TreeMenu treeMenu = getTreeMenuByFunctions(f);
                 buildTreeMenu(treeMenu, functionsList, 2);// 因为是三级菜单，所以在一级菜单下再递归2层（1+2=3）
                 menus.add(treeMenu);
