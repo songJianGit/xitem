@@ -71,7 +71,7 @@ public class LoginInterceptor implements HandlerInterceptor {
             return false;
         }
         // 是否有这个链接（是否需要检查权限）
-        List<Functions> haveFun = functionsService.list(new LambdaQueryWrapper<Functions>().select(Functions::getId).eq(Functions::getStatus, 1).likeRight(Functions::getUrl, url));
+        List<Functions> haveFun = functionsService.list(new LambdaQueryWrapper<Functions>().select(Functions::getId).eq(Functions::getStatus, 1).eq(Functions::getUrl, url));
         if (haveFun.isEmpty()) {
             return true;// 没有配置菜单，默认放行
         }

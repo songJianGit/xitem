@@ -22,4 +22,11 @@ public interface RoleFunctionsService extends IService<RoleFunctions> {
      * @param funIds
      */
     void roleFunctionsSave(String roleId, String funIds);
+
+    /**
+     * 获取角色的菜单关联表
+     * @param roleId
+     * @return
+     */
+    List<RoleFunctions> listRoleFunctionsByRoleId(String roleId);
 }

@@ -235,15 +235,15 @@ public class SystemController {
      * 分配权限
      */
     @RequestMapping("roleFunctions")
-    public String roleFunctions(HttpServletRequest request, String roleid, Model model) {
+    public String roleFunctions(HttpServletRequest request, String roleId, Model model) {
         UserInfo userInfo = Utils.getUserInfo(request);
         List<Functions> listFunctions = MenuUtil.listFunctionsByRoles(userInfo.getRolelist());
         List<Functions> listFunctionsSeq = MenuUtil.sortList(listFunctions);
-        Role role = roleService.getRoleById(roleid, true);
+        Role role = roleService.getRoleById(roleId, true);
         model.addAttribute("roleFunctions", role.getFunctionlist());
         model.addAttribute("listFunctions", listFunctionsSeq);
         model.addAttribute("role", role);
-        return "admin/system/rolefunctions";
+        return "/admin/system/rolefunctions";
     }
 
     /**
