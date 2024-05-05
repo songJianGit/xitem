@@ -63,7 +63,7 @@ public class SystemController {
      */
     @RequestMapping("userList")
     public String userList() {
-        return "admin/system/userlist";
+        return "/admin/system/userlist";
     }
 
     @RequestMapping("userListData")
@@ -86,7 +86,7 @@ public class SystemController {
             userInfo.setOrganname(organ == null ? "" : organ.getName());
         }
         model.addAttribute("user", userInfo);
-        return "admin/system/useredit";
+        return "/admin/system/useredit";
     }
 
     /**
@@ -130,7 +130,7 @@ public class SystemController {
      */
     @RequestMapping("roleList")
     public String roleList(HttpServletRequest request) {
-        return "admin/system/rolelist";
+        return "/admin/system/rolelist";
     }
 
     /**
@@ -153,7 +153,7 @@ public class SystemController {
             role = roleService.getById(roleid);
         }
         model.addAttribute("role", role);
-        return "admin/system/roleedit";
+        return "/admin/system/roleedit";
     }
 
     /**
@@ -263,7 +263,7 @@ public class SystemController {
         List<Functions> listFunctions = functionsService.list(functionsDto.toQuery());// 所有可用菜单
         List<Functions> listFunctionsSeq = MenuUtil.sortList(listFunctions);
         model.addAttribute("listFunctions", listFunctionsSeq);
-        return "admin/system/functionslist";
+        return "/admin/system/functionslist";
     }
 
     /**
@@ -288,7 +288,7 @@ public class SystemController {
         }
         model.addAttribute("functions", functions);
         model.addAttribute("pfunctions", pfunctions);
-        return "admin/system/functionsedit";
+        return "/admin/system/functionsedit";
     }
 
     /**
@@ -307,7 +307,7 @@ public class SystemController {
         f.setShowflag(1);
         model.addAttribute("functions", f);
         model.addAttribute("pfunctions", pfunctions);
-        return "admin/system/functionsedit";
+        return "/admin/system/functionsedit";
     }
 
     /**
@@ -343,7 +343,7 @@ public class SystemController {
     public String functionsSelect(FunctionsDto functionsDto, Model model) {
         List<Functions> listFunctions = functionsService.list(functionsDto.toQuery());// 所有可用菜单
         model.addAttribute("listFunctions", listFunctions);
-        return "admin/system/functionsselect";
+        return "/admin/system/functionsselect";
     }
 
     /**
@@ -438,7 +438,7 @@ public class SystemController {
      */
     @RequestMapping("dictList")
     public String dictList(Model model) {
-        return "admin/system/dictlist";
+        return "/admin/system/dictlist";
     }
 
     /**
@@ -470,7 +470,7 @@ public class SystemController {
             dict = new Dict();
         }
         model.addAttribute("dict", dict);
-        return "admin/system/dictedit";
+        return "/admin/system/dictedit";
     }
 
     /**

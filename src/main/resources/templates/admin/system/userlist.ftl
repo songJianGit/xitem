@@ -146,7 +146,7 @@
                             $.ajax({
                                 url: "${ctx.contextPath}/admin/system/userDelete",
                                 data: {
-                                    'userIds': getSelectionIds()
+                                    'userIds': getSelectionIds().join(',')
                                 },
                                 success: function (data) {
                                     if (data.result) {

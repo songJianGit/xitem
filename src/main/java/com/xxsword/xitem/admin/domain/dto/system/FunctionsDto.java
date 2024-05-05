@@ -29,6 +29,6 @@ public class FunctionsDto {
         return new LambdaQueryWrapper<Functions>().eq(Functions::getStatus, 1)
                 .eq(StringUtils.isNotBlank(name), Functions::getName, name)
                 .eq(StringUtils.isNotBlank(pid), Functions::getPid, pid)
-                .orderByDesc(Functions::getSeq, Functions::getId);
+                .orderByAsc(Functions::getSeq, Functions::getId);
     }
 }

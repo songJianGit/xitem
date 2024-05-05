@@ -28,6 +28,11 @@
                                       onsubmit="return check();">
                                     <input type="hidden" name="id" value="${user.id!}"/>
                                     <div class="form-group col-6">
+                                        <label for="nickname">昵称</label>
+                                        <input type="text" class="form-control" id="nickname" name="nickname"
+                                               value="${user.nickname!}" placeholder="昵称" required/>
+                                    </div>
+                                    <div class="form-group col-6">
                                         <label for="username">用户名</label>
                                         <input type="text" class="form-control" id="username" name="username"
                                                value="${user.username!}" placeholder="用户名" required/>

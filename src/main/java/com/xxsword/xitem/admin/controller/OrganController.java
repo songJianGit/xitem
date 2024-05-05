@@ -109,7 +109,7 @@ public class OrganController {
             }
         }
         model.addAttribute("organ", organ);
-        return "admin/system/organeditlayer";
+        return "/admin/system/organeditlayer";
     }
 
     /**

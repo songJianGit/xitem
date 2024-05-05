@@ -42,7 +42,7 @@ public abstract class BaseEntity {
 
     @Column
     @Index
-    @ColumnComment("删除标记(0-删除 1-可用)")
+    @ColumnComment("删除标记(0-删除 1-可用 2-部分业务中，该状态表示停用)")
     private Integer status;
 
     public String getId() {
