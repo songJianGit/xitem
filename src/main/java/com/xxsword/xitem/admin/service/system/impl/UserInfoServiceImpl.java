@@ -173,7 +173,7 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
 
     @Override
     public void resetPassword(String userId, String password) {
-        UserInfo userUp= new UserInfo();
+        UserInfo userUp = new UserInfo();
         userUp.setId(userId);
         userUp.setPassword(password);
         updateById(userUp);
@@ -187,6 +187,19 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
     @Override
     public int countUserBuRoleId(String roleId) {
         return baseMapper.countUserBuRoleId(roleId);
+    }
+
+    @Override
+    public void upLastInfo(UserInfo doUserInfo, String userIds) {
+        String[] ids = userIds.split(",");
+        List<UserInfo> listUp = new ArrayList<>();
+        for (String id : ids) {
+            UserInfo userInfoUp = new UserInfo();
+            userInfoUp.setId(id);
+            userInfoUp.setBaseInfo(doUserInfo);
+            listUp.add(userInfoUp);
+        }
+        updateBatchById(listUp);
     }
 
 }

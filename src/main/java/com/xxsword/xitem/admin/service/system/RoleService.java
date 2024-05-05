@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.xxsword.xitem.admin.domain.dto.system.RoleDto;
 import com.xxsword.xitem.admin.domain.entity.system.Role;
+import com.xxsword.xitem.admin.domain.entity.system.UserInfo;
 
 import java.util.Collection;
 import java.util.List;
@@ -41,5 +42,10 @@ public interface RoleService extends IService<Role> {
      * @return
      */
     Role upRoleStatus(String roleId);
+
+    /**
+     * 刷新角色最后更新人和最后更新时间
+     */
+    void upLastInfo(UserInfo doUserInfo, String roleIds);
 
 }

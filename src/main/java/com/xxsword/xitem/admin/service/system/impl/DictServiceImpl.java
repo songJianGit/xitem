@@ -2,6 +2,7 @@ package com.xxsword.xitem.admin.service.system.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.xxsword.xitem.admin.domain.entity.system.Dict;
+import com.xxsword.xitem.admin.domain.entity.system.UserInfo;
 import com.xxsword.xitem.admin.mapper.system.DictMapper;
 import com.xxsword.xitem.admin.service.system.DictService;
 import org.springframework.stereotype.Service;
@@ -23,5 +24,18 @@ public class DictServiceImpl extends ServiceImpl<DictMapper, Dict> implements Di
             dictListUp.add(dictUp);
         }
         updateBatchById(dictListUp);
+    }
+
+    @Override
+    public void upLastInfo(UserInfo doUserInfo, String dictIds) {
+        String[] ids = dictIds.split(",");
+        List<Dict> listUp = new ArrayList<>();
+        for (String id : ids) {
+            Dict dictUp = new Dict();
+            dictUp.setId(id);
+            dictUp.setBaseInfo(doUserInfo);
+            listUp.add(dictUp);
+        }
+        updateBatchById(listUp);
     }
 }

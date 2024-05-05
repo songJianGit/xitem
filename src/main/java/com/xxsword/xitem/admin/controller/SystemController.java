@@ -119,7 +119,9 @@ public class SystemController {
         if (StringUtils.isBlank(userIds)) {
             return RestResult.Fail("参数缺失");
         }
+        UserInfo userInfo = Utils.getUserInfo(request);
         userInfoService.delUserInfoByIds(userIds);
+        userInfoService.upLastInfo(userInfo, userIds);
         return RestResult.OK();
     }
 
@@ -168,19 +170,21 @@ public class SystemController {
     /**
      * 删除角色
      *
-     * @param roleids
+     * @param roleIds
      * @return
      */
     @RequestMapping("roleDelete")
     @ResponseBody
-    public RestResult roleDelete(HttpServletRequest request, String roleids) {
-        if (StringUtils.isBlank(roleids)) {
+    public RestResult roleDelete(HttpServletRequest request, String roleIds) {
+        if (StringUtils.isBlank(roleIds)) {
             return RestResult.Fail("参数缺失");
         }
-        if (checkRoleByids(roleids)) {
+        if (checkRoleByids(roleIds)) {
             return RestResult.Fail("本角色被引用，请勿删除");
         }
-        roleService.delRoleByIds(roleids);
+        UserInfo userInfo = Utils.getUserInfo(request);
+        roleService.delRoleByIds(roleIds);
+        roleService.upLastInfo(userInfo, roleIds);
         return RestResult.OK();
     }
 
@@ -215,7 +219,9 @@ public class SystemController {
         if (StringUtils.isBlank(roleid)) {
             return RestResult.Fail("参数缺失");
         }
+        UserInfo userInfo = Utils.getUserInfo(request);
         Role role = roleService.upRoleStatus(roleid);
+        roleService.upLastInfo(userInfo, roleid);
         Integer status = role.getStatus();
         if (status == 1) {
             return RestResult.Codes(Codes.STATUS_1);
@@ -320,11 +326,13 @@ public class SystemController {
      */
     @RequestMapping("functionsDelete")
     @ResponseBody
-    public RestResult functionsDelete(String functionsid) {
-        if (StringUtils.isBlank(functionsid)) {
+    public RestResult functionsDelete(HttpServletRequest request, String functionsId) {
+        if (StringUtils.isBlank(functionsId)) {
             return RestResult.Fail("参数缺失");
         }
-        functionsService.delFunctionsById(functionsid);
+        UserInfo userInfo = Utils.getUserInfo(request);
+        functionsService.delFunctionsById(functionsId);
+        functionsService.upLastInfo(userInfo, functionsId);
         return RestResult.OK();
     }
 
@@ -385,14 +393,16 @@ public class SystemController {
      */
     @RequestMapping("resetPassword")
     @ResponseBody
-    public RestResult resetPassword(String userId, String password) {
+    public RestResult resetPassword(HttpServletRequest request, String userId, String password) {
         if (StringUtils.isNotBlank(password)) {
             password = password.trim();
         } else {
             return RestResult.Fail("请填写密码");
         }
         if (Utils.isValidPassword(password)) {
+            UserInfo userInfo = Utils.getUserInfo(request);
             userInfoService.resetPassword(userId, password);
+            userInfoService.upLastInfo(userInfo, userId);
             return RestResult.OK();
         } else {
             return RestResult.Fail("密码不符合要求(至少8位且包含大小写英文和数字)");
@@ -482,13 +492,15 @@ public class SystemController {
      * 删除字典
      *
      * @param request
-     * @param ids
+     * @param dictIds
      * @return
      */
     @RequestMapping("dictDelete")
     @ResponseBody
-    public RestResult delDict(HttpServletRequest request, String ids) {
-        dictService.delDictByIds(ids);
+    public RestResult delDict(HttpServletRequest request, String dictIds) {
+        UserInfo userInfo = Utils.getUserInfo(request);
+        dictService.delDictByIds(dictIds);
+        dictService.upLastInfo(userInfo, dictIds);
         return RestResult.OK();
     }
 

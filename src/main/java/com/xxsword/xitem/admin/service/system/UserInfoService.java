@@ -35,7 +35,6 @@ public interface UserInfoService extends IService<UserInfo> {
 
     /**
      * 删除用户（逻辑删除）
-     *
      */
     void delUserInfoByIds(String userIds);
 
@@ -93,4 +92,9 @@ public interface UserInfoService extends IService<UserInfo> {
      * @return
      */
     int countUserBuRoleId(String roleId);
+
+    /**
+     * 刷新用户最后更新人和最后更新时间
+     */
+    void upLastInfo(UserInfo doUserInfo, String userIds);
 }

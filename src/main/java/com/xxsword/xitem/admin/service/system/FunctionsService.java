@@ -2,6 +2,7 @@ package com.xxsword.xitem.admin.service.system;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.xxsword.xitem.admin.domain.entity.system.Functions;
+import com.xxsword.xitem.admin.domain.entity.system.UserInfo;
 
 import java.util.List;
 
@@ -28,4 +29,8 @@ public interface FunctionsService extends IService<Functions> {
      */
     void saveFunctionsSeq(String fids, String seqs);
 
+    /**
+     * 刷新菜单最后更新人和最后更新时间
+     */
+    void upLastInfo(UserInfo doUserInfo, String functionsIds);
 }

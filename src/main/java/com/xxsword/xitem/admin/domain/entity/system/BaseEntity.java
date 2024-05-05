@@ -119,6 +119,7 @@ public abstract class BaseEntity {
             this.cuserid = userInfo.getId();
             this.corganid = userInfo.getOrganid();
             this.cdate = DateUtil.now();
+            this.status = 1;
         } else {
             this.lastuserid = userInfo.getId();
             this.lastupdate = DateUtil.now();

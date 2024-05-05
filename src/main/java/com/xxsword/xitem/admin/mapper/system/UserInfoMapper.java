@@ -29,14 +29,14 @@ public interface UserInfoMapper extends BaseMapper<UserInfo> {
             "and b.roleid=#{userInfoDto.roleId} " +
             "</if>" +
             "</script>")
-    Page<UserInfo> pageUserBuRoleId(Page<UserInfo> page, UserInfoDto userInfoDto);
+    Page<UserInfo> pageUserBuRoleId(Page<UserInfo> page, UserInfoDto dto);
 
     @Select("<script>" +
             "select " +
-            "count(c.*)" +
+            "count(c.id)" +
             "from t_sys_user_role b left join t_sys_userinfo c on b.userid=c.id " +
             "where 1=1 " +
-            "<if test='dto.roleId!=null and dto.roleId!=\"\"'>" +
+            "<if test='roleId!=null and roleId!=\"\"'>" +
             "and b.roleid=#{roleId} " +
             "</if>" +
             "</script>")
