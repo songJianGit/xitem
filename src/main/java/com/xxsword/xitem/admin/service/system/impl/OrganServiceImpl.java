@@ -232,7 +232,7 @@ public class OrganServiceImpl extends ServiceImpl<OrganMapper, Organ> implements
     private List<String> getPermissionsIds(UserInfo userInfo) {
         List<String> list = new ArrayList<>();
         if (StringUtils.isNotBlank(userInfo.getPermissionids())) {
-            return Arrays.asList(userInfo.getPermissionids().split(","));
+            return new ArrayList<>(Arrays.asList(userInfo.getPermissionids().split(",")));
         }
         list.add(userInfo.getOrganid());
         return list;
