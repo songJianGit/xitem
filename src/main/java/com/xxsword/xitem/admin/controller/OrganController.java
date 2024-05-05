@@ -126,10 +126,12 @@ public class OrganController {
             organ.setSeq(pOrganMax.getSeq() + 10);
         }
         organ.setBaseInfo(userInfo);
-        organ.setPid(pId);
         organService.saveOrUpdate(organ);
-        organ.setPids(organService.organPIds(organ.getId()));
-        organService.saveOrUpdate(organ);
+
+        Organ organUp = new Organ();
+        organUp.setId(organ.getId());
+        organUp.setPids(organService.organPIds(organ.getId()));
+        organService.updateById(organUp);// 更新该机构pids
         RestResult a = RestResult.OK();
         a.setData(organ);
         return a;

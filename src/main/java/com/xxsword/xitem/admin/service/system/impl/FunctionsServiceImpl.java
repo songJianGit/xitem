@@ -2,7 +2,6 @@ package com.xxsword.xitem.admin.service.system.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.xxsword.xitem.admin.domain.entity.system.Functions;
 import com.xxsword.xitem.admin.mapper.system.FunctionsMapper;
@@ -15,33 +14,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-@Transactional
 public class FunctionsServiceImpl extends ServiceImpl<FunctionsMapper, Functions> implements FunctionsService {
-
-    @Override
-    public Page<Functions> pageFunctions(Page<Functions> page) {
-        LambdaQueryWrapper<Functions> query = Wrappers.lambdaQuery();
-        query.eq(Functions::getStatus, 1);
-        query.orderByAsc(Functions::getSeq, Functions::getId);
-        return page(page, query);
-    }
-
-    @Override
-    public List<Functions> functionsAll() {
-        LambdaQueryWrapper<Functions> query = Wrappers.lambdaQuery();
-        query.eq(Functions::getStatus, 1);
-        query.orderByAsc(Functions::getSeq);
-        return list(query);
-    }
-
-    @Override
-    public List<Functions> functionsByPId(String pid) {
-        LambdaQueryWrapper<Functions> query = Wrappers.lambdaQuery();
-        query.eq(Functions::getStatus, 1);
-        query.eq(Functions::getPid, pid);
-        query.orderByAsc(Functions::getSeq, Functions::getId);
-        return list(query);
-    }
 
     @Override
     public List<Functions> functionsRetainAll(String pid, List<Functions> functionsList) {
@@ -58,35 +31,42 @@ public class FunctionsServiceImpl extends ServiceImpl<FunctionsMapper, Functions
     }
 
     @Override
+    @Transactional
     public void delFunctionsById(String id) {
-        Functions functions = getById(id);
-        functions.setStatus(0);
-        updateById(functions);
-        delFunctionsDown(functions);// 递归删除其所有子集
+        Functions functionsUp = new Functions();
+        functionsUp.setId(id);
+        functionsUp.setStatus(0);
+        updateById(functionsUp);
+        delFunctionsDown(id);// 递归删除其所有子集
     }
 
-    private void delFunctionsDown(Functions functions) {
+    private void delFunctionsDown(String functionsId) {
         LambdaQueryWrapper<Functions> query = Wrappers.lambdaQuery();
-        query.eq(Functions::getPid, functions.getId());
+        query.eq(Functions::getPid, functionsId);
         List<Functions> pf = list(query);
         if (pf != null && pf.size() > 0) {
             for (Functions f : pf) {
-                f.setStatus(0);
-                updateById(f);
-                delFunctionsDown(f);
+                Functions functionsUp = new Functions();
+                functionsUp.setId(f.getId());
+                functionsUp.setStatus(0);
+                updateById(functionsUp);
+                delFunctionsDown(f.getId());
             }
         }
     }
 
     @Override
     public void saveFunctionsSeq(String fids, String seqs) {
-        String[] fidattr = fids.split(",");
-        String[] seqattr = seqs.split(",");
-        for (int i = 0; i < fidattr.length; i++) {
-            Functions functions = getById(fidattr[i]);
-            functions.setSeq(Integer.valueOf(seqattr[i]));
-            saveOrUpdate(functions);
+        String[] fidAttr = fids.split(",");
+        String[] seqAttr = seqs.split(",");
+        List<Functions> functionsListUp = new ArrayList<>();
+        for (int i = 0; i < fidAttr.length; i++) {
+            Functions functionsUp = new Functions();
+            functionsUp.setId(fidAttr[i]);
+            functionsUp.setSeq(Integer.valueOf(seqAttr[i]));
+            functionsListUp.add(functionsUp);
         }
+        updateBatchById(functionsListUp);
     }
 
 }

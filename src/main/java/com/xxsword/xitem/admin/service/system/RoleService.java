@@ -30,11 +30,9 @@ public interface RoleService extends IService<Role> {
     /**
      * 删除角色（逻辑删除）
      *
-     * @param roleId
+     * @param roleIds
      */
-    void delRoleById(String roleId);
-
-    void delRoleByIds(String[] roleIds);
+    void delRoleByIds(String roleIds);
 
     /**
      * 启用和停用

@@ -11,14 +11,13 @@ import com.xxsword.xitem.admin.service.system.FunctionsService;
 import com.xxsword.xitem.admin.service.system.RoleFunctionsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
-@Transactional
 public class RoleFunctionsServiceImpl extends ServiceImpl<RoleFunctionsMapper, RoleFunctions> implements RoleFunctionsService {
     @Autowired
     private FunctionsService functionsService;
@@ -41,14 +40,16 @@ public class RoleFunctionsServiceImpl extends ServiceImpl<RoleFunctionsMapper, R
             List<Functions> functionsList = listFunctionsByRoleId(roleId);
             Set<String> sets = functionsList.stream().map(Functions::getId).collect(Collectors.toSet());
             String[] funs = funIds.split(",");
+            List<RoleFunctions> list = new ArrayList<>();
             for (String fId : funs) {
                 if (!sets.contains(fId)) {
                     RoleFunctions r = new RoleFunctions();
                     r.setFunid(fId);
                     r.setRoleid(roleId);
-                    save(r);
+                    list.add(r);
                 }
             }
+            saveBatch(list);
         }
     }
 }

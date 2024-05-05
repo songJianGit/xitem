@@ -28,7 +28,7 @@ public interface UserInfoService extends IService<UserInfo> {
      * 校验本登录名是否可用
      *
      * @param loginname
-     * @param userId       当前用户
+     * @param userId    当前用户
      * @return true-还没有人用  false-已有人使用
      */
     boolean checkLonginName(String loginname, String userId);
@@ -36,11 +36,8 @@ public interface UserInfoService extends IService<UserInfo> {
     /**
      * 删除用户（逻辑删除）
      *
-     * @param id
      */
-    void delUserInfoById(UserInfo userInfo, String id);
-
-    void delUserInfoByIds(UserInfo userInfo, String[] ids);
+    void delUserInfoByIds(String userIds);
 
     /**
      * 用户的启用和停用

@@ -12,12 +12,11 @@ import com.xxsword.xitem.admin.service.system.RoleFunctionsService;
 import com.xxsword.xitem.admin.service.system.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
-@Transactional
 public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements RoleService {
     @Autowired
     private RoleFunctionsService roleFunctionsService;
@@ -47,31 +46,30 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
     }
 
     @Override
-    public void delRoleById(String roleId) {
-        Role role = getById(roleId);
-        if (role != null) {
-            role.setStatus(0);
-            updateById(role);
+    public void delRoleByIds(String roleIds) {
+        String[] ids = roleIds.split(",");
+        List<Role> listUp = new ArrayList<>();
+        for (String id : ids) {
+            Role roleUp = new Role();
+            roleUp.setId(id);
+            roleUp.setStatus(0);
+            listUp.add(roleUp);
         }
-    }
-
-    @Override
-    public void delRoleByIds(String[] roleIds) {
-        for (String id : roleIds) {
-            delRoleById(id);
-        }
+        updateBatchById(listUp);
     }
 
 
     @Override
     public Role upRoleStatus(String roleId) {
         Role role = getById(roleId);
+        Role roleUp = new Role();
+        roleUp.setId(roleId);
         if (role.getStatus() == null || role.getStatus() == 1) {
-            role.setStatus(2);
+            roleUp.setStatus(2);
         } else {
-            role.setStatus(1);
+            roleUp.setStatus(1);
         }
-        updateById(role);
+        updateById(roleUp);
         return role;
     }
 

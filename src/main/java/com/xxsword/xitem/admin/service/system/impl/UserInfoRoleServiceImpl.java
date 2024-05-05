@@ -10,13 +10,12 @@ import com.xxsword.xitem.admin.service.system.RoleService;
 import com.xxsword.xitem.admin.service.system.UserInfoRoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-@Transactional
 public class UserInfoRoleServiceImpl extends ServiceImpl<UserInfoRoleMapper, UserInfoRole> implements UserInfoRoleService {
 
     @Autowired
@@ -46,6 +45,7 @@ public class UserInfoRoleServiceImpl extends ServiceImpl<UserInfoRoleMapper, Use
     @Override
     public void userLinkRole(String roleId, String userIds) {
         String[] ids = userIds.split(",");
+        List<UserInfoRole> list = new ArrayList<>();
         for (String id : ids) {
             LambdaQueryWrapper<UserInfoRole> query = Wrappers.lambdaQuery();
             query.eq(UserInfoRole::getUserid, id);
@@ -57,7 +57,8 @@ public class UserInfoRoleServiceImpl extends ServiceImpl<UserInfoRoleMapper, Use
             UserInfoRole ur = new UserInfoRole();
             ur.setRoleid(roleId);
             ur.setUserid(id);
-            save(ur);
+            list.add(ur);
         }
+        saveBatch(list);
     }
 }

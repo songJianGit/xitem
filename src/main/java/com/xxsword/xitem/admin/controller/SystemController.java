@@ -3,6 +3,7 @@ package com.xxsword.xitem.admin.controller;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.xxsword.xitem.admin.domain.dto.system.DictDto;
+import com.xxsword.xitem.admin.domain.dto.system.FunctionsDto;
 import com.xxsword.xitem.admin.domain.dto.system.RoleDto;
 import com.xxsword.xitem.admin.domain.dto.system.UserInfoDto;
 import com.xxsword.xitem.admin.domain.entity.system.*;
@@ -114,12 +115,11 @@ public class SystemController {
      */
     @RequestMapping("userDelete")
     @ResponseBody
-    public RestResult userDelete(HttpServletRequest request, String userids) {
-        UserInfo userInfo = Utils.getUserInfo(request);
-        if (StringUtils.isBlank(userids)) {
+    public RestResult userDelete(HttpServletRequest request, String userIds) {
+        if (StringUtils.isBlank(userIds)) {
             return RestResult.Fail("参数缺失");
         }
-        userInfoService.delUserInfoByIds(userInfo, userids.split(","));
+        userInfoService.delUserInfoByIds(userIds);
         return RestResult.OK();
     }
 
@@ -180,7 +180,7 @@ public class SystemController {
         if (checkRoleByids(roleids)) {
             return RestResult.Fail("本角色被引用，请勿删除");
         }
-        roleService.delRoleByIds(roleids.split(","));
+        roleService.delRoleByIds(roleids);
         return RestResult.OK();
     }
 
@@ -253,8 +253,8 @@ public class SystemController {
      * 菜单列表
      */
     @RequestMapping("functionsList")
-    public String functionsList(Model model) {
-        List<Functions> listFunctions = functionsService.functionsAll();// 所有可用菜单
+    public String functionsList(FunctionsDto functionsDto, Model model) {
+        List<Functions> listFunctions = functionsService.list(functionsDto.toQuery());// 所有可用菜单
         List<Functions> listFunctionsSeq = MenuUtil.sortList(listFunctions);
         model.addAttribute("listFunctions", listFunctionsSeq);
         return "admin/system/functionslist";
@@ -332,8 +332,8 @@ public class SystemController {
      * 上级菜单的选择
      */
     @RequestMapping("functionsSelect")
-    public String functionsSelect(Model model) {
-        List<Functions> listFunctions = functionsService.functionsAll();// 所有可用菜单
+    public String functionsSelect(FunctionsDto functionsDto, Model model) {
+        List<Functions> listFunctions = functionsService.list(functionsDto.toQuery());// 所有可用菜单
         model.addAttribute("listFunctions", listFunctions);
         return "admin/system/functionsselect";
     }

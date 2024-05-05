@@ -15,13 +15,11 @@ import com.xxsword.xitem.admin.service.system.OrganService;
 import com.xxsword.xitem.admin.utils.Utils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
-@Transactional
 @Slf4j
 public class OrganServiceImpl extends ServiceImpl<OrganMapper, Organ> implements OrganService {
 
@@ -55,10 +53,9 @@ public class OrganServiceImpl extends ServiceImpl<OrganMapper, Organ> implements
 
     @Override
     public Organ maxSeq(String organId) {
-        LambdaQueryWrapper<Organ> query = Wrappers.lambdaQuery();
-        query.eq(Organ::getStatus, 1);
-        query.eq(Organ::getPid, organId);
-        query.orderByAsc(Organ::getSeq, Organ::getId);
+        OrganDto organDto = new OrganDto();
+        organDto.setPid(organId);
+        LambdaQueryWrapper<Organ> query = organDto.toQuery();
         List<Organ> p = page(new Page<>(1, 1), query).getRecords();
         if (p.size() == 0) {
             return getById(organId);
@@ -112,10 +109,15 @@ public class OrganServiceImpl extends ServiceImpl<OrganMapper, Organ> implements
         try {
             for (int i = 1; i < page; i++) {
                 Page<Organ> xo = page(new Page<>(i, pageSize), query);
-                for (Organ item : xo.getRecords()) {
-                    item.setPids(organPIds(item.getId()));
-                    updateById(item);
+                List<Organ> organList = xo.getRecords();
+                List<Organ> organListUp = new ArrayList<>();
+                for (Organ o : organList) {
+                    Organ oUp = new Organ();
+                    oUp.setId(o.getId());
+                    oUp.setPids(organPIds(o.getId()));
+                    organListUp.add(oUp);
                 }
+                updateBatchById(organListUp);
                 if (xo.getRecords().size() < pageSize) {
                     break;
                 }
@@ -131,22 +133,28 @@ public class OrganServiceImpl extends ServiceImpl<OrganMapper, Organ> implements
     public void delOrgan(String organIds) {
         String[] ids = organIds.split(",");
         for (String id : ids) {
-            Organ organ = getById(id);
-            organ.setStatus(0);
-            updateById(organ);
+            Organ organUp = new Organ();
+            organUp.setId(id);
+            organUp.setStatus(0);
+            updateById(organUp);
             List<Organ> list = organC(id);
+            List<Organ> listUp = new ArrayList<>();
             for (Organ o : list) {
-                o.setStatus(0);
+                Organ oUp = new Organ();
+                oUp.setId(o.getId());
+                oUp.setStatus(0);
+                listUp.add(oUp);
             }
-            updateBatchById(list);
+            updateBatchById(listUp);
         }
     }
 
     @Override
     public List<String> listOrganIdByOrganId(String organId) {
         List<Organ> list = organC(organId);
-        list.add(getById(organId));
-        return list.stream().map(Organ::getId).collect(Collectors.toList());
+        List<String> stringList = list.stream().map(Organ::getId).collect(Collectors.toList());
+        stringList.add(organId);
+        return stringList;
     }
 
     @Override

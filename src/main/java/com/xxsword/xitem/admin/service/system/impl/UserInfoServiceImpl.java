@@ -17,12 +17,11 @@ import com.xxsword.xitem.admin.service.system.UserInfoService;
 import com.xxsword.xitem.admin.utils.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
-@Transactional
 public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> implements UserInfoService {
 
     @Autowired
@@ -68,28 +67,29 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
     }
 
     @Override
-    public void delUserInfoById(UserInfo operator, String userId) {
-        UserInfo userInfo = getById(userId);
-        userInfo.setStatus(0);
-        updateById(userInfo);
-    }
-
-    @Override
-    public void delUserInfoByIds(UserInfo userInfo, String[] userIds) {
-        for (String id : userIds) {
-            delUserInfoById(userInfo, id);
+    public void delUserInfoByIds(String userIds) {
+        String[] ids = userIds.split(",");
+        List<UserInfo> listUp = new ArrayList<>();
+        for (String id : ids) {
+            UserInfo userInfoUp = new UserInfo();
+            userInfoUp.setId(id);
+            userInfoUp.setStatus(0);
+            listUp.add(userInfoUp);
         }
+        updateBatchById(listUp);
     }
 
     @Override
     public void upUserInfoStatus(String userId) {
         UserInfo userInfo = getById(userId);
+        UserInfo userInfoUp = new UserInfo();
+        userInfoUp.setId(userId);
         if (userInfo.getStatus() == null || userInfo.getStatus() == 1) {
-            userInfo.setStatus(2);
+            userInfoUp.setStatus(2);
         } else {
-            userInfo.setStatus(1);
+            userInfoUp.setStatus(1);
         }
-        updateById(userInfo);
+        updateById(userInfoUp);
     }
 
     @Override
@@ -146,8 +146,10 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
                 pwdError = nowTime + ",1";
             }
         }
-        userInfo.setPassworderror(pwdError);
-        updateById(userInfo);
+        UserInfo userInfoUp = new UserInfo();
+        userInfoUp.setId(userInfo.getId());
+        userInfoUp.setPassworderror(pwdError);
+        updateById(userInfoUp);
         return flag;
     }
 
@@ -156,8 +158,10 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
         UserInfo user = getById(userId);
         if (p.equals(user.getPassword())) {
             if (p1.equals(p2)) {
-                user.setPassword(p1);
-                updateById(user);
+                UserInfo userUp = new UserInfo();
+                userUp.setId(user.getId());
+                userUp.setPassword(p1);
+                updateById(userUp);
                 return RestResult.OK();
             } else {
                 return RestResult.Fail("密码不一致");
@@ -169,9 +173,10 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
 
     @Override
     public void resetPassword(String userId, String password) {
-        UserInfo user = getById(userId);
-        user.setPassword(password);
-        updateById(user);
+        UserInfo userUp= new UserInfo();
+        userUp.setId(userId);
+        userUp.setPassword(password);
+        updateById(userUp);
     }
 
     @Override
