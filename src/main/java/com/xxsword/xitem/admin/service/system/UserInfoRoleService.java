@@ -15,10 +15,10 @@ public interface UserInfoRoleService extends IService<UserInfoRole> {
     /**
      * 将用户和角色拆分
      */
-    void userSplitRole(String roleid, String userids);
+    void userSplitRole(String urIds);
 
     /**
      * 将用户和角色绑定
      */
-    void userLinkRole(String roleid, String userids);
+    void userLinkRole(String roleId, String userIds);
 }

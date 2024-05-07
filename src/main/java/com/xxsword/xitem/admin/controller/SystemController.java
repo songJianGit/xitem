@@ -425,8 +425,8 @@ public class SystemController {
      */
     @RequestMapping("userSplitRole")
     @ResponseBody
-    public RestResult userSplitRole(String roleId, String userIds) {
-        userInfoRoleService.userSplitRole(roleId, userIds);
+    public RestResult userSplitRole(String urIds) {
+        userInfoRoleService.userSplitRole(urIds);
         return RestResult.OK();
     }
 

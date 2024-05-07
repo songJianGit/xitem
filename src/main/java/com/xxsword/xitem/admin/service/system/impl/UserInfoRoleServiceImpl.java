@@ -34,11 +34,10 @@ public class UserInfoRoleServiceImpl extends ServiceImpl<UserInfoRoleMapper, Use
     }
 
     @Override
-    public void userSplitRole(String roleId, String userIds) {
-        String[] ids = userIds.split(",");
+    public void userSplitRole(String urIds) {
+        String[] ids = urIds.split(",");
         LambdaQueryWrapper<UserInfoRole> query = Wrappers.lambdaQuery();
-        query.in(UserInfoRole::getUserid, ids);
-        query.eq(UserInfoRole::getRoleid, roleId);
+        query.in(UserInfoRole::getId, ids);
         remove(query);
     }
 
