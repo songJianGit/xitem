@@ -41,9 +41,18 @@ public class LoginInterceptor implements HandlerInterceptor {
         if (roleSet == null) {
             return back(request, response);
         }
-        for (Role role : roleSet) {
-            if (checkF(request, role)) {
-                return true;
+        String url = request.getServletPath();
+        if (StringUtils.isBlank(url)) {
+            return back(request, response);
+        }
+        Functions functions = checkF(url);
+        if (functions == null) {
+            return true;// 没有配置该url，默认放行。
+        } else {
+            for (Role role : roleSet) {
+                if (checkRF(role, functions)) {
+                    return true;
+                }
             }
         }
         return back(request, response);
@@ -59,27 +68,27 @@ public class LoginInterceptor implements HandlerInterceptor {
     }
 
     /**
+     * 是否有这个链接（是否需要检查权限）
+     *
+     * @return
+     */
+    private Functions checkF(String url) {
+        List<Functions> haveFun = functionsService.list(new LambdaQueryWrapper<Functions>().select(Functions::getId).eq(Functions::getStatus, 1).eq(Functions::getUrl, url));
+        if (haveFun.isEmpty()) {
+            return null;
+        }
+        return haveFun.get(0);
+    }
+
+    /**
      * 检查用户是否有本权限    true-有 false-没有
      *
-     * @param request
      * @param role
      * @return
      */
-    private boolean checkF(HttpServletRequest request, Role role) {
-        String url = request.getServletPath();
-        if (StringUtils.isBlank(url)) {
-            return false;
-        }
-        // 是否有这个链接（是否需要检查权限）
-        List<Functions> haveFun = functionsService.list(new LambdaQueryWrapper<Functions>().select(Functions::getId).eq(Functions::getStatus, 1).eq(Functions::getUrl, url));
-        if (haveFun.isEmpty()) {
-            return true;// 没有配置菜单，默认放行
-        }
+    private boolean checkRF(Role role, Functions functions) {
         // 角色是否拥有本链接
-        long roleFunctionsCount = roleFunctionsService.count(new LambdaQueryWrapper<RoleFunctions>().eq(RoleFunctions::getRoleid, role.getId()).eq(RoleFunctions::getFunid, haveFun.get(0).getId()));
-        if (roleFunctionsCount == 0) {
-            return false;// 该角色没有此权限
-        }
-        return true;
+        long roleFunctionsCount = roleFunctionsService.count(new LambdaQueryWrapper<RoleFunctions>().eq(RoleFunctions::getRoleid, role.getId()).eq(RoleFunctions::getFunid, functions.getId()));
+        return roleFunctionsCount != 0;
     }
 }
