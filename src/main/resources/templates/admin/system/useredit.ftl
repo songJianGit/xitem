@@ -33,9 +33,9 @@
                                                value="${user.nickname!}" placeholder="昵称" required/>
                                     </div>
                                     <div class="form-group col-6">
-                                        <label for="username">用户名</label>
+                                        <label for="username">姓名</label>
                                         <input type="text" class="form-control" id="username" name="username"
-                                               value="${user.username!}" placeholder="用户名" required/>
+                                               value="${user.username!}" placeholder="姓名" required/>
                                     </div>
                                     <div class="form-group col-6">
                                         <label for="loginname">登录名</label>

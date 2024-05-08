@@ -18,7 +18,7 @@ import javax.servlet.http.HttpSession;
 
 @Controller
 @Slf4j
-public class LoginController {
+public class LoginController extends BaseController {
 
     @Autowired
     private UserInfoService userInfoService;

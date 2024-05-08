@@ -25,7 +25,7 @@ import java.util.List;
 
 @Controller
 @RequestMapping("admin/system")
-public class SystemController {
+public class SystemController extends BaseController {
 
     @Autowired
     private UserInfoService userInfoService;

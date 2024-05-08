@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 @Controller
 @Slf4j
 @RequestMapping("admin/ueditor")
-public class UeditorController {
+public class UeditorController extends BaseController{
 
     @ResponseBody
     @RequestMapping("ueditorConfig")

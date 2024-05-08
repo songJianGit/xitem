@@ -40,7 +40,7 @@
     <form action="#!" method="post" class="login-form">
         <div class="form-group has-feedback">
             <span class="mdi mdi-account" aria-hidden="true"></span>
-            <input type="text" class="form-control" id="loginName" placeholder="用户名" value="admin">
+            <input type="text" class="form-control" id="loginName" placeholder="登录名" value="admin">
         </div>
 
         <div class="form-group has-feedback">
@@ -91,7 +91,7 @@
         let passWord = $('#passWord').val();
         let captchaInput = $('#captchaInput').val();
         if (isBlank_login(loginName)) {
-            layer.msg("请输入用户名");
+            layer.msg("请输入登录名");
             return false;
         } else if (isBlank_login(passWord)) {
             layer.msg("请输入密码");

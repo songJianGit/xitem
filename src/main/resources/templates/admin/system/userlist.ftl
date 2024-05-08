@@ -27,14 +27,14 @@
 
                                     <div class="input-group m-r-5">
                                         <div class="input-group-prepend">
-                                            <span class="input-group-text" id="inputGroup-sizing-default">用户名</span>
+                                            <span class="input-group-text">姓名</span>
                                         </div>
-                                        <input type="text" class="form-control" name="userName" placeholder="用户名">
+                                        <input type="text" class="form-control" name="userName" placeholder="姓名">
                                     </div>
 
                                     <div class="input-group m-r-5">
                                         <div class="input-group-prepend">
-                                            <span class="input-group-text" id="inputGroup-sizing-default">登录名</span>
+                                            <span class="input-group-text">登录名</span>
                                         </div>
                                         <input type="text" class="form-control" value="" name="loginName"
                                                placeholder="登录名">
@@ -71,7 +71,7 @@
                                         <thead>
                                         <tr>
                                             <th data-checkbox="true"></th>
-                                            <th data-field="username">用户名</th>
+                                            <th data-field="username">姓名</th>
                                             <th data-field="loginname">登录名</th>
                                             <th data-field="email">邮箱</th>
                                             <th data-field="phoneno">手机号码</th>

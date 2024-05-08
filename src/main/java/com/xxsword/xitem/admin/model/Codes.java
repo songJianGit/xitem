@@ -21,7 +21,7 @@ public enum Codes {
      * 失败信息
      */
     FAIL(false, "20000", "操作失败"),
-    LOGIN_FAIL(false, "20001", "登录失败，请检查用户名或密码是否正确"),
+    LOGIN_FAIL(false, "20001", "登录失败，请检查登录名或密码是否正确"),
     USERINFO_STOP(false, "20002", "账号已无法使用"),
     USERINFO_NO_ADMIN(false, "20003", "本用户非管理员"),
     USERINFO_NO_COMPLETE(false, "20004", "用户信息不完整"),
