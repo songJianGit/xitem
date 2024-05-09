@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 
 @Controller
 @RequestMapping("admin/record")
-public class RecordController extends BaseController{
+public class RecordController extends BaseController {
     @Autowired
     private RecordService recordService;
 

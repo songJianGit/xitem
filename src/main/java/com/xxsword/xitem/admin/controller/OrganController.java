@@ -21,7 +21,7 @@ import java.util.*;
 
 @Controller
 @RequestMapping("admin/organ")
-public class OrganController extends BaseController{
+public class OrganController extends BaseController {
     @Autowired
     private OrganService organService;
 

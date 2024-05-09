@@ -27,7 +27,7 @@ import java.util.*;
 @Slf4j
 public class UpLoadUtil {
 
-    private static final String PATH_INFO = "/fileinfo";// 所有文件路径都会加的前缀，用作nginx转发可以减轻java压力
+    public static final String PATH_INFO = "/fileinfo";// 所有文件路径都会加的前缀，用作nginx转发可以减轻java压力
 
     private static final String PATH_DEF = "/def";// 默认文件夹
 
@@ -82,15 +82,8 @@ public class UpLoadUtil {
 
     /**
      * 将文件从临时文件夹里面移动出来（本方法专门用作临时文件夹的文件移动，不要用做其它）
-     *
-     * @param url
-     * @return
      */
-    public static String tempToFileInfoPath(String url) {
-        return tempToFileInfoPath(url, UpLoadUtil.getTIMEPath());
-    }
-
-    private static String tempToFileInfoPath(String url, String timePath) {
+    public static void tempToFileInfoPath(String url, String timePath) {
         timePath = doPath(timePath);
         String[] u = FilenameUtils.getFullPathNoEndSeparator(url).split(PATH_TEMP);
         String urlPrefix = u[0] + PATH_DEF + timePath + u[1];
@@ -98,10 +91,8 @@ public class UpLoadUtil {
             FileUtils.moveToDirectory(new File(url), new File(urlPrefix), true);
         } catch (IOException e) {
             e.printStackTrace();
-            return null;
         }
-        urlPrefix = urlPrefix.replaceAll(UpLoadUtil.getPath(), "") + "/" + FilenameUtils.getName(url);
-        return PATH_INFO + urlPrefix;
+//        urlPrefix = urlPrefix.replaceAll(UpLoadUtil.getPath(), "") + "/" + FilenameUtils.getName(url);
     }
 
     /**
@@ -140,7 +131,11 @@ public class UpLoadUtil {
      */
     private static String getDPath() {
         try {
-            String pathStr = ResourceUtils.getURL("").getPath() + PATH_INFO;
+            String url = ResourceUtils.getURL("").getPath();
+            if (url.endsWith("/")) {
+                url = url.substring(0, url.length() - 1);
+            }
+            String pathStr = url + PATH_INFO;
             Utils.hasFolder(pathStr);
             log.debug("uploadPath:" + pathStr);
             return pathStr.replaceAll("\\\\", "/");

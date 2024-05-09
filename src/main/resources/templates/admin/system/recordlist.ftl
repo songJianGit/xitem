@@ -44,7 +44,7 @@
                                         <input type="text" class="form-control" name="params" placeholder="提交参数">
                                     </div>
                                     <button type="button" id="searchBtn" class="btn btn-primary m-r-5">搜索</button>
-                                    <button type="reset" class="btn btn-primary">清除</button>
+                                    <button type="reset" class="btn btn-default">重置</button>
                                 </form>
                             </div>
 
@@ -65,7 +65,7 @@
                                             <th data-field="dopath">URI</th>
                                             <th data-field="method">提交方式</th>
                                             <th data-field="params">提交参数</th>
-                                            <th data-field="remoteaddr">IP</th>
+                                            <th data-field="ips">IP</th>
                                             <th data-field="useragent">浏览器信息</th>
                                             <th data-field="cdate">操作时间</th>
                                         </tr>
@@ -83,7 +83,11 @@
 </div>
 <#include "../commons/js.ftl"/>
 <script type="text/javascript">
-
+    $('#searchBtn').click(function () {
+        $("#table-pagination").bootstrapTable('refresh', {
+            url: "${ctx.contextPath}/admin/record/recordListData?" + $("#searchform").serialize()
+        });
+    });
 
 </script>
 </body>

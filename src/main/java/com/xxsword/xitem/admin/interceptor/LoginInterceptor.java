@@ -34,9 +34,6 @@ public class LoginInterceptor implements HandlerInterceptor {
             return back(request, response);
         }
         UserInfo userInfo = (UserInfo) o;
-        if (userInfo == null) {
-            return back(request, response);
-        }
         List<Role> roleSet = userInfo.getRolelist();
         if (roleSet == null) {
             return back(request, response);

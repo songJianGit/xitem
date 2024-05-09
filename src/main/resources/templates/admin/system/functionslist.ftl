@@ -26,7 +26,7 @@
                         <form action="${ctx.contextPath}/admin/system/functionsSeq" method="post"
                               onsubmit="return check();">
                             <div class="card">
-                                <div class="card-toolbar clearfix">
+                                <div class="card-header">
                                     <div class="toolbar-btn-action">
                                         <button type="button" id="add" class="btn btn-primary m-r-5" href="#!"><i
                                                     class="mdi mdi-plus"></i> 新增菜单
