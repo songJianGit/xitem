@@ -98,6 +98,11 @@ public interface OrganService extends IService<Organ> {
      */
     List<String> listOrganIdByOrganId(List<String> organIds);
 
+    /**
+     * 刷新机构最后更新人和最后更新时间
+     */
+    void upLastInfo(UserInfo doUserInfo, String organIds);
+
     //=======================================================================
 
     void permissionHandle(UserInfo userInfo, String permissionType, LambdaQueryWrapper query);

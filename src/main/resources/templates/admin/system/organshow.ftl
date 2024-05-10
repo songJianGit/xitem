@@ -42,28 +42,33 @@
     });
 
     let zTreeObj;
-    $.ajax({
-        url: "${ctx.contextPath}/admin/organ/data",
-        cache: false,// 不缓存
-        success: function (d) {
-            let setting = {
-                data: {
-                    simpleData: {
-                        enable: true// 简单数据
-                    }
-                },
-                callback: {
-                    onCheck: nodeOnCheck
-                },
-                check: {
-                    enable: true,
-                    chkboxType: {"Y": "", "N": ""}
-                }
-            };
-            zTreeObj = $.fn.zTree.init($("#ztree"), setting, d);
-            showOne();
-        }
+    $(function () {
+        loadTree();
     });
+    function loadTree() {
+        $.ajax({
+            url: "${ctx.contextPath}/admin/organ/data",
+            cache: false,// 不缓存
+            success: function (d) {
+                let setting = {
+                    data: {
+                        simpleData: {
+                            enable: true// 简单数据
+                        }
+                    },
+                    callback: {
+                        onCheck: nodeOnCheck
+                    },
+                    check: {
+                        enable: true,
+                        chkboxType: {"Y": "", "N": ""}
+                    }
+                };
+                zTreeObj = $.fn.zTree.init($("#ztree"), setting, d);
+                showOne();
+            }
+        });
+    }
 
     function nodeOnCheck(tevent, treeId, treeNode) {
         if (treeNode.checked) {

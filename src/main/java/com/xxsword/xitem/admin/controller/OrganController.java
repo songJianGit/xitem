@@ -83,6 +83,11 @@ public class OrganController extends BaseController {
         return datas;
     }
 
+    @RequestMapping("organList")
+    public String organList() {
+        return "/admin/system/organlist";
+    }
+
     /**
      * 右侧机构表
      * 根据部门id，获取该部门下一级的所有部门信息
@@ -109,7 +114,7 @@ public class OrganController extends BaseController {
             }
         }
         model.addAttribute("organ", organ);
-        return "/admin/system/organeditlayer";
+        return "/admin/system/organedit";
     }
 
     /**
@@ -142,8 +147,10 @@ public class OrganController extends BaseController {
      */
     @RequestMapping("delOrgan")
     @ResponseBody
-    public RestResult delOrgan(String organIds) {
+    public RestResult delOrgan(HttpServletRequest request, String organIds) {
+        UserInfo userInfo = Utils.getUserInfo(request);
         organService.delOrgan(organIds);
+        organService.upLastInfo(userInfo, organIds);
         return RestResult.OK();
     }
 

@@ -167,6 +167,19 @@ public class OrganServiceImpl extends ServiceImpl<OrganMapper, Organ> implements
     }
 
     @Override
+    public void upLastInfo(UserInfo doUserInfo, String organIds) {
+        String[] ids = organIds.split(",");
+        List<Organ> listUp = new ArrayList<>();
+        for (String id : ids) {
+            Organ organUp = new Organ();
+            organUp.setId(id);
+            organUp.setBaseInfo(doUserInfo);
+            listUp.add(organUp);
+        }
+        updateBatchById(listUp);
+    }
+
+    @Override
     public void permissionHandle(UserInfo userInfo, String permissionType, LambdaQueryWrapper query) {
         Integer userPermissionType = userInfo.getPermissionType();
         String userId = userInfo.getId();
