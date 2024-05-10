@@ -1,8 +1,8 @@
-package com.xxsword.xitem.admin.domain.dto.system;
+package com.xxsword.xitem.admin.domain.system.dto;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
-import com.xxsword.xitem.admin.domain.entity.system.Record;
+import com.xxsword.xitem.admin.domain.system.entity.Record;
 
 public class RecordDto {
     private String dopath;

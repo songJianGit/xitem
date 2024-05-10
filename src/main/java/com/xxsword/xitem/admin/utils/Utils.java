@@ -1,7 +1,7 @@
 package com.xxsword.xitem.admin.utils;
 
 import com.xxsword.xitem.admin.constant.Constant;
-import com.xxsword.xitem.admin.domain.entity.system.UserInfo;
+import com.xxsword.xitem.admin.domain.system.entity.UserInfo;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;

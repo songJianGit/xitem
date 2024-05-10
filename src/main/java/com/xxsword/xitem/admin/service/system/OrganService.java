@@ -3,10 +3,9 @@ package com.xxsword.xitem.admin.service.system;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.xxsword.xitem.admin.domain.dto.system.OrganDto;
-import com.xxsword.xitem.admin.domain.entity.system.BaseEntity;
-import com.xxsword.xitem.admin.domain.entity.system.Organ;
-import com.xxsword.xitem.admin.domain.entity.system.UserInfo;
+import com.xxsword.xitem.admin.domain.system.dto.OrganDto;
+import com.xxsword.xitem.admin.domain.system.entity.Organ;
+import com.xxsword.xitem.admin.domain.system.entity.UserInfo;
 
 import java.util.List;
 

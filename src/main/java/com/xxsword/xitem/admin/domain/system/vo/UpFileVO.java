@@ -1,4 +1,4 @@
-package com.xxsword.xitem.admin.model;
+package com.xxsword.xitem.admin.domain.system.vo;
 
 public class UpFileVO {
     private String path;

@@ -1,8 +1,8 @@
 package com.xxsword.xitem.admin.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.xxsword.xitem.admin.domain.dto.system.RecordDto;
-import com.xxsword.xitem.admin.domain.entity.system.Record;
+import com.xxsword.xitem.admin.domain.system.dto.RecordDto;
+import com.xxsword.xitem.admin.domain.system.entity.Record;
 import com.xxsword.xitem.admin.model.RestPaging;
 import com.xxsword.xitem.admin.service.system.RecordService;
 import org.springframework.beans.factory.annotation.Autowired;

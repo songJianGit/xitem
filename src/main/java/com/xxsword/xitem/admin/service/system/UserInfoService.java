@@ -2,8 +2,8 @@ package com.xxsword.xitem.admin.service.system;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.xxsword.xitem.admin.domain.dto.system.UserInfoDto;
-import com.xxsword.xitem.admin.domain.entity.system.UserInfo;
+import com.xxsword.xitem.admin.domain.system.dto.UserInfoDto;
+import com.xxsword.xitem.admin.domain.system.entity.UserInfo;
 import com.xxsword.xitem.admin.model.RestResult;
 
 public interface UserInfoService extends IService<UserInfo> {
@@ -75,15 +75,6 @@ public interface UserInfoService extends IService<UserInfo> {
     RestResult changePwd(String userId, String p, String p1, String p2);
 
     void resetPassword(String userId, String password);
-
-    /**
-     * 根据角色查询用户
-     *
-     * @param page
-     * @param userInfoDto
-     * @return
-     */
-    Page<UserInfo> queryUserListByRole(Page<UserInfo> page, UserInfoDto userInfoDto);
 
     /**
      * 根据角色id查询用户数

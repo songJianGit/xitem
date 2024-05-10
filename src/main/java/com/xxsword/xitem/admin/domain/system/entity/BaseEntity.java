@@ -1,4 +1,4 @@
-package com.xxsword.xitem.admin.domain.entity.system;
+package com.xxsword.xitem.admin.domain.system.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;

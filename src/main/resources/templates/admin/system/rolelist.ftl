@@ -89,7 +89,7 @@
         htm += '<div class="btn-group">';
         htm += '<a class="btn btn-sm btn-default m-r-5" href="#" onclick="edit(\'' + value + '\')" title="编辑">编辑</a>';
         htm += '<a class="btn btn-sm btn-default m-r-5" href="${ctx.contextPath}/admin/system/roleFunctions?roleId=' + value + '" title="权限设置">权限设置</a>';
-        htm += '<a class="btn btn-sm btn-default" href="#" onclick="userListByRole(\'' + value + '\')" title="分配权限">分配权限</a>';
+        htm += '<a class="btn btn-sm btn-default" href="#" onclick="userListByRole(\'' + value + '\')" title="分配用户">分配用户</a>';
         htm += '</div>';
         return htm;
     }

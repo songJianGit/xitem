@@ -1,7 +1,7 @@
 package com.xxsword.xitem.admin.interceptor;
 
-import com.xxsword.xitem.admin.domain.entity.system.Record;
-import com.xxsword.xitem.admin.domain.entity.system.UserInfo;
+import com.xxsword.xitem.admin.domain.system.entity.Record;
+import com.xxsword.xitem.admin.domain.system.entity.UserInfo;
 import com.xxsword.xitem.admin.service.system.RecordService;
 import com.xxsword.xitem.admin.utils.RecordUtils;
 import com.xxsword.xitem.admin.utils.Utils;

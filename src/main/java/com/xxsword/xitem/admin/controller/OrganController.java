@@ -2,12 +2,12 @@ package com.xxsword.xitem.admin.controller;
 
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.xxsword.xitem.admin.domain.dto.system.OrganDto;
-import com.xxsword.xitem.admin.domain.entity.system.Organ;
-import com.xxsword.xitem.admin.domain.entity.system.UserInfo;
+import com.xxsword.xitem.admin.domain.system.dto.OrganDto;
+import com.xxsword.xitem.admin.domain.system.entity.Organ;
+import com.xxsword.xitem.admin.domain.system.entity.UserInfo;
 import com.xxsword.xitem.admin.model.RestPaging;
 import com.xxsword.xitem.admin.model.RestResult;
-import com.xxsword.xitem.admin.model.ZTreeVO;
+import com.xxsword.xitem.admin.model.ZTree;
 import com.xxsword.xitem.admin.service.system.OrganService;
 import com.xxsword.xitem.admin.utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +34,7 @@ public class OrganController extends BaseController {
      */
     @RequestMapping("data")
     @ResponseBody
-    public List<ZTreeVO> data(HttpServletRequest request, Integer open, String checkedids, OrganDto organDto) {
+    public List<ZTree> data(HttpServletRequest request, Integer open, String checkedids, OrganDto organDto) {
         UserInfo userInfo = Utils.getUserInfo(request);
         return dataI(userInfo, open, checkedids, null, organDto);
     }
@@ -46,7 +46,7 @@ public class OrganController extends BaseController {
      * @param discheckid 不可选的ids
      * @return
      */
-    private List<ZTreeVO> dataI(UserInfo userInfo, Integer open, String checkedids, String discheckid, OrganDto organDto) {
+    private List<ZTree> dataI(UserInfo userInfo, Integer open, String checkedids, String discheckid, OrganDto organDto) {
         if (open == null) {
             open = 0;
         }
@@ -61,9 +61,9 @@ public class OrganController extends BaseController {
         }
         List<Organ> listOrgan = organService.listOrgan(userInfo, organDto);
 
-        List<ZTreeVO> datas = new ArrayList<>();
+        List<ZTree> datas = new ArrayList<>();
         for (Organ organ : listOrgan) {
-            ZTreeVO zTreeVO = new ZTreeVO();
+            ZTree zTreeVO = new ZTree();
             zTreeVO.setName(organ.getName());
             zTreeVO.setpId(organ.getPid());
             zTreeVO.setId(organ.getId());

@@ -2,11 +2,10 @@ package com.xxsword.xitem.admin.service.system;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.xxsword.xitem.admin.domain.dto.system.RoleDto;
-import com.xxsword.xitem.admin.domain.entity.system.Role;
-import com.xxsword.xitem.admin.domain.entity.system.UserInfo;
+import com.xxsword.xitem.admin.domain.system.dto.RoleDto;
+import com.xxsword.xitem.admin.domain.system.entity.Role;
+import com.xxsword.xitem.admin.domain.system.entity.UserInfo;
 
-import java.util.Collection;
 import java.util.List;
 
 public interface RoleService extends IService<Role> {

@@ -2,8 +2,8 @@ package com.xxsword.xitem.admin.utils;
 
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.xxsword.xitem.admin.constant.Constant;
-import com.xxsword.xitem.admin.domain.entity.system.Functions;
-import com.xxsword.xitem.admin.domain.entity.system.Role;
+import com.xxsword.xitem.admin.domain.system.entity.Functions;
+import com.xxsword.xitem.admin.domain.system.entity.Role;
 import com.xxsword.xitem.admin.model.TreeMenu;
 
 import java.util.*;

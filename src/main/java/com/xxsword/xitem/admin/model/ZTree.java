@@ -1,6 +1,6 @@
 package com.xxsword.xitem.admin.model;
 
-public class ZTreeVO {
+public class ZTree {
     private String id;
     private String name;
     private String pId;

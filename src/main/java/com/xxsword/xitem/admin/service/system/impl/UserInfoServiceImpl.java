@@ -5,10 +5,10 @@ import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.xxsword.xitem.admin.domain.dto.system.UserInfoDto;
-import com.xxsword.xitem.admin.domain.entity.system.Functions;
-import com.xxsword.xitem.admin.domain.entity.system.Role;
-import com.xxsword.xitem.admin.domain.entity.system.UserInfo;
+import com.xxsword.xitem.admin.domain.system.dto.UserInfoDto;
+import com.xxsword.xitem.admin.domain.system.entity.Functions;
+import com.xxsword.xitem.admin.domain.system.entity.Role;
+import com.xxsword.xitem.admin.domain.system.entity.UserInfo;
 import com.xxsword.xitem.admin.mapper.system.UserInfoMapper;
 import com.xxsword.xitem.admin.model.RestResult;
 import com.xxsword.xitem.admin.service.system.RoleFunctionsService;
@@ -177,11 +177,6 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
         userUp.setId(userId);
         userUp.setPassword(password);
         updateById(userUp);
-    }
-
-    @Override
-    public Page<UserInfo> queryUserListByRole(Page<UserInfo> page, UserInfoDto userInfoDto) {
-        return baseMapper.pageUserBuRoleId(page, userInfoDto);
     }
 
     @Override

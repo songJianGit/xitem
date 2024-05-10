@@ -1,7 +1,7 @@
 package com.xxsword.xitem.admin.utils;
 
 import com.alibaba.fastjson2.JSON;
-import com.xxsword.xitem.admin.domain.entity.system.Record;
+import com.xxsword.xitem.admin.domain.system.entity.Record;
 import org.springframework.util.FastByteArrayOutputStream;
 
 import javax.servlet.http.HttpServletRequest;

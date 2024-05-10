@@ -1,8 +1,8 @@
 package com.xxsword.xitem.admin.service.system;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.xxsword.xitem.admin.domain.entity.system.Dict;
-import com.xxsword.xitem.admin.domain.entity.system.UserInfo;
+import com.xxsword.xitem.admin.domain.system.entity.Dict;
+import com.xxsword.xitem.admin.domain.system.entity.UserInfo;
 
 public interface DictService extends IService<Dict> {
 

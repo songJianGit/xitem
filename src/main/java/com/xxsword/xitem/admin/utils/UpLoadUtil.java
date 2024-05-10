@@ -2,7 +2,7 @@ package com.xxsword.xitem.admin.utils;
 
 import com.xxsword.xitem.admin.config.SystemConfig;
 import com.xxsword.xitem.admin.constant.Constant;
-import com.xxsword.xitem.admin.model.UpFileVO;
+import com.xxsword.xitem.admin.domain.system.vo.UpFileVO;
 import com.xxsword.xitem.admin.model.UpState;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;

@@ -1,8 +1,8 @@
 package com.xxsword.xitem.admin.service.system.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.xxsword.xitem.admin.domain.entity.system.Dict;
-import com.xxsword.xitem.admin.domain.entity.system.UserInfo;
+import com.xxsword.xitem.admin.domain.system.entity.Dict;
+import com.xxsword.xitem.admin.domain.system.entity.UserInfo;
 import com.xxsword.xitem.admin.mapper.system.DictMapper;
 import com.xxsword.xitem.admin.service.system.DictService;
 import org.springframework.stereotype.Service;

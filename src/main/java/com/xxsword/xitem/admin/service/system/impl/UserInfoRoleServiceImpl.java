@@ -2,10 +2,13 @@ package com.xxsword.xitem.admin.service.system.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.xxsword.xitem.admin.domain.entity.system.Role;
-import com.xxsword.xitem.admin.domain.entity.system.UserInfoRole;
+import com.xxsword.xitem.admin.domain.system.dto.UserInfoRoleDto;
+import com.xxsword.xitem.admin.domain.system.entity.Role;
+import com.xxsword.xitem.admin.domain.system.entity.UserInfoRole;
 import com.xxsword.xitem.admin.mapper.system.UserInfoRoleMapper;
+import com.xxsword.xitem.admin.domain.system.vo.UserInfoRoleVO;
 import com.xxsword.xitem.admin.service.system.RoleService;
 import com.xxsword.xitem.admin.service.system.UserInfoRoleService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,5 +62,10 @@ public class UserInfoRoleServiceImpl extends ServiceImpl<UserInfoRoleMapper, Use
             list.add(ur);
         }
         saveBatch(list);
+    }
+
+    @Override
+    public Page<UserInfoRoleVO> queryUserListByRole(Page<UserInfoRole> page, UserInfoRoleDto dto) {
+        return baseMapper.pageUserBuRoleId(page, dto);
     }
 }

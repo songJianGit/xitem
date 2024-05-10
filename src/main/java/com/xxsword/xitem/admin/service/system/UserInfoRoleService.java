@@ -1,8 +1,11 @@
 package com.xxsword.xitem.admin.service.system;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.xxsword.xitem.admin.domain.entity.system.Role;
-import com.xxsword.xitem.admin.domain.entity.system.UserInfoRole;
+import com.xxsword.xitem.admin.domain.system.dto.UserInfoRoleDto;
+import com.xxsword.xitem.admin.domain.system.entity.Role;
+import com.xxsword.xitem.admin.domain.system.entity.UserInfoRole;
+import com.xxsword.xitem.admin.domain.system.vo.UserInfoRoleVO;
 
 import java.util.List;
 
@@ -21,4 +24,13 @@ public interface UserInfoRoleService extends IService<UserInfoRole> {
      * 将用户和角色绑定
      */
     void userLinkRole(String roleId, String userIds);
+
+    /**
+     * 根据角色查询用户
+     *
+     * @param page
+     * @param dto
+     * @return
+     */
+    Page<UserInfoRoleVO> queryUserListByRole(Page<UserInfoRole> page, UserInfoRoleDto dto);
 }

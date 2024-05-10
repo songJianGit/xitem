@@ -2,7 +2,7 @@ package com.xxsword.xitem.admin.controller;
 
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.xxsword.xitem.admin.constant.Constant;
-import com.xxsword.xitem.admin.domain.entity.system.UserInfo;
+import com.xxsword.xitem.admin.domain.system.entity.UserInfo;
 import com.xxsword.xitem.admin.model.Codes;
 import com.xxsword.xitem.admin.model.RestResult;
 import com.xxsword.xitem.admin.service.system.UserInfoService;

@@ -1,9 +1,8 @@
-package com.xxsword.xitem.admin.domain.dto.system;
+package com.xxsword.xitem.admin.domain.system.dto;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
-import com.xxsword.xitem.admin.domain.entity.system.Dict;
-import com.xxsword.xitem.admin.domain.entity.system.Organ;
+import com.xxsword.xitem.admin.domain.system.entity.Organ;
 
 public class OrganDto {
     private String name;

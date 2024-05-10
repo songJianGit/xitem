@@ -1,10 +1,10 @@
-package com.xxsword.xitem.admin.domain.dto.system;
+package com.xxsword.xitem.admin.domain.system.dto;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
-import com.xxsword.xitem.admin.domain.entity.system.UserInfo;
+import com.xxsword.xitem.admin.domain.system.entity.UserInfo;
 
-public class UserInfoDto {
+public class UserInfoRoleDto {
     private String loginName;
     private String userName;
     private String phoneNo;

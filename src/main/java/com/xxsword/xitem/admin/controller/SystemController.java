@@ -2,15 +2,10 @@ package com.xxsword.xitem.admin.controller;
 
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.xxsword.xitem.admin.domain.dto.system.DictDto;
-import com.xxsword.xitem.admin.domain.dto.system.FunctionsDto;
-import com.xxsword.xitem.admin.domain.dto.system.RoleDto;
-import com.xxsword.xitem.admin.domain.dto.system.UserInfoDto;
-import com.xxsword.xitem.admin.domain.entity.system.*;
-import com.xxsword.xitem.admin.model.Codes;
-import com.xxsword.xitem.admin.model.RestPaging;
-import com.xxsword.xitem.admin.model.RestResult;
-import com.xxsword.xitem.admin.model.TreeMenu;
+import com.xxsword.xitem.admin.domain.system.dto.*;
+import com.xxsword.xitem.admin.domain.system.entity.*;
+import com.xxsword.xitem.admin.domain.system.vo.UserInfoRoleVO;
+import com.xxsword.xitem.admin.model.*;
 import com.xxsword.xitem.admin.service.system.*;
 import com.xxsword.xitem.admin.utils.MenuUtil;
 import com.xxsword.xitem.admin.utils.Utils;
@@ -373,14 +368,14 @@ public class SystemController extends BaseController {
      * 根据角色id获取用户列表页
      *
      * @param request
-     * @param userInfoDto
+     * @param dto
      * @param page
      * @return
      */
     @RequestMapping("userListByRoleData")
     @ResponseBody
-    public RestPaging<UserInfo> userListByRoleData(HttpServletRequest request, Page<UserInfo> page, UserInfoDto userInfoDto) {
-        Page<UserInfo> userInfoPage = userInfoService.queryUserListByRole(page, userInfoDto);
+    public RestPaging<UserInfoRoleVO> userListByRoleData(HttpServletRequest request, Page<UserInfoRole> page, UserInfoRoleDto dto) {
+        Page<UserInfoRoleVO> userInfoPage = userInfoRoleService.queryUserListByRole(page, dto);
         return new RestPaging<>(userInfoPage.getTotal(), userInfoPage.getRecords());
     }
 
