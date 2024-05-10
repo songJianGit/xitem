@@ -28,7 +28,7 @@
                                     <input type="hidden" name="id" value="${functions.id!}"/>
                                     <div class="form-group col-6">
                                         <label for="name">菜单名称</label>
-                                        <input type="text" class="form-control" id="name" name="name" value="${functions.name!}" placeholder="菜单名称" required/>
+                                        <input type="text" class="form-control" id="name" name="name" value="${functions.name!}" placeholder="菜单名称" maxlength="100" required/>
                                     </div>
                                     <div class="form-group col-6">
                                         <label for="url">链接</label>

@@ -59,7 +59,23 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
         }
         LambdaQueryWrapper<UserInfo> q = Wrappers.lambdaQuery();
         q.eq(UserInfo::getLoginname, loginName);
-        q.eq(UserInfo::getStatus, 1);
+//        q.eq(UserInfo::getStatus, 1);不论有效还是无效，都要检查唯一
+        if (StringUtils.isNotBlank(userId)) {
+            q.ne(UserInfo::getId, userId);
+        }
+        return count(q) <= 0;
+    }
+
+    @Override
+    public boolean checkPhoneNo(String phoneNo, String userId) {
+        if (StringUtils.isBlank(phoneNo)) {
+            return false;
+        } else {
+            phoneNo = phoneNo.trim();
+        }
+        LambdaQueryWrapper<UserInfo> q = Wrappers.lambdaQuery();
+        q.eq(UserInfo::getPhoneno, phoneNo);
+//        q.eq(UserInfo::getStatus, 1);不论有效还是无效，都要检查唯一
         if (StringUtils.isNotBlank(userId)) {
             q.ne(UserInfo::getId, userId);
         }
@@ -101,6 +117,7 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
         query.eq(UserInfo::getStatus, 1);
         query.eq(UserInfo::getLoginname, loginName);
         query.eq(UserInfo::getPassword, passWord);
+        query.ge(UserInfo::getLifedate, DateUtil.now());
         UserInfo userInfo = getOne(query);
         if (userInfo == null) {
             return null;

@@ -12,7 +12,7 @@ import java.io.Serializable;
 public class Functions extends BaseEntity implements Serializable {
 
     private static final long serialVersionUID = 6644224705867838887L;
-    @Column
+    @Column(length = 100)
     @ColumnComment("菜单名称")
     private String name;
 

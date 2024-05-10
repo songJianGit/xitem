@@ -30,27 +30,27 @@
                                     <div class="form-group col-6">
                                         <label for="nickname">昵称</label>
                                         <input type="text" class="form-control" id="nickname" name="nickname"
-                                               value="${user.nickname!}" placeholder="昵称" required/>
+                                               value="${user.nickname!}" placeholder="昵称" maxlength="50" required/>
                                     </div>
                                     <div class="form-group col-6">
                                         <label for="username">姓名</label>
                                         <input type="text" class="form-control" id="username" name="username"
-                                               value="${user.username!}" placeholder="姓名" required/>
+                                               value="${user.username!}" placeholder="姓名" maxlength="100" required/>
                                     </div>
                                     <div class="form-group col-6">
                                         <label for="loginname">登录名</label>
                                         <input type="text" class="form-control" id="loginname" name="loginname"
-                                               value="${user.loginname!}" placeholder="登录名" required/>
+                                               value="${user.loginname!}" placeholder="登录名" maxlength="50" required/>
                                     </div>
                                     <div class="form-group col-6">
                                         <label for="email">邮箱</label>
-                                        <input type="email" class="form-control" id="email" name="email"
+                                        <input type="email" class="form-control" id="email" name="email" maxlength="100"
                                                value="${user.email!}" placeholder="邮箱"/>
                                     </div>
                                     <div class="form-group col-6">
                                         <label for="phoneno">手机号码</label>
                                         <input type="text" class="form-control" id="phoneno" name="phoneno"
-                                               pattern="[1-9]\d{10}"
+                                               pattern="[1-9]\d{10}" maxlength="20"
                                                value="${user.phoneno!}" placeholder="手机号码" required/>
                                     </div>
                                     <div class="form-group col-6">
@@ -61,6 +61,12 @@
                                         <input type="hidden" id="organid" name="organid"
                                                value="${user.organid!}"/>
 
+                                    </div>
+                                    <div class="form-group col-6">
+                                        <label for="lifedate">账号有效期</label>
+                                        <input type="text" class="form-control" id="lifedate" name="lifedate" autocomplete="off"
+                                               onClick="WdatePicker({el:this,dateFmt:'yyyy-MM-dd HH:mm:ss'})"
+                                               value="${user.lifedate!}" placeholder="账号有效期" required/>
                                     </div>
                                     <div class="form-group col-12">
                                         <button type="submit" class="btn btn-primary">确 定</button>
@@ -84,7 +90,13 @@
 <#include "../commons/js.ftl"/>
 <script type="text/javascript">
     function check() {
-        return checkloginname();
+        if(!checkloginname()){
+            return false;
+        }
+        if(!checkphoneno()){
+            return false;
+        }
+        return true;
     }
 
     function checkloginname() {
@@ -97,6 +109,29 @@
             async: false,
             data: {
                 'userLoginName': userloginname,
+                'userId': userid
+            },
+            success: function (data) {
+                if (data.result) {
+                    b = true;
+                } else {
+                    layer.msg(data.msg);
+                    b = false;
+                }
+            }
+        });
+        return b;
+    };
+    function checkphoneno() {
+        let b = false;
+        let userphoneno = $("#phoneno").val();
+        let userid = '${user.id!}';
+        $.ajax({
+            url: '${ctx.contextPath}/admin/system/checkPhoneNo',
+            cache: false,
+            async: false,
+            data: {
+                'userPhoneNo': userphoneno,
                 'userId': userid
             },
             success: function (data) {

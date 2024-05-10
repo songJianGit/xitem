@@ -14,7 +14,7 @@ import java.util.List;
 public class Role extends BaseEntity implements Serializable {
 
     private static final long serialVersionUID = 6052152389008771496L;
-    @Column
+    @Column(length = 100)
     @ColumnComment("角色名称")
     private String name;
 

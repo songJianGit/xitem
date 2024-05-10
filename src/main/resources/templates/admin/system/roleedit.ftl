@@ -28,7 +28,7 @@
                                     <input type="hidden" name="id" value="${role.id!}"/>
                                     <div class="form-group col-12">
                                         <label for="username">角色名</label>
-                                        <input type="text" class="form-control" id="name" name="name" value="${role.name!}" placeholder="角色名" required/>
+                                        <input type="text" class="form-control" id="name" name="name" value="${role.name!}" placeholder="角色名" maxlength="100" required/>
                                     </div>
                                     <div class="form-group col-12">
                                         <button type="submit" class="btn btn-primary">确 定</button>

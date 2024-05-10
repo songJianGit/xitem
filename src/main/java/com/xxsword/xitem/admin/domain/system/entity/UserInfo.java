@@ -15,21 +15,21 @@ import java.util.List;
 public class UserInfo extends BaseEntity implements Serializable {
 
     private static final long serialVersionUID = -1282638492431542107L;
-    @Column
+    @Column(length = 50)
     @ColumnComment("用户昵称")
     private String nickname;
 
-    @Column
+    @Column(length = 100)
     @ColumnComment("用户姓名")
     private String username;
 
-    @Column
     @Index
     @Unique
+    @Column(length = 50)
     @ColumnComment("登录名")
     private String loginname;
 
-    @Column
+    @Column(length = 100)
     @Index
     @ColumnComment("密码")
     private String password;
@@ -38,11 +38,12 @@ public class UserInfo extends BaseEntity implements Serializable {
     @ColumnComment("密码错误次数(分钟,错误次数)")
     private String passworderror;
 
-    @Column
+    @Column(length = 100)
     @ColumnComment("邮箱")
     private String email;
 
-    @Column(length = 50)
+    @Unique
+    @Column(length = 20)
     @ColumnComment("联系电话")
     private String phoneno;
 
@@ -60,6 +61,11 @@ public class UserInfo extends BaseEntity implements Serializable {
     @Column(type = MySqlTypeConstant.TEXT)
     @ColumnComment("权限")
     private String permissionids;
+
+    @Index
+    @Column(length = 19)
+    @ColumnComment("账号有效期(超过该日期后无法登录)")
+    private String lifedate;
 
     @TableField(exist = false)
     private List<Role> rolelist;
@@ -158,5 +164,13 @@ public class UserInfo extends BaseEntity implements Serializable {
 
     public void setPermissionids(String permissionids) {
         this.permissionids = permissionids;
+    }
+
+    public String getLifedate() {
+        return lifedate;
+    }
+
+    public void setLifedate(String lifedate) {
+        this.lifedate = lifedate;
     }
 }

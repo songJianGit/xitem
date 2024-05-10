@@ -27,11 +27,20 @@ public interface UserInfoService extends IService<UserInfo> {
     /**
      * 校验本登录名是否可用
      *
-     * @param loginname
+     * @param loginName
      * @param userId    当前用户
      * @return true-还没有人用  false-已有人使用
      */
-    boolean checkLonginName(String loginname, String userId);
+    boolean checkLonginName(String loginName, String userId);
+
+    /**
+     * 校验本手机号是否可用
+     *
+     * @param phoneNo
+     * @param userId    当前用户
+     * @return true-还没有人用  false-已有人使用
+     */
+    boolean checkPhoneNo(String phoneNo, String userId);
 
     /**
      * 删除用户（逻辑删除）

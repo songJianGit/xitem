@@ -57,7 +57,7 @@ public class LoginController extends BaseController {
         }
         if (userInfoService.lockUser(loginName)) {
             httpSession.removeAttribute(Constant.CAPTCHA);
-            return RestResult.Codes(Codes.LOGIN_FAIL_MAX_DETAIL);
+            return RestResult.Codes(Codes.LOGIN_FAIL_MAX);
         }
         UserInfo userInfo = userInfoService.getUserInfoByloginNameAndPassword(loginName, passWord);
         if (userInfo == null) {

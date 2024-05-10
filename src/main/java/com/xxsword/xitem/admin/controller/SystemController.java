@@ -105,6 +105,16 @@ public class SystemController extends BaseController {
         }
     }
 
+    @RequestMapping("checkPhoneNo")
+    @ResponseBody
+    public RestResult checkPhoneNo(String userPhoneNo, String userId) {
+        if (userInfoService.checkPhoneNo(userPhoneNo, userId)) {
+            return RestResult.OK();
+        } else {
+            return RestResult.Fail("该手机号已存在");
+        }
+    }
+
     /**
      * 删除用户
      */
@@ -400,7 +410,7 @@ public class SystemController extends BaseController {
             userInfoService.upLastInfo(userInfo, userId);
             return RestResult.OK();
         } else {
-            return RestResult.Fail("密码不符合要求(至少8位且包含大小写英文和数字)");
+            return RestResult.Codes(Codes.PASSWORD_COMPLEXITY);
         }
     }
 

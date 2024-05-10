@@ -14,11 +14,11 @@ import java.io.Serializable;
 public class Organ extends BaseEntity implements Serializable {
     private static final long serialVersionUID = -688403103187636353L;
 
-    @Column
+    @Column(length = 100)
     @ColumnComment("机构名称")
     private String name;
 
-    @Column
+    @Column(length = 100)
     @ColumnComment("机构编号")
     private String organnum;
 
