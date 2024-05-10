@@ -54,8 +54,7 @@ public class UpLoadController {
     }
 
     @RequestMapping(value = "fileUploadDemo")
-    public String fileUploadDemo(HttpServletRequest request, Model model) {
-        model.addAttribute("path", "无");
+    public String fileUploadDemo(HttpServletRequest request) {
         return "/admin/upload/fileuploaddemo";
     }
 
@@ -86,9 +85,8 @@ public class UpLoadController {
         model.addAttribute("multiple", multiple);
         model.addAttribute("uuid", Utils.getuuid());
         model.addAttribute("maxnum", maxnum);
-        int maxsize = 1024;
-        // 单个文件大小限制（单位是MB）
-        model.addAttribute("maxsize", maxsize);
+        model.addAttribute("allMaxSize", 1024);// 文件总大小限制（单位Mb）
+        model.addAttribute("itemMaxSize", 512);// 单个文件大小限制（单位Mb）
         model.addAttribute("mburl", mburl == null ? "" : mburl);
         return "/admin/upload/fileuploadmain";
     }

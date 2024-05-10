@@ -26,7 +26,8 @@
                                         <thead>
                                         <tr>
                                             <th>文件名</th>
-                                            <th>进度</th>
+                                            <th>文件大小</th>
+                                            <th>上传进度</th>
                                             <th>状态</th>
                                             <th>操作</th>
                                         </tr>
@@ -50,7 +51,8 @@
 <script type="text/javascript">
     // [{'name':'文件名.xx','url':'/xxx/sss/p11.jpg'},{'name':'文件名22.xx','url':'/xxx/sss/aa222aa.jpg'}]
     let uuid = '${uuid}';// 站点唯一标识
-    let allMaxSize = ${maxsize};// 上传文件总大小（单位Mb）
+    let allMaxSize = ${allMaxSize};// 文件总大小限制（单位Mb）
+    let itemMaxSize = ${itemMaxSize};// 单个文件大小限制（单位Mb）
     $(function () {
         webUpload();
         subBtn();
@@ -79,16 +81,27 @@
                 layer.msg('资源列表中的部分文件未成功上传');
                 return false;
             }
-            let index_zz = layer.load(1, {// 遮罩层
+            let index_ = layer.load(1, {// 遮罩层
                 shade: [0.5, '#fff']
             });
             let timePath = getTimePath();
             assignment(timePath);// 收集信息
             savetoData(timePath);// 保存到数据库
-            window.parent.uploadCallback($("#outjson").val());// 回调父页面的函数
-            layer.close(index_zz);
+            let outJson = $("#outjson").val();
+            window.parent.uploadCallback(clearUrlTemp(outJson));// 回调父页面的函数
+            layer.close(index_);
             layer_close();
         });
+    }
+
+    // 清除urlTemp信息
+    function clearUrlTemp(outJson) {
+        let jsonArray = JSON.parse(outJson);
+        let newArray = jsonArray.map(item => {
+            let {urlTemp, ...rest} = item;
+            return rest;
+        });
+        return JSON.stringify(newArray);
     }
 
     function getTimePath() {
@@ -108,7 +121,7 @@
         }
         let uploader = WebUploader.create({
             // swf文件路径
-            swf: '${ctx.contextPath}/static/plugins/webuploadder/Uploader.swf',
+            swf: '${ctx.contextPath}/static/plugins/webuploader/Uploader.swf',
             // 文件接收服务端 。
             server: '${ctx.contextPath}/admin/upload/fileUpload',
             // 选择文件的按钮。可选。
@@ -122,10 +135,10 @@
                 'uuid': uuid// 用作上传站点标识
             },
             fileNumLimit: '${maxnum}',
-            // 是否分片上传
-            chunked: true,
-            fileSingleSizeLimit: allMaxSize * 1024 * 1024,
-            timeout: 0,
+            chunked: true,// 是否分片上传
+            duplicate: false,// 是否去重， 根据文件名字、文件大小和最后修改时间来生成hash Key
+            fileSizeLimit: allMaxSize * 1024 * 1024,// 验证文件总大小是否超出限制, 超出则不允许加入队列
+            fileSingleSizeLimit: itemMaxSize * 1024 * 1024,// 验证单个文件大小是否超出限制, 超出则不允许加入队列
             accept: {// 限定文件格式
                 title: 'intoTypes',
                 extensions: '${extensions}',
@@ -205,7 +218,9 @@
             if (type == 'F_DUPLICATE') {
                 alert('请不要重复选择文件！');
             } else if (type == 'F_EXCEED_SIZE') {
-                alert('总大小不可超过' + allMaxSize + 'Mb');
+                alert('单个文件大小不可超过' + itemMaxSize + 'Mb');
+            } else if (type == 'Q_EXCEED_SIZE_LIMIT') {
+                alert('文件总大小不可超过' + allMaxSize + 'Mb');
             } else if (type == 'Q_TYPE_DENIED') {
                 alert('请选择指定类型文件');
             } else if (type == 'Q_EXCEED_NUM_LIMIT') {
@@ -220,6 +235,7 @@
         let htm = '';
         htm += '<tr class="upfiletable" id="row' + fileid + '" data-id="' + fileid + '">';
         htm += '<td id="aa' + fileid + '" data-size="' + filesize + '">' + filename + '</td>';
+        htm += '<td>' + (filesize / 1024 / 1024).toFixed(2) + ' MB</td>';
         htm += '<td class="progressAF" id="bb' + fileid + '">0%</td>';
         htm += '<td class="progresstextAF" id="cc' + fileid + '">等待</td>';
         htm += '<td id="ee' + fileid + '">';
