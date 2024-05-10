@@ -71,6 +71,7 @@ public class UpLoadUtil {
      * @return
      */
     public static String doPath(String path) {
+        path = replaceSeparator(path);
         if (!path.startsWith("/")) {
             path = "/" + path;
         }
@@ -132,20 +133,21 @@ public class UpLoadUtil {
     private static String getDPath() {
         try {
             String url = ResourceUtils.getURL("").getPath();
+            url = replaceSeparator(url);
             if (url.endsWith("/")) {
-                url = url.substring(0, url.length() - 1);
+                url = url.substring(0, url.length() - 1);// 去掉最后一个杠，保持：前带杠杠，后不带的风格
             }
             String pathStr = url + PATH_INFO;
             Utils.hasFolder(pathStr);
             log.debug("uploadPath:" + pathStr);
-            return pathStr.replaceAll("\\\\", "/");
+            return replaceSeparator(pathStr);
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }
     }
 
     /**
-     * 获取资源路径
+     * 获取指定的资源路径
      *
      * @return
      */
@@ -157,12 +159,13 @@ public class UpLoadUtil {
             String path = SystemConfig.getProperty("filepath.path") + PATH_INFO;
             Utils.hasFolder(path);
             log.debug("uploadPath:" + path);
-            return path.replaceAll("\\\\", "/");
+            return replaceSeparator(path);
         }
         return getDPath();
     }
 
-    private static String pathById(String uuid) {
+    // 这个比较特殊，屁股后面有杠杠
+    private static String tempPathById(String uuid) {
         return UpLoadUtil.getPath() + PATH_TEMP + "/" + uuid + "/";
     }
 
@@ -170,14 +173,14 @@ public class UpLoadUtil {
      * 分片文件上传,文件默认存储在temp/uuid文件夹中
      * 2020-06-29只允许上传压缩文件（Constant.COMPRESS_EX）
      */
-    public static UpState sliceFileupload(HttpServletRequest request) {
+    public static UpState sliceFileUpload(HttpServletRequest request) {
         UpState upState = new UpState();
         MultipartHttpServletRequest mQuest = (MultipartHttpServletRequest) request;
         MultipartFile file = mQuest.getFile("file");// 获得上传的文件
-        String fname = file.getOriginalFilename().toLowerCase();
-        if (!Constant.COMPRESS_EX.toLowerCase().contains(FilenameUtils.getExtension(fname).toLowerCase())) {// 只允许上传指定文件
+        String fName = file.getOriginalFilename().toLowerCase();
+        if (!Constant.COMPRESS_EX.toLowerCase().contains(FilenameUtils.getExtension(fName).toLowerCase())) {// 只允许上传指定文件
             upState.setInfo(3);
-            log.error("上传的文件格式，不是允许的格式:{}", FilenameUtils.getExtension(fname));
+            log.error("上传的文件格式，不是允许的格式:{}", FilenameUtils.getExtension(fName));
             return upState;
         }
         String uuid = request.getParameter("uuid");// 上传站点标识，用于区分各站点，以便判断文件合并信息
@@ -185,7 +188,7 @@ public class UpLoadUtil {
             upState.setInfo(3);
             return upState;
         }
-        String pathuuid = pathById(uuid);
+        String pathuuid = tempPathById(uuid);
         String chunkStr = request.getParameter("chunk");
         String chunksStr = request.getParameter("chunks");
         if (chunkStr == null) {
@@ -194,9 +197,9 @@ public class UpLoadUtil {
         if (chunksStr == null) {
             chunksStr = "1";
         }
-        Integer chunk = Integer.valueOf(chunkStr);// 第几片
+        int chunk = Integer.parseInt(chunkStr);// 第几片
         int chunks = Integer.parseInt(chunksStr);// 一共分了几片
-        String fileid = request.getParameter("id").toLowerCase();// 文件id（文件分片上传的时候，文件id是一样的，同一个站点不会有相同文件id，但是不同站点的id可能会相同）
+        String fileId = request.getParameter("id").toLowerCase();// 文件id（文件分片上传的时候，文件id是一样的，同一个站点不会有相同文件id，但是不同站点的id可能会相同）
         log.info("uuid:{},chunk:{},chunks:{}", uuid, chunk, chunks);
         String suffix = "";
         if (!file.isEmpty()) {
@@ -204,56 +207,63 @@ public class UpLoadUtil {
             suffix = FilenameUtils.getExtension(oldfilename);
             try {
                 Utils.hasFolder(pathuuid);
-                File uploadFile = new File(pathuuid + chunk + fileid + "." + suffix);
+                File uploadFile = new File(pathuuid + chunk + fileId + "." + suffix);
                 FileCopyUtils.copy(file.getBytes(), uploadFile);
-                Set<File> files = new HashSet<File>();
+                int fileSize = 0;
                 for (int i = 0; i < chunks; i++) {
-                    File chunkFile = new File(pathuuid + i + fileid + "." + suffix);
+                    File chunkFile = new File(pathuuid + i + fileId + "." + suffix);
                     if (chunkFile.exists()) {
-                        files.add(chunkFile);
+                        fileSize++;
                     }
                 }
-                log.info("uuid:{},chunks:{},files.size:{}", uuid, chunks, files.size());
-                if (chunks == files.size()) {// 文件全部到齐
-                    log.info("xxx=uuid:{},chunks:{},files.size:{},oldfilename:{}", uuid, chunks, files.size(), oldfilename);
+                log.info("uuid:{},chunks:{},fileSize:{}", uuid, chunks, fileSize);
+                if (chunks == fileSize) {// 文件全部到齐
+                    log.info("xxx=uuid:{},chunks:{},fileSize:{},oldfilename:{}", uuid, chunks, fileSize, oldfilename);
                 }
             } catch (Exception e) {
                 log.error("分片文件接收出错");
                 e.printStackTrace();
-                clearErrorFile(chunks, pathuuid, fileid, suffix);
+                clearErrorFile(chunks, pathuuid, fileId, suffix);
                 upState.setInfo(3);
                 return upState;
             }
         } else {
-            log.error("分片文件为空,uuid:{},fileid:{}", uuid, fileid);
+            log.error("分片文件为空,uuid:{},fileid:{}", uuid, fileId);
             upState.setInfo(4);
             return upState;
         }
         upState.setInfo(0);
-        // 每一次成功的分片上传，都返回详细信息
         upState.setChunks(chunks);
         upState.setSuffix(suffix);
         upState.setUuid(uuid);
-        upState.setFileid(fileid);
-        return upState;
+        upState.setFileid(fileId);
+        return upState;// 每一次成功的分片上传，都返回详细信息
     }
 
-    // 文件合并
-    public static UpState merge(Integer chunks, String uuid, String fileid, String suffix) {
-        fileid = fileid.toLowerCase();
-        String pathuuid = pathById(uuid);
+    /**
+     * 文件合并
+     *
+     * @param chunks
+     * @param uuid
+     * @param fileId
+     * @param suffix
+     * @return
+     */
+    public static UpState merge(Integer chunks, String uuid, String fileId, String suffix) {
+        fileId = fileId.toLowerCase();
+        String pathuuid = tempPathById(uuid);
         UpState upState = new UpState();
-        String fFileName = fileid + "." + suffix;
+        String fFileName = fileId + "." + suffix;
         try {
-            log.info("开始合并分片文件,uuid:{},fileid:{},fFileName:{}", uuid, fileid, fFileName);
+            log.info("开始合并分片文件,uuid:{},fileid:{},fFileName:{}", uuid, fileId, fFileName);
             File destFile = new File(pathuuid + fFileName);
             OutputStream out = Files.newOutputStream(destFile.toPath());
             BufferedOutputStream bos = new BufferedOutputStream(out);
             for (int i = 0; i < chunks; i++) {// 按顺序，从第一个开始进行拼接
-                File srcFile = new File(pathuuid + i + fileid + "." + suffix);
+                File srcFile = new File(pathuuid + i + fileId + "." + suffix);
                 if (!srcFile.exists()) {
                     log.error("分片丢失，chunk is null,i:{},fFileName:{}", i, fFileName);
-                    clearErrorFile(chunks, pathuuid, fileid, suffix);
+                    clearErrorFile(chunks, pathuuid, fileId, suffix);
                     upState.setInfo(4);
                     return upState;
                 }
@@ -272,11 +282,11 @@ public class UpLoadUtil {
             out.close();
             log.info("分片文件合并完成，fFileName：{}", fFileName);
             upState.setInfo(1);
-            upState.setFileid(fileid);
+            upState.setFileid(fileId);
             return upState;
         } catch (Exception e) {
             log.error("分片文件合并出错，fFileName：{}", fFileName);
-            clearErrorFile(chunks, pathuuid, fileid, suffix);
+            clearErrorFile(chunks, pathuuid, fileId, suffix);
             e.printStackTrace();
             upState.setInfo(2);
             return upState;
@@ -325,7 +335,26 @@ public class UpLoadUtil {
         return codedFilename;
     }
 
+    /**
+     * 将所有反斜杠换成正斜杠
+     *
+     * @param path
+     * @return
+     */
+    private static String replaceSeparator(String path) {
+        return path.replaceAll("\\\\", "/");
+    }
+
 //    public static void main(String[] args) {
-//        System.out.println("Project directory: " + getProjectPath());
+////        System.out.println("Project directory: " + getProjectPath());
+//        System.out.println("Project directory: " + doPath("/a/b/d/"));
+//        System.out.println("Project directory: " + doPath("/a/b/d"));
+//        System.out.println("Project directory: " + doPath("a/b/d/"));
+//        System.out.println("Project directory: " + doPath("a/b/d"));
+//
+//        System.out.println("Project directory: " + doPath("\\a\\b\\d\\"));
+//        System.out.println("Project directory: " + doPath("\\a\\b\\d"));
+//        System.out.println("Project directory: " + doPath("a\\b\\d\\"));
+//        System.out.println("Project directory: " + doPath("a\\b\\d"));
 //    }
 }

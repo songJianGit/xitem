@@ -20,9 +20,6 @@ public class Constant {
     // 创建机构字段名
     public static final String permissionKey = "corganid";
 
-    // 根机构的pid信息
-    public static final String ORGAN_TOP = "0";
-
     // 顶级菜单的pid信息
     public static final String FUNCTIONS_TOP = "0";
 

@@ -160,7 +160,7 @@
             let $li = $('#bb' + file.id);
             let $litext = $('#cc' + file.id);
             $litext.text('上传中');
-            $li.text('99%');
+            $li.text('99%');// 上传完成后，更新为99%，因为还未合并
             merge(file, response);
         });
 
@@ -171,7 +171,7 @@
             let uuid_ = response.data.uuid;
             let fileid_ = response.data.fileid;
             // console.log(file.id + "," + fileid_);
-            setTimeout(function () {// 合并请求发起千前，再等待100毫秒，以100%保证其分片真正传完。
+            setTimeout(function () {// 100毫秒后，发起合并请求
                 $.ajax({
                     url: '${ctx.contextPath}/admin/upload/fileMerge',
                     cache: false,

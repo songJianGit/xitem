@@ -28,7 +28,7 @@ public class UpLoadController {
     @RequestMapping(value = "fileUpload")
     @ResponseBody
     public RestResult fileUpload(HttpServletRequest request) {
-        UpState upState = UpLoadUtil.sliceFileupload(request);
+        UpState upState = UpLoadUtil.sliceFileUpload(request);
         return RestResult.OK(upState);
     }
 
