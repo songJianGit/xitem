@@ -104,8 +104,7 @@
             $.ajax({
                 url: '${ctx.contextPath}/checkLogin',
                 cache: false,
-                async: false,
-                type: 'POST',
+                type: 'post',
                 data: {
                     'loginName': loginName,
                     'passWord': passWord,

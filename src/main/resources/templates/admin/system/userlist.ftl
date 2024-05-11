@@ -116,7 +116,6 @@
             $.ajax({
                 url: '${ctx.contextPath}/admin/system/resetPassword',
                 cache: false,
-                async: false,
                 data: {
                     'userId': id,
                     'password': pass

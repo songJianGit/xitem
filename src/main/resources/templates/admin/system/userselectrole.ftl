@@ -153,7 +153,6 @@
             $.ajax({
                 url: '${ctx.contextPath}/admin/system/userLinkRole',
                 cache: false,
-                async: false,
                 data: {
                     'userIds': ids.join(","),
                     'roleId': '${roleId}'
@@ -176,7 +175,6 @@
             $.ajax({
                 url: '${ctx.contextPath}/admin/system/userSplitRole',
                 cache: false,
-                async: false,
                 data: {
                     'urIds': ids.join(","),
                 },

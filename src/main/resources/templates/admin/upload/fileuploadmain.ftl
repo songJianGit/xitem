@@ -95,7 +95,7 @@
                 }
             });
             if (!bf) {
-                layer.msg('资源列表中的部分文件未成功上传');
+                layer.msg('部分文件可能还在传输中，请稍候...');
                 return false;
             }
             assignment();// 收集信息
@@ -144,7 +144,6 @@
         // 当有文件被添加进队列的时候
         uploader.on('fileQueued', function (file) {
             $("#uploadstatutable").append(getHtm(file.name, file.size, file.id));
-
             $("#caozuo" + file.id).click(function () {
                 uploader.removeFile(file.id, true);
                 $("#row" + file.id).remove();
@@ -178,7 +177,6 @@
                 $.ajax({
                     url: '${ctx.contextPath}/admin/upload/fileMerge',
                     cache: false,
-                    async: false,
                     type: "post",
                     data: {
                         "chunks": chunks_,
@@ -201,16 +199,16 @@
             alert('上传出错，原因：' + reason);
         });
         // 所有文件上传完成时触发
-        uploader.on('uploadFinished', function (file) {
-            alert('上传完成，请点击保存');
+        uploader.on('uploadFinished', function () {
+            layer.msg('数据已上传');// 出现该提示时，表示数据分片全部上传完成了，但是合并可能还未结束
         });
         uploader.on('error', function (type) {
             if (type == 'F_DUPLICATE') {
                 alert('请不要重复选择文件！');
             } else if (type == 'F_EXCEED_SIZE') {
-                alert('单个文件大小不可超过' + itemMaxSize + 'Mb');
+                alert('单个文件大小不可超过' + itemMaxSize + 'MB');
             } else if (type == 'Q_EXCEED_SIZE_LIMIT') {
-                alert('文件总大小不可超过' + allMaxSize + 'Mb');
+                alert('文件总大小不可超过' + allMaxSize + 'MB');
             } else if (type == 'Q_TYPE_DENIED') {
                 alert('请选择指定类型文件');
             } else if (type == 'Q_EXCEED_NUM_LIMIT') {
@@ -258,7 +256,6 @@
         $.ajax({
             url: '${ctx.contextPath}/admin/upload/saveFile',
             cache: false,
-            async: false,
             type: "post",
             data: {
                 "infos": $("#outjson").val()

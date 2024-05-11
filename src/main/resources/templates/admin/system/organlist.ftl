@@ -124,7 +124,6 @@
                                 'organIds': id
                             },
                             cache: false,// 不缓存
-                            async: false,
                             success: function (data) {
                                 if (data.result) {
                                     reload();
@@ -165,7 +164,6 @@
         $.ajax({
             url: "${ctx.contextPath}/admin/organ/data",
             cache: false,// 不缓存
-            async: false,
             success: function (d) {
                 let setting = {
                     data: {

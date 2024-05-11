@@ -100,7 +100,6 @@
             $.ajax({
                 url: '${ctx.contextPath}/admin/system/functionsDelete',
                 cache: false,
-                async: false,
                 data: {
                     'functionsId': functionsId
                 },
