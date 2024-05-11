@@ -7,7 +7,7 @@
 <script type="text/javascript" src="${ctx.contextPath}/static/plugins/admin-template/js/main.min.js"></script>
 <script type="text/javascript"
         src="${ctx.contextPath}/static/plugins/admin-template/js/jquery-confirm/jquery-confirm.min.js"></script>
-<script type="text/javascript" src="${ctx.contextPath}/static/plugins/layer/layer.js"></script>
+<script type="text/javascript" src="${ctx.contextPath}/static/plugins/layer3.5.1/layer.js"></script>
 <script type="text/javascript" src="${ctx.contextPath}/static/plugins/My97DatePicker/WdatePicker.js"></script>
 <script type="text/javascript" src="${ctx.contextPath}/static/plugins/bootstrap-table/bootstrap-table.js"></script>
 <script type="text/javascript"
@@ -28,7 +28,7 @@
     // ---菜单回显---end
 
     // 打开弹出层 参数解释： title 标题 url 请求的url w 弹出层宽度（缺省调默认值） h 弹出层高度（缺省调默认值） full 弹出是否立即全屏
-    function layer_show(title, url, w, h, full) {
+    function layer_show(title, url, w, h, full, closeBtn) {
         if (title == null || title == '') {
             title = false;
         }
@@ -41,9 +41,10 @@
         let index = layer.open({
             type: 2,
             area: [w, h],
-            shadeClose: false,
+            shadeClose: false,// 点击遮罩区域，关闭弹层
             title: title,
-            content: url
+            content: url,
+            closeBtn: closeBtn
         });
         if (full) {
             layer.full(index);

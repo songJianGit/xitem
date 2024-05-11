@@ -14,9 +14,14 @@
                     <div class="col-12">
                         <div class="card">
                             <div class="card-header">
-                                <div class="toolbar-btn-action">
-                                    <div class="btn" id="picker">选择文件</div>
-                                    <a id="subBtn" class="btn btn-success" href="#!" style="margin-top: -5px;">保存</a>
+                                <div>
+                                    <div style="line-height: 1.3;" class="btn m-r-10" id="picker">选择文件</div>
+                                    <a id="subBtn" class="btn btn-primary m-r-5" href="#!" style="margin-top: -5px;">
+                                        保存
+                                    </a>
+                                    <a id="cancelBtn" class="btn btn-default" href="#!" style="margin-top: -5px;">
+                                        返回
+                                    </a>
                                     <input type="hidden" name="outjson" id="outjson"/>
                                 </div>
                             </div>
@@ -55,8 +60,20 @@
     let itemMaxSize = ${itemMaxSize};// 单个文件大小限制（单位Mb）
     $(function () {
         webUpload();
-        subBtn();
+        subBtn();// 保存事件
+        cancelBtn();// 返回事件
     });
+
+    function cancelBtn() {
+        $('#cancelBtn').click(function () {
+            layer.confirm('文件不会被保存，确定返回？', {
+                btn: ['确定', '取消'] //按钮
+            }, function () {
+                layer_close();
+            }, function () {
+            });
+        });
+    }
 
     function subBtn() {
         $('#subBtn').click(function () {
@@ -88,7 +105,10 @@
             assignment(timePath);// 收集信息
             savetoData(timePath);// 保存到数据库
             let outJson = $("#outjson").val();
-            window.parent.uploadCallback(clearUrlTemp(outJson));// 回调父页面的函数
+            let returnInfo = clearUrlTemp(outJson);
+            if (returnInfo != '[]') {
+                window.parent.uploadCallback(returnInfo);// 回调父页面的函数
+            }
             layer.close(index_);
             layer_close();
         });

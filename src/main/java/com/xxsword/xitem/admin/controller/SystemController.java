@@ -401,6 +401,9 @@ public class SystemController extends BaseController {
     public RestResult resetPassword(HttpServletRequest request, String userId, String password) {
         if (StringUtils.isNotBlank(password)) {
             password = password.trim();
+            if (password.length() > 100) {
+                return RestResult.Fail("密码过长");
+            }
         } else {
             return RestResult.Fail("请填写密码");
         }
