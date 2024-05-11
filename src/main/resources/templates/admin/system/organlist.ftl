@@ -198,6 +198,9 @@
 
     // 机构搜索
     function searchData(clickTreeId) {
+        if(isBlank(clickTreeId)){
+            clickTreeId = '';
+        }
         $("#table-pagination").bootstrapTable('refresh', {
             url: "${ctx.contextPath}/admin/organ/pageById?pid=" + clickTreeId + "&" + $("#searchform").serialize()
         });

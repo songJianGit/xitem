@@ -98,39 +98,9 @@
                 layer.msg('资源列表中的部分文件未成功上传');
                 return false;
             }
-            let index_ = layer.load(1, {// 遮罩层
-                shade: [0.5, '#fff']
-            });
-            let timePath = getTimePath();
-            assignment(timePath);// 收集信息
-            savetoData(timePath);// 保存到数据库
-            let outJson = $("#outjson").val();
-            let returnInfo = clearUrlTemp(outJson);
-            if (returnInfo != '[]') {
-                window.parent.uploadCallback(returnInfo);// 回调父页面的函数
-            }
-            layer.close(index_);
-            layer_close();
+            assignment();// 收集信息
+            savetoData();// 保存到数据库&回调上级页面输出信息
         });
-    }
-
-    // 清除urlTemp信息
-    function clearUrlTemp(outJson) {
-        let jsonArray = JSON.parse(outJson);
-        let newArray = jsonArray.map(item => {
-            let {urlTemp, ...rest} = item;
-            return rest;
-        });
-        return JSON.stringify(newArray);
-    }
-
-    function getTimePath() {
-        let currentDate = new Date();
-        let year = currentDate.getFullYear();
-        let month = ("0" + (currentDate.getMonth() + 1)).slice(-2); // 补零并截取后两位
-        let day = ("0" + currentDate.getDate()).slice(-2); // 补零并截取后两位
-        let timePath = '/' + year + '/' + month + '/' + day;
-        return timePath;
     }
 
     function webUpload() {
@@ -265,7 +235,7 @@
         return htm;
     }
 
-    function assignment(timePath) {
+    function assignment() {
         let jsonarray = [];
         $(".upfiletable").each(function () {
             let fileid = $(this).data("id");
@@ -276,25 +246,28 @@
             cjson.name = zipname;
             cjson.size = zipsize;
             cjson.urlTemp = '/temp' + '/' + uuid + '/' + fileidlo + zipname.substring(zipname.lastIndexOf("."));
-            cjson.url = '/fileinfo/def' + timePath + '/' + uuid + '/' + fileidlo + zipname.substring(zipname.lastIndexOf("."));
             jsonarray.push(cjson);
         });
         $("#outjson").val(JSON.stringify(jsonarray));
     }
 
-    function savetoData(timePath) {
+    function savetoData() {
+        let index_ = layer.load(1, {// 遮罩层
+            shade: [0.5, '#fff']
+        });
         $.ajax({
             url: '${ctx.contextPath}/admin/upload/saveFile',
             cache: false,
             async: false,
             type: "post",
             data: {
-                "infos": $("#outjson").val(),
-                "timePath": timePath
+                "infos": $("#outjson").val()
             },
             success: function (data) {
+                layer.close(index_);
                 if (data.result) {
-                    layer.msg("文件保存成功");
+                    window.parent.uploadCallback(data.data);// 回调父页面的函数
+                    layer_close();
                 } else {
                     layer.msg("文件保存失败");
                 }

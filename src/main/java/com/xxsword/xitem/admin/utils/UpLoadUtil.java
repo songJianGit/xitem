@@ -84,16 +84,16 @@ public class UpLoadUtil {
     /**
      * 将文件从临时文件夹里面移动出来（本方法专门用作临时文件夹的文件移动，不要用做其它）
      */
-    public static void tempToFileInfoPath(String url, String timePath) {
-        timePath = doPath(timePath);
-        String[] u = FilenameUtils.getFullPathNoEndSeparator(url).split(PATH_TEMP);
-        String urlPrefix = u[0] + PATH_DEF + timePath + u[1];
+    public static String tempToFileInfoPath(String url) {
+        String[] p0 = FilenameUtils.getFullPathNoEndSeparator(url).split(PATH_TEMP);
+        String newFileName = Utils.getuuid() + "." + FilenameUtils.getExtension(url);
+        String newPath = PATH_DEF + getTIMEPath() + "/";
         try {
-            FileUtils.moveToDirectory(new File(url), new File(urlPrefix), true);
+            FileUtils.moveFile(new File(url), new File(p0[0] + newPath + newFileName));
         } catch (IOException e) {
             e.printStackTrace();
         }
-//        urlPrefix = urlPrefix.replaceAll(UpLoadUtil.getPath(), "") + "/" + FilenameUtils.getName(url);
+        return PATH_INFO + newPath + newFileName;
     }
 
     /**

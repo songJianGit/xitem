@@ -51,8 +51,8 @@
     });
 
     function uploadCallback(infos) {
-        console.log(infos);
-        $("#fileinfo").val(infos);
+        console.log("uploadCallback", infos);
+        $("#fileinfo").val(JSON.stringify(infos));
     }
 </script>
 </body>

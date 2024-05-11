@@ -22,17 +22,19 @@
                         <div class="card">
                             <div class="card-header">
                                 <form class="form-inline" method="post" action="#!" role="form" id="searchform">
-                                    <div class="input-group">
-                                        <div class="input-group-btn">
-                                            <button class="btn btn-default" id="search-btn" type="button">
-                                                角色名
-                                            </button>
+                                    <div class="input-group m-r-5">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">角色名</span>
                                         </div>
-                                        <input type="text" class="form-control" value="" name="keyinfo"
-                                               placeholder="角色名">
+                                        <input type="text" class="form-control" value="" name="name"
+                                               placeholder="登录名">
                                     </div>
-
-                                    <button type="button" id="searchBtn" class="btn btn-primary">搜索</button>
+                                    <div class="input-group">
+                                        <div class="btn-group">
+                                            <button type="button" id="searchBtn" class="btn btn-primary m-r-5">搜索</button>
+                                            <button type="reset" class="btn btn-default">重置</button>
+                                        </div>
+                                    </div>
                                 </form>
                             </div>
 

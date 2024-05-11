@@ -14,6 +14,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("admin/upload")
@@ -92,25 +96,31 @@ public class UpLoadController {
     }
 
     /**
-     * 将时间传进来，是为了防止跨天的操作
+     * 文件保存（主要是将文件从temp里面移出来）
      *
      * @param infos
-     * @param timePath
      * @return
      */
     @RequestMapping("saveFile")
     @ResponseBody
-    public RestResult saveFile(String infos, String timePath) {
+    public RestResult saveFile(String infos) {
         if (StringUtils.isBlank(infos)) {
             return null;
         }
         JSONArray ja = JSONArray.parseArray(infos);
+        List<Map<String, String>> urls = new ArrayList<>();
         for (int i = 0; i < ja.size(); i++) {
             JSONObject item = ja.getJSONObject(i);
+            Map<String, String> map = new HashMap<>();
+            String name = item.getString("name");
+            String size = item.getString("size");
             String url = item.getString("urlTemp");
-            UpLoadUtil.tempToFileInfoPath(UpLoadUtil.getProjectPath() + UpLoadUtil.PATH_INFO + url, timePath);
+            map.put("url", UpLoadUtil.tempToFileInfoPath(UpLoadUtil.getProjectPath() + UpLoadUtil.PATH_INFO + url));
+            map.put("name", name);
+            map.put("size", size);
+            urls.add(map);
         }
-        return RestResult.OK();
+        return RestResult.OK(urls);
     }
 
 }

@@ -26,7 +26,7 @@ public class OrganDto {
 
     public LambdaQueryWrapper<Organ> toQuery() {
         return new LambdaQueryWrapper<Organ>().eq(Organ::getStatus, 1)
-                .eq(StringUtils.isNotBlank(name), Organ::getName, name)
+                .like(StringUtils.isNotBlank(name), Organ::getName, name)
                 .eq(StringUtils.isNotBlank(pid), Organ::getPid, pid)
                 .orderByAsc(Organ::getSeq, Organ::getId);
     }
