@@ -12,8 +12,8 @@ import java.io.Serializable;
 @TableName("t_sys_organ")
 @TableEngine(MySqlEngineConstant.InnoDB)
 public class Organ extends BaseEntity implements Serializable {
-    private static final long serialVersionUID = -688403103187636353L;
 
+    private static final long serialVersionUID = 103L;
     @Column(length = 100)
     @ColumnComment("机构名称")
     private String name;

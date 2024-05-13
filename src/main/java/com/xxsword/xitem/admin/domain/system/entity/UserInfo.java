@@ -14,7 +14,7 @@ import java.util.List;
 @TableEngine(MySqlEngineConstant.InnoDB)
 public class UserInfo extends BaseEntity implements Serializable {
 
-    private static final long serialVersionUID = -1282638492431542107L;
+    private static final long serialVersionUID = 107L;
     @Column(length = 50)
     @ColumnComment("用户昵称")
     private String nickname;

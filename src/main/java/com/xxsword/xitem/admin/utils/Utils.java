@@ -2,6 +2,8 @@ package com.xxsword.xitem.admin.utils;
 
 import com.xxsword.xitem.admin.constant.Constant;
 import com.xxsword.xitem.admin.domain.system.entity.UserInfo;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.poi.ss.usermodel.Cell;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
@@ -174,4 +176,40 @@ public class Utils {
         return Optional.ofNullable(str).map(s -> s.replaceAll("\\s+|\\t|\\r|\\n", "")).orElse("");
     }
 
+    /**
+     * 判断一个字符串是否能转化为数值
+     *
+     * @param str
+     * @return
+     */
+    public static boolean isStringCanBeConvertedToNumber(String str) {
+        if (StringUtils.isBlank(str)) {
+            return false;
+        }
+        try {
+            Integer.parseInt(str);
+            return true; // 如果没有抛出异常，说明字符串可以转换为整数
+        } catch (NumberFormatException e) {
+            try {
+                Double.parseDouble(str);
+                return true; // 如果没有抛出异常，说明字符串可以转换为双精度浮点数
+            } catch (NumberFormatException ex) {
+                return false; // 如果再次抛出了异常，说明字符串不能转换为任何数值类型
+            }
+        }
+    }
+
+    /**
+     * 去除前后空格，
+     * 然后去除所有奇怪的空格
+     *
+     * @param str
+     * @return
+     */
+    public static String getString(String str) {
+        if (StringUtils.isBlank(str)) {
+            return "";
+        }
+        return str.trim().replaceAll("\u00A0", "").replaceAll("\u3000", "");
+    }
 }

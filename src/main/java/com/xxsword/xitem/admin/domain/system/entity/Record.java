@@ -13,7 +13,7 @@ import java.io.Serializable;
 @TableName("t_sys_record")
 @TableEngine(MySqlEngineConstant.InnoDB)
 public class Record implements Serializable {
-    private static final long serialVersionUID = -5950916385417252236L;
+    private static final long serialVersionUID = 104L;
     @TableId(value = "id", type = IdType.ASSIGN_ID)
     @Column(length = 50)
     private String id;

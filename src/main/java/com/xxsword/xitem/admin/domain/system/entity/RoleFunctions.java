@@ -12,7 +12,7 @@ import java.io.Serializable;
 @TableName("t_sys_role_functions")
 @TableEngine(MySqlEngineConstant.InnoDB)
 public class RoleFunctions implements Serializable {
-    private static final long serialVersionUID = -928790075642942659L;
+    private static final long serialVersionUID = 106L;
     @TableId(value = "id", type = IdType.ASSIGN_ID)
     @ColumnComment("主键id")
     @Column(length = 50)

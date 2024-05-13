@@ -8,13 +8,12 @@ import com.gitee.sunchenbin.mybatis.actable.constants.MySqlEngineConstant;
 
 import java.io.Serializable;
 
-
 @TableComment("用户角色表")
 @TableName("t_sys_user_role")
 @TableEngine(MySqlEngineConstant.InnoDB)
 public class UserInfoRole implements Serializable {
-    private static final long serialVersionUID = 2268284926154065619L;
 
+    private static final long serialVersionUID = 108L;
     @TableId(value = "id", type = IdType.ASSIGN_ID)
     @ColumnComment("主键id")
     @Column(length = 50)

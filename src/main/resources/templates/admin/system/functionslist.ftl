@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh">
 <head>
     <#include "../commons/head.ftl"/>
     <link href="${ctx.contextPath}/static/plugins/treeTable/themes/vsStyle/treeTable.min.css" rel="stylesheet"

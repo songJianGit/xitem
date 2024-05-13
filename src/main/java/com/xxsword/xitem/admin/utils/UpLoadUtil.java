@@ -311,31 +311,6 @@ public class UpLoadUtil {
     }
 
     /**
-     * 编码中文字符，使其输出到浏览器时，中文不乱码
-     *
-     * @param fileNames
-     * @param request
-     * @return
-     */
-    public static String encodeFileName(String fileNames, HttpServletRequest request) {
-        String codedFilename = null;
-        try {
-            String agent = request.getHeader("USER-AGENT");
-            if (null != agent && agent.contains("MSIE") || null != agent && agent.contains("Trident") ||
-                    null != agent && agent.contains("Edge")) {
-                // ie浏览器及Edge浏览器
-                codedFilename = URLEncoder.encode(fileNames, "UTF-8");
-            } else if (null != agent && agent.contains("Mozilla")) {
-                // 火狐,Chrome等浏览器
-                codedFilename = new String(fileNames.getBytes("UTF-8"), "ISO-8859-1");
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return codedFilename;
-    }
-
-    /**
      * 将所有反斜杠换成正斜杠
      *
      * @param path

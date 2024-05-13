@@ -11,7 +11,7 @@ import java.io.Serializable;
 @TableEngine(MySqlEngineConstant.InnoDB)
 public class Dict extends BaseEntity implements Serializable {
 
-    private static final long serialVersionUID = -5452088274320062415L;
+    private static final long serialVersionUID = 101L;
     @Column
     @ColumnComment("名称")
     private String name;
@@ -20,8 +20,8 @@ public class Dict extends BaseEntity implements Serializable {
     @ColumnComment("值")
     private String val;
 
-    @Column
     @Index
+    @Column
     @ColumnComment("类型")
     private String type;
 

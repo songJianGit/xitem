@@ -40,9 +40,13 @@
                                                 <input type="text" class="form-control" name="name"
                                                        placeholder="机构名称">
                                             </div>
-                                            <button type="button" id="searchBtn" class="btn btn-primary m-r-5">搜索
-                                            </button>
-                                            <button type="reset" class="btn btn-default">重置</button>
+
+                                            <div class="input-group">
+                                                <div class="btn-group">
+                                                    <button type="button" id="searchBtn" class="btn btn-primary m-r-5">搜索</button>
+                                                    <button type="reset" class="btn btn-default">重置</button>
+                                                </div>
+                                            </div>
                                         </form>
                                     </div>
                                     <div class="card-body">
@@ -58,11 +62,8 @@
                                             <table id="table-pagination"
                                                    data-toolbar="#custom-toolbar"
                                                    data-toggle="table"
-                                                   data-flat="true"
-                                                   data-row-style="rowStyle"
                                                    data-pagination="true"
                                                    data-page-list="[10, 20, 50, 100, 200]"
-                                                   data-select-item-name="radioName"
                                                    data-click-to-select="true"
                                                    data-url="${ctx.contextPath}/admin/organ/pageById"
                                                    data-side-pagination="server">

@@ -11,7 +11,7 @@ import java.io.Serializable;
 @TableEngine(MySqlEngineConstant.InnoDB)
 public class Functions extends BaseEntity implements Serializable {
 
-    private static final long serialVersionUID = 6644224705867838887L;
+    private static final long serialVersionUID = 102L;
     @Column(length = 100)
     @ColumnComment("菜单名称")
     private String name;

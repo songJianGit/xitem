@@ -13,7 +13,7 @@ import java.util.List;
 @TableEngine(MySqlEngineConstant.InnoDB)
 public class Role extends BaseEntity implements Serializable {
 
-    private static final long serialVersionUID = 6052152389008771496L;
+    private static final long serialVersionUID = 105L;
     @Column(length = 100)
     @ColumnComment("角色名称")
     private String name;
