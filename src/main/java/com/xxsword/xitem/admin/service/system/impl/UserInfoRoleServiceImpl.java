@@ -29,6 +29,9 @@ public class UserInfoRoleServiceImpl extends ServiceImpl<UserInfoRoleMapper, Use
         LambdaQueryWrapper<UserInfoRole> qUserRole = Wrappers.lambdaQuery();
         qUserRole.eq(UserInfoRole::getUserid, userId);
         List<UserInfoRole> userInfoRole = list(qUserRole);
+        if (userInfoRole.isEmpty()) {
+            return new ArrayList<>();
+        }
         List<String> roleIds = userInfoRole.stream().map(UserInfoRole::getRoleid).collect(Collectors.toList());// 角色ids
         LambdaQueryWrapper<Role> qRole = Wrappers.lambdaQuery();
         qRole.in(Role::getId, roleIds);
