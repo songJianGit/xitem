@@ -51,12 +51,12 @@
                             <div class="card-body">
                                 <div id="custom-toolbar d-flex flex-column flex-md-row">
                                     <div class="toolbar-btn-action">
-                                        <a id="add" class="btn btn-primary m-r-5">
+                                        <button type="button" id="add" class="btn btn-primary m-r-5">
                                             新增
-                                        </a>
-                                        <a id="del" class="btn btn-primary m-r-5">
+                                        </button>
+                                        <button type="button" id="del" class="btn btn-primary m-r-5">
                                             删除
-                                        </a>
+                                        </button>
                                     </div>
                                 </div>
                                 <div class="table-responsive">
@@ -136,7 +136,7 @@
         if (getSelectionIds() != false) {
             $.confirm({
                 title: '提示',
-                content: '是否要删除？',
+                content: '是否删除？',
                 buttons: {
                     confirm: {
                         text: '确认',

@@ -102,7 +102,7 @@
         if (getSelectionIds() != false) {
             $.confirm({
                 title: '提示',
-                content: '是否要删除？',
+                content: '是否删除？',
                 buttons: {
                     confirm: {
                         text: '确认',

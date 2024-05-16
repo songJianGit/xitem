@@ -3,14 +3,11 @@ package com.xxsword.xitem.admin.controller;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.xxsword.xitem.admin.constant.Constant;
 import com.xxsword.xitem.admin.domain.exam.dto.QuestionDto;
-import com.xxsword.xitem.admin.domain.exam.entity.Exam;
 import com.xxsword.xitem.admin.domain.exam.entity.Question;
-import com.xxsword.xitem.admin.domain.exam.entity.QuestionOption;
 import com.xxsword.xitem.admin.domain.system.entity.Dict;
 import com.xxsword.xitem.admin.domain.system.entity.UserInfo;
 import com.xxsword.xitem.admin.model.RestPaging;
 import com.xxsword.xitem.admin.model.RestResult;
-import com.xxsword.xitem.admin.service.exam.ExamService;
 import com.xxsword.xitem.admin.service.exam.QuestionOptionService;
 import com.xxsword.xitem.admin.service.exam.QuestionService;
 import com.xxsword.xitem.admin.service.system.DictService;
@@ -39,8 +36,6 @@ public class QuestionController {
     @Autowired
     private DictService dictService;
     @Autowired
-    private ExamService examService;
-    @Autowired
     private QuestionOptionService questionOptionService;
 
     @RequestMapping("list")
@@ -56,6 +51,20 @@ public class QuestionController {
         Page<Question> data = questionService.page(page, questionDto.toQuery());
         questionService.setQuestionQclass(data.getRecords());
         return new RestPaging<>(data.getTotal(), data.getRecords());
+    }
+
+    /**
+     * 题目选择弹框
+     *
+     * @param model
+     * @return
+     */
+    @RequestMapping("listQuestion")
+    public String listQuestion(String qrid, Model model) {
+        List<Dict> dictList = dictService.listDictByType(Constant.DICT_TYPE_QCLASS);
+        model.addAttribute("qclasslist", dictList);
+        model.addAttribute("qrid", qrid);
+        return "/admin/exam/question/listquestion";
     }
 
     @RequestMapping("edit")
@@ -80,21 +89,11 @@ public class QuestionController {
 
     @RequestMapping("del")
     @ResponseBody
-    public RestResult del(HttpServletRequest request, String id) {
-        Question q = questionService.getById(id);
-        q.setStatus(0);
-        questionService.updateById(q);
+    public RestResult del(HttpServletRequest request, String ids) {
+        UserInfo userInfo = Utils.getUserInfo(request);
+        questionService.delQuestionByIds(ids);
+        questionService.upLastInfo(userInfo, ids);
         return RestResult.OK();
-    }
-
-    @RequestMapping("listQRS")
-    public String listQRS(String examid, String qrid, Model model) {
-        Exam exam = examService.getById(examid);
-        model.addAttribute("exam", exam);
-        model.addAttribute("qrid", qrid);
-        List<Dict> dictList = dictService.listDictByType(Constant.DICT_TYPE_QCLASS);
-        model.addAttribute("qclasslist", dictList);
-        return "admin/exam/question/listqrs";
     }
 
     /**

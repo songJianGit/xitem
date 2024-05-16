@@ -10,7 +10,7 @@
 
             <ul class="navbar-right d-flex align-items-center">
                 <li class="dropdown dropdown-profile">
-                    <a href="javascript:void(0)" data-toggle="dropdown" class="dropdown-toggle">
+                    <a href="#!" data-toggle="dropdown" class="dropdown-toggle">
                         <span>${Session.puser.username!}</span>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-right">
@@ -21,7 +21,7 @@
                             <a class="dropdown-item" href="#"><i class="mdi mdi-lock-outline"></i> 修改密码</a>
                         </li>
                         <li>
-                            <a class="dropdown-item" href="javascript:void(0)"><i class="mdi mdi-delete"></i> 清空缓存</a>
+                            <a class="dropdown-item" href="#!"><i class="mdi mdi-delete"></i> 清空缓存</a>
                         </li>
                         <li class="dropdown-divider"></li>
                         <li>

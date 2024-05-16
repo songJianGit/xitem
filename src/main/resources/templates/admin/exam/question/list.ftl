@@ -17,10 +17,10 @@
         <!--页面主要内容-->
         <main class="lyear-layout-content">
 
-            <div class="container-fluid">
+            <div class="container-fluid p-t-15">
 
                 <div class="row">
-                    <div class="col-lg-12">
+                    <div class="col-12">
                         <div class="card">
 
                             <div class="card-header">
@@ -28,15 +28,15 @@
 
                                     <div class="input-group m-r-5">
                                         <div class="input-group-prepend">
-                                            <span class="input-group-text">问题描述</span>
+                                            <span class="input-group-text">题目描述</span>
                                         </div>
                                         <input type="text" class="form-control" name="title"
-                                               placeholder="问题描述">
+                                               placeholder="题目描述">
                                     </div>
 
                                     <div class="input-group m-r-5">
                                         <div class="input-group-prepend">
-                                            <span class="input-group-text">问题分类</span>
+                                            <span class="input-group-text">题目分类</span>
                                         </div>
                                         <select class="form-control" name="qclass">
                                             <option value="">---请选择---</option>
@@ -73,8 +73,11 @@
                             <div class="card-body">
                                 <div id="custom-toolbar">
                                     <div class="form-inline" role="form">
-                                        <button id="add" class="btn btn-primary">
+                                        <button type="button" id="add" class="btn btn-primary m-r-5">
                                             新增
+                                        </button>
+                                        <button type="button" id="del" class="btn btn-primary m-r-5">
+                                            删除
                                         </button>
                                     </div>
                                 </div>
@@ -89,6 +92,7 @@
                                            data-side-pagination="server">
                                         <thead>
                                         <tr>
+                                            <th data-checkbox="true"></th>
                                             <th data-field="title">题目标题</th>
                                             <th data-field="qtype" data-formatter="qtype">题型</th>
                                             <th data-field="qclassname">题目分类</th>
@@ -115,40 +119,44 @@
         window.location.href = '${ctx.contextPath}/admin/question/edit';
     });
 
-    function del(id) {
-        $.confirm({
-            title: '提示',
-            content: '是否要删除？',
-            buttons: {
-                confirm: {
-                    text: '确认',
-                    action: function () {
-                        $.ajax({
-                            url: "${ctx.contextPath}/admin/question/del?id=" + id,
-                            success: function (data) {
-                                if (data.result) {
-                                    $("#table-pagination").bootstrapTable('refresh');
-                                } else {
-                                    alert(data.msg);
+    $('#del').click(function () {
+        if (getSelectionIds() != false) {
+            $.confirm({
+                title: '提示',
+                content: '是否删除？',
+                buttons: {
+                    confirm: {
+                        text: '确认',
+                        action: function () {
+                            $.ajax({
+                                url: "${ctx.contextPath}/admin/question/del",
+                                data: {
+                                    ids: getSelectionIds().join(',')
+                                },
+                                success: function (data) {
+                                    if (data.result) {
+                                        $("#table-pagination").bootstrapTable('refresh');
+                                    } else {
+                                        alert(data.msg);
+                                    }
                                 }
-                            }
-                        });
-                    }
-                },
-                cancel: {
-                    text: '取消',
-                    action: function () {
+                            });
+                        }
+                    },
+                    cancel: {
+                        text: '取消',
+                        action: function () {
+                        }
                     }
                 }
-            }
-        });
-    }
+            });
+        }
+    });
 
     function caozuo(value, row) {
         let htm = '';
         htm += '<div class="btn-group">';
         htm += '<a class="btn btn-sm btn-default m-r-5" href="${ctx.contextPath}/admin/question/edit?id=' + value + '" title="编辑">编辑</a>';
-        htm += '<a class="btn btn-sm btn-default" href="javascript:;" title="删除" onclick="del(\'' + value + '\')">删除</a>';
         htm += '</div>';
         return htm;
     }

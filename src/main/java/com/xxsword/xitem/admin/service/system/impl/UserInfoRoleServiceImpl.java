@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -26,9 +27,7 @@ public class UserInfoRoleServiceImpl extends ServiceImpl<UserInfoRoleMapper, Use
 
     @Override
     public List<Role> listRoleByUserId(String userId) {
-        LambdaQueryWrapper<UserInfoRole> qUserRole = Wrappers.lambdaQuery();
-        qUserRole.eq(UserInfoRole::getUserid, userId);
-        List<UserInfoRole> userInfoRole = list(qUserRole);
+        List<UserInfoRole> userInfoRole = listUserInfoRoleByUserId(userId);
         if (userInfoRole.isEmpty()) {
             return new ArrayList<>();
         }
@@ -50,13 +49,11 @@ public class UserInfoRoleServiceImpl extends ServiceImpl<UserInfoRoleMapper, Use
     @Override
     public void userLinkRole(String roleId, String userIds) {
         String[] ids = userIds.split(",");
+        List<UserInfoRole> userInfoRoles = listUserInfoRoleByRoleId(roleId);
+        Set<String> userIdsS = userInfoRoles.stream().map(UserInfoRole::getUserid).collect(Collectors.toSet());// 该角色已关联的用户信息
         List<UserInfoRole> list = new ArrayList<>();
         for (String id : ids) {
-            LambdaQueryWrapper<UserInfoRole> query = Wrappers.lambdaQuery();
-            query.eq(UserInfoRole::getUserid, id);
-            query.eq(UserInfoRole::getRoleid, roleId);
-            long integer = count(query);
-            if (integer > 0) {
+            if (userIdsS.contains(id)) {
                 continue;
             }
             UserInfoRole ur = new UserInfoRole();
@@ -70,5 +67,19 @@ public class UserInfoRoleServiceImpl extends ServiceImpl<UserInfoRoleMapper, Use
     @Override
     public Page<UserInfoRoleVO> queryUserListByRole(Page<UserInfoRole> page, UserInfoRoleDto dto) {
         return baseMapper.pageUserBuRoleId(page, dto);
+    }
+
+    @Override
+    public List<UserInfoRole> listUserInfoRoleByUserId(String userId) {
+        LambdaQueryWrapper<UserInfoRole> qUserRole = Wrappers.lambdaQuery();
+        qUserRole.eq(UserInfoRole::getUserid, userId);
+        return list(qUserRole);
+    }
+
+    @Override
+    public List<UserInfoRole> listUserInfoRoleByRoleId(String roleId) {
+        LambdaQueryWrapper<UserInfoRole> qUserRole = Wrappers.lambdaQuery();
+        qUserRole.eq(UserInfoRole::getRoleid, roleId);
+        return list(qUserRole);
     }
 }

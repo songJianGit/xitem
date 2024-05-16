@@ -24,11 +24,11 @@ public class QuestionRule extends BaseEntity implements Serializable {
     private String paperid;
 
     @Column
-    @ColumnComment("排序")
-    private Integer seq;
+    @ColumnComment("排序(将时间用作排序标识)")
+    private Long seq;
 
     @TableField(exist = false)
-    private Integer snum;// 该规则的题目总数
+    private Integer snum;// 该规则的题目总数（查询中间表）
 
     @Column
     @ColumnComment("抽取多少题")
@@ -50,11 +50,11 @@ public class QuestionRule extends BaseEntity implements Serializable {
         this.paperid = paperid;
     }
 
-    public Integer getSeq() {
+    public Long getSeq() {
         return seq;
     }
 
-    public void setSeq(Integer seq) {
+    public void setSeq(Long seq) {
         this.seq = seq;
     }
 

@@ -15,7 +15,7 @@
                 <#list Session.treeMenuList as menu>
                     <li class="nav-item nav-item-has-subnav" id="${menu.id}">
                         <#if (menu.nodes?size>0)>
-                            <a href="javascript:void(0);">
+                            <a href="#!">
                                 <#if menu.icon??>
                                 <i class="${menu.icon!}"></i>
                             <#else>
@@ -26,7 +26,7 @@
                                 <#list menu.nodes as node>
                                     <#if (node.nodes?size>0)>
                                         <li class="nav-item nav-item-has-subnav" id="${node.id}">
-                                            <a href="javascript:void(0)">${node.name}</a>
+                                            <a href="#!">${node.name}</a>
                                             <ul class="nav nav-subnav">
                                                 <#list node.nodes as no>
                                                     <li id="${no.id}">

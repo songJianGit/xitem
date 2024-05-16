@@ -52,7 +52,7 @@
                                             <div class="card-body">
                                                 <div id="custom-toolbarA">
                                                     <div class="form-inline" role="form">
-                                                        <button id="del" class="btn btn-primary">
+                                                        <button type="button" id="del" class="btn btn-primary">
                                                             删除授权
                                                         </button>
                                                     </div>
@@ -109,8 +109,8 @@
                                             <div class="card-body">
                                                 <div id="custom-toolbarB">
                                                     <div class="form-inline" role="form">
-                                                        <button id="add" class="btn btn-primary">
-                                                            添加授权
+                                                        <button type="button" id="add" class="btn btn-primary">
+                                                            新增授权
                                                         </button>
                                                     </div>
                                                 </div>

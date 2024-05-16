@@ -17,4 +17,8 @@ public interface QuestionService extends IService<Question> {
     RestResult excelQuestion(String path, UserInfo userInfo);
 
     void saveQuestionAndOption(UserInfo userInfo, Question question, String optionJson);
+
+    void upLastInfo(UserInfo doUserInfo, String ids);
+
+    void delQuestionByIds(String ids);
 }

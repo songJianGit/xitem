@@ -23,45 +23,12 @@
                     <div class="col-12">
                         <div class="card">
                             <div class="card-body">
-                                <form action="${ctx.contextPath}/admin/question/save" method="post" class="row"
+                                <form action="${ctx.contextPath}/admin/paper/save" method="post" class="row"
                                       onsubmit="return check();">
-                                    <input type="hidden" name="id" value="${question.id!}"/>
+                                    <input type="hidden" name="id" value="${paper.id!}"/>
                                     <div class="form-group col-12">
-                                        <label for="title">题目描述</label>
-                                        <textarea class="form-control" name="title">${question.title!}</textarea>
-                                    </div>
-                                    <div class="form-group col-6">
-                                        <label for="qclass">题目分类</label>
-                                        <select class="form-control" name="qclass" id="qclass">
-                                            <option value="">---请选择---</option>
-                                            <#list qclassList as item>
-                                                <option value="${item.id!}"
-                                                        <#if question.qclass??><#if question.qclass==item.id>selected</#if></#if>>${item.name!}</option>
-                                            </#list>
-                                        </select>
-                                    </div>
-                                    <div class="form-group col-6">
-                                        <label for="qtype">题目类型</label>
-                                        <select class="form-control" name="qtype" id="qtype">
-                                            <option value="0"
-                                                    <#if question.qtype??><#if question.qtype==0>selected</#if></#if>>是非
-                                            </option>
-                                            <option value="1"
-                                                    <#if question.qtype??><#if question.qtype==1>selected</#if></#if>>单选
-                                            </option>
-                                            <option value="2"
-                                                    <#if question.qtype??><#if question.qtype==2>selected</#if></#if>>多选
-                                            </option>
-                                        </select>
-                                    </div>
-                                    <div class="form-group col-6">
-                                        <label>选项</label>
-                                        <div id="optionBox"></div>
-                                        <button type="button" class="btn btn-sm btn-label btn-default" id="addOption">
-                                            <label><i class="mdi mdi-plus"></i></label>
-                                            增加选项
-                                        </button>
-                                        <input type="hidden" id="optionJson" name="optionJson">
+                                        <label for="title">试卷标题</label>
+                                        <textarea class="form-control" name="title">${paper.title!}</textarea>
                                     </div>
                                     <div class="form-group col-md-12">
                                         <button type="submit" class="btn btn-primary">保 存</button>
@@ -108,12 +75,12 @@
         }
         let title = $("textarea[name='title']").val();
         if (isBlank(title)) {
-            layer.msg("请填写题目描述");
+            layer.msg("请填写问题描述");
             return false;
         }
         let qclass = $("#qclass").val();
         if (isBlank(qclass)) {
-            layer.msg("请选择题目分类");
+            layer.msg("请选择问题分类");
             return false;
         }
         optionJson();
@@ -182,7 +149,7 @@
     /**
      *
      * @param optionid 选项id
-     * @param qtype 题目类型
+     * @param qtype 问题类型
      * @param title 选项标题
      * @param optionright 是否正确答案 1-是 0-否
      * @param domNum 选项序号（从0开始，所以大于1的会显示删除按钮）

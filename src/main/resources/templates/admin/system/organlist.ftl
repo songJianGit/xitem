@@ -53,7 +53,7 @@
                                         <h4 class="card-title">机构列表</h4>
                                         <div id="custom-toolbar">
                                             <div class="form-inline" role="form">
-                                                <button id="add" class="btn btn-primary">
+                                                <button type="button" id="add" class="btn btn-primary">
                                                     机构新增
                                                 </button>
                                             </div>

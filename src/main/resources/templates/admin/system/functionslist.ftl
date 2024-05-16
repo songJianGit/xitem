@@ -72,8 +72,8 @@
                                                 </td>
                                                 <td>
                                                     <a href="${ctx.contextPath}/admin/system/functionsEdit?functionsId=${func.id}">修改</a>
-                                                    <a href="javascript:void(0);" class="functionsDelete" data-id="${func.id}">删除</a>
-                                                    <a href="${ctx.contextPath}/admin/system/functionsAdd?functionsId=${func.id}">添加下级菜单</a>
+                                                    <a href="#!" class="functionsDelete" data-id="${func.id}">删除</a>
+                                                    <a href="${ctx.contextPath}/admin/system/functionsAdd?functionsId=${func.id}">新增下级菜单</a>
                                                 </td>
                                             </tr>
                                         </#list>

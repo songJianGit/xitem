@@ -33,4 +33,20 @@ public interface UserInfoRoleService extends IService<UserInfoRole> {
      * @return
      */
     Page<UserInfoRoleVO> queryUserListByRole(Page<UserInfoRole> page, UserInfoRoleDto dto);
+
+
+    /**
+     * 根据用户id，获取中间表数据
+     *
+     * @param userId
+     * @return
+     */
+    List<UserInfoRole> listUserInfoRoleByUserId(String userId);
+
+    /**
+     * 根据角色id，获取中间表数据
+     * @param roleId
+     * @return
+     */
+    List<UserInfoRole> listUserInfoRoleByRoleId(String roleId);
 }

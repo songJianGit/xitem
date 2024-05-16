@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.xxsword.xitem.admin.constant.Constant;
+import com.xxsword.xitem.admin.domain.exam.entity.Paper;
 import com.xxsword.xitem.admin.domain.exam.entity.Question;
 import com.xxsword.xitem.admin.domain.exam.entity.QuestionOption;
 import com.xxsword.xitem.admin.domain.system.entity.Dict;
@@ -232,5 +233,31 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
         q.orderByDesc(Question::getCdate, Question::getId);
         long count = count(q);
         return count != 0;
+    }
+
+    @Override
+    public void upLastInfo(UserInfo doUserInfo, String ids) {
+        String[] idsS = ids.split(",");
+        List<Question> listUp = new ArrayList<>();
+        for (String id : idsS) {
+            Question itemUp = new Question();
+            itemUp.setId(id);
+            itemUp.setBaseInfo(doUserInfo);
+            listUp.add(itemUp);
+        }
+        updateBatchById(listUp);
+    }
+
+    @Override
+    public void delQuestionByIds(String ids) {
+        String[] idsS = ids.split(",");
+        List<Question> listUp = new ArrayList<>();
+        for (String id : idsS) {
+            Question question = new Question();
+            question.setId(id);
+            question.setStatus(0);
+            listUp.add(question);
+        }
+        updateBatchById(listUp);
     }
 }

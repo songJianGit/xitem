@@ -1,37 +1,43 @@
 <!DOCTYPE html>
 <html lang="zh">
 <head>
-    <#include "../commons/head.ftl"/>
+    <#include "../../commons/head.ftl"/>
 </head>
 <body>
 <div class="lyear-layout-web">
     <div class="lyear-layout-container">
         <!--左侧导航-->
-        <#include "../commons/aside.ftl"/>
+        <#include "../../commons/aside.ftl"/>
         <!--End 左侧导航-->
 
         <!--头部信息-->
-        <#include "../commons/header.ftl"/>
+        <#include "../../commons/header.ftl"/>
         <!--End 头部信息-->
 
         <!--页面主要内容-->
         <main class="lyear-layout-content">
+
             <div class="container-fluid p-t-15">
+
                 <div class="row">
                     <div class="col-12">
                         <div class="card">
+
                             <div class="card-header">
                                 <form class="form-inline" method="post" action="#!" role="form" id="searchform">
+
                                     <div class="input-group m-r-5">
                                         <div class="input-group-prepend">
-                                            <span class="input-group-text">角色名</span>
+                                            <span class="input-group-text">试卷标题</span>
                                         </div>
-                                        <input type="text" class="form-control" value="" name="name"
-                                               placeholder="登录名">
+                                        <input type="text" class="form-control" name="title"
+                                               placeholder="试卷标题">
                                     </div>
+
                                     <div class="input-group">
                                         <div class="btn-group">
-                                            <button type="button" id="searchBtn" class="btn btn-primary m-r-5">搜索</button>
+                                            <button type="button" id="searchBtn" class="btn btn-primary m-r-5">搜索
+                                            </button>
                                             <button type="reset" class="btn btn-default">重置</button>
                                         </div>
                                     </div>
@@ -56,13 +62,13 @@
                                            data-pagination="true"
                                            data-page-list="[10, 20, 50, 100, 200]"
                                            data-click-to-select="true"
-                                           data-url="${ctx.contextPath}/admin/system/roleListData"
+                                           data-url="${ctx.contextPath}/admin/paper/data"
                                            data-side-pagination="server">
                                         <thead>
                                         <tr>
                                             <th data-checkbox="true"></th>
-                                            <th data-field="name">角色名</th>
-                                            <th data-field="cdate" data-formatter="cdate">创建时间</th>
+                                            <th data-field="title">题目标题</th>
+                                            <th data-field="cdate">创建时间</th>
                                             <th data-field="id" data-formatter="caozuo">操作</th>
                                         </tr>
                                         </thead>
@@ -72,41 +78,18 @@
                         </div>
                     </div>
                 </div>
+
             </div>
+
         </main>
         <!--End 页面主要内容-->
     </div>
 </div>
-<#include "../commons/js.ftl"/>
+<#include "../../commons/js.ftl"/>
 <script type="text/javascript">
-    function cdate(value, row) {
-        if (value == '') {
-            return '';
-        }
-        return value.substring(0, 10);
-    }
-
-    function caozuo(value, row) {
-        let htm = '';
-        htm += '<div class="btn-group">';
-        htm += '<a class="btn btn-sm btn-default m-r-5" href="#" onclick="edit(\'' + value + '\')" title="编辑">编辑</a>';
-        htm += '<a class="btn btn-sm btn-default m-r-5" href="${ctx.contextPath}/admin/system/roleFunctions?roleId=' + value + '" title="权限设置">权限设置</a>';
-        htm += '<a class="btn btn-sm btn-default" href="#" onclick="userListByRole(\'' + value + '\')" title="分配用户">分配用户</a>';
-        htm += '</div>';
-        return htm;
-    }
-
     $('#add').click(function () {
-        window.location.href = '${ctx.contextPath}/admin/system/roleEdit';
-    })
-
-    function edit(id) {
-        window.location.href = '${ctx.contextPath}/admin/system/roleEdit?roleId=' + id;
-    }
-
-    function userListByRole(id) {
-        layer_show('分配权限', '${ctx.contextPath}/admin/system/userListByRole?roleId=' + id);
-    }
+        window.location.href = '${ctx.contextPath}/admin/paper/edit';
+    });
 
     $('#del').click(function () {
         if (getSelectionIds() != false) {
@@ -118,13 +101,12 @@
                         text: '确认',
                         action: function () {
                             $.ajax({
-                                url: "${ctx.contextPath}/admin/system/roleDelete",
+                                url: "${ctx.contextPath}/admin/paper/del",
                                 data: {
-                                    'roleIds': getSelectionIds().join(',')
+                                    ids: getSelectionIds().join(',')
                                 },
                                 success: function (data) {
                                     if (data.result) {
-                                        layer.msg(data.msg);
                                         $("#table-pagination").bootstrapTable('refresh');
                                     } else {
                                         alert(data.msg);
@@ -143,9 +125,18 @@
         }
     });
 
+    function caozuo(value, row) {
+        let htm = '';
+        htm += '<div class="btn-group">';
+        htm += '<a class="btn btn-sm btn-default m-r-5" href="${ctx.contextPath}/admin/paper/edit?id=' + value + '" title="编辑">编辑</a>';
+        htm += '<a class="btn btn-sm btn-default m-r-5" href="${ctx.contextPath}/admin/paper/questionRule?paperId=' + value + '" title="设置题目">设置题目</a>';
+        htm += '</div>';
+        return htm;
+    }
+
     $('#searchBtn').click(function () {
         $("#table-pagination").bootstrapTable('refresh', {
-            url: "${ctx.contextPath}/admin/system/roleListData?" + $("#searchform").serialize()
+            url: "${ctx.contextPath}/admin/paper/data?" + $("#searchform").serialize()
         });
     });
 
