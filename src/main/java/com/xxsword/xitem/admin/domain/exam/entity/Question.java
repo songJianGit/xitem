@@ -31,9 +31,6 @@ public class Question extends BaseEntity implements Serializable {
     @ColumnComment("题目类型(0-是非 1-单选 2-多选)")
     private Integer qtype;
 
-    @TableField(exist = false)
-    private List<QuestionOption> questionOptionList;
-
     public String getTitle() {
         return title;
     }
@@ -66,11 +63,4 @@ public class Question extends BaseEntity implements Serializable {
         this.qtype = qtype;
     }
 
-    public List<QuestionOption> getQuestionOptionList() {
-        return questionOptionList;
-    }
-
-    public void setQuestionOptionList(List<QuestionOption> questionOptionList) {
-        this.questionOptionList = questionOptionList;
-    }
 }

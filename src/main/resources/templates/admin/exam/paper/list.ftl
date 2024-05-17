@@ -68,7 +68,7 @@
                                         <thead>
                                         <tr>
                                             <th data-checkbox="true"></th>
-                                            <th data-field="title">题目标题</th>
+                                            <th data-field="title">试卷标题</th>
                                             <th data-field="cdate">创建时间</th>
                                             <th data-field="id" data-formatter="caozuo">操作</th>
                                         </tr>

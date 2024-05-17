@@ -8,6 +8,7 @@ import com.xxsword.xitem.admin.domain.exam.dto.QuestionDto;
 import com.xxsword.xitem.admin.domain.exam.dto.QuestionRuleDto;
 import com.xxsword.xitem.admin.domain.exam.entity.*;
 import com.xxsword.xitem.admin.domain.exam.vo.QRSVO;
+import com.xxsword.xitem.admin.domain.exam.vo.QuestionVO;
 import com.xxsword.xitem.admin.domain.system.entity.UserInfo;
 import com.xxsword.xitem.admin.model.Codes;
 import com.xxsword.xitem.admin.model.RestPaging;
@@ -25,7 +26,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Controller
 @Slf4j
@@ -172,19 +172,11 @@ public class PaperController {
      * 抽提规则的题目
      *
      * @param request
-     * @param page
      * @return
      */
-//    @RequestMapping("pageQRS")
-//    @ResponseBody
-//    public RestPaging<QRS> pageQRS(HttpServletRequest request, QRSDto qrsDto, Page<QRS> page) {
-//        Page<QRS> data = qrsService.page(page, qrsDto.toQuery());
-//        qrsService.qRSsetQuestion(data.getRecords());
-//        return new RestPaging<>(data.getTotal(), data.getRecords());
-//    }
     @RequestMapping("listQRSData")
     @ResponseBody
-    public RestPaging<QRSVO> listQRSData(HttpServletRequest request, QRSDto qrsDto, QuestionDto questionDto, Page<QRS> page) {
+    public RestPaging<QRSVO> listQRSData(HttpServletRequest request, QRSDto qrsDto, QuestionDto questionDto) {
         List<QRSVO> data = qrsService.listQRS(qrsDto, questionDto);
         return new RestPaging<>(data.size(), data);
     }
@@ -269,9 +261,8 @@ public class PaperController {
         UserInfo userInfo = Utils.getUserInfo(request);
         Paper paper = paperService.getById(paperId);
         userPaperService.getUserPaper(userInfo, paper, null, 2);
-        List<String> qIds = paper.getUserPaperQuestionList().stream().map(UserPaperQuestion::getQid).collect(Collectors.toList());
-        List<Question> questionList = questionService.listQuestionByIds(qIds, true);
+        List<QuestionVO> questionList = questionService.listQuestionByUserPaperQuestion(paper.getUserPaperQuestionList(), true);
         model.addAttribute("questionList", questionList);
-        return "/admin/exam/paper/papershow";// 预览
+        return "/admin/exam/paper/papershow";
     }
 }

@@ -12,6 +12,10 @@
             margin-top: 7px;
         }
 
+        .q-item-score{
+            float: right;
+        }
+
         .q-item-op-box {
             display: flex;
             flex-direction: column;
@@ -30,7 +34,7 @@
     <div class="card-body">
         <#list questionList as item>
             <div class="q-item-box">
-                <div class="q-item-title">${item.title!}</div>
+                <div class="q-item-title">${item_index+1}.${item.title!}<label class="q-item-score">【${item.score!}分】</label></div>
                 <div class="q-item-op-box">
                     <#list item.questionOptionList as option>
                         <div class="q-item-op">

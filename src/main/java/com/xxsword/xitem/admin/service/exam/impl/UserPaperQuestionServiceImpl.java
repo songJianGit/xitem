@@ -57,16 +57,16 @@ public class UserPaperQuestionServiceImpl extends ServiceImpl<UserPaperQuestionM
         for (QuestionRule item : questionRuleList) {
             List<QRS> qIds = this.listQuestionByQR(item);
             for (QRS ite : qIds) {
-                UserPaperQuestion uq = new UserPaperQuestion();
-                uq.setBaseInfo(userInfo);
-                uq.setQid(ite.getQid());
-                uq.setUserid(userPaper.getUserid());
-                uq.setUserpaperid(userPaper.getId());
-                uq.setCdate(DateUtil.now());
-                uq.setQscore(ite.getScore());// 取中间表的分数
-                uq.setSeq(seq);
+                UserPaperQuestion userPaperQuestion = new UserPaperQuestion();
+                userPaperQuestion.setBaseInfo(userInfo);
+                userPaperQuestion.setQid(ite.getQid());
+                userPaperQuestion.setUserid(userPaper.getUserid());
+                userPaperQuestion.setUserpaperid(userPaper.getId());
+                userPaperQuestion.setCdate(DateUtil.now());
+                userPaperQuestion.setQscore(ite.getScore());// 取中间表的分数
+                userPaperQuestion.setSeq(seq);
                 seq++;
-                userPaperQuestionList.add(uq);
+                userPaperQuestionList.add(userPaperQuestion);
             }
         }
         saveBatch(userPaperQuestionList);
