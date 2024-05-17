@@ -1,7 +1,9 @@
 package com.xxsword.xitem.admin.service.exam.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.xxsword.xitem.admin.domain.exam.entity.QuestionRule;
 import com.xxsword.xitem.admin.domain.system.entity.UserInfo;
@@ -25,7 +27,7 @@ public class QuestionRuleServiceImpl extends ServiceImpl<QuestionRuleMapper, Que
     public QuestionRule addQuestionRule(UserInfo userInfo, String paperId) {
         QuestionRule questionRule = new QuestionRule();
         questionRule.setBaseInfo(userInfo);
-        questionRule.setTitle("规则" + countByPaperId(paperId));
+        questionRule.setTitle("规则" + (countByPaperId(paperId) + 1));
         questionRule.setSeq(DateTime.now().getMillis());
         questionRule.setNum(0);
         questionRule.setPaperid(paperId);
@@ -73,5 +75,14 @@ public class QuestionRuleServiceImpl extends ServiceImpl<QuestionRuleMapper, Que
             item.setSnum(Math.toIntExact(qrsService.countQRSByQrid(item.getId())));
         }
         return list;
+    }
+
+    @Override
+    public List<QuestionRule> listQuestionRuleByPid(String pid) {
+        LambdaQueryWrapper<QuestionRule> q = Wrappers.lambdaQuery();
+        q.eq(QuestionRule::getStatus, 1);
+        q.eq(QuestionRule::getPaperid, pid);
+        q.orderByAsc(QuestionRule::getSeq, QuestionRule::getId);
+        return list(q);
     }
 }

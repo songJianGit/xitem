@@ -1,6 +1,5 @@
 package com.xxsword.xitem.admin.domain.exam.entity;
 
-import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.gitee.sunchenbin.mybatis.actable.annotation.*;
 import com.gitee.sunchenbin.mybatis.actable.constants.MySqlEngineConstant;
@@ -31,9 +30,6 @@ public class QRS extends BaseEntity implements Serializable {
     @Column(length = 7, decimalLength = 2)
     @ColumnComment("题目分值")
     private Double score;
-
-    @TableField(exist = false)
-    private Question question;
 
     public String getQrid() {
         return qrid;
@@ -67,11 +63,4 @@ public class QRS extends BaseEntity implements Serializable {
         this.score = score;
     }
 
-    public Question getQuestion() {
-        return question;
-    }
-
-    public void setQuestion(Question question) {
-        this.question = question;
-    }
 }

@@ -1,16 +1,19 @@
 package com.xxsword.xitem.admin.service.exam.impl;
 
+import com.alibaba.fastjson2.JSONArray;
+import com.alibaba.fastjson2.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.xxsword.xitem.admin.domain.exam.dto.QRSDto;
+import com.xxsword.xitem.admin.domain.exam.dto.QuestionDto;
 import com.xxsword.xitem.admin.domain.exam.entity.QRS;
+import com.xxsword.xitem.admin.domain.exam.vo.QRSVO;
 import com.xxsword.xitem.admin.domain.system.entity.UserInfo;
 import com.xxsword.xitem.admin.mapper.exam.QRSMapper;
 import com.xxsword.xitem.admin.service.exam.QRSService;
-import com.xxsword.xitem.admin.service.exam.QuestionService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -19,13 +22,10 @@ import java.util.List;
 @Service
 public class QRSServiceImpl extends ServiceImpl<QRSMapper, QRS> implements QRSService {
 
-    @Autowired
-    private QuestionService questionService;
-
     @Override
     public Long countQRSByQrid(String qrid) {
-        QueryWrapper<QRS> q = Wrappers.query();
-        q.eq("qrid", qrid);
+        LambdaQueryWrapper<QRS> q = Wrappers.lambdaQuery();
+        q.eq(QRS::getQrid, qrid);
         return count(q);
     }
 
@@ -40,14 +40,6 @@ public class QRSServiceImpl extends ServiceImpl<QRSMapper, QRS> implements QRSSe
             listUp.add(itemUp);
         }
         updateBatchById(listUp);
-    }
-
-    @Override
-    public List<QRS> qRSsetQuestion(List<QRS> list) {
-        for (QRS item : list) {
-            item.setQuestion(questionService.getById(item.getQid()));
-        }
-        return list;
     }
 
     @Override
@@ -80,5 +72,52 @@ public class QRSServiceImpl extends ServiceImpl<QRSMapper, QRS> implements QRSSe
         q.eq(QRS::getQrid, qrid);
         q.eq(QRS::getQid, qid);
         return getOne(q);
+    }
+
+    @Override
+    public void upQRSSeq(JSONArray jsonArray) {
+        List<QRS> qrsList = new ArrayList<>();
+        for (int i = 0; i < jsonArray.size(); i++) {
+            JSONObject j = jsonArray.getJSONObject(i);
+            QRS qrs = new QRS();
+            qrs.setId(j.getString("id"));
+            Integer s = j.getInteger("seq");
+            if (s == null) {
+                continue;
+            }
+            qrs.setSeq(s);
+            qrsList.add(qrs);
+        }
+        updateBatchById(qrsList);
+    }
+
+    @Override
+    public void upQRSScore(JSONArray jsonArray) {
+        List<QRS> qrsList = new ArrayList<>();
+        for (int i = 0; i < jsonArray.size(); i++) {
+            JSONObject j = jsonArray.getJSONObject(i);
+            QRS qrs = new QRS();
+            qrs.setId(j.getString("id"));
+            Double d = j.getDouble("score");
+            if (d == null) {
+                continue;
+            }
+            qrs.setScore(d);
+            qrsList.add(qrs);
+        }
+        updateBatchById(qrsList);
+    }
+
+    @Override
+    public List<QRSVO> listQRS(QRSDto qrsDto, QuestionDto questionDto) {
+        return baseMapper.listQRS(qrsDto, questionDto);
+    }
+
+    @Override
+    public List<QRS> listQRSByQrid(String qrid) {
+        LambdaQueryWrapper<QRS> q = Wrappers.lambdaQuery();
+        q.eq(QRS::getQrid, qrid);
+        q.orderByAsc(QRS::getSeq, QRS::getId);
+        return list(q);
     }
 }

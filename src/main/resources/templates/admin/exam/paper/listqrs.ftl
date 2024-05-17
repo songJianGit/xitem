@@ -4,39 +4,100 @@
     <#include "../../commons/head.ftl"/>
 </head>
 <body style="background-color: white">
-<div class="card" style="-webkit-box-shadow:none;box-shadow:none">
+<div class="card" style="-webkit-box-shadow:none;box-shadow:none;">
+    <div class="card-header">
+        <form class="form-inline" method="post" action="#!" role="form" id="searchform">
+
+            <div class="input-group m-r-5">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">题目描述</span>
+                </div>
+                <input type="text" class="form-control" name="title"
+                       placeholder="题目描述">
+            </div>
+
+            <div class="input-group m-r-5">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">题型</span>
+                </div>
+                <select class="form-control" name="qtype">
+                    <#-- 0-是非 1-单选 2-多选-->
+                    <option value="">---请选择---</option>
+                    <option value="0">是非</option>
+                    <option value="1">单选</option>
+                    <option value="2">多选</option>
+                </select>
+            </div>
+
+            <div class="input-group">
+                <div class="btn-group">
+                    <button type="button" id="searchBtn" class="btn btn-primary m-r-5">搜索
+                    </button>
+                    <button type="reset" class="btn btn-default">重置</button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="card-toolbar d-flex flex-column flex-md-row">
+        <div class="toolbar-btn-action">
+            <button type="button" id="saveBtn" class="btn btn-primary m-r-5">
+                保存
+            </button>
+            <button type="button" id="addQuestion" class="btn btn-primary m-r-5">
+                添加考题
+            </button>
+            <button type="button" id="delBtn" class="btn btn-primary m-r-5">
+                删除
+            </button>
+        </div>
+    </div>
+
     <div class="card-body">
         <div id="custom-toolbar">
-            <div class="form-inline" role="form">
-                <button type="button" id="closeBtn" class="btn btn-primary m-r-5">
-                    保存
-                </button>
-                <button type="button" id="addQuestion" class="btn btn-primary m-r-5">
-                    选择考题
-                </button>
-                <button type="button" class="btn btn-primary m-r-5">
-                    保存分值
-                </button>
-                <button type="button" id="upQuestionSeq" class="btn btn-primary m-r-5">
-                    保存排序
-                </button>
-            </div>
+            <#--            <div class="form-inline" role="form">-->
+            <#--                <button type="button" id="saveBtn" class="btn btn-primary m-r-5">-->
+            <#--                    保存-->
+            <#--                </button>-->
+            <#--                <button type="button" id="addQuestion" class="btn btn-primary m-r-5">-->
+            <#--                    选择考题-->
+            <#--                </button>-->
+            <#--                <button type="button" id="delBtn" class="btn btn-primary m-r-5">-->
+            <#--                    删除-->
+            <#--                </button>-->
+            <#--            </div>-->
+            <form class="form-inline" action="#!" role="form">
+                <div class="input-group m-r-5">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">规则名称</span>
+                    </div>
+                    <input type="text" class="form-control" id="questionRuleTitle" name="title"
+                           value="${questionRule.title!}"
+                           placeholder="规则名称">
+                </div>
+                <div class="input-group m-r-5">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">抽提数</span>
+                    </div>
+                    <input type="number" class="form-control" id="questionRuleNum" name="num"
+                           value="${questionRule.num!}" placeholder="抽提数">
+                </div>
+            </form>
         </div>
         <div class="table-responsive">
             <table id="table-pagination"
                    data-toolbar="#custom-toolbar"
                    data-toggle="table"
-                   data-pagination="true"
-                   data-page-list="[10, 20, 50, 100, 200]"
                    data-click-to-select="true"
-                   data-url="${ctx.contextPath}/admin/paper/pageQRS?qrid=${questionRule.id!}"
+                   data-url="${ctx.contextPath}/admin/paper/listQRSData?qrid=${questionRule.id!}"
                    data-side-pagination="server">
                 <thead>
                 <tr>
-                    <th data-field="question.title">题目描述</th>
-                    <th data-field="question.qtype" data-formatter="qtype">题型</th>
-                    <th data-field="score">题目分值</th>
-                    <th data-field="seq" data-formatter="seq">排序</th>
+                    <th data-checkbox="true"></th>
+                    <th data-formatter="indexFormatter">序号</th>
+                    <th data-field="title">题目描述</th>
+                    <th data-field="qtype" data-formatter="qtype">题型</th>
+                    <th data-field="score" data-formatter="score" data-width="100px">分值</th>
+                    <th data-field="seq" data-formatter="seq" data-width="100px">排序</th>
                     <th data-field="id" data-formatter="caozuo" data-width="70px">操作</th>
                 </tr>
                 </thead>
@@ -47,6 +108,14 @@
 <!--End 页面主要内容-->
 <#include "../../commons/js.ftl"/>
 <script type="text/javascript">
+    function indexFormatter(value, row, index) {
+        return index + 1;
+    }
+
+    function score(value, row) {
+        return '<input class="qrs-score form-control form-control-sm" step="0.01" type="number" data-id=' + row.id + ' value="' + value + '"/>';
+    }
+
     function seq(value, row) {
         return '<input class="qrs-seq form-control form-control-sm" type="number" data-id=' + row.id + ' value="' + value + '"/>';
     }
@@ -63,21 +132,31 @@
         layer_show("题目", "${ctx.contextPath}/admin/question/listQuestion?qrid=${questionRule.id}");
     });
 
-    $("#closeBtn").click(function () {
-        parent.reloadData();
-        layer_close();
+    let index_;
+    $("#saveBtn").click(function () {
+        index_ = layer.load(1, {shade: [0.1, '#fff']});
+        upQuestionScore();
     });
 
-    function del(id) {
+    $("#delBtn").click(function () {
+        if (getSelectionIds() != false) {
+            del(getSelectionIds());
+        }
+    });
+
+    function del(ids) {
         $.confirm({
             title: '提示',
-            content: '是否要删除？',
+            content: '是否删除？',
             buttons: {
                 confirm: {
                     text: '确认',
                     action: function () {
                         $.ajax({
-                            url: "${ctx.contextPath}/admin/paper/delQRS?qrsids=" + id,
+                            url: "${ctx.contextPath}/admin/paper/delQRS",
+                            data: {
+                                qrsids: ids.join(',')
+                            },
                             success: function (data) {
                                 if (data.result) {
                                     reloadData();
@@ -97,34 +176,102 @@
         });
     }
 
-    $("#upQuestionSeq").click(function () {
-        let json = [];
+    // 保存规则名称和抽提数
+    function saveQuestionRule() {
+        let title = $('#questionRuleTitle').val();
+        let num = $('#questionRuleNum').val();
+        if (isBlank(title)) {
+            layer.msg('规则名称不可为空');
+            layer.close(index_);
+            return;
+        }
+        if (isBlank(num)) {
+            layer.msg('抽提数不可为空');
+            layer.close(index_);
+            return;
+        }
+        if (isPositiveInteger(num)) {
+            $.ajax({
+                url: "${ctx.contextPath}/admin/paper/upQuestionRule",
+                data: {
+                    id: '${questionRule.id}',
+                    title: title,
+                    num: num,
+                },
+                success: function (data) {
+                    if (data.result) {
+                        parent.reloadData();
+                        layer.close(index_);
+                        layer_close();
+                    } else {
+                        layer.close(index_);
+                        alert(data.msg);
+                    }
+                }
+            });
+        } else {
+            layer.msg('抽提数应该是一个正整数');
+            layer.close(index_);
+        }
+    }
+
+    // 更新排序
+    function upQuestionSeq() {
+        let jsonSeq = [];
         $(".qrs-seq").each(function (e) {
             let seq = $(this).val();
             let id = $(this).data("id");
-            json.push({"id": id, "seq": seq});
+            jsonSeq.push({"id": id, "seq": seq});
         });
-        if (json.length == 0) {
-            return false;
-        }
         $.ajax({
-            url: "${ctx.contextPath}/admin/exam/upQRSSeq",
+            url: "${ctx.contextPath}/admin/paper/upQRSSeq",
             data: {
-                "json": JSON.stringify(json)
+                "jsonSeq": JSON.stringify(jsonSeq)
             },
             success: function (data) {
                 if (data.result) {
-                    reloadData();
+                    saveQuestionRule()
                 } else {
+                    layer.close(index_);
                     alert(data.msg);
                 }
             }
         });
-    });
+    }
 
-    function reloadData(){
+    // 更新分值
+    function upQuestionScore() {
+        let jsonScore = [];
+        $(".qrs-score").each(function (e) {
+            let score = $(this).val();
+            let id = $(this).data("id");
+            jsonScore.push({"id": id, "score": score});
+        });
+        $.ajax({
+            url: "${ctx.contextPath}/admin/paper/upQRSScore",
+            data: {
+                "jsonScore": JSON.stringify(jsonScore)
+            },
+            success: function (data) {
+                if (data.result) {
+                    upQuestionSeq();
+                } else {
+                    layer.close(index_);
+                    alert(data.msg);
+                }
+            }
+        });
+    }
+
+    function reloadData() {
         $("#table-pagination").bootstrapTable('refresh');
     }
+
+    $('#searchBtn').click(function () {
+        $("#table-pagination").bootstrapTable('refresh', {
+            url: "${ctx.contextPath}/admin/paper/listQRSData?qrid=${questionRule.id!}&" + $("#searchform").serialize()
+        });
+    });
 </script>
 </body>
 </html>

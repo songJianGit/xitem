@@ -65,6 +65,7 @@
                                                            data-page-list="[10, 20, 50, 100, 200]"
                                                            data-click-to-select="true"
                                                            data-url="${ctx.contextPath}/admin/system/userListByRoleData?roleId=${roleId}"
+                                                           data-query-params="queryParams"
                                                            data-side-pagination="server">
                                                         <thead>
                                                         <tr>
@@ -122,6 +123,7 @@
                                                            data-page-list="[10, 20, 50, 100, 200]"
                                                            data-click-to-select="true"
                                                            data-url="${ctx.contextPath}/admin/system/userListData"
+                                                           data-query-params="queryParams"
                                                            data-side-pagination="server">
                                                         <thead>
                                                         <tr>

@@ -2,6 +2,7 @@ package com.xxsword.xitem.admin.utils;
 
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.xxsword.xitem.admin.constant.Constant;
+import com.xxsword.xitem.admin.domain.system.convert.FunctionsConvert;
 import com.xxsword.xitem.admin.domain.system.entity.Functions;
 import com.xxsword.xitem.admin.domain.system.entity.Role;
 import com.xxsword.xitem.admin.model.TreeMenu;
@@ -94,7 +95,7 @@ public class MenuUtil {
         List<TreeMenu> menus = new ArrayList<>();
         for (Functions f : functionsList) {
             if (Constant.FUNCTIONS_TOP.equals(f.getPid())) {// 若为顶级菜单
-                TreeMenu treeMenu = getTreeMenuByFunctions(f);
+                TreeMenu treeMenu = FunctionsConvert.INSTANCE.toTreeMenu(f);
                 buildTreeMenu(treeMenu, functionsList, 2);// 因为是三级菜单，所以在一级菜单下再递归2层（1+2=3）
                 menus.add(treeMenu);
             }
@@ -132,7 +133,7 @@ public class MenuUtil {
             List<TreeMenu> list = new ArrayList<>();
             for (Functions f : functions) {
                 if (f.getPid().equals(treeMenu.getId())) {
-                    TreeMenu t = getTreeMenuByFunctions(f);
+                    TreeMenu t = FunctionsConvert.INSTANCE.toTreeMenu(f);
                     buildTreeMenu(t, functions, layer - 1);
                     list.add(t);
                 }
@@ -141,22 +142,4 @@ public class MenuUtil {
         }
     }
 
-    /**
-     * 将Functions转为TreeMenu
-     *
-     * @param f
-     * @return
-     */
-    private static TreeMenu getTreeMenuByFunctions(Functions f) {
-        TreeMenu t = new TreeMenu();
-        t.setId(f.getId());
-        t.setName(f.getName());
-        t.setUrl(f.getUrl());
-        t.setStatus(f.getStatus());
-        t.setTag(f.getTag());
-        t.setSeq(f.getSeq());
-        t.setIcon(f.getIcon());
-        t.setTarget(f.getTarget());
-        return t;
-    }
 }

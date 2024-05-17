@@ -38,4 +38,12 @@ public interface QuestionRuleService extends IService<QuestionRule> {
      * @return
      */
     List<QuestionRule> setQuestionRuleSNum(List<QuestionRule> list);
+
+    /**
+     * 试卷id获取抽提规则
+     *
+     * @param pid
+     * @return
+     */
+    List<QuestionRule> listQuestionRuleByPid(String pid);
 }

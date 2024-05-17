@@ -30,7 +30,7 @@ public class ExamController {
         model.addAttribute("extype", extype);
         model.addAttribute("examid", examid);
         model.addAttribute("scoretype", scoretype);
-        return "admin/exam/list";
+        return "/admin/exam/list";
     }
 
     @RequestMapping("data")
@@ -48,7 +48,7 @@ public class ExamController {
             exam = examService.getById(id);
         }
         model.addAttribute("exam", exam);
-        return "admin/exam/edit";
+        return "/admin/exam/edit";
     }
 
     @RequestMapping("save")

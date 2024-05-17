@@ -33,10 +33,10 @@
             title = false;
         }
         if (w == null || w == '') {
-            w = '1000px';
+            w = '79%';
         }
         if (h == null || h == '') {
-            h = ($(window).height() - 100) + 'px'
+            h = ($(window).height() - 50) + 'px'
         }
         let index = layer.open({
             type: 2,
@@ -97,4 +97,20 @@
         return !isBlank(val);
     }
 
+    // Bootstrap Table翻页参数设置
+    function queryParams(params) {
+        params.current = Math.floor(params.offset / params.limit) + 1;
+        params.size = params.limit;
+        return params;
+    }
+
+    // 判断一个变量是否为正整数
+    function isPositiveInteger(value) {
+        // 尝试将值转换为整数，如果转换失败（即原始值不是数字或无法解释为数字），则返回false
+        const numValue = Number(value);
+        if (isNaN(numValue)) {
+            return false;
+        }
+        return Number.isInteger(numValue) && numValue > 0;
+    }
 </script>

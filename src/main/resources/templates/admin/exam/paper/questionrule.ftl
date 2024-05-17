@@ -58,6 +58,7 @@
                                 试卷预览
                             </div>
                             <div class="card-body">
+                                <iframe style="border: 0;width: 99%;min-height: 700px" src="${ctx.contextPath}/admin/paper/paperShow?paperId=${paper.id!}"></iframe>
                             </div>
                         </div>
                     </div>
@@ -108,7 +109,7 @@
     function del(id) {
         $.confirm({
             title: '提示',
-            content: '是否要删除？',
+            content: '是否删除？',
             buttons: {
                 confirm: {
                     text: '确认',

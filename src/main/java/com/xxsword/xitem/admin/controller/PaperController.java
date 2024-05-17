@@ -1,19 +1,18 @@
 package com.xxsword.xitem.admin.controller;
 
+import com.alibaba.fastjson2.JSONArray;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.xxsword.xitem.admin.domain.exam.dto.PaperDto;
 import com.xxsword.xitem.admin.domain.exam.dto.QRSDto;
+import com.xxsword.xitem.admin.domain.exam.dto.QuestionDto;
 import com.xxsword.xitem.admin.domain.exam.dto.QuestionRuleDto;
-import com.xxsword.xitem.admin.domain.exam.entity.Paper;
-import com.xxsword.xitem.admin.domain.exam.entity.QRS;
-import com.xxsword.xitem.admin.domain.exam.entity.QuestionRule;
+import com.xxsword.xitem.admin.domain.exam.entity.*;
+import com.xxsword.xitem.admin.domain.exam.vo.QRSVO;
 import com.xxsword.xitem.admin.domain.system.entity.UserInfo;
 import com.xxsword.xitem.admin.model.Codes;
 import com.xxsword.xitem.admin.model.RestPaging;
 import com.xxsword.xitem.admin.model.RestResult;
-import com.xxsword.xitem.admin.service.exam.PaperService;
-import com.xxsword.xitem.admin.service.exam.QRSService;
-import com.xxsword.xitem.admin.service.exam.QuestionRuleService;
+import com.xxsword.xitem.admin.service.exam.*;
 import com.xxsword.xitem.admin.utils.Utils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -26,6 +25,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 @Slf4j
@@ -37,6 +37,10 @@ public class PaperController {
     private QuestionRuleService questionRuleService;
     @Autowired
     private QRSService qrsService;
+    @Autowired
+    private UserPaperService userPaperService;
+    @Autowired
+    private QuestionService questionService;
 
     @RequestMapping("list")
     public String list() {
@@ -109,6 +113,23 @@ public class PaperController {
         return RestResult.OK();
     }
 
+    @RequestMapping("upQuestionRule")
+    @ResponseBody
+    public RestResult upQuestionRule(HttpServletRequest request, QuestionRule questionRule) {
+        UserInfo userInfo = Utils.getUserInfo(request);
+        int countQRS = qrsService.countQRSByQrid(questionRule.getId()).intValue();
+        if (countQRS == 0) {
+            return RestResult.Fail("请添加考题");
+        }
+        if (countQRS < questionRule.getNum()) {
+            return RestResult.Fail("抽提数应小于总提数");
+        } else {
+            questionRule.setBaseInfo(userInfo);
+            questionRuleService.updateById(questionRule);
+            return RestResult.OK();
+        }
+    }
+
     /**
      * 删除抽题规则
      *
@@ -154,12 +175,18 @@ public class PaperController {
      * @param page
      * @return
      */
-    @RequestMapping("pageQRS")
+//    @RequestMapping("pageQRS")
+//    @ResponseBody
+//    public RestPaging<QRS> pageQRS(HttpServletRequest request, QRSDto qrsDto, Page<QRS> page) {
+//        Page<QRS> data = qrsService.page(page, qrsDto.toQuery());
+//        qrsService.qRSsetQuestion(data.getRecords());
+//        return new RestPaging<>(data.getTotal(), data.getRecords());
+//    }
+    @RequestMapping("listQRSData")
     @ResponseBody
-    public RestPaging<QRS> pageQRS(HttpServletRequest request, QRSDto qrsDto, Page<QRS> page) {
-        Page<QRS> data = qrsService.page(page, qrsDto.toQuery());
-        qrsService.qRSsetQuestion(data.getRecords());
-        return new RestPaging<>(data.getTotal(), data.getRecords());
+    public RestPaging<QRSVO> listQRSData(HttpServletRequest request, QRSDto qrsDto, QuestionDto questionDto, Page<QRS> page) {
+        List<QRSVO> data = qrsService.listQRS(qrsDto, questionDto);
+        return new RestPaging<>(data.size(), data);
     }
 
     /**
@@ -201,5 +228,50 @@ public class PaperController {
         String[] ids = qrsids.split(",");
         qrsService.removeBatchByIds(Arrays.asList(ids));
         return RestResult.OK();
+    }
+
+    /**
+     * 抽提规则中的题目顺序调整
+     *
+     * @param request
+     * @param jsonSeq
+     * @return
+     */
+    @RequestMapping("upQRSSeq")
+    @ResponseBody
+    public RestResult upQRSSeq(HttpServletRequest request, String jsonSeq) {
+        qrsService.upQRSSeq(JSONArray.parseArray(jsonSeq));
+        return RestResult.OK();
+    }
+
+    /**
+     * 抽提规则中的分值调整
+     *
+     * @param request
+     * @param jsonScore
+     * @return
+     */
+    @RequestMapping("upQRSScore")
+    @ResponseBody
+    public RestResult upQRSScore(HttpServletRequest request, String jsonScore) {
+        qrsService.upQRSScore(JSONArray.parseArray(jsonScore));
+        return RestResult.OK();
+    }
+
+    /**
+     * 试卷的预览
+     *
+     * @param request
+     * @return
+     */
+    @RequestMapping("paperShow")
+    public String paperShow(HttpServletRequest request, String paperId, Model model) {
+        UserInfo userInfo = Utils.getUserInfo(request);
+        Paper paper = paperService.getById(paperId);
+        userPaperService.getUserPaper(userInfo, paper, null, 2);
+        List<String> qIds = paper.getUserPaperQuestionList().stream().map(UserPaperQuestion::getQid).collect(Collectors.toList());
+        List<Question> questionList = questionService.listQuestionByIds(qIds, true);
+        model.addAttribute("questionList", questionList);
+        return "/admin/exam/paper/papershow";// 预览
     }
 }

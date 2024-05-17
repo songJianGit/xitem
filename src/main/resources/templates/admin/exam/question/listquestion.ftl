@@ -69,6 +69,7 @@
                    data-page-list="[10, 20, 50, 100, 200]"
                    data-click-to-select="true"
                    data-url="${ctx.contextPath}/admin/question/data"
+                   data-query-params="queryParams"
                    data-side-pagination="server">
                 <thead>
                 <tr>
@@ -76,7 +77,7 @@
                     <th data-field="title">题目标题</th>
                     <th data-field="qtype" data-formatter="qtype">题型</th>
                     <th data-field="qclassname">题目分类</th>
-                    <th data-field="cdate">创建时间</th>
+                    <th data-field="cdate" data-width="160px">创建时间</th>
                 </tr>
                 </thead>
             </table>
@@ -87,20 +88,26 @@
 <script type="text/javascript">
     $('#add').click(function () {
         if (getSelectionIds() != false) {
-            $.ajax({
-                url: "${ctx.contextPath}/admin/paper/addQRS",
-                data: {
-                    qids: getSelectionIds().join(','),
-                    qrid: '${qrid}',
-                    score: 0
-                },
-                success: function (data) {
-                    if (data.result) {
-                        parent.reloadData();
-                        layer_close();
-                    } else {
-                        alert(data.msg);
-                    }
+            layer.prompt({title: '请输入每题分值'}, function (value, index) {
+                if (!isNaN(value) && value.trim() !== '') {
+                    $.ajax({
+                        url: "${ctx.contextPath}/admin/paper/addQRS",
+                        data: {
+                            qids: getSelectionIds().join(','),
+                            qrid: '${qrid}',
+                            score: value.trim()
+                        },
+                        success: function (data) {
+                            if (data.result) {
+                                parent.reloadData();
+                                layer_close();
+                            } else {
+                                alert(data.msg);
+                            }
+                        }
+                    });
+                } else {
+                    layer.msg("请输入正确分值");
                 }
             });
         }

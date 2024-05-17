@@ -8,6 +8,7 @@ import com.gitee.sunchenbin.mybatis.actable.constants.MySqlTypeConstant;
 import com.xxsword.xitem.admin.domain.system.entity.BaseEntity;
 
 import java.io.Serializable;
+import java.util.List;
 
 @TableComment("考试的题目")
 @TableName("t_ex_question")
@@ -29,6 +30,9 @@ public class Question extends BaseEntity implements Serializable {
     @Column
     @ColumnComment("题目类型(0-是非 1-单选 2-多选)")
     private Integer qtype;
+
+    @TableField(exist = false)
+    private List<QuestionOption> questionOptionList;
 
     public String getTitle() {
         return title;
@@ -60,5 +64,13 @@ public class Question extends BaseEntity implements Serializable {
 
     public void setQtype(Integer qtype) {
         this.qtype = qtype;
+    }
+
+    public List<QuestionOption> getQuestionOptionList() {
+        return questionOptionList;
+    }
+
+    public void setQuestionOptionList(List<QuestionOption> questionOptionList) {
+        this.questionOptionList = questionOptionList;
     }
 }

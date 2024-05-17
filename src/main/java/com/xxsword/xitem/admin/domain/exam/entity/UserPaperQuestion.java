@@ -1,6 +1,5 @@
 package com.xxsword.xitem.admin.domain.exam.entity;
 
-import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.gitee.sunchenbin.mybatis.actable.annotation.*;
 import com.gitee.sunchenbin.mybatis.actable.constants.MySqlEngineConstant;
@@ -46,9 +45,6 @@ public class UserPaperQuestion extends BaseEntity implements Serializable {
     @Column
     @ColumnComment("排序")
     private Integer seq;
-
-    @TableField(exist = false)
-    private Question question;
 
     public String getUserid() {
         return userid;
@@ -114,11 +110,4 @@ public class UserPaperQuestion extends BaseEntity implements Serializable {
         this.seq = seq;
     }
 
-    public Question getQuestion() {
-        return question;
-    }
-
-    public void setQuestion(Question question) {
-        this.question = question;
-    }
 }

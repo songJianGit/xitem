@@ -47,6 +47,14 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
     }
 
     @Override
+    public List<Question> setQuestionOption(List<Question> list) {
+        for (Question question : list) {
+            question.setQuestionOptionList(questionOptionService.questionOptionListByQid(question.getId()));
+        }
+        return list;
+    }
+
+    @Override
     @Transactional
     public RestResult excelQuestion(String path, UserInfo userInfo) {
         Workbook wb = ExcelUtils.readExcle(new File(path));
@@ -260,4 +268,17 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
         }
         updateBatchById(listUp);
     }
+
+    @Override
+    public List<Question> listQuestionByIds(List<String> qIds, boolean setOption) {
+        List<Question> questionList = new ArrayList<>();
+        for (String id : qIds) {
+            questionList.add(getById(id));
+        }
+        if (setOption) {
+            setQuestionOption(questionList);
+        }
+        return questionList;
+    }
+
 }
