@@ -30,6 +30,7 @@ public interface QRSMapper extends BaseMapper<QRS> {
             "<if test='questionDto.qtype!=null'>" +
             "and b.qtype=#{questionDto.qtype} " +
             "</if>" +
+            "order by a.seq, a.id " +
             "</script>")
     List<QRSVO> listQRS(QRSDto qrsDto, QuestionDto questionDto);
 
