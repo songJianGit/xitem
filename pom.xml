@@ -8,8 +8,8 @@
         <version>2.7.18</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>com.example</groupId>
-    <artifactId>xxsword</artifactId>
+    <groupId>com.xxsword</groupId>
+    <artifactId>xitem</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>xitem</name>
     <description>xitem</description>
