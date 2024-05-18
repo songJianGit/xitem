@@ -183,12 +183,12 @@
         if (isBlank(title)) {
             layer.msg('规则名称不可为空');
             layer.close(index_);
-            return;
+            return false;
         }
         if (isBlank(num)) {
             layer.msg('抽提数不可为空');
             layer.close(index_);
-            return;
+            return false;
         }
         if (isPositiveInteger(num)) {
             $.ajax({
