@@ -40,7 +40,8 @@
     </div>
     <div class="card-toolbar d-flex flex-column flex-md-row">
         <div class="toolbar-btn-action">
-            <button type="button" id="saveBtn" class="btn btn-primary m-r-5">
+            <button type="button" id="saveBtn" class="btn btn-label btn-primary m-r-5 animated flipInX">
+                <label><i class="mdi mdi-checkbox-marked-circle-outline"></i></label>
                 保存
             </button>
             <button type="button" id="addQuestion" class="btn btn-primary m-r-5">
@@ -98,7 +99,6 @@
                     <th data-field="qtype" data-formatter="qtype">题型</th>
                     <th data-field="score" data-formatter="score" data-width="100px">分值</th>
                     <th data-field="seq" data-formatter="seq" data-width="100px">排序</th>
-                    <th data-field="id" data-formatter="caozuo" data-width="70px">操作</th>
                 </tr>
                 </thead>
             </table>
@@ -118,14 +118,6 @@
 
     function seq(value, row) {
         return '<input class="qrs-seq form-control form-control-sm" type="number" data-id=' + row.id + ' value="' + value + '"/>';
-    }
-
-    function caozuo(value, row) {
-        let htm = '';
-        htm += '<div class="btn-group">';
-        htm += '<a class="btn btn-sm btn-default" onclick="del(\'' + value + '\')" href="javascript:;" title="删除">删除</a>';
-        htm += '</div>';
-        return htm;
     }
 
     $("#addQuestion").click(function () {

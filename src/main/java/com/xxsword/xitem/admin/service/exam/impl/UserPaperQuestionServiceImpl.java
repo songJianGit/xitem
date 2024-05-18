@@ -1,7 +1,6 @@
 package com.xxsword.xitem.admin.service.exam.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.xxsword.xitem.admin.domain.exam.entity.QRS;
@@ -60,7 +59,6 @@ public class UserPaperQuestionServiceImpl extends ServiceImpl<UserPaperQuestionM
                 UserPaperQuestion userPaperQuestion = new UserPaperQuestion();
                 userPaperQuestion.setBaseInfo(userInfo);
                 userPaperQuestion.setQid(ite.getQid());
-                userPaperQuestion.setUserid(userPaper.getUserid());
                 userPaperQuestion.setUserpaperid(userPaper.getId());
                 userPaperQuestion.setCdate(DateUtil.now());
                 userPaperQuestion.setQscore(ite.getScore());// 取中间表的分数

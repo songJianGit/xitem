@@ -1,6 +1,5 @@
 package com.xxsword.xitem.admin.domain.exam.vo;
 
-import com.baomidou.mybatisplus.annotation.TableField;
 import com.xxsword.xitem.admin.domain.exam.entity.QuestionOption;
 
 import java.util.List;
@@ -13,7 +12,7 @@ public class QuestionVO {
     private String qclassname;
     private Integer qtype;// 题目类型(0-是非 1-单选 2-多选)
     private Double score;// 题目分值
-    @TableField(exist = false)
+    private String userpaperquestionid;// 用户试题t_ex_user_paper_question表的主键id
     private List<QuestionOption> questionOptionList;
 
     public String getId() {
@@ -56,19 +55,27 @@ public class QuestionVO {
         this.qtype = qtype;
     }
 
-    public List<QuestionOption> getQuestionOptionList() {
-        return questionOptionList;
-    }
-
-    public void setQuestionOptionList(List<QuestionOption> questionOptionList) {
-        this.questionOptionList = questionOptionList;
-    }
-
     public Double getScore() {
         return score;
     }
 
     public void setScore(Double score) {
         this.score = score;
+    }
+
+    public String getUserpaperquestionid() {
+        return userpaperquestionid;
+    }
+
+    public void setUserpaperquestionid(String userpaperquestionid) {
+        this.userpaperquestionid = userpaperquestionid;
+    }
+
+    public List<QuestionOption> getQuestionOptionList() {
+        return questionOptionList;
+    }
+
+    public void setQuestionOptionList(List<QuestionOption> questionOptionList) {
+        this.questionOptionList = questionOptionList;
     }
 }

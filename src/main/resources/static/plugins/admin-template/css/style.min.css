@@ -2297,9 +2297,10 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
 .card-header div.card-title {
     font-size: 16px;
 }
-.card-body {
-    padding: 24px;
-}
+/*2024-05-18感觉card-body的内填充太多了，所以注释掉，用bootstrap.min.css默认的内填充就行*/
+/*.card-body {*/
+/*    padding: 24px;*/
+/*}*/
 .card-body > *:last-child {
     margin-bottom: 0;
 }

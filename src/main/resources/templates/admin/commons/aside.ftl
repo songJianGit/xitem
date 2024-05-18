@@ -2,7 +2,7 @@
 
     <!-- logo -->
     <div id="logo" class="sidebar-header">
-        <div style="font-size: 20px;max-width: 240px;margin: 7px 7px;color: #fff;text-align: center">xitem</div>
+        <div style="font-size: 23px;max-width: 240px;color: #fff;text-align: center;min-height: 68px;line-height: 68px">xitem</div>
     </div>
     <div class="lyear-layout-sidebar-info lyear-scroll">
         <#--菜单是根据其url是否为空来判断其是否有下一级-->

@@ -34,6 +34,7 @@ public interface QuestionRuleService extends IService<QuestionRule> {
 
     /**
      * 赋值题目总数字段
+     *
      * @param list
      * @return
      */
@@ -46,4 +47,14 @@ public interface QuestionRuleService extends IService<QuestionRule> {
      * @return
      */
     List<QuestionRule> listQuestionRuleByPid(String pid);
+
+    /**
+     * 试卷分数计算
+     * 当试卷分数不固定时，返回-1
+     */
+    Double getPaperScore(String paperId);
+    /**
+     * 试卷题目总数获取（该张试卷通过抽提规则抽取后的题目数）
+     */
+    Integer getPaperQNum(String paperId);
 }

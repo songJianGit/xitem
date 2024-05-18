@@ -2,11 +2,13 @@ package com.xxsword.xitem.admin.controller;
 
 import com.alibaba.fastjson2.JSONArray;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.xxsword.xitem.admin.domain.exam.convert.PaperConvert;
 import com.xxsword.xitem.admin.domain.exam.dto.PaperDto;
 import com.xxsword.xitem.admin.domain.exam.dto.QRSDto;
 import com.xxsword.xitem.admin.domain.exam.dto.QuestionDto;
 import com.xxsword.xitem.admin.domain.exam.dto.QuestionRuleDto;
 import com.xxsword.xitem.admin.domain.exam.entity.*;
+import com.xxsword.xitem.admin.domain.exam.vo.PaperVO;
 import com.xxsword.xitem.admin.domain.exam.vo.QRSVO;
 import com.xxsword.xitem.admin.domain.exam.vo.QuestionVO;
 import com.xxsword.xitem.admin.domain.system.entity.UserInfo;
@@ -260,9 +262,12 @@ public class PaperController {
     public String paperShow(HttpServletRequest request, String paperId, Model model) {
         UserInfo userInfo = Utils.getUserInfo(request);
         Paper paper = paperService.getById(paperId);
-        userPaperService.getUserPaper(userInfo, paper, null, 2);
-        List<QuestionVO> questionList = questionService.listQuestionByUserPaperQuestion(paper.getUserPaperQuestionList(), true);
-        model.addAttribute("questionList", questionList);
+        PaperVO paperVO = PaperConvert.INSTANCE.toPaperVO(paper);
+        userPaperService.getUserPaper(userInfo, paperVO, null, 2);
+        paperVO.setSnum(questionRuleService.getPaperQNum(paperId));
+        paperVO.setScore(questionRuleService.getPaperScore(paperId));
+        model.addAttribute("paperVO", paperVO);
         return "/admin/exam/paper/papershow";
     }
+
 }

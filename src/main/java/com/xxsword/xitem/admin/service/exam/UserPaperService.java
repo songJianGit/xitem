@@ -3,6 +3,7 @@ package com.xxsword.xitem.admin.service.exam;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.xxsword.xitem.admin.domain.exam.entity.Paper;
 import com.xxsword.xitem.admin.domain.exam.entity.UserPaper;
+import com.xxsword.xitem.admin.domain.exam.vo.PaperVO;
 import com.xxsword.xitem.admin.domain.system.entity.UserInfo;
 
 public interface UserPaperService extends IService<UserPaper> {
@@ -15,10 +16,10 @@ public interface UserPaperService extends IService<UserPaper> {
      * 该方法给paper的userPaperQuestionList赋值
      *
      * @param userInfo
-     * @param paper
+     * @param paperVO
      * @param examId
      * @param type     1-根据用户，试卷，考试信息获取，有则返回，无则新增 2-永远产生新的试卷
      */
-    UserPaper getUserPaper(UserInfo userInfo, Paper paper, String examId, Integer type);
+    UserPaper getUserPaper(UserInfo userInfo, PaperVO paperVO, String examId, Integer type);
 
 }

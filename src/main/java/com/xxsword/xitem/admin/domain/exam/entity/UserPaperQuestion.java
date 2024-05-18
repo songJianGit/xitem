@@ -12,9 +12,6 @@ import java.io.Serializable;
 @TableEngine(MySqlEngineConstant.InnoDB)
 public class UserPaperQuestion extends BaseEntity implements Serializable {
     private static final long serialVersionUID = 208L;
-    @Column(length = 50)
-    @ColumnComment("用户id")
-    private String userid;
 
     @Index
     @Column(length = 50)
@@ -45,14 +42,6 @@ public class UserPaperQuestion extends BaseEntity implements Serializable {
     @Column
     @ColumnComment("排序")
     private Integer seq;
-
-    public String getUserid() {
-        return userid;
-    }
-
-    public void setUserid(String userid) {
-        this.userid = userid;
-    }
 
     public String getUserpaperid() {
         return userpaperid;

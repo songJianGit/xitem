@@ -47,7 +47,7 @@
 <#include "../commons/js.ftl"/>
 <script type="text/javascript">
     $('#upload').click(function () {
-        layer_show("上传", '${ctx.contextPath}/admin/upload/fileUploadMain?multiple=1&maxnum=3&type=png,mp4', '', '', '', 0);
+        layer_show("上传", '${ctx.contextPath}/admin/upload/fileUploadMain?multiple=1&maxnum=3&type=png,mp4', '', '', false, 0);
     });
 
     function uploadCallback(infos) {

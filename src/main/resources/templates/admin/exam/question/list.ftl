@@ -97,8 +97,8 @@
                                             <th data-field="title">题目标题</th>
                                             <th data-field="qtype" data-formatter="qtype">题型</th>
                                             <th data-field="qclassname">题目分类</th>
-                                            <th data-field="cdate">创建时间</th>
-                                            <th data-field="id" data-formatter="caozuo">操作</th>
+                                            <th data-field="cdate" data-width="160px">创建时间</th>
+                                            <th data-field="id" data-formatter="caozuo" data-width="70px">操作</th>
                                         </tr>
                                         </thead>
                                     </table>

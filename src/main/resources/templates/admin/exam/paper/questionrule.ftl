@@ -19,6 +19,13 @@
 
             <div class="container-fluid p-t-15">
                 <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <button type="button" class="btn btn-default" onclick="javascript:history.back(-1);return false;">返 回</button>
+                            </div>
+                        </div>
+                    </div>
                     <div class="col-4">
                         <div class="card">
                             <div class="card-header">
@@ -27,7 +34,7 @@
                             <div class="card-body">
                                 <div id="custom-toolbar">
                                     <div class="form-inline" role="form">
-                                        <button type="button" id="add" class="btn btn-primary m-r-5">
+                                        <button type="button" id="add" class="btn btn-primary m-r-5 animated flipInX">
                                             新增
                                         </button>
                                     </div>
@@ -58,7 +65,8 @@
                                 试卷预览
                             </div>
                             <div class="card-body">
-                                <iframe style="border: 0;width: 99%;min-height: 700px" src="${ctx.contextPath}/admin/paper/paperShow?paperId=${paper.id!}"></iframe>
+                                <iframe id="paperShwoIframe" style="border: 0;width: 99%;min-height: 623px"
+                                        src="${ctx.contextPath}/admin/paper/paperShow?paperId=${paper.id!}"></iframe>
                             </div>
                         </div>
                     </div>
@@ -140,6 +148,8 @@
 
     function reloadData() {
         $("#table-pagination").bootstrapTable('refresh');
+        let paperShwoIframe = document.getElementById('paperShwoIframe');
+        paperShwoIframe.src = paperShwoIframe.src; // 重新分配src属性来触发重新加载
     }
 
 </script>
