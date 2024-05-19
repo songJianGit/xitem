@@ -3,7 +3,6 @@ package com.xxsword.xitem.admin.service.exam.impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.xxsword.xitem.admin.domain.exam.entity.Paper;
 import com.xxsword.xitem.admin.domain.exam.entity.UserPaper;
 import com.xxsword.xitem.admin.domain.system.entity.UserInfo;
 import com.xxsword.xitem.admin.mapper.exam.UserPaperMapper;
@@ -39,15 +38,15 @@ public class UserPaperServiceImpl extends ServiceImpl<UserPaperMapper, UserPaper
 
     @Override
     @Transactional
-    public UserPaper getUserPaper(UserInfo userInfo, Paper paper, String examId, Integer type) {
+    public UserPaper getUserPaper(UserInfo userInfo, String paperId, String examId, Integer type) {
         if (type == null) {
             type = 1;
         }
         UserPaper userPaper = null;
         if (type == 1) {
-            List<UserPaper> listUserPaper = this.listUserPaper(userInfo.getId(), paper.getId(), examId, 0);// 获取其未提交的答题记录
+            List<UserPaper> listUserPaper = this.listUserPaper(userInfo.getId(), paperId, examId, 0);// 获取其未提交的答题记录
             if (listUserPaper == null || listUserPaper.size() == 0) {
-                userPaper = this.newUserPaper(userInfo, paper, examId);
+                userPaper = this.newUserPaper(userInfo, paperId, examId);
             } else {
                 userPaper = listUserPaper.get(0);
                 if (listUserPaper.size() > 1) {
@@ -56,7 +55,7 @@ public class UserPaperServiceImpl extends ServiceImpl<UserPaperMapper, UserPaper
             }
         }
         if (type == 2) {
-            userPaper = this.newUserPaper(userInfo, paper, examId);
+            userPaper = this.newUserPaper(userInfo, paperId, examId);
         }
         return userPaper;
     }
@@ -104,16 +103,16 @@ public class UserPaperServiceImpl extends ServiceImpl<UserPaperMapper, UserPaper
      * 新的试卷
      *
      * @param userInfo
-     * @param paper
+     * @param paperId
      * @param examId
      * @return
      */
-    private UserPaper newUserPaper(UserInfo userInfo, Paper paper, String examId) {
+    private UserPaper newUserPaper(UserInfo userInfo, String paperId, String examId) {
         UserPaper userPaper = new UserPaper();
         userPaper.setBaseInfo(userInfo);
         userPaper.setSubstatus(0);
         userPaper.setExamid(examId);
-        userPaper.setPaperid(paper.getId());
+        userPaper.setPaperid(paperId);
         userPaper.setUserid(userInfo.getId());
         save(userPaper);
         userPaperQuestionService.newPaperQ(userPaper, userInfo);// 给新的试卷生成新的题目

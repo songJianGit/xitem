@@ -2,31 +2,21 @@
 <html>
 <head>
     <#include "../../commons/head.ftl"/>
-    <style>
-
-    </style>
 </head>
-<body style="background-color: white">
-<!--页面主要内容-->
-<main>
-    <form action="${ctx.contextPath}/admin/question/excelquestionExcel" method="post" id="formData"
-          enctype="multipart/form-data">
-        <input type="hidden" name="questionRuleId" value="${questionRuleId}">
-        <input type="hidden" name="examid" value="${examid}">
-        <div style="padding: 23px;">
-            <div>模板下载：<a href="${ctx.contextPath}/static/pc/excelfile/examT.xlsx">examT.xlsx</a></div>
-            <div style="overflow: hidden;border-bottom: 1px solid #e0e0e0;padding-bottom: 17px;margin-top: 23px">
-                <input type="file" id="fileid" name="fileinfo" style="float: left">
-                <button style="float: left" class="btn btn-info" type="button" id="subBtn">确认</button>
-            </div>
-            <div style="clear: both"></div>
-            <div style="margin-top: 13px">上传结果：
-                <div id="errorinfo">暂无</div>
-            </div>
+<body style="background-color: #fff">
+<form action="#!" method="post" id="formData" enctype="multipart/form-data">
+    <div style="padding: 23px;">
+        <div>模板下载：<a href="${ctx.contextPath}/static/excelTemplate/examT.xlsx">examT.xlsx</a></div>
+        <div style="overflow: hidden;border-bottom: 1px solid #e0e0e0;padding-bottom: 17px;margin-top: 23px">
+            <input type="file" name="fileinfo" style="float: left">
+            <button style="float: left" class="btn btn-primary" type="button" id="subBtn">导 入</button>
         </div>
-    </form>
-</main>
-<!--End 页面主要内容-->
+        <div style="clear: both"></div>
+        <div style="margin-top: 13px">上传结果：
+            <div id="errorinfo">暂无</div>
+        </div>
+    </div>
+</form>
 <#include "../../commons/js.ftl"/>
 <script type="text/javascript">
     $("#subBtn").click(function () {
@@ -36,7 +26,7 @@
         setTimeout(function () {
             let formData = new FormData($("#formData")[0]);
             $.ajax({
-                url: "${ctx.contextPath}/admin/question/excelquestionExcel",
+                url: "${ctx.contextPath}/admin/question/questionImport",
                 data: formData,
                 type: 'POST',
                 // async: false,
@@ -50,9 +40,9 @@
                         layer.msg(data.msg);
                         setTimeout(function () {
                             layer_close();
-                        }, 1200);
+                        }, 1000);
                     } else {
-                        alert(data.msg);
+                        layer.msg('导入失败');
                         let info = '';
                         let errors = data.data;
                         for (let i = 0; i < errors.length; i++) {

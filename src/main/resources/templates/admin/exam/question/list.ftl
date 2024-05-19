@@ -76,6 +76,9 @@
                                         <button type="button" id="add" class="btn btn-primary m-r-5">
                                             新增
                                         </button>
+                                        <button id="addQuestionExcel" class="btn btn-primary m-r-5">
+                                            导入
+                                        </button>
                                         <button type="button" id="del" class="btn btn-primary m-r-5">
                                             删除
                                         </button>
@@ -162,12 +165,19 @@
         return htm;
     }
 
+    $("#addQuestionExcel").click(function () {
+        layer_show("导入", "${ctx.contextPath}/admin/question/excelquestion", '700px', '450px');
+    });
+
     $('#searchBtn').click(function () {
         $("#table-pagination").bootstrapTable('refresh', {
             url: "${ctx.contextPath}/admin/question/data?" + $("#searchform").serialize()
         });
     });
 
+    function reloadTable() {
+        $("#table-pagination").bootstrapTable('refresh');
+    }
 </script>
 </body>
 </html>

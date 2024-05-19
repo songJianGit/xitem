@@ -99,13 +99,10 @@ public class QuestionController {
     /**
      * 题目的excel导入
      *
-     * @param questionRuleId 规则id
      * @return
      */
     @RequestMapping("excelquestion")
-    public String excelquestion(String questionRuleId, String examid, Model model) {
-        model.addAttribute("questionRuleId", questionRuleId);
-        model.addAttribute("examid", examid);
+    public String excelquestion() {
         return "admin/exam/question/excelquestion";
     }
 
