@@ -143,7 +143,11 @@
 
     $('#addOption').click(function () {
         let num = $('#optionBox').find('.optionRow').length;
-        $('#optionBox').append(getHtm('', qtype, '', 0, num));
+        if (num >= 26) {
+            layer.msg("最多26个选项");
+        } else {
+            $('#optionBox').append(getHtm('', qtype, '', 0, num));
+        }
     });
 
     function deleteOption(dom) {
@@ -173,7 +177,7 @@
             if (qtype == 0) {
                 qtypeInitTitle0();
                 $('#addOption').hide();
-            }else {
+            } else {
                 $('#addOption').show();
             }
         }
@@ -185,7 +189,7 @@
      * @param qtype 题目类型
      * @param title 选项标题
      * @param optionright 是否正确答案 1-是 0-否
-     * @param domNum 选项序号（从0开始，所以大于1的会显示删除按钮）
+     * @param domNum 选项序号（从0开始，大于1的会显示删除按钮）
      * @returns {string}
      */
     function getHtm(optionid, qtype, title, optionright, domNum) {

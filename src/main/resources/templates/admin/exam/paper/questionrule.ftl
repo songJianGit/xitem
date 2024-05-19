@@ -65,7 +65,7 @@
                                 试卷预览
                             </div>
                             <div class="card-body">
-                                <iframe id="paperShwoIframe" style="border: 0;width: 99%;min-height: 623px"
+                                <iframe id="paperShwoIframe" style="border: 0;width: 100%;min-height: 623px"
                                         src="${ctx.contextPath}/admin/paper/paperShow?paperId=${paper.id!}"></iframe>
                             </div>
                         </div>
@@ -84,8 +84,8 @@
     function caozuo(value, row) {
         let htm = '';
         htm += '<div class="btn-group">';
-        htm += '<a class="btn btn-sm btn-default m-r-5" onclick="edit(\'' + value + '\')" href="#!" title="编辑">编辑</a>';
-        htm += '<a class="btn btn-sm btn-default" onclick="del(\'' + value + '\')" href="#!" title="删除">删除</a>';
+        htm += '<button class="btn btn-sm btn-default m-r-5" onclick="edit(\'' + value + '\')" type="button" title="编辑">编辑</button>';
+        htm += '<button class="btn btn-sm btn-default" onclick="del(\'' + value + '\')" type="button" title="删除">删除</button>';
         htm += '</div>';
         return htm;
     }

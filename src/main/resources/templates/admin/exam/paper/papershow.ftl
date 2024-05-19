@@ -17,6 +17,7 @@
 
         .q-item-box:not(:last-child) {
             border-bottom: 1px solid #4d525912;
+            padding-bottom: 3px;
         }
 
         .q-item-title-box {
@@ -24,6 +25,7 @@
         }
 
         .q-item-title {
+            display: inline;
             margin-left: 3px;
             font-size: 15px;
             font-weight: bold;
@@ -41,8 +43,19 @@
             margin-left: 7px;
         }
 
-        .q-item-op span {
-            margin-left: 5px;
+        .q-item-op {
+            position: relative;
+            margin: 3px 0;
+        }
+
+        .q-item-op-ipt {
+            position: absolute;
+            top: 6px;
+        }
+
+        .q-item-op-label {
+            display: inline;
+            padding-left: 23px;
         }
     </style>
 </head>
@@ -63,14 +76,21 @@
                 <#list item.questionOptionList as option>
                     <div class="q-item-op">
                         <#if item.qtype==0 || item.qtype==1>
-                            <input name="q-item-op-i${item.id!}" value="${option.id!}" type="radio"/>
+                            <input class="q-item-op-ipt" id="lable-i${option.id!}"
+                                   name="q-item-op-i${item.id!}" value="${option.id!}" type="radio"/>
                         </#if>
                         <#if item.qtype==2>
-                            <input name="q-item-op-i${item.id!}" value="${option.id!}" type="checkbox"/>
+                            <input class="q-item-op-ipt" id="lable-i${option.id!}"
+                                   name="q-item-op-i${item.id!}" value="${option.id!}" type="checkbox"/>
                         </#if>
-                        <span>${option.title}</span>
+                        <label class="q-item-op-label" for="lable-i${option.id!}">
+                            ${option.title!}
+                        </label>
                     </div>
                 </#list>
+            </div>
+            <div class="q-item-op-answer">
+                答案：${item.answer!}
             </div>
         </div>
     </#list>

@@ -5,14 +5,11 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.xxsword.xitem.admin.domain.exam.entity.Paper;
 import com.xxsword.xitem.admin.domain.exam.entity.UserPaper;
-import com.xxsword.xitem.admin.domain.exam.vo.PaperVO;
-import com.xxsword.xitem.admin.domain.exam.vo.QuestionVO;
 import com.xxsword.xitem.admin.domain.system.entity.UserInfo;
 import com.xxsword.xitem.admin.mapper.exam.UserPaperMapper;
 import com.xxsword.xitem.admin.service.exam.QuestionService;
 import com.xxsword.xitem.admin.service.exam.UserPaperQuestionService;
 import com.xxsword.xitem.admin.service.exam.UserPaperService;
-import com.xxsword.xitem.admin.utils.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -42,26 +39,24 @@ public class UserPaperServiceImpl extends ServiceImpl<UserPaperMapper, UserPaper
 
     @Override
     @Transactional
-    public UserPaper getUserPaper(UserInfo userInfo, PaperVO paperVO, String examId, Integer type) {
+    public UserPaper getUserPaper(UserInfo userInfo, Paper paper, String examId, Integer type) {
         if (type == null) {
             type = 1;
         }
         UserPaper userPaper = null;
         if (type == 1) {
-            List<UserPaper> listUserPaper = this.listUserPaper(userInfo.getId(), paperVO.getId(), examId, 0);// 获取其未提交的答题记录
+            List<UserPaper> listUserPaper = this.listUserPaper(userInfo.getId(), paper.getId(), examId, 0);// 获取其未提交的答题记录
             if (listUserPaper == null || listUserPaper.size() == 0) {
-                userPaper = this.newUserPaper(userInfo, paperVO, examId);
+                userPaper = this.newUserPaper(userInfo, paper, examId);
             } else {
                 userPaper = listUserPaper.get(0);
-                List<QuestionVO> questionVOList = questionService.listQuestionByUserPaperQuestion(userPaperQuestionService.getPaperQ(userPaper), true);
-                paperVO.setQuestionVOList(questionVOList);
                 if (listUserPaper.size() > 1) {
                     this.clearUserPaper(listUserPaper);// 一场考试中，一个用户对一张试卷只能有一条substatus为0的数据
                 }
             }
         }
         if (type == 2) {
-            userPaper = this.newUserPaper(userInfo, paperVO, examId);
+            userPaper = this.newUserPaper(userInfo, paper, examId);
         }
         return userPaper;
     }
@@ -109,20 +104,19 @@ public class UserPaperServiceImpl extends ServiceImpl<UserPaperMapper, UserPaper
      * 新的试卷
      *
      * @param userInfo
-     * @param paperVO
+     * @param paper
      * @param examId
      * @return
      */
-    private UserPaper newUserPaper(UserInfo userInfo, PaperVO paperVO, String examId) {
+    private UserPaper newUserPaper(UserInfo userInfo, Paper paper, String examId) {
         UserPaper userPaper = new UserPaper();
         userPaper.setBaseInfo(userInfo);
         userPaper.setSubstatus(0);
         userPaper.setExamid(examId);
-        userPaper.setPaperid(paperVO.getId());
+        userPaper.setPaperid(paper.getId());
         userPaper.setUserid(userInfo.getId());
         save(userPaper);
-        List<QuestionVO> questionVOList = questionService.listQuestionByUserPaperQuestion(userPaperQuestionService.newPaperQ(userPaper, userInfo), true);
-        paperVO.setQuestionVOList(questionVOList);// 新的题目
+        userPaperQuestionService.newPaperQ(userPaper, userInfo);// 给新的试卷生成新的题目
         return userPaper;
     }
 }

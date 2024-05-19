@@ -9,7 +9,6 @@ public class PaperVO {
     private String title;
     private Double score;// 卷面总分
     private Integer snum;// 总题目数
-//    private List<UserPaperQuestion> userPaperQuestionList;
     private List<QuestionVO> questionVOList;
 
     public String getId() {

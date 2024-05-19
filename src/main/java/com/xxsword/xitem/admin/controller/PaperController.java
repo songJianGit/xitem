@@ -42,7 +42,8 @@ public class PaperController {
     @Autowired
     private UserPaperService userPaperService;
     @Autowired
-    private QuestionService questionService;
+    private UserPaperQuestionService userPaperQuestionService;
+
 
     @RequestMapping("list")
     public String list() {
@@ -262,10 +263,13 @@ public class PaperController {
     public String paperShow(HttpServletRequest request, String paperId, Model model) {
         UserInfo userInfo = Utils.getUserInfo(request);
         Paper paper = paperService.getById(paperId);
+        UserPaper userPaper = userPaperService.getUserPaper(userInfo, paper, null, 2);
+        List<QuestionVO> questionVOList = userPaperQuestionService.listQuestionByUserPaper(userPaper, true, true, true);
         PaperVO paperVO = PaperConvert.INSTANCE.toPaperVO(paper);
-        userPaperService.getUserPaper(userInfo, paperVO, null, 2);
+        paperVO.setQuestionVOList(questionVOList);
         paperVO.setSnum(questionRuleService.getPaperQNum(paperId));
         paperVO.setScore(questionRuleService.getPaperScore(paperId));
+
         model.addAttribute("paperVO", paperVO);
         return "/admin/exam/paper/papershow";
     }

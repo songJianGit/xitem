@@ -3,15 +3,12 @@ package com.xxsword.xitem.admin.service.exam.impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.xxsword.xitem.admin.domain.exam.entity.QRS;
-import com.xxsword.xitem.admin.domain.exam.entity.QuestionRule;
-import com.xxsword.xitem.admin.domain.exam.entity.UserPaper;
-import com.xxsword.xitem.admin.domain.exam.entity.UserPaperQuestion;
+import com.xxsword.xitem.admin.domain.exam.convert.QuestionConvert;
+import com.xxsword.xitem.admin.domain.exam.entity.*;
+import com.xxsword.xitem.admin.domain.exam.vo.QuestionVO;
 import com.xxsword.xitem.admin.domain.system.entity.UserInfo;
 import com.xxsword.xitem.admin.mapper.exam.UserPaperQuestionMapper;
-import com.xxsword.xitem.admin.service.exam.QRSService;
-import com.xxsword.xitem.admin.service.exam.QuestionRuleService;
-import com.xxsword.xitem.admin.service.exam.UserPaperQuestionService;
+import com.xxsword.xitem.admin.service.exam.*;
 import com.xxsword.xitem.admin.utils.DateUtil;
 import com.xxsword.xitem.admin.utils.ExamUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +26,10 @@ public class UserPaperQuestionServiceImpl extends ServiceImpl<UserPaperQuestionM
     private QuestionRuleService questionRuleService;
     @Autowired
     private QRSService qrsService;
+    @Autowired
+    private QuestionService questionService;
+    @Autowired
+    private QuestionOptionService questionOptionService;
 
     @Override
     public void upLastInfo(UserInfo doUserInfo, String ids) {
@@ -49,7 +50,7 @@ public class UserPaperQuestionServiceImpl extends ServiceImpl<UserPaperQuestionM
      * @param userPaper
      */
     @Override
-    public List<UserPaperQuestion> newPaperQ(UserPaper userPaper, UserInfo userInfo) {
+    public void newPaperQ(UserPaper userPaper, UserInfo userInfo) {
         List<QuestionRule> questionRuleList = questionRuleService.listQuestionRuleByPid(userPaper.getPaperid());// 抽题规则
         List<UserPaperQuestion> userPaperQuestionList = new ArrayList<>();
         int seq = 0;
@@ -68,7 +69,6 @@ public class UserPaperQuestionServiceImpl extends ServiceImpl<UserPaperQuestionM
             }
         }
         saveBatch(userPaperQuestionList);
-        return userPaperQuestionList;
     }
 
     private List<QRS> listQuestionByQR(QuestionRule questionRule) {
@@ -82,11 +82,56 @@ public class UserPaperQuestionServiceImpl extends ServiceImpl<UserPaperQuestionM
         return questionIds;
     }
 
-    @Override
-    public List<UserPaperQuestion> getPaperQ(UserPaper usp) {
+    /**
+     * 已有答题记录题目获取
+     *
+     * @param usp
+     * @return
+     */
+    private List<UserPaperQuestion> getPaperQ(UserPaper usp) {
         LambdaQueryWrapper<UserPaperQuestion> q = Wrappers.lambdaQuery();
         q.eq(UserPaperQuestion::getUserpaperid, usp.getId());
         q.orderByAsc(UserPaperQuestion::getSeq, UserPaperQuestion::getId);
         return list(q);
+    }
+
+    @Override
+    public List<QuestionVO> listQuestionByUserPaper(UserPaper userPaper, boolean setOption, boolean setRight, boolean setABC) {
+        List<UserPaperQuestion> list = getPaperQ(userPaper);
+        List<QuestionVO> questionList = new ArrayList<>();
+        for (UserPaperQuestion userPaperQuestion : list) {
+            Question question = questionService.getById(userPaperQuestion.getQid());
+            QuestionVO questionVO = QuestionConvert.INSTANCE.toQuestionVO(question);
+            questionVO.setScore(userPaperQuestion.getQscore());
+            questionVO.setUserpaperquestionid(userPaperQuestion.getId());
+            questionList.add(questionVO);
+        }
+        if (setOption) {
+            for (QuestionVO question : questionList) {
+                List<QuestionOption> questionOptionList = questionOptionService.questionOptionListByQid(question.getId());
+                if (setRight) {
+                    StringBuilder answer = new StringBuilder();
+                    for (int i = 0; i < questionOptionList.size(); i++) {
+                        QuestionOption option = questionOptionList.get(i);
+                        if (option.getOptionright() == 1) {
+                            answer.append(ExamUtil.convertNumberToLetter(i));
+                        }
+                    }
+                    question.setAnswer(answer.toString());
+                } else {
+                    for (QuestionOption option : questionOptionList) {
+                        option.setOptionright(null);// 不显示答案
+                    }
+                }
+                if (setABC) {
+                    for (int i = 0; i < questionOptionList.size(); i++) {
+                        QuestionOption option = questionOptionList.get(i);
+                        option.setTitle(ExamUtil.convertNumberToLetter(i) + ".&nbsp;" + option.getTitle());
+                    }
+                }
+                question.setQuestionOptionList(questionOptionList);
+            }
+        }
+        return questionList;
     }
 }

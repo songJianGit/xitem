@@ -103,6 +103,20 @@ public class ExamUtil {
         return possibleNumbers.subList(0, count);
     }
 
+    /**
+     * 将0-25数字，转为A-Z字母
+     *
+     * @param number
+     * @return
+     */
+    public static char convertNumberToLetter(int number) {
+        if (number >= 0 && number <= 25) {
+            return (char) (number + 65);
+        } else {
+            throw new IllegalArgumentException("Input must be between 0 and 25 inclusive.");
+        }
+    }
+
 //    public static void main(String[] args) {
 //        for (int j = 0; j <10 ; j++) {
 //            List<Integer> list = generateShuffledUniqueNumbers(5, 0, 10);
@@ -110,6 +124,9 @@ public class ExamUtil {
 //                System.out.print(i + ",");
 //            }
 //            System.out.println("");
+//        }
+//        for (int j = 0; j < 26; j++) {
+//            System.out.println(convertNumberToLetter(j));
 //        }
 //    }
 }

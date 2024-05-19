@@ -6,12 +6,8 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.xxsword.xitem.admin.constant.Constant;
-import com.xxsword.xitem.admin.domain.exam.convert.QuestionConvert;
-import com.xxsword.xitem.admin.domain.exam.entity.Paper;
 import com.xxsword.xitem.admin.domain.exam.entity.Question;
 import com.xxsword.xitem.admin.domain.exam.entity.QuestionOption;
-import com.xxsword.xitem.admin.domain.exam.entity.UserPaperQuestion;
-import com.xxsword.xitem.admin.domain.exam.vo.QuestionVO;
 import com.xxsword.xitem.admin.domain.system.entity.Dict;
 import com.xxsword.xitem.admin.domain.system.entity.UserInfo;
 import com.xxsword.xitem.admin.mapper.exam.QuestionMapper;
@@ -262,35 +258,6 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
             listUp.add(question);
         }
         updateBatchById(listUp);
-    }
-
-    @Override
-    public List<QuestionVO> listQuestionByUserPaperQuestion(List<UserPaperQuestion> list, boolean setOption) {
-        List<QuestionVO> questionList = new ArrayList<>();
-        for (UserPaperQuestion userPaperQuestion : list) {
-            Question question = getById(userPaperQuestion.getQid());
-            QuestionVO questionVO = QuestionConvert.INSTANCE.toQuestionVO(question);
-            questionVO.setScore(userPaperQuestion.getQscore());
-            questionVO.setUserpaperquestionid(userPaperQuestion.getId());
-            questionList.add(questionVO);
-        }
-        if (setOption) {
-            this.setQuestionOption(questionList);
-        }
-        return questionList;
-    }
-
-    /**
-     * 给问题赋值其选项
-     *
-     * @param list
-     * @return
-     */
-    private List<QuestionVO> setQuestionOption(List<QuestionVO> list) {
-        for (QuestionVO question : list) {
-            question.setQuestionOptionList(questionOptionService.questionOptionListByQid(question.getId()));
-        }
-        return list;
     }
 
 }

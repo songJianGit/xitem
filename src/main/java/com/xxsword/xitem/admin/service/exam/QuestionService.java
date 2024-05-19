@@ -2,8 +2,6 @@ package com.xxsword.xitem.admin.service.exam;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.xxsword.xitem.admin.domain.exam.entity.Question;
-import com.xxsword.xitem.admin.domain.exam.entity.UserPaperQuestion;
-import com.xxsword.xitem.admin.domain.exam.vo.QuestionVO;
 import com.xxsword.xitem.admin.domain.system.entity.UserInfo;
 import com.xxsword.xitem.admin.model.RestResult;
 
@@ -30,13 +28,4 @@ public interface QuestionService extends IService<Question> {
 
     void delQuestionByIds(String ids);
 
-
-    /**
-     * 按照试卷题目，拿问题对象
-     *
-     * @param list
-     * @param setOption 是否赋值选项信息
-     * @return
-     */
-    List<QuestionVO> listQuestionByUserPaperQuestion(List<UserPaperQuestion> list, boolean setOption);
 }
