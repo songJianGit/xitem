@@ -186,30 +186,30 @@ public class OrganServiceImpl extends ServiceImpl<OrganMapper, Organ> implements
         if (userPermissionType == null) {
             userPermissionType = 1;// 默认未本级及以下
         }
-        if (userPermissionType == 2) {
+        if (userPermissionType.equals(2)) {
             return;// 查看全部数据
         }
         List<String> permissionIdsAll = null;
-        if (userPermissionType == 1) {
+        if (userPermissionType.equals(1)) {
             List<String> permissionsIds = getPermissionsIds(userInfo);
             permissionIdsAll = listOrganIdByOrganId(permissionsIds);
         }
         switch (permissionType) {
             case PermissionType.USERINFO:
                 LambdaQueryWrapper<UserInfo> qUser = query;
-                if (userPermissionType == 0) {
+                if (userPermissionType.equals(0)) {
                     qUser.eq(UserInfo::getCuserid, userId);
                 }
-                if (userPermissionType == 1) {
+                if (userPermissionType.equals(1)) {
                     qUser.in(UserInfo::getCorganid, permissionIdsAll);
                 }
                 break;
             case PermissionType.ORGAN:
                 LambdaQueryWrapper<Organ> qOrgan = query;
-                if (userPermissionType == 0) {
+                if (userPermissionType.equals(0)) {
                     qOrgan.eq(Organ::getCuserid, userId);
                 }
-                if (userPermissionType == 1) {
+                if (userPermissionType.equals(1)) {
                     qOrgan.in(Organ::getId, permissionIdsAll);
                 }
                 break;

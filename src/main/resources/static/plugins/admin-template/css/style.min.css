@@ -1558,7 +1558,7 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
     border-color: #F2F3F3/*rgba(77, 82, 89, 0.07)*/;
     -webkit-border-radius: 2px;
     border-radius: 2px;
-    color: #8b95a5;
+    /*color: #8b95a5;2024-05-19这个颜色太淡了，注释掉，用bootstrap.min.css默认的颜色就行*/
     -webkit-transition: 0.2s linear;
     transition: 0.2s linear;
 }
@@ -2170,7 +2170,7 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
 .custom-control-input.is-invalid ~ .custom-control-label::before {
     border-color: #f96868;
 }
-.was-validated .custom-control-input:invalid:focus ~ .custom-control-label::before, 
+.was-validated .custom-control-input:invalid:focus ~ .custom-control-label::before,
 .custom-control-input.is-invalid:focus ~ .custom-control-label::before {
     box-shadow: 0 0 0 0.2rem rgba(249, 104, 104, 0.25);
 }
@@ -4231,7 +4231,7 @@ body[data-theme='dark'] a:not(.btn),
 }
 [data-theme='dark'] .was-validated .custom-select:invalid:focus,
 [data-theme='dark'] .custom-select.is-invalid:focus,
-[data-theme='dark'] .was-validated .form-control:invalid:focus, 
+[data-theme='dark'] .was-validated .form-control:invalid:focus,
 [data-theme='dark'] .form-control.is-invalid:focus,
 [data-theme='dark'] .was-validated .custom-file-input:invalid:focus ~ .custom-file-label,
 [data-theme='dark'] .custom-file-input.is-invalid:focus ~ .custom-file-label {
@@ -4528,7 +4528,7 @@ body[data-theme='translucent'] {
 [data-theme='translucent'] .sidebar-header,
 [data-theme='translucent'] .lyear-layout-sidebar-info,
 [data-theme='translucent'] .lyear-layout-header,
-[data-theme='translucent'] .navbar-light, 
+[data-theme='translucent'] .navbar-light,
 [data-theme='translucent'] .navbar-light.bg-light,
 [data-theme='translucent'] .border-example-toasts,
 [data-theme='translucent'] .breadcrumb,
@@ -4716,7 +4716,7 @@ body[data-theme='translucent'] {
 [data-theme='translucent'] .form-control:disabled:-ms-input-placeholder,
 [data-theme='translucent'] .form-control[readonly]::-webkit-input-placeholder {
   color:rgba(255, 255, 255, .35);
-} 
+}
 [data-theme='translucent'] .btn-default:hover,
 [data-theme='translucent'] .custom-control-label::before {
 	background-color: rgba(255, 255, 255, .125);
@@ -5139,7 +5139,7 @@ body[data-theme='translucent'] {
     .table-responsive-sm>.table>thead>tr>td,
     .table-responsive-sm>.table>thead>tr>th {
         white-space: nowrap;
-    }    
+    }
     .pagination .page-item {
         display: none;
     }
@@ -5214,7 +5214,7 @@ body[data-theme='translucent'] {
     .table-responsive>.table-bordered>tbody>tr>th:last-child,
     .table-responsive>.table-bordered>tfoot>tr>td:last-child,
     .table-responsive>.table-bordered>tfoot>tr>th:last-child,
-    .table-responsive>.table-bordered>thead>tr>td:last-child, 
+    .table-responsive>.table-bordered>thead>tr>td:last-child,
     .table-responsive>.table-bordered>thead>tr>th:last-child {
         border-right: 0;
     }

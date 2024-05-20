@@ -54,7 +54,7 @@ public class MenuUtil {
      */
     public static List<TreeMenu> listTreeMenuByFunctions(List<Functions> functionsList, boolean show) {
         if (!show) {
-            functionsList = functionsList.stream().filter(functions -> functions.getShowflag() == 1).collect(Collectors.toList());
+            functionsList = functionsList.stream().filter(functions -> functions.getShowflag().equals(1)).collect(Collectors.toList());
         }
         return listTreeMenuByListFunctions(functionsList);
     }

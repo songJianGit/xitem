@@ -67,7 +67,7 @@ public class OrganController extends BaseController {
             zTreeVO.setName(organ.getName());
             zTreeVO.setpId(organ.getPid());
             zTreeVO.setId(organ.getId());
-            zTreeVO.setOpen(open == 0 ? false : true);
+            zTreeVO.setOpen(!open.equals(0));
             if (checkedidset.contains(organ.getId())) {
                 zTreeVO.setChecked(true);
             }

@@ -227,7 +227,7 @@ public class SystemController extends BaseController {
         UserInfo userInfo = Utils.getUserInfo(request);
         Role role = roleService.upRoleStatus(roleid);
         roleService.upLastInfo(userInfo, roleid);
-        Integer status = role.getStatus();
+        int status = role.getStatus();
         if (status == 1) {
             return RestResult.Codes(Codes.STATUS_1);
         } else if (status == 2) {

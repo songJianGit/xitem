@@ -100,7 +100,7 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
         UserInfo userInfo = getById(userId);
         UserInfo userInfoUp = new UserInfo();
         userInfoUp.setId(userId);
-        if (userInfo.getStatus() == null || userInfo.getStatus() == 1) {
+        if (userInfo.getStatus() == null || userInfo.getStatus().equals(1)) {
             userInfoUp.setStatus(2);
         } else {
             userInfoUp.setStatus(1);

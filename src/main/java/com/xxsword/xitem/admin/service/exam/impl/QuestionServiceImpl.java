@@ -169,7 +169,7 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
 
     private void saveByQuestionVO(UserInfo userInfo, List<QuestionExcelVO> list) {
         for (QuestionExcelVO item : list) {
-            Integer qtypeInfo = item.getQtype();
+            int qtypeInfo = item.getQtype();
             List<QuestionOption> listQP = new ArrayList<>();// 题目选项
             Question question = new Question();// 题目
             question.setBaseInfo(userInfo);

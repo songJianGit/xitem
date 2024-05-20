@@ -43,7 +43,7 @@ public class UserPaperServiceImpl extends ServiceImpl<UserPaperMapper, UserPaper
             type = 1;
         }
         UserPaper userPaper = null;
-        if (type == 1) {
+        if (type.equals(1)) {
             List<UserPaper> listUserPaper = this.listUserPaper(userInfo.getId(), paperId, examId, 0);// 获取其未提交的答题记录
             if (listUserPaper == null || listUserPaper.size() == 0) {
                 userPaper = this.newUserPaper(userInfo, paperId, examId);
@@ -54,7 +54,7 @@ public class UserPaperServiceImpl extends ServiceImpl<UserPaperMapper, UserPaper
                 }
             }
         }
-        if (type == 2) {
+        if (type.equals(2)) {
             userPaper = this.newUserPaper(userInfo, paperId, examId);
         }
         return userPaper;

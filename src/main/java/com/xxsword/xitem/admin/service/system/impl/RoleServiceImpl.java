@@ -65,7 +65,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
         Role role = getById(roleId);
         Role roleUp = new Role();
         roleUp.setId(roleId);
-        if (role.getStatus() == null || role.getStatus() == 1) {
+        if (role.getStatus() == null || role.getStatus().equals(1)) {
             roleUp.setStatus(2);
         } else {
             roleUp.setStatus(1);

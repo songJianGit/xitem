@@ -113,7 +113,7 @@ public class UserPaperQuestionServiceImpl extends ServiceImpl<UserPaperQuestionM
                     StringBuilder answer = new StringBuilder();
                     for (int i = 0; i < questionOptionList.size(); i++) {
                         QuestionOption option = questionOptionList.get(i);
-                        if (option.getOptionright() == 1) {
+                        if (option.getOptionright().equals(1)) {
                             answer.append(ExamUtil.convertNumberToLetter(i));
                         }
                     }

@@ -132,7 +132,7 @@ public class ExcelUtils {
                 } else {
                     anchor = new XSSFClientAnchor(0, 0, 0, 0, (short) cellnum, rownum, (short) cellnum + cac + 1, rownum + car + 1);
                 }
-                if (questionSum.getType() == 2) {
+                if (questionSum.getType().equals(2)) {
                     ByteArrayOutputStream byteArrayOut = new ByteArrayOutputStream();
                     BufferedImage bufferImg = null;
                     try {
