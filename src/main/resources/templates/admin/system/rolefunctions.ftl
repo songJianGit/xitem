@@ -25,9 +25,9 @@
                             <div class="card-body">
                                 <form action="${ctx.contextPath}/admin/system/roleFunctionsSave" method="post">
                                     <input type="hidden" value="${role.id}" name="roleId"/>
-                                    <button class="btn btn-primary" type="button" onclick="history.back();">返回
+                                    <button type="button" class="btn btn-primary" onclick="history.back();">返回
                                     </button>
-                                    <button class="btn btn-primary" type="submit" data-type="addBtn">保存</button>
+                                    <button type="submit" class="btn btn-primary" data-type="addBtn">保存</button>
                                     <div class="divider text-uppercase">${role.name}</div>
                                     <table id="treeTable" class="table table-striped table-bordered table-hover">
                                         <thead>

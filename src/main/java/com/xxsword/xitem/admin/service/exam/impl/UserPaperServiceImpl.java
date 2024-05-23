@@ -3,12 +3,15 @@ package com.xxsword.xitem.admin.service.exam.impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.xxsword.xitem.admin.domain.exam.entity.QRS;
 import com.xxsword.xitem.admin.domain.exam.entity.UserPaper;
+import com.xxsword.xitem.admin.domain.exam.entity.UserPaperQuestion;
 import com.xxsword.xitem.admin.domain.system.entity.UserInfo;
 import com.xxsword.xitem.admin.mapper.exam.UserPaperMapper;
-import com.xxsword.xitem.admin.service.exam.QuestionService;
 import com.xxsword.xitem.admin.service.exam.UserPaperQuestionService;
 import com.xxsword.xitem.admin.service.exam.UserPaperService;
+import com.xxsword.xitem.admin.utils.DateUtil;
+import com.xxsword.xitem.admin.utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,8 +23,6 @@ import java.util.List;
 public class UserPaperServiceImpl extends ServiceImpl<UserPaperMapper, UserPaper> implements UserPaperService {
     @Autowired
     private UserPaperQuestionService userPaperQuestionService;
-    @Autowired
-    private QuestionService questionService;
 
     @Override
     public void upLastInfo(UserInfo doUserInfo, String ids) {
@@ -60,16 +61,37 @@ public class UserPaperServiceImpl extends ServiceImpl<UserPaperMapper, UserPaper
         return userPaper;
     }
 
+    @Override
+    public List<UserPaper> listUserPaper(String userId, String paperId, String examId, Integer subStatus) {
+        return list(getUserPaperLambdaQueryWrapper(userId, paperId, examId, subStatus));
+    }
+
+    @Override
+    public Long countUserPaper(String userId, String paperId, String examId, Integer subStatus) {
+        return count(getUserPaperLambdaQueryWrapper(userId, paperId, examId, subStatus));
+    }
+
+    @Override
+    @Transactional
+    public UserPaper userPaperSub(String userPaperId) {
+        UserPaper userPaper = new UserPaper();
+        userPaper.setId(userPaperId);
+        userPaper.setSubstatus(1);
+        userPaper.setSubdate(DateUtil.now());
+        userPaper.setScore(this.sumScore(userPaper));
+        updateById(userPaper);
+        return userPaper;
+    }
+
     /**
-     * 获取某一状态的用户答题记录
-     *
-     * @param userId
-     * @param paperId
-     * @param examId
-     * @param subStatus 0-初始 1-已提交  null-查询全部
-     * @return
+     * 算分
      */
-    private List<UserPaper> listUserPaper(String userId, String paperId, String examId, Integer subStatus) {
+    private double sumScore(UserPaper userPaper) {
+        List<UserPaperQuestion> list = userPaperQuestionService.getPaperQ(userPaper);
+        return list.stream().mapToDouble(UserPaperQuestion::getScore).sum();
+    }
+
+    private LambdaQueryWrapper<UserPaper> getUserPaperLambdaQueryWrapper(String userId, String paperId, String examId, Integer subStatus) {
         LambdaQueryWrapper<UserPaper> q = Wrappers.lambdaQuery();
         q.eq(UserPaper::getStatus, 1);
         q.eq(UserPaper::getUserid, userId);
@@ -79,7 +101,7 @@ public class UserPaperServiceImpl extends ServiceImpl<UserPaperMapper, UserPaper
             q.eq(UserPaper::getSubstatus, subStatus);
         }
         q.orderByDesc(UserPaper::getCdate, UserPaper::getId);
-        return list(q);
+        return q;
     }
 
     private void clearUserPaper(List<UserPaper> listUserPaper) {

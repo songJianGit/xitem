@@ -61,7 +61,7 @@
         </div>
 
         <div class="form-group">
-            <button class="btn btn-block btn-primary" type="button" onclick="logBtn()">立即登录</button>
+            <button type="button" class="btn btn-block btn-primary" onclick="logBtn()">立即登录</button>
         </div>
     </form>
 

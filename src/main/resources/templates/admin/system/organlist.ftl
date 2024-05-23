@@ -93,9 +93,9 @@
 <script type="text/javascript">
     function caozuo(value, row) {
         let htm = '';
-        htm += '<div class="buttons" id="caozuo">';
-        htm += '<span class="btn btn-sm btn-default m-r-5" onclick="edit(' + "\'" + row.id + "\'" + ')">编辑</span>';
-        htm += '<span class="btn btn-sm btn-default" onclick="del(' + "\'" + row.id + "\'" + ')">删除</span>';
+        htm += '<div class="btn-group">';
+        htm += '<button type="button" class="btn btn-sm btn-default m-r-5" onclick="edit(' + "\'" + row.id + "\'" + ')">编辑</button>';
+        htm += '<button type="button" class="btn btn-sm btn-default" onclick="del(' + "\'" + row.id + "\'" + ')">删除</button>';
         htm += '</div>';
         return htm;
     }

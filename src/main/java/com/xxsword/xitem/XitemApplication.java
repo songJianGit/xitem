@@ -7,7 +7,7 @@ import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
 @MapperScan({"com.gitee.sunchenbin.mybatis.actable.dao.*", "com.xxsword.xitem.admin.mapper.*"})
-@ComponentScan({"com.gitee.sunchenbin.mybatis.actable.manager.*", "com.xxsword.xitem.admin.*"})
+@ComponentScan({"com.gitee.sunchenbin.mybatis.actable.manager.*", "com.xxsword.xitem.admin.*", "com.xxsword.xitem.pc"})
 public class XitemApplication {
 
     public static void main(String[] args) {

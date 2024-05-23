@@ -33,7 +33,7 @@ public class UserPaper extends BaseEntity implements Serializable {
 
     @Index
     @Column
-    @ColumnComment("提交状态(0-初始 1-答题中 2-已提交)")
+    @ColumnComment("提交状态(0-初始 1-已提交)")
     private Integer substatus;
 
     @Column(length = 19)

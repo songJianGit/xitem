@@ -4,6 +4,8 @@ import org.joda.time.*;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
+import java.util.concurrent.TimeUnit;
+
 public class DateUtil {
     public static final DateTimeFormatter sdfA1 = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss");
     public static final DateTimeFormatter sdfA2 = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm");
@@ -170,4 +172,17 @@ public class DateUtil {
         return str;
     }
 
+    /**
+     * 将秒转化为 00:00:00的格式
+     *
+     * @return
+     */
+    public static String sToHHmmss(Long seconds) {
+        if (seconds == null) {
+            return "00:00:00";
+        }
+        long hours = TimeUnit.SECONDS.toHours(seconds);
+        long remainingMinutes = TimeUnit.SECONDS.toMinutes(seconds) - TimeUnit.HOURS.toMinutes(hours);
+        return String.format("%02d:%02d:%02d", hours, remainingMinutes, seconds % 60);
+    }
 }

@@ -26,10 +26,7 @@ public class ExamController {
     private ExamService examService;
 
     @RequestMapping("list")
-    public String index(Integer extype, String examid, String msg, Integer scoretype, Model model) {
-        model.addAttribute("extype", extype);
-        model.addAttribute("examid", examid);
-        model.addAttribute("scoretype", scoretype);
+    public String index() {
         return "/admin/exam/list";
     }
 
@@ -61,11 +58,8 @@ public class ExamController {
 
     @RequestMapping("del")
     @ResponseBody
-    public RestResult del(HttpServletRequest request, String id) {
-        Exam examUp = new Exam();
-        examUp.setId(id);
-        examUp.setStatus(0);
-        examService.updateById(examUp);
+    public RestResult del(HttpServletRequest request, String ids) {
+        examService.delExamByIds(ids);
         return RestResult.OK();
     }
 

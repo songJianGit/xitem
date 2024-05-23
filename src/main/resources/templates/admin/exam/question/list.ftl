@@ -76,7 +76,7 @@
                                         <button type="button" id="add" class="btn btn-primary m-r-5">
                                             新增
                                         </button>
-                                        <button id="addQuestionExcel" class="btn btn-primary m-r-5">
+                                        <button type="button" id="addQuestionExcel" class="btn btn-primary m-r-5">
                                             导入
                                         </button>
                                         <button type="button" id="del" class="btn btn-primary m-r-5">

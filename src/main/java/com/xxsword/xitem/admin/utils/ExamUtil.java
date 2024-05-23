@@ -15,7 +15,7 @@ public class ExamUtil {
      * 根据考试时间，获取考试状态
      * 0-未开始 1-已开始 2-已结束
      */
-    public static Integer getExamStatus(Exam exam) {
+    public static int getExamStatus(Exam exam) {
         if (StringUtils.isBlank(exam.getStime()) || StringUtils.isBlank(exam.getEtime())) {
             return 0;
         }

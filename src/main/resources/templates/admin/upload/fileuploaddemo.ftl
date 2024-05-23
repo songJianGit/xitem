@@ -31,7 +31,7 @@
                             </div>
                             <div class="card-body">
                                 <input class="form-control" type="text" name="fileinfo" id="fileinfo"/>
-                                <button class="btn btn-primary m-t-10" type="button" id="upload">上传</button>
+                                <button type="button" class="btn btn-primary m-t-10" id="upload">上传</button>
                             </div>
                         </div>
                     </div>

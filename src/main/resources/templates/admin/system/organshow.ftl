@@ -8,7 +8,7 @@
 <body style="background-color: #fff">
 <div class="card" style="-webkit-box-shadow:none;box-shadow:none">
     <div class="card-header">
-        <button class="btn btn-primary" type="button" id="saveBtn">确定</button>
+        <button type="button" class="btn btn-primary" id="saveBtn">确定</button>
     </div>
     <div class="card-body" style="height: 100%">
         <ul id="ztree" class="ztree"></ul>

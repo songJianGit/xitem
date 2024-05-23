@@ -10,4 +10,6 @@ public interface ExamService extends IService<Exam> {
     List<Exam> setExamexstatus(List<Exam> list);
 
     void upLastInfo(UserInfo doUserInfo, String ids);
+
+    void delExamByIds(String ids);
 }

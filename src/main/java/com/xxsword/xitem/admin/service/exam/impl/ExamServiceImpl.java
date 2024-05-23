@@ -33,4 +33,17 @@ public class ExamServiceImpl extends ServiceImpl<ExamMapper, Exam> implements Ex
         }
         updateBatchById(listUp);
     }
+
+    @Override
+    public void delExamByIds(String ids) {
+        String[] idsS = ids.split(",");
+        List<Exam> listUp = new ArrayList<>();
+        for (String id : idsS) {
+            Exam exam = new Exam();
+            exam.setId(id);
+            exam.setStatus(0);
+            listUp.add(exam);
+        }
+        updateBatchById(listUp);
+    }
 }

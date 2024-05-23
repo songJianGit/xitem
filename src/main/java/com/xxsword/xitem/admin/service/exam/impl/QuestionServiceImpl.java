@@ -6,9 +6,12 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.xxsword.xitem.admin.constant.Constant;
+import com.xxsword.xitem.admin.domain.exam.convert.QuestionConvert;
 import com.xxsword.xitem.admin.domain.exam.entity.Question;
 import com.xxsword.xitem.admin.domain.exam.entity.QuestionOption;
+import com.xxsword.xitem.admin.domain.exam.entity.UserPaperQuestion;
 import com.xxsword.xitem.admin.domain.exam.vo.QuestionExcelVO;
+import com.xxsword.xitem.admin.domain.exam.vo.QuestionVO;
 import com.xxsword.xitem.admin.domain.system.entity.Dict;
 import com.xxsword.xitem.admin.domain.system.entity.UserInfo;
 import com.xxsword.xitem.admin.mapper.exam.QuestionMapper;
@@ -16,6 +19,7 @@ import com.xxsword.xitem.admin.model.RestResult;
 import com.xxsword.xitem.admin.service.exam.QuestionOptionService;
 import com.xxsword.xitem.admin.service.exam.QuestionService;
 import com.xxsword.xitem.admin.service.system.DictService;
+import com.xxsword.xitem.admin.utils.ExamUtil;
 import com.xxsword.xitem.admin.utils.ExcelUtils;
 import com.xxsword.xitem.admin.utils.Utils;
 import org.apache.commons.lang3.StringUtils;
@@ -333,6 +337,49 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
             listUp.add(question);
         }
         updateBatchById(listUp);
+    }
+
+    @Override
+    public QuestionVO getQuestionVO(UserPaperQuestion userPaperQuestion, boolean setOption, boolean setRight, boolean setABC) {
+        Question question = getById(userPaperQuestion.getQid());
+        QuestionVO questionVO = QuestionConvert.INSTANCE.toQuestionVO(question);
+        questionVO.setScore(userPaperQuestion.getQscore());
+        questionVO.setUserpaperquestionid(userPaperQuestion.getId());
+        if (setOption) {
+            List<QuestionOption> questionOptionList = questionOptionService.questionOptionListByQid(questionVO.getId());
+            if (setRight) {
+                StringBuilder answer = new StringBuilder();
+                for (int i = 0; i < questionOptionList.size(); i++) {
+                    QuestionOption option = questionOptionList.get(i);
+                    if (option.getOptionright().equals(1)) {
+                        answer.append(ExamUtil.convertNumberToLetter(i));
+                    }
+                }
+                questionVO.setAnswer(answer.toString());
+            } else {
+                for (QuestionOption option : questionOptionList) {
+                    option.setOptionright(null);// 不显示答案
+                }
+            }
+            if (setABC) {
+                for (int i = 0; i < questionOptionList.size(); i++) {
+                    QuestionOption option = questionOptionList.get(i);
+                    option.setTitle(ExamUtil.convertNumberToLetter(i) + ".&nbsp;" + option.getTitle());
+                }
+            }
+            questionVO.setQuestionOptionList(questionOptionList);
+        }
+        return questionVO;
+    }
+
+    @Override
+    public List<QuestionVO> getQuestionVO(List<UserPaperQuestion> userPaperQuestionList, boolean setOption, boolean setRight, boolean setABC) {
+        List<QuestionVO> questionList = new ArrayList<>();
+        for (UserPaperQuestion userPaperQuestion : userPaperQuestionList) {
+            QuestionVO questionVO = this.getQuestionVO(userPaperQuestion, setOption, setRight, setABC);
+            questionList.add(questionVO);
+        }
+        return questionList;
     }
 
 }

@@ -91,9 +91,9 @@
     function caozuo(value, row) {
         let htm = '';
         htm += '<div class="btn-group">';
-        htm += '<button class="btn btn-sm btn-default" onclick="edit(\'' + value + '\')" type="button" title="编辑">编辑</button>';
-        htm += '<button class="btn btn-sm btn-default m-r-5" onclick="del(\'' + value + '\')" type="button" title="删除">删除</button>';
-        htm += '<button class="btn btn-sm btn-default" type="button" title="拖动排序" draggable="true" ondragstart="dragStart(event,\'' + value + '\')" ondrop="drop(event,\'' + value + '\')" ondragover="allowDrop(event)">';
+        htm += '<button type="button" class="btn btn-sm btn-default" onclick="edit(\'' + value + '\')" title="编辑">编辑</button>';
+        htm += '<button type="button" class="btn btn-sm btn-default m-r-5" onclick="del(\'' + value + '\')" title="删除">删除</button>';
+        htm += '<button type="button" class="btn btn-sm btn-default" title="拖动排序" draggable="true" ondragstart="dragStart(event,\'' + value + '\')" ondrop="drop(event,\'' + value + '\')" ondragover="allowDrop(event)">';
         htm += '<span class="mdi mdi-cursor-move"></span>';
         htm += '</button>';
         htm += '</div>';

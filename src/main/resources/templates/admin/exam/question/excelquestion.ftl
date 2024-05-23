@@ -9,7 +9,7 @@
         <div>模板下载：<a href="${ctx.contextPath}/static/excelTemplate/examT.xlsx">examT.xlsx</a></div>
         <div style="overflow: hidden;border-bottom: 1px solid #e0e0e0;padding-bottom: 17px;margin-top: 23px">
             <input type="file" name="fileinfo" style="float: left">
-            <button style="float: left" class="btn btn-primary" type="button" id="subBtn">导 入</button>
+            <button type="button" style="float: left" class="btn btn-primary" id="subBtn">导 入</button>
         </div>
         <div style="clear: both"></div>
         <div style="margin-top: 13px">上传结果：

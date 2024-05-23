@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.xxsword.xitem.admin.domain.exam.entity.UserPaper;
 import com.xxsword.xitem.admin.domain.system.entity.UserInfo;
 
+import java.util.List;
+
 public interface UserPaperService extends IService<UserPaper> {
 
     void upLastInfo(UserInfo doUserInfo, String ids);
@@ -18,4 +20,21 @@ public interface UserPaperService extends IService<UserPaper> {
      */
     UserPaper getUserPaper(UserInfo userInfo, String paperId, String examId, Integer type);
 
+    /**
+     * 获取某一状态的用户答题记录
+     *
+     * @param userId
+     * @param paperId
+     * @param examId
+     * @param subStatus 0-初始 1-已提交  null-查询全部
+     * @return
+     */
+    List<UserPaper> listUserPaper(String userId, String paperId, String examId, Integer subStatus);
+
+    Long countUserPaper(String userId, String paperId, String examId, Integer subStatus);
+
+    /**
+     * 更新用户答题记录状态，计算用户总成绩
+     */
+    UserPaper userPaperSub(String userPaperId);
 }

@@ -15,7 +15,14 @@ public interface UserPaperQuestionService extends IService<UserPaperQuestion> {
     /**
      * 根据抽提规则，抽取题目
      */
-    void newPaperQ(UserPaper usp, UserInfo userInfo);
+    void newPaperQ(UserPaper userPaper, UserInfo userInfo);
+
+    /**
+     * UserPaper已有答题记录题目获取
+     * @param userPaper
+     * @return
+     */
+    List<UserPaperQuestion> getPaperQ(UserPaper userPaper);
 
     /**
      * 按照试卷，获取题目
@@ -26,4 +33,11 @@ public interface UserPaperQuestionService extends IService<UserPaperQuestion> {
      * @return
      */
     List<QuestionVO> listQuestionByUserPaper(UserPaper userPaper, boolean setOption, boolean setRight, boolean setABC);
+
+    /**
+     * 获取用户本次答题的未答题题目顺序号
+     *
+     * @return
+     */
+    List<Integer> checkBlankNum(UserPaper usp);
 }
