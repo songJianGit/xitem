@@ -90,9 +90,9 @@
     function caozuo(value, row) {
         let htm = '';
         htm += '<div class="btn-group">';
-        htm += '<button class="btn btn-sm btn-default m-r-5" onclick="edit(\'' + value + '\')" title="编辑">编辑</button>';
+        htm += '<button type="button" class="btn btn-sm btn-default m-r-5" onclick="edit(\'' + value + '\')" title="编辑">编辑</button>';
         htm += '<a class="btn btn-sm btn-default m-r-5" href="${ctx.contextPath}/admin/system/roleFunctions?roleId=' + value + '" title="权限设置">权限设置</a>';
-        htm += '<button class="btn btn-sm btn-default" onclick="userListByRole(\'' + value + '\')" title="分配用户">分配用户</button>';
+        htm += '<button type="button" class="btn btn-sm btn-default" onclick="userListByRole(\'' + value + '\')" title="分配用户">分配用户</button>';
         htm += '</div>';
         return htm;
     }

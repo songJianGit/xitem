@@ -98,8 +98,8 @@
     function caozuo(value, row) {
         let htm = '';
         htm += '<div class="btn-group">';
-        htm += '<button class="btn btn-sm btn-default m-r-5" onclick="edit(\'' + value + '\')" title="编辑">编辑</button>';
-        htm += '<button class="btn btn-sm btn-default" onclick="resetpassword(\'' + value + '\')" title="重置密码">重置密码</button>';
+        htm += '<button type="button" class="btn btn-sm btn-default m-r-5" onclick="edit(\'' + value + '\')" title="编辑">编辑</button>';
+        htm += '<button type="button" class="btn btn-sm btn-default" onclick="resetpassword(\'' + value + '\')" title="重置密码">重置密码</button>';
         htm += '</div>';
         return htm;
     }
