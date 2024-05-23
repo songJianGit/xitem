@@ -17,6 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 public class LoginInterceptor implements HandlerInterceptor {
@@ -46,10 +47,9 @@ public class LoginInterceptor implements HandlerInterceptor {
         if (functions == null) {
             return true;// 没有配置该url，默认放行。
         } else {
-            for (Role role : roleSet) {
-                if (checkRF(role, functions)) {
-                    return true;
-                }
+            List<String> roleIds = roleSet.stream().map(Role::getId).collect(Collectors.toList());
+            if (checkRF(roleIds, functions)) {
+                return true;
             }
         }
         return back(request, response);
@@ -78,14 +78,13 @@ public class LoginInterceptor implements HandlerInterceptor {
     }
 
     /**
-     * 检查用户是否有本权限    true-有 false-没有
+     * 检查角色是否有本权限
      *
-     * @param role
-     * @return
+     * @param roleIds
+     * @return true-有 false-没有
      */
-    private boolean checkRF(Role role, Functions functions) {
-        // 角色是否拥有本链接
-        long roleFunctionsCount = roleFunctionsService.count(new LambdaQueryWrapper<RoleFunctions>().eq(RoleFunctions::getRoleid, role.getId()).eq(RoleFunctions::getFunid, functions.getId()));
+    private boolean checkRF(List<String> roleIds, Functions functions) {
+        long roleFunctionsCount = roleFunctionsService.count(new LambdaQueryWrapper<RoleFunctions>().in(RoleFunctions::getRoleid, roleIds).eq(RoleFunctions::getFunid, functions.getId()));
         return roleFunctionsCount != 0;
     }
 }
