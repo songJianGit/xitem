@@ -130,5 +130,23 @@ public class QuestionRuleServiceImpl extends ServiceImpl<QuestionRuleMapper, Que
         return sum.intValue();
     }
 
+    @Override
+    public void questionRuleSeq(UserInfo userInfo, String id1, String id2) {
+        QuestionRule questionRule1 = getById(id1);
+        QuestionRule questionRule2 = getById(id2);
+        QuestionRule questionRule1Up = new QuestionRule();
+        QuestionRule questionRule2Up = new QuestionRule();
+        questionRule1Up.setId(id1);
+        questionRule1Up.setSeq(questionRule2.getSeq());
+        questionRule1Up.setBaseInfo(userInfo);
+        questionRule2Up.setId(id2);
+        questionRule2Up.setSeq(questionRule1.getSeq());
+        questionRule2Up.setBaseInfo(userInfo);
+        List<QuestionRule> listUp = new ArrayList<>();
+        listUp.add(questionRule1Up);
+        listUp.add(questionRule2Up);
+        updateBatchById(listUp);
+    }
+
 
 }

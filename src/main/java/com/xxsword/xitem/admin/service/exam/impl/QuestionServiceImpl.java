@@ -103,7 +103,7 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
             }
             boolean have = haveQuestionTitle(qtitle);
             if (have) {
-                listError.add("第" + (rowNum + 1) + "行，该题目标题已存在");
+                listError.add("第" + (rowNum + 1) + "行，该题目已存在于系统中");
             } else {
                 if (listError.size() != 0) {
                     continue;

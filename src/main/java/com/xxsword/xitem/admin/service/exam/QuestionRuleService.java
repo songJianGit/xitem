@@ -53,8 +53,14 @@ public interface QuestionRuleService extends IService<QuestionRule> {
      * 当试卷分数不固定时，返回-1
      */
     Double getPaperScore(String paperId);
+
     /**
      * 试卷题目总数获取（该张试卷通过抽提规则抽取后的题目数）
      */
     Integer getPaperQNum(String paperId);
+
+    /**
+     * 交换两个抽题规则的排序字段
+     */
+    void questionRuleSeq(UserInfo userInfo, String id1, String id2);
 }

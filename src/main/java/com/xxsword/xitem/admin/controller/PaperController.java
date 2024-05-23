@@ -150,6 +150,21 @@ public class PaperController {
     }
 
     /**
+     * 抽题规则的拖拽
+     * 排序字段的交换
+     *
+     * @param request
+     * @return
+     */
+    @RequestMapping("questionRuleSeq")
+    @ResponseBody
+    public RestResult questionRuleSeq(HttpServletRequest request, String id1, String id2) {
+        UserInfo userInfo = Utils.getUserInfo(request);
+        questionRuleService.questionRuleSeq(userInfo, id1, id2);
+        return RestResult.OK();
+    }
+
+    /**
      * 抽提规则查询
      *
      * @param request
@@ -164,6 +179,14 @@ public class PaperController {
         return new RestPaging<>(data.size(), data);
     }
 
+    /**
+     * 抽提规则的编辑页面
+     *
+     * @param request
+     * @param qrsDto
+     * @param model
+     * @return
+     */
     @RequestMapping("listQRS")
     public String listQRS(HttpServletRequest request, QRSDto qrsDto, Model model) {
         QuestionRule questionRule = questionRuleService.getById(qrsDto.getQrid());
@@ -171,12 +194,6 @@ public class PaperController {
         return "admin/exam/paper/listqrs";
     }
 
-    /**
-     * 抽提规则的题目
-     *
-     * @param request
-     * @return
-     */
     @RequestMapping("listQRSData")
     @ResponseBody
     public RestPaging<QRSVO> listQRSData(HttpServletRequest request, QRSDto qrsDto, QuestionDto questionDto) {
