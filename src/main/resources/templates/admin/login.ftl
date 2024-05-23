@@ -65,7 +65,7 @@
         </div>
     </form>
 
-    <p class="text-center text-muted mb-0">Copyright © 2024 <a href="#">xitem</a>. All right
+    <p class="text-center text-muted mb-0">Copyright © 2024 <a href="#!">xitem</a>. All right
         reserved</p>
 </div>
 <script type="text/javascript" src="${ctx.contextPath}/static/plugins/admin-template/js/jquery.min.js"></script>

@@ -58,7 +58,7 @@
         </nav>
 
         <div class="sidebar-footer">
-            <p class="copyright">Copyright © 2024 <a href="#">xitem</a>. All rights reserved.</p>
+            <p class="copyright">Copyright © 2024 <a href="#!">xitem</a>. All rights reserved.</p>
         </div>
     </div>
 
