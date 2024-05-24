@@ -69,9 +69,10 @@
     <div class="card-header">${exam.title!}</div>
     <div class="card-body row">
         <div class="col-6">
-            <div>考试剩余时间：<span class="countdownInfo">00:00:00</span></div>
+            <div>${Session.puser.username!}</div>
         </div>
         <div class="col-6">
+            <div>剩余时间：<span class="countdownInfo">00:00:00</span></div>
             <button type="button" class="btn btn-primary" onclick="onSub()">交卷</button>
         </div>
     </div>
@@ -89,8 +90,9 @@
         </div>
     </div>
     <div class="card-footer row">
-        <button type="button" class="col-6 btn btn-sm btn-primary" id="prevBtn">上一题</button>
-        <button type="button" class="col-6 btn btn-sm btn-primary" id="nextBtn">下一题</button>
+        <button type="button" class="col-4 btn btn-sm btn-primary" id="prevBtn">答题卡</button>
+        <button type="button" class="col-4 btn btn-sm btn-primary" id="prevBtn">上一题</button>
+        <button type="button" class="col-4 btn btn-sm btn-primary" id="nextBtn">下一题</button>
     </div>
 </div>
 <#include "../commons/js.ftl"/>

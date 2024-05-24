@@ -3,7 +3,6 @@ package com.xxsword.xitem.admin.service.exam.impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.xxsword.xitem.admin.domain.exam.entity.QRS;
 import com.xxsword.xitem.admin.domain.exam.entity.UserPaper;
 import com.xxsword.xitem.admin.domain.exam.entity.UserPaperQuestion;
 import com.xxsword.xitem.admin.domain.system.entity.UserInfo;
@@ -11,11 +10,11 @@ import com.xxsword.xitem.admin.mapper.exam.UserPaperMapper;
 import com.xxsword.xitem.admin.service.exam.UserPaperQuestionService;
 import com.xxsword.xitem.admin.service.exam.UserPaperService;
 import com.xxsword.xitem.admin.utils.DateUtil;
-import com.xxsword.xitem.admin.utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -88,7 +87,7 @@ public class UserPaperServiceImpl extends ServiceImpl<UserPaperMapper, UserPaper
      */
     private double sumScore(UserPaper userPaper) {
         List<UserPaperQuestion> list = userPaperQuestionService.getPaperQ(userPaper);
-        return list.stream().filter(item -> item.getScore() != null).mapToDouble(UserPaperQuestion::getScore).sum();
+        return list.stream().filter(item -> item.getScore() != null).map(item -> BigDecimal.valueOf(item.getScore())).reduce(BigDecimal.ZERO, BigDecimal::add).doubleValue();
     }
 
     private LambdaQueryWrapper<UserPaper> getUserPaperLambdaQueryWrapper(String userId, String paperId, String examId, Integer subStatus) {
