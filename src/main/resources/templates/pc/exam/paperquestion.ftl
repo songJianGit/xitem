@@ -3,9 +3,6 @@
 <head>
     <#include "../commons/head.ftl"/>
     <style>
-        .panel-heading {
-            text-align: center;
-        }
 
         .q-item-title {
             margin-top: 15px;
@@ -47,23 +44,12 @@
             height: 20px;
         }
 
-        .footer-btn {
-            text-align: center;
-        }
-
         .q-item-type {
             display: flex;
             justify-content: space-between;
             margin-bottom: 5px;
             color: #1a4883;
             font-size: 16px;
-        }
-
-        .float-card {
-            background: #eff3ff;
-            width: 95%;
-            margin: 0 auto;
-            margin-top: 10px;
         }
 
         .q-item-type-num-sum-active {
@@ -80,38 +66,31 @@
 </head>
 <body>
 <div class="card">
-
-    <div class="panel-heading"
-         style="background-image: none;background-color: #2566b8;color: white;border-color: #ffffff;">${exam.name!}</div>
-
-    <div class="panel-body float-card">
-        <button type="button" class="btn btn-sm btn-primary" onclick="onSub()"
-                style="float: right;background-color: #2566b8;border: #2566b8;">交卷
-        </button>
-        <div>${username!}</div>
-        <div>${dataDay!}</div>
-        <div style="margin-top: 13px">考试结束时间：${endTime!}</div>
-    </div>
-
-    <div class="panel-body float-card">
-        <div class="q-item-type">
-            <div class="q-item-type-name">多选</div>
-            <div class="q-item-type-num"><span class="q-item-type-num-sum-active">0</span>/<span
-                        class="q-item-type-num-sum">0</span></div>
+    <div class="card-header">${exam.title!}</div>
+    <div class="card-body row">
+        <div class="col-6">
+            <div>考试剩余时间：<span class="countdownInfo">00:00:00</span></div>
         </div>
-
+        <div class="col-6">
+            <button type="button" class="btn btn-primary" onclick="onSub()">交卷</button>
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="q-item-type">
+            <div class="q-item-type-name">问题类型</div>
+            <div class="q-item-type-num">
+                <span class="q-item-type-num-sum-active">0</span>/
+                <span class="q-item-type-num-sum">0</span>
+            </div>
+        </div>
         <div style="padding: 1px 0;background-color: #eeeeee"></div>
         <div class="q-item-title"></div>
         <div class="q-item-op-box">
         </div>
     </div>
-    <div class="panel-footer row float-card" style="overflow: hidden;">
-        <div class="footer-btn col-xs-5 col-md-5 col-sm-5 btn btn-sm btn-primary"
-             style="background-color: #2566b8;border: #2566b8;" id="prevBtn">上一题
-        </div>
-        <div class="footer-btn col-xs-5 col-md-5 col-sm-5 btn btn-sm btn-primary"
-             style="background-color: #2566b8;border: #2566b8;float:right" id="nextBtn">下一题
-        </div>
+    <div class="card-footer row">
+        <button type="button" class="col-6 btn btn-sm btn-primary" id="prevBtn">上一题</button>
+        <button type="button" class="col-6 btn btn-sm btn-primary" id="nextBtn">下一题</button>
     </div>
 </div>
 <#include "../commons/js.ftl"/>
@@ -139,11 +118,7 @@
         }
     });
 
-    // msgFlag 0-抑制消息提示 1-不限制
-    function getQuestion(msgFlag) {
-        if (isBlank(msgFlag)) {
-            msgFlag = 1;
-        }
+    function getQuestion() {
         if (isBlank(action_user_paper_question_id)) {
             action_user_paper_question_id = userPaperQuestions[0];
         }
@@ -164,9 +139,9 @@
                     action_question_type = question.qtype;
                     action_user_paper_question_id = data.data.id;
                     $(".q-item-title").html(question.title);
-                    let questionOptionList = question.questionOptionList;
-                    $(".q-item-op-box").html(getQuestionOptionHtm(questionOptionList));// 选项
+                    $(".q-item-op-box").html(getQuestionOptionHtm(question));// 选项
                     $(".q-item-type-num-sum-active").text(pageNum);
+                    setQItemTypeName(question.qtype);
                 } else {
                     layer.msg(data.msg);
                 }
@@ -227,17 +202,18 @@
     }
 
     function getQuestionOptionHtm(question) {
-        let htm = '';
+        let questionOptionList = question.questionOptionList;
         let type = question.qtype;// 0-是非 1-单选 2-多选
         let inputType = '';
-        if (type == 0 || type == 0) {
+        if (type == 0 || type == 1) {
             inputType = 'radio';
         }
         if (type == 2) {
             inputType = 'checkbox';
         }
-        for (let i = 0; i < question.length; i++) {
-            htm += optionHtm(question[i].title, i, inputType);
+        let htm = '';
+        for (let i = 0; i < questionOptionList.length; i++) {
+            htm += optionHtm(questionOptionList[i].title, questionOptionList[i].id, inputType);
         }
         return htm;
     }
@@ -263,11 +239,9 @@
         let indexLoadSub = layer.load(1, {// 遮罩层
             shade: [0.5, '#fff']
         });
-        getQuestion(0);
         $.ajax({
             url: "${ctx.contextPath}/pc/exam/checkBlankNum",
             cache: false,// 不缓存
-            async: false,// 同步
             data: {
                 "userPaperId": '${userPaperId!}'
             },
@@ -276,41 +250,34 @@
                 let infos = data.data;
                 let msg = "";
                 if (infos.length != 0) {
-                    msg = '第' + infos.join("，") + "题未作答，"
+                    msg = '第' + infos.join("，") + "题未作答"
                 }
-                layer.confirm(msg + '确定提交？', {
+                layer.confirm(msg + '，确定提交？', {
                     title: '提示',
                     btn: ['确定', '取消'] //按钮
                 }, function () {
                     onSubFUN();
                 }, function () {
-                    console.log("取消");
+                    // 取消
                 });
             }
         });
     }
 
     function onSubFUN() {
-        // 提交当前题目；
-        // 题目的答案提交通过上一题下一题按钮触发，但是到达最后一页的时候，用户点不了下一题，只能点上一题，如果其没有点上一题，直接提交了
-        // 就没办法触发答案的提交
-        // 所以这边直接对当前题目再进行一次提交
-        getQuestion(0);
         let indexLoadSub = layer.load(1, {// 遮罩层
             shade: [0.5, '#fff']
         });
         $.ajax({
             url: "${ctx.contextPath}/pc/exam/examPageSubmit",
             cache: false,// 不缓存
-            async: false,// 同步
             data: {
-                "userPaperQuestionId": action_user_paper_question_id
+                "userPaperId": '${userPaperId!}'
             },
             success: function (data) {
-                // console.log(data);
                 layer.close(indexLoadSub);
                 if (data.result) {
-                    window.location.href = "${ctx.contextPath}/pc/exam/examSubmitOk?userPaperId=" + data.data;
+                    window.location.href = "${ctx.contextPath}/pc/exam/examSubmitOk?userPaperId=${userPaperId!}";
                 } else {
                     alert(data.msg);
                 }
@@ -318,15 +285,11 @@
         });
     }
 
-    function adminFlag() {
-        layer.msg("预览模式，无需提交");
-    }
-
     function subTime() {
-        let t = setInterval(function () {
-            console.log("xxx", compareDateStringWithNow('${endTime!}'))
+        let time = setInterval(function () {
+            countdownInfo('${endTime!}');
             if (compareDateStringWithNow('${endTime!}')) {
-                clearInterval(t);
+                clearInterval(time);
                 layer.msg("考试时间已到，系统自动提交");
                 setTimeout(function () {
                     onSubFUN();
@@ -338,7 +301,6 @@
     function compareDateStringWithNow(dateString) {
         let inputDate = new Date(dateString);
         let currentDate = new Date();
-
         if (inputDate > currentDate) {
             // return '输入的时间大于当前时间';
             return false;
@@ -349,6 +311,24 @@
             // return '输入的时间等于当前时间';
             return true;
         }
+    }
+
+    /**
+     * 结束时间和当前时间的时间差显示
+     * @param endStr 考试结束时间
+     */
+    function countdownInfo(endStr) {
+        let endDate = new Date(endStr);
+        // 计算时间差，单位为毫秒
+        let diffMs = Math.abs(endDate.getTime() - new Date().getTime());
+        // 将毫秒转换为小时、分钟、秒
+        let hours = Math.floor(diffMs / 3600000);
+        let minutes = Math.floor((diffMs % 3600000) / 60000);
+        let seconds = Math.floor((diffMs % 60000) / 1000);
+        // 格式化输出为HH:mm:ss
+        let formattedDiff = hours.toString().padStart(2, '0') + ":" + minutes.toString().padStart(2, '0') + ":" + seconds.toString().padStart(2, '0');
+        // console.log(formattedDiff); // 输出相差的时间，格式为HH:mm:ss
+        $('.countdownInfo').text(formattedDiff);
     }
 
 </script>

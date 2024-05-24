@@ -62,19 +62,18 @@ public class PcExamController {
         if (!examExamStatusCheck(exam, model)) {
             return "/pc/exam/examerror";
         }
-        UserPaper userPaper = userPaperService.getUserPaper(userInfo, exam.getPaperid(), exam.getId(), 1);
-        if (!examCheckUserPaper(exam, userPaper, model)) {
+        Long countUserPaper = userPaperService.countUserPaper(userInfo.getId(), exam.getPaperid(), exam.getId(), 1);
+        if (countUserPaper >= exam.getMaxnum() && exam.getMaxnum() > 0) {
+            model.addAttribute("exStatus", "已超过最大考试次数");
             return "/pc/exam/examerror";
         }
-        Long countUserPaper = userPaperService.countUserPaper(userInfo.getId(), exam.getPaperid(), exam.getId(), null);
-        if (countUserPaper >= exam.getMaxnum()) {
-            model.addAttribute("exStatus", "已超过最大考试次数");
+        UserPaper userPaper = userPaperService.getUserPaper(userInfo, exam.getPaperid(), exam.getId(), 1);
+        if (!examCheckUserPaper(exam, userPaper, model)) {
             return "/pc/exam/examerror";
         }
         List<String> userPaperQuestionIds = userPaperQuestionService.getPaperQ(userPaper).stream().map(UserPaperQuestion::getId).collect(Collectors.toList());
         model.addAttribute("exam", exam);
         model.addAttribute("userPaperQuestionIds", String.join(",", userPaperQuestionIds));
-        model.addAttribute("dataDay", DateUtil.day());
         model.addAttribute("endTime", ExamUtil.examEndTime(exam, userPaper));
         model.addAttribute("userPaperId", userPaper.getId());
         return "pc/exam/paperquestion";
@@ -112,7 +111,8 @@ public class PcExamController {
             model.addAttribute("duration", exam.getDuration());
             model.addAttribute("cDate", userPaper.getCdate());
             model.addAttribute("nowDate", DateUtil.now());
-            model.addAttribute("exStatus", "已超过考试时长");
+            model.addAttribute("exStatus", "超过考试时长未交卷");
+            model.addAttribute("userPaperId", userPaper.getId());
             return false;
         }
         return true;
@@ -168,7 +168,7 @@ public class PcExamController {
         model.addAttribute("maxscore", questionRuleService.getPaperScore(exam.getPaperid()));// 总分
         model.addAttribute("examname", exam.getTitle());
         model.addAttribute("paperduration", DateUtil.sToHHmmss(DateUtil.differSecond(userPaper.getCdate(), userPaper.getSubdate(), DateUtil.sdfA1)));// 考试用时
-        return "pc/exam/examok";
+        return "/pc/exam/examok";
     }
 
     @RequestMapping("checkBlankNum")

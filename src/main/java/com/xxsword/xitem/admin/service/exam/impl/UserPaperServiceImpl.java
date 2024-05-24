@@ -88,7 +88,7 @@ public class UserPaperServiceImpl extends ServiceImpl<UserPaperMapper, UserPaper
      */
     private double sumScore(UserPaper userPaper) {
         List<UserPaperQuestion> list = userPaperQuestionService.getPaperQ(userPaper);
-        return list.stream().mapToDouble(UserPaperQuestion::getScore).sum();
+        return list.stream().filter(item -> item.getScore() != null).mapToDouble(UserPaperQuestion::getScore).sum();
     }
 
     private LambdaQueryWrapper<UserPaper> getUserPaperLambdaQueryWrapper(String userId, String paperId, String examId, Integer subStatus) {
