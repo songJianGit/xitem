@@ -64,10 +64,10 @@
                                         <thead>
                                         <tr>
                                             <th data-field="title">考试标题</th>
-                                            <th data-field="stime">开始时间</th>
-                                            <th data-field="etime">结束时间</th>
+                                            <th data-field="stime" data-width="160px">开始时间</th>
+                                            <th data-field="etime" data-width="160px">结束时间</th>
                                             <th data-field="duration">考试时长（分钟）</th>
-                                            <th data-field="exstatus" data-formatter="exstatus">状态</th>
+                                            <th data-field="exstatus" data-formatter="exstatus" data-width="65px">状态</th>
                                             <th data-field="id" data-formatter="caozuo" data-width="145px">操作</th>
                                         </tr>
                                         </thead>

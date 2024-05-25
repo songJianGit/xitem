@@ -350,7 +350,7 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
         QuestionVO questionVO = QuestionConvert.INSTANCE.toQuestionVO(question);
         questionVO.setScore(userPaperQuestion.getQscore());
         questionVO.setUserpaperquestionid(userPaperQuestion.getId());
-        questionVO.setAnswer(userPaperQuestion.getAnswer());
+        questionVO.setUseranswerIds(userPaperQuestion.getAnswer());
         if (setOption) {
             List<QuestionOption> questionOptionList = questionOptionService.questionOptionListByQid(questionVO.getId());
             if (setRight) {

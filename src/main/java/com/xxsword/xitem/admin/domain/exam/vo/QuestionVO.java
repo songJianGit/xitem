@@ -1,7 +1,5 @@
 package com.xxsword.xitem.admin.domain.exam.vo;
 
-import com.xxsword.xitem.admin.domain.exam.entity.QuestionOption;
-
 import java.util.List;
 
 public class QuestionVO {
@@ -15,6 +13,7 @@ public class QuestionVO {
     private String userpaperquestionid;// 用户试题t_ex_user_paper_question表的主键id
     private List<QuestionOptionVO> questionOptionList;
     private String answer;// 答案（示例数据：C）
+    private String useranswerIds;// 用户的答案ids
 
     public String getId() {
         return id;
@@ -86,5 +85,13 @@ public class QuestionVO {
 
     public void setAnswer(String answer) {
         this.answer = answer;
+    }
+
+    public String getUseranswerIds() {
+        return useranswerIds;
+    }
+
+    public void setUseranswerIds(String useranswerIds) {
+        this.useranswerIds = useranswerIds;
     }
 }

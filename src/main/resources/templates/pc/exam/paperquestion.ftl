@@ -159,7 +159,7 @@
                     action_user_paper_question_id = question.userpaperquestionid;// 当前题目id
                     $(".q-item-title").html(pageNum + ".&nbsp;" + question.title);// 题目标题
                     $(".q-item-op-box").html(getQuestionOptionHtm(question));// 选项
-                    setAnswer(question.answer);
+                    setAnswer(question.useranswerIds);
                 } else {
                     layer.msg(data.msg);
                 }
