@@ -2,101 +2,78 @@
 <html lang="zh">
 <head>
     <#include "../../commons/head.ftl"/>
-    <style>
-        .paper-box {
-            padding: 7px;
-        }
-
-        .paper-title {
-            font-size: 19px;
-            text-align: center;
-            padding: 9px 0;
-            border-bottom: 1px solid #4d525912;
-            margin-bottom: 7px;
-        }
-
-        .q-item-box:not(:last-child) {
-            border-bottom: 1px solid #4d525912;
-            padding-bottom: 3px;
-        }
-
-        .q-item-title-box {
-            margin-top: 7px;
-        }
-
-        .q-item-title {
-            display: inline;
-            margin-left: 3px;
-            font-size: 15px;
-            font-weight: bold;
-        }
-
-        .q-item-score {
-            float: right;
-        }
-
-        .q-item-op-box {
-            display: flex;
-            flex-direction: column;
-            margin-top: 7px;
-            margin-bottom: 7px;
-            margin-left: 7px;
-        }
-
-        .q-item-op {
-            position: relative;
-            margin: 3px 0;
-        }
-
-        .q-item-op-ipt {
-            position: absolute;
-            top: 6px;
-        }
-
-        .q-item-op-label {
-            display: inline;
-            padding-left: 23px;
-        }
-    </style>
 </head>
-<body style="background-color: #fff">
-<div class="callout callout-success">
-    <div>总题数：${paperVO.snum!}&nbsp;题</div>
-    <div>当前总分：${paperVO.score!}&nbsp;分</div>
-</div>
-<div class="paper-box">
-    <div class="paper-title">${paperVO.title!}</div>
-    <#list paperVO.questionVOList as item>
-        <div class="q-item-box">
-            <div class="q-item-title-box">
-                <label class="q-item-title">${item_index+1}.&nbsp;${item.title!}</label>
-                <label class="q-item-score">【${item.score!}分】</label>
+<body style="background-color: white">
+<div class="card">
+
+    <div class="card-header">
+        <form class="form-inline" method="post" action="#!" role="form" id="searchform">
+
+            <div class="input-group m-r-5">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">试卷标题</span>
+                </div>
+                <input type="text" class="form-control" name="title"
+                       placeholder="试卷标题">
             </div>
-            <div class="q-item-op-box">
-                <#list item.questionOptionList as option>
-                    <div class="q-item-op">
-                        <#if item.qtype==0 || item.qtype==1>
-                            <input class="q-item-op-ipt" id="lable-i${option.id!}"
-                                   name="q-item-op-i${item.id!}" value="${option.id!}" type="radio"/>
-                        </#if>
-                        <#if item.qtype==2>
-                            <input class="q-item-op-ipt" id="lable-i${option.id!}"
-                                   name="q-item-op-i${item.id!}" value="${option.id!}" type="checkbox"/>
-                        </#if>
-                        <label class="q-item-op-label" for="lable-i${option.id!}">
-                            ${option.title!}
-                        </label>
-                    </div>
-                </#list>
+
+            <div class="input-group">
+                <div class="btn-group">
+                    <button type="button" id="searchBtn" class="btn btn-primary m-r-5">搜索
+                    </button>
+                    <button type="reset" class="btn btn-default">重置</button>
+                </div>
             </div>
-            <div class="q-item-op-answer">
-                答案：${item.answer!}
+        </form>
+    </div>
+
+    <div class="card-body">
+        <div id="custom-toolbar">
+            <div class="form-inline" role="form">
+                <button type="button" id="add" class="btn btn-primary m-r-5">
+                    确定
+                </button>
             </div>
         </div>
-    </#list>
+        <div class="table-responsive">
+            <table id="table-pagination"
+                   data-toolbar="#custom-toolbar"
+                   data-toggle="table"
+                   data-pagination="true"
+                   data-page-list="[10, 20, 50, 100, 200]"
+                   data-click-to-select="true"
+                   data-url="${ctx.contextPath}/admin/paper/data"
+                   data-query-params="pageQueryParams"
+                   data-side-pagination="server">
+                <thead>
+                <tr>
+                    <th data-radio="true"></th>
+                    <th data-field="title">试卷标题</th>
+                    <th data-field="snum">总题数</th>
+                    <th data-field="score">总分</th>
+                    <th data-field="cdate" data-width="160px">创建时间</th>
+                </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
 </div>
 <#include "../../commons/js.ftl"/>
 <script type="text/javascript">
+    $('#add').click(function () {
+        if (getSelectionId() != false) {
+            let obj = $("#table-pagination").bootstrapTable('getSelections');
+            parent.paperCallback(obj[0]);
+            layer_close();
+        }
+    });
+
+    $('#searchBtn').click(function () {
+        $("#table-pagination").bootstrapTable('refresh', {
+            url: "${ctx.contextPath}/admin/paper/data?" + $("#searchform").serialize()
+        });
+    });
+
 </script>
 </body>
 </html>

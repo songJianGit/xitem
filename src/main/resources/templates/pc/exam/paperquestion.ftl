@@ -1,15 +1,12 @@
 <!DOCTYPE html>
 <html lang="zh">
 <head>
+    <title>考试</title>
     <#include "../commons/head.ftl"/>
     <style>
-
         .q-item-title {
             margin-top: 15px;
-            text-indent: 2em;
             font-size: 16px;
-            font-weight: 600;
-            margin-bottom: 15px;
         }
 
         .q-item-op-box {
@@ -21,105 +18,113 @@
         }
 
         .q-item-op {
-            /*display: flex;*/
-            /*align-items: flex-start;*/
-            margin-top: 10px;
-            margin-bottom: 10px;
-            background: white;
-            box-shadow: 0 1px 1px 0 rgb(239 243 255), 0 3px 7px 0 rgba(0, 0, 0, 0.1);
-            padding: 15px;
+            display: flex;
+            margin-top: 7px;
+            margin-bottom: 7px;
+            background-color: #F5F7FA;
+            padding: 13px;
+            border-radius: 4px;
         }
 
-        .q-item-op span {
-            margin-left: 7px;
-            font-size: 16px;
-            color: #000;
-            line-height: 24px;
+        .q-item-op-put-label-style {
+            width: 100%;
+            margin-left: 1%;
+            margin-bottom: 0;
         }
 
-        .q-item-op input {
-            /*明明对齐了，但是手机上就是差点距离，这边微调一下位置*/
-            margin-top: 2px;
-            width: 20px;
-            height: 20px;
-        }
-
-        .q-item-type {
+        .top-info {
+            z-index: 1;
             display: flex;
             justify-content: space-between;
-            margin-bottom: 5px;
-            color: #1a4883;
-            font-size: 16px;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 7px;
+            background-color: #fff;
+            border-bottom: 3px solid #e7e7e7;
         }
 
-        .q-item-type-num-sum-active {
-            color: #2566b8;
-            font-size: 18px;
+        .bottom-btns {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            margin: 0;
+            display: flex;
+            justify-content: space-around;
+            padding: 7px;
+            background-color: #fff;
+            border-top: 3px solid #e7e7e7;
         }
 
-        .q-item-type-num-sum {
-            font-size: 12px;
-            color: #2566b8;
+        .q-item-box {
+            margin-top: 27px;
+            margin-bottom: 50px;
+            border: 0;
         }
 
+        /*大屏下的显示调整*/
+        .pc-auto {
+            max-width: 900px;
+        }
+
+        .countdownInfo-box {
+            line-height: 36px;
+        }
     </style>
 </head>
 <body>
-<div class="card">
-    <div class="card-header">${exam.title!}</div>
-    <div class="card-body row">
-        <div class="col-6">
-            <div>${Session.puser.username!}</div>
-        </div>
-        <div class="col-6">
-            <div>剩余时间：<span class="countdownInfo">00:00:00</span></div>
-            <button type="button" class="btn btn-primary" onclick="onSub()">交卷</button>
+<div class="pc-auto" style="margin: 0 auto">
+    <div class="top-info pc-auto">
+        <div class="countdownInfo-box">剩余时间：<span class="countdownInfo">00:00:00</span></div>
+        <div>
+            <button type="button" class="btn btn-primary" onclick="saveAnswer(2)">交卷</button>
         </div>
     </div>
-    <div class="card-body">
-        <div class="q-item-type">
-            <div class="q-item-type-name">问题类型</div>
-            <div class="q-item-type-num">
-                <span class="q-item-type-num-sum-active">0</span>/
-                <span class="q-item-type-num-sum">0</span>
+    <div class="card q-item-box pc-auto">
+        <div class="card-body">
+            <div class="q-item-title"></div>
+            <div class="q-item-op-box">
             </div>
         </div>
-        <div style="padding: 1px 0;background-color: #eeeeee"></div>
-        <div class="q-item-title"></div>
-        <div class="q-item-op-box">
-        </div>
     </div>
-    <div class="card-footer row">
-        <button type="button" class="col-4 btn btn-sm btn-primary" id="prevBtn">答题卡</button>
-        <button type="button" class="col-4 btn btn-sm btn-primary" id="prevBtn">上一题</button>
-        <button type="button" class="col-4 btn btn-sm btn-primary" id="nextBtn">下一题</button>
+    <div class="bottom-btns pc-auto">
+        <button type="button" class="btn btn-primary bottom-btn" id="paperQinfo">答题卡</button>
+        <button type="button" class="btn btn-primary bottom-btn" id="prevBtn">上一题</button>
+        <button type="button" class="btn btn-primary bottom-btn" id="nextBtn">下一题</button>
     </div>
 </div>
 <#include "../commons/js.ftl"/>
 <script type="text/javascript">
-    // TODO 页面调整===========================
     let pageNum = 1;// 当前页
     let userPaperQuestions = '${userPaperQuestionIds!}'.split(",");// 当前试卷题目集合
-    let action_question_type = '';// 当前题目类型
     let action_user_paper_question_id = '';// 当前题id
+
+    $(function () {
+        getQuestion();// 第一个问题显示
+        timeInfo();// 计时
+    });
 
     $("#prevBtn").click(function () {
         if (pageNum > 1) {
             pageNum--;
-            getQuestion();
+            saveAnswer(0);
         } else {
             layer.msg("已是第一题");
         }
     });
+
     $("#nextBtn").click(function () {
         if (pageNum < userPaperQuestions.length) {
             pageNum++;
-            getQuestion();
+            saveAnswer(1);
         } else {
             layer.msg("已是最后一题");
         }
     });
 
+    /**
+     * 获取题目信息
+     */
     function getQuestion() {
         if (isBlank(action_user_paper_question_id)) {
             action_user_paper_question_id = userPaperQuestions[0];
@@ -131,19 +136,17 @@
             url: "${ctx.contextPath}/pc/exam/getQuestion",
             cache: false,// 不缓存
             data: {
-                "userPaperId": '${userPaperId!}',
-                "nextQid": userPaperQuestions[pageNum - 1]
+                userPaperId: '${userPaperId!}',
+                nextQid: userPaperQuestions[pageNum - 1]
             },
             success: function (data) {
                 layer.close(indexLoad);
                 if (data.result) {
                     let question = data.data;
-                    action_question_type = question.qtype;
-                    action_user_paper_question_id = data.data.id;
-                    $(".q-item-title").html(question.title);
+                    action_user_paper_question_id = question.userpaperquestionid;// 当前题目id
+                    $(".q-item-title").html(pageNum + ".&nbsp;" + question.title);// 题目标题
                     $(".q-item-op-box").html(getQuestionOptionHtm(question));// 选项
-                    $(".q-item-type-num-sum-active").text(pageNum);
-                    setQItemTypeName(question.qtype);
+                    setAnswer(question.answer);
                 } else {
                     layer.msg(data.msg);
                 }
@@ -151,55 +154,66 @@
         });
     }
 
-    function setQItemTypeName(type) {
-        // 0-是非 1-单选 2-多选
-        if (type == 0) {
-            $(".q-item-type-name").text('【是非题】');
-        }
-        if (type == 1) {
-            $(".q-item-type-name").text('【单选题】');
-        }
-        if (type == 2) {
-            $(".q-item-type-name").text('【多选题】');
-        }
-    }
-
-    function setAnswer(userPaperQuestion) {
-        let answer = userPaperQuestion.answer;
-        if (isNotBlank(answer)) {
-            if (action_question_type == 0 || action_question_type == 1) {
-                $(".q-item-op-i" + answer).prop("checked", true);
-            }
-            if (action_question_type == 2) {
-                let answerS = answer.split(",");
-                for (let i = 0; i < answerS.length; i++) {
-                    $(".q-item-op-i" + answerS[i]).prop("checked", true);
+    /**
+     * functiontype
+     * @param functiontype 0-上一页 1-下一页 2-检查未答题目后交卷 3-交卷
+     */
+    function saveAnswer(functiontype) {
+        let answers = getAnswer();
+        let indexLoad = layer.load(1, {// 遮罩层
+            shade: [0.5, '#fff']
+        });
+        $.ajax({
+            url: "${ctx.contextPath}/pc/exam/saveAnswer",
+            cache: false,// 不缓存
+            data: {
+                qid: action_user_paper_question_id,
+                answers: answers
+            },
+            success: function (data) {
+                layer.close(indexLoad);
+                if (data.result) {
+                    if (functiontype == 0 || functiontype == 1) {
+                        getQuestion();
+                    }
+                    if (functiontype == 2) {
+                        checkBlankNumAndSub();
+                    }
+                    if (functiontype == 3) {
+                        onSubFUN();
+                    }
+                } else {
+                    layer.msg(data.msg);
                 }
             }
+        });
+    }
+
+    /**
+     * 答案的回显
+     * @param answer
+     */
+    function setAnswer(answer) {
+        if (isNotBlank(answer)) {
+            let answerS = answer.split(",");
+            for (let i = 0; i < answerS.length; i++) {
+                $(".q-item-op-" + answerS[i]).prop("checked", true);
+            }
         }
     }
 
+    /**
+     * 答案的获取
+     * @returns {*|string}
+     */
     function getAnswer() {
-        let inputName = '';
-        let vals;
-        if (action_question_type == 0 || action_question_type == 1) {
-            inputName = 'radio-input';
-            vals = $("input[name='" + inputName + "']:checked").val();
-        }
-        if (action_question_type == 2) {
-            inputName = 'checkbox-input';
-            vals = $("input[name='" + inputName + "']:checked").map(function () {
-                return this.value;
-            }).get();
-        }
-        if (isNotBlank(vals)) {
-            if (action_question_type == 2) {
-                return vals.join(",");
-            } else {
-                return vals;
-            }
+        let vals = $("input[name='val-input']:checked").map(function () {
+            return this.value;
+        }).get();
+        if (isBlank(vals)) {
+            return '';
         } else {
-            return "";
+            return vals.join(",");
         }
     }
 
@@ -224,20 +238,17 @@
         let htm = '';
         if (isNotBlank(lable)) {
             htm += '<div class="q-item-op">';
-            htm += '<input style="float: left;width: 8%" class="q-item-op-i' + val + '" name="' + type + '-input" value="' + val + '" type="' + type + '"/>';
-            htm += '<div style="float: left;width: 90%;margin-left: 1%">' + lable + '</div>';
+            htm += '<input id="op-id-' + val + '" class="q-item-op-' + val + '" name="val-input" value="' + val + '" type="' + type + '"/>';
+            htm += '<label class="q-item-op-put-label-style" for="op-id-' + val + '">' + lable + '</label>';
             htm += '</div>';
         }
         return htm;
     }
 
-    $(function () {
-        getQuestion();
-        $(".q-item-type-num-sum").text(userPaperQuestions.length);
-        subTime();
-    });
-
-    function onSub() {
+    /**
+     * 检查是否有题目还未作答，然后提交试卷
+     */
+    function checkBlankNumAndSub() {
         let indexLoadSub = layer.load(1, {// 遮罩层
             shade: [0.5, '#fff']
         });
@@ -252,9 +263,9 @@
                 let infos = data.data;
                 let msg = "";
                 if (infos.length != 0) {
-                    msg = '第' + infos.join("，") + "题未作答"
+                    msg = '第' + infos.join("，") + "题未作答，"
                 }
-                layer.confirm(msg + '，确定提交？', {
+                layer.confirm(msg + '确定提交？', {
                     title: '提示',
                     btn: ['确定', '取消'] //按钮
                 }, function () {
@@ -287,20 +298,25 @@
         });
     }
 
-    function subTime() {
+    function timeInfo() {
         let time = setInterval(function () {
             countdownInfo('${endTime!}');
             if (compareDateStringWithNow('${endTime!}')) {
                 clearInterval(time);
-                layer.msg("考试时间已到，系统自动提交");
+                layer.msg("考试时间已到，自动交卷");
+                let indexLoad = layer.load(1, {// 遮罩层
+                    shade: [0.5, '#fff']
+                });
                 setTimeout(function () {
-                    onSubFUN();
-                }, 1000)
+                    saveAnswer(3);
+                    layer.close(indexLoad);
+                }, 1500);
             }
         }, 1000);
     }
 
     function compareDateStringWithNow(dateString) {
+        dateString = new Date(dateString.replace(/-/g, '/'));
         let inputDate = new Date(dateString);
         let currentDate = new Date();
         if (inputDate > currentDate) {
@@ -320,6 +336,7 @@
      * @param endStr 考试结束时间
      */
     function countdownInfo(endStr) {
+        endStr = new Date(endStr.replace(/-/g, '/'));
         let endDate = new Date(endStr);
         // 计算时间差，单位为毫秒
         let diffMs = Math.abs(endDate.getTime() - new Date().getTime());

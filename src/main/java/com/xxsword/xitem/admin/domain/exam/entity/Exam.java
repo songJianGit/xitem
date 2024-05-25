@@ -32,15 +32,18 @@ public class Exam extends BaseEntity implements Serializable {
 
     @Column
     @ColumnComment("用户的最大考试次数")
-    private Integer maxnum;// 一个用户的最大考试次数（默认为1）
+    private Integer maxnum;
 
     @Column(length = 50)
     @ColumnComment("试卷id")
     private String paperid;
 
+    @TableField(exist = false)
+    private String papertitle;
+
     /**
      * 考试状态(通过考试的开始和结束时间进行赋值)
-     * 0-未开始 1-已开始 2-已结束
+     * 0-未开始 1-进行中 2-已结束
      */
     @TableField(exist = false)
     private Integer exstatus;
@@ -91,6 +94,14 @@ public class Exam extends BaseEntity implements Serializable {
 
     public void setPaperid(String paperid) {
         this.paperid = paperid;
+    }
+
+    public String getPapertitle() {
+        return papertitle;
+    }
+
+    public void setPapertitle(String papertitle) {
+        this.papertitle = papertitle;
     }
 
     public Integer getExstatus() {

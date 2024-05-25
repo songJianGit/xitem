@@ -40,7 +40,7 @@
     </div>
     <div class="card-toolbar d-flex flex-column flex-md-row">
         <div class="toolbar-btn-action">
-            <button type="button" id="saveBtn" class="btn btn-label btn-primary m-r-5 animated flipInX">
+            <button type="button" id="saveBtn" class="btn btn-label btn-primary m-r-5">
                 <label><i class="mdi mdi-checkbox-marked-circle-outline"></i></label>
                 保存
             </button>

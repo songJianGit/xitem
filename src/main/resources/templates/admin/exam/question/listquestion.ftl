@@ -11,10 +11,10 @@
 
             <div class="input-group m-r-5">
                 <div class="input-group-prepend">
-                    <span class="input-group-text">题目描述</span>
+                    <span class="input-group-text">题目标题</span>
                 </div>
                 <input type="text" class="form-control" name="title"
-                       placeholder="题目描述">
+                       placeholder="题目标题">
             </div>
 
             <div class="input-group m-r-5">
@@ -69,7 +69,7 @@
                    data-page-list="[10, 20, 50, 100, 200]"
                    data-click-to-select="true"
                    data-url="${ctx.contextPath}/admin/question/data"
-                   data-query-params="queryParams"
+                   data-query-params="pageQueryParams"
                    data-side-pagination="server">
                 <thead>
                 <tr>

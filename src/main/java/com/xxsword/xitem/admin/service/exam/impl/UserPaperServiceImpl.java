@@ -73,13 +73,17 @@ public class UserPaperServiceImpl extends ServiceImpl<UserPaperMapper, UserPaper
     @Override
     @Transactional
     public UserPaper userPaperSub(String userPaperId) {
-        UserPaper userPaper = new UserPaper();
-        userPaper.setId(userPaperId);
-        userPaper.setSubstatus(1);
-        userPaper.setSubdate(DateUtil.now());
-        userPaper.setScore(this.sumScore(userPaper));
-        updateById(userPaper);
-        return userPaper;
+        UserPaper userPaper = getById(userPaperId);
+        if (userPaper.getSubstatus().equals(1)) {// 已提交则无需重复提交
+            return userPaper;
+        }
+        UserPaper userPaperUp = new UserPaper();
+        userPaperUp.setId(userPaperId);
+        userPaperUp.setSubstatus(1);
+        userPaperUp.setSubdate(DateUtil.now());
+        userPaperUp.setScore(this.sumScore(userPaper));
+        updateById(userPaperUp);
+        return userPaperUp;
     }
 
     /**

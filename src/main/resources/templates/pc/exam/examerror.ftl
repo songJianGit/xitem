@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html lang="zh">
 <head>
+    <title>考试异常</title>
     <#include "../commons/head.ftl"/>
 </head>
 <body>
-<div class="card">
+<div class="card p-5 text-center" style="border: 0">
     <#if exStatus??>
         <div>
             ${exStatus}

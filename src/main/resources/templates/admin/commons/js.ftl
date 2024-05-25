@@ -17,12 +17,16 @@
 <script type="text/javascript">
     // ---菜单回显---begin
     window.onload = function () {
+        <#if treeMenuList??>
         <#if Session.mclick??>
         let menuClickInfo = '${Session.mclick}';
         if (isNotBlank(menuClickInfo) && menuClickInfo != 'x') {
             $('#' + menuClickInfo).parents('li').addClass('active').addClass('open');
             $('#' + menuClickInfo).addClass('active');
         }
+        </#if>
+        <#else>
+        window.location.href = "${ctx.contextPath}/admin/system/index?mclick=1";
         </#if>
     };
     // ---菜单回显---end
@@ -98,7 +102,7 @@
     }
 
     // Bootstrap Table翻页参数设置
-    function queryParams(params) {
+    function pageQueryParams(params) {
         params.current = Math.floor(params.offset / params.limit) + 1;
         params.size = params.limit;
         return params;

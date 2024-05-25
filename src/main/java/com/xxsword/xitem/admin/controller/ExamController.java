@@ -3,10 +3,12 @@ package com.xxsword.xitem.admin.controller;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.xxsword.xitem.admin.domain.exam.dto.ExamDto;
 import com.xxsword.xitem.admin.domain.exam.entity.Exam;
+import com.xxsword.xitem.admin.domain.exam.entity.Paper;
 import com.xxsword.xitem.admin.domain.system.entity.UserInfo;
 import com.xxsword.xitem.admin.model.RestPaging;
 import com.xxsword.xitem.admin.model.RestResult;
 import com.xxsword.xitem.admin.service.exam.ExamService;
+import com.xxsword.xitem.admin.service.exam.PaperService;
 import com.xxsword.xitem.admin.utils.Utils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -24,6 +26,8 @@ import javax.servlet.http.HttpServletRequest;
 public class ExamController {
     @Autowired
     private ExamService examService;
+    @Autowired
+    private PaperService paperService;
 
     @RequestMapping("list")
     public String index() {
@@ -43,6 +47,10 @@ public class ExamController {
         Exam exam = new Exam();
         if (StringUtils.isNotBlank(id)) {
             exam = examService.getById(id);
+            if (StringUtils.isNotBlank(exam.getPaperid())) {
+                Paper paper = paperService.getById(exam.getPaperid());
+                exam.setPapertitle(paper.getTitle());
+            }
         }
         model.addAttribute("exam", exam);
         return "/admin/exam/edit";

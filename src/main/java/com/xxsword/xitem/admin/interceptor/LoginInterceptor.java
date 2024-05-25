@@ -36,7 +36,7 @@ public class LoginInterceptor implements HandlerInterceptor {
         }
         UserInfo userInfo = (UserInfo) o;
         List<Role> roleSet = userInfo.getRolelist();
-        if (roleSet == null) {
+        if (roleSet == null || roleSet.isEmpty()) {
             return back(request, response);
         }
         String url = request.getServletPath();

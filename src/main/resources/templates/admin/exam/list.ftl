@@ -27,10 +27,10 @@
 
                                     <div class="input-group m-r-5">
                                         <div class="input-group-prepend">
-                                            <span class="input-group-text">考试名称</span>
+                                            <span class="input-group-text">考试标题</span>
                                         </div>
                                         <input type="text" class="form-control" name="title"
-                                               placeholder="考试名称">
+                                               placeholder="考试标题">
                                     </div>
 
                                     <div class="input-group">
@@ -59,10 +59,11 @@
                                            data-page-list="[10, 20, 50, 100, 200]"
                                            data-click-to-select="true"
                                            data-url="${ctx.contextPath}/admin/exam/data"
+                                           data-query-params="pageQueryParams"
                                            data-side-pagination="server">
                                         <thead>
                                         <tr>
-                                            <th data-field="title">考试名称</th>
+                                            <th data-field="title">考试标题</th>
                                             <th data-field="stime">开始时间</th>
                                             <th data-field="etime">结束时间</th>
                                             <th data-field="duration">考试时长（分钟）</th>

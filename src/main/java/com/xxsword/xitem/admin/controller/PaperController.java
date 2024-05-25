@@ -276,8 +276,8 @@ public class PaperController {
      * @param request
      * @return
      */
-    @RequestMapping("paperShow")
-    public String paperShow(HttpServletRequest request, String paperId, Model model) {
+    @RequestMapping("paperPreview")
+    public String paperPreview(HttpServletRequest request, String paperId, Model model) {
         UserInfo userInfo = Utils.getUserInfo(request);
         Paper paper = paperService.getById(paperId);
         UserPaper userPaper = userPaperService.getUserPaper(userInfo, paperId, null, 2);
@@ -288,7 +288,11 @@ public class PaperController {
         paperVO.setScore(questionRuleService.getPaperScore(paperId));
 
         model.addAttribute("paperVO", paperVO);
-        return "/admin/exam/paper/papershow";
+        return "/admin/exam/paper/paperpreview";
     }
 
+    @RequestMapping("paperShow")
+    public String paperShow(HttpServletRequest request, Model model) {
+        return "admin/exam/paper/papershow";
+    }
 }

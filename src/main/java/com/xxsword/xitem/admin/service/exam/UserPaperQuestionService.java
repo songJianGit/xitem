@@ -19,6 +19,7 @@ public interface UserPaperQuestionService extends IService<UserPaperQuestion> {
 
     /**
      * UserPaper已有答题记录题目获取
+     *
      * @param userPaper
      * @return
      */
@@ -40,4 +41,13 @@ public interface UserPaperQuestionService extends IService<UserPaperQuestion> {
      * @return
      */
     List<Integer> checkBlankNum(UserPaper usp);
+
+    /**
+     * 记录用户答案,并计算该题得分
+     *
+     * @param userPaperQuestionId
+     * @param answers
+     * @return
+     */
+    void upUserPaperQuestionAnswers(String userPaperQuestionId, String answers);
 }

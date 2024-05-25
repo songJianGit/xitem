@@ -1,7 +1,5 @@
 package com.xxsword.xitem.admin.domain.exam.vo;
 
-import com.xxsword.xitem.admin.domain.exam.entity.UserPaperQuestion;
-
 import java.util.List;
 
 public class PaperVO {

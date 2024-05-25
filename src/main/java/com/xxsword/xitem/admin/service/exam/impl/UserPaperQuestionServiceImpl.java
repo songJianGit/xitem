@@ -7,19 +7,15 @@ import com.xxsword.xitem.admin.domain.exam.entity.*;
 import com.xxsword.xitem.admin.domain.exam.vo.QuestionVO;
 import com.xxsword.xitem.admin.domain.system.entity.UserInfo;
 import com.xxsword.xitem.admin.mapper.exam.UserPaperQuestionMapper;
-import com.xxsword.xitem.admin.service.exam.QRSService;
-import com.xxsword.xitem.admin.service.exam.QuestionRuleService;
-import com.xxsword.xitem.admin.service.exam.QuestionService;
-import com.xxsword.xitem.admin.service.exam.UserPaperQuestionService;
+import com.xxsword.xitem.admin.service.exam.*;
 import com.xxsword.xitem.admin.utils.DateUtil;
 import com.xxsword.xitem.admin.utils.ExamUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -31,6 +27,8 @@ public class UserPaperQuestionServiceImpl extends ServiceImpl<UserPaperQuestionM
     private QRSService qrsService;
     @Autowired
     private QuestionService questionService;
+    @Autowired
+    private QuestionOptionService questionOptionService;
 
     @Override
     public void upLastInfo(UserInfo doUserInfo, String ids) {
@@ -112,4 +110,49 @@ public class UserPaperQuestionServiceImpl extends ServiceImpl<UserPaperQuestionM
         }
         return info;
     }
+
+    @Override
+    public void upUserPaperQuestionAnswers(String userPaperQuestionId, String answers) {
+        if (StringUtils.isBlank(answers)) {
+            return;
+        }
+        UserPaperQuestion userPaperQuestion = getById(userPaperQuestionId);
+        if (userPaperQuestion == null) {
+            return;
+        }
+        UserPaperQuestion userPaperQuestionUp = new UserPaperQuestion();
+        userPaperQuestionUp.setId(userPaperQuestionId);
+        userPaperQuestionUp.setAnswer(answers);
+        userPaperQuestionUp.setAnswertime(DateUtil.now());
+        // 得分情况
+        boolean b = checkAnswer(userPaperQuestion.getQid(), answers);
+        if (b) {
+            userPaperQuestionUp.setScore(userPaperQuestion.getQscore());
+        } else {
+            userPaperQuestionUp.setScore(0D);
+        }
+        updateById(userPaperQuestionUp);
+    }
+
+    /**
+     * 校验答案是否正确
+     *
+     * @param qid
+     * @param answers
+     * @return
+     */
+    private boolean checkAnswer(String qid, String answers) {
+        if (StringUtils.isBlank(answers)) {
+            return false;
+        }
+        Set<String> userAIds = Arrays.stream(answers.split(",")).collect(Collectors.toSet());
+        Question question = questionService.getById(qid);
+        List<QuestionOption> questionOption = questionOptionService.questionOptionListByQid(qid);
+        Set<String> aIds = questionOption.stream().filter(item -> item.getOptionright().equals(1)).map(QuestionOption::getId).collect(Collectors.toSet());
+        if (question == null) {
+            return false;
+        }
+        return userAIds.containsAll(aIds);
+    }
+
 }

@@ -68,7 +68,7 @@
                             </div>
                             <div class="card-body">
                                 <iframe id="paperShwoIframe" style="border: 0;width: 100%;min-height: 623px"
-                                        src="${ctx.contextPath}/admin/paper/paperShow?paperId=${paper.id!}"></iframe>
+                                        src="${ctx.contextPath}/admin/paper/paperPreview?paperId=${paper.id!}"></iframe>
                             </div>
                         </div>
                     </div>

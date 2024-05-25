@@ -8,6 +8,7 @@ import com.xxsword.xitem.admin.service.exam.*;
 import com.xxsword.xitem.admin.utils.DateUtil;
 import com.xxsword.xitem.admin.utils.ExamUtil;
 import com.xxsword.xitem.admin.utils.Utils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -140,6 +141,16 @@ public class PcExamController {
         } else {
             return RestResult.Fail("考试状态异常，试下重新进入");
         }
+    }
+
+    @RequestMapping("saveAnswer")
+    @ResponseBody
+    public RestResult saveAnswer(HttpServletRequest request, String qid, String answers) {
+        if (StringUtils.isBlank(answers)) {
+            return RestResult.OK("未作答");
+        }
+        userPaperQuestionService.upUserPaperQuestionAnswers(qid, answers);
+        return RestResult.OK();
     }
 
     /**

@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @Controller
@@ -44,10 +45,13 @@ public class SystemController extends BaseController {
      * @return
      */
     @RequestMapping("index")
-    public String index(HttpServletRequest request, Model model) {
+    public String index(HttpServletRequest request) {
         UserInfo userInfo = Utils.getUserInfo(request);
-        List<TreeMenu> treeMenuList = MenuUtil.listTreeMenuByFunctions(MenuUtil.listFunctionsByRoles(userInfo.getRolelist()), false);
-        request.getSession().setAttribute("treeMenuList", treeMenuList);
+        HttpSession session = request.getSession();
+        if (session.getAttribute("treeMenuList") == null) {
+            List<TreeMenu> treeMenuList = MenuUtil.listTreeMenuByFunctions(MenuUtil.listFunctionsByRoles(userInfo.getRolelist()), false);
+            session.setAttribute("treeMenuList", treeMenuList);
+        }
         return "/admin/index";
     }
 

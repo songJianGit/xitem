@@ -39,13 +39,15 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
     public UserInfo setUserInfoRoleAndFun(UserInfo user, boolean role, boolean functions) {
         if (role) {
             List<Role> roleList = userInfoRoleService.listRoleByUserId(user.getId());
-            if (functions) {
-                for (Role r : roleList) {
-                    List<Functions> functionsList = roleFunctionsService.listFunctionsByRoleId(r.getId());
-                    r.setFunctionlist(functionsList);
+            if (!roleList.isEmpty()) {
+                if (functions) {
+                    for (Role r : roleList) {
+                        List<Functions> functionsList = roleFunctionsService.listFunctionsByRoleId(r.getId());
+                        r.setFunctionlist(functionsList);
+                    }
                 }
+                user.setRolelist(roleList);
             }
-            user.setRolelist(roleList);
         }
         return user;
     }
