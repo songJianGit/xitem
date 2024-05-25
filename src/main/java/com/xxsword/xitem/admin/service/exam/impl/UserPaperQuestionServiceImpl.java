@@ -112,7 +112,7 @@ public class UserPaperQuestionServiceImpl extends ServiceImpl<UserPaperQuestionM
     }
 
     @Override
-    public void upUserPaperQuestionAnswers(String userPaperQuestionId, String answers) {
+    public void upUserPaperQuestionAnswers(UserInfo userInfo, String userPaperQuestionId, String answers) {
         if (StringUtils.isBlank(answers)) {
             return;
         }
@@ -122,8 +122,8 @@ public class UserPaperQuestionServiceImpl extends ServiceImpl<UserPaperQuestionM
         }
         UserPaperQuestion userPaperQuestionUp = new UserPaperQuestion();
         userPaperQuestionUp.setId(userPaperQuestionId);
+        userPaperQuestionUp.setBaseInfo(userInfo);
         userPaperQuestionUp.setAnswer(answers);
-        userPaperQuestionUp.setAnswertime(DateUtil.now());
         // 得分情况
         boolean b = checkAnswer(userPaperQuestion.getQid(), answers);
         if (b) {

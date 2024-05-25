@@ -13,7 +13,7 @@ public class QuestionVO {
     private Integer qtype;// 题目类型(0-是非 1-单选 2-多选)
     private Double score;// 题目分值
     private String userpaperquestionid;// 用户试题t_ex_user_paper_question表的主键id
-    private List<QuestionOption> questionOptionList;
+    private List<QuestionOptionVO> questionOptionList;
     private String answer;// 答案（示例数据：C）
 
     public String getId() {
@@ -72,11 +72,11 @@ public class QuestionVO {
         this.userpaperquestionid = userpaperquestionid;
     }
 
-    public List<QuestionOption> getQuestionOptionList() {
+    public List<QuestionOptionVO> getQuestionOptionList() {
         return questionOptionList;
     }
 
-    public void setQuestionOptionList(List<QuestionOption> questionOptionList) {
+    public void setQuestionOptionList(List<QuestionOptionVO> questionOptionList) {
         this.questionOptionList = questionOptionList;
     }
 

@@ -26,10 +26,6 @@ public class UserPaperQuestion extends BaseEntity implements Serializable {
     @ColumnComment("用户答案")
     private String answer;
 
-    @Column(length = 19)
-    @ColumnComment("答题时间")
-    private String answertime;
-
     @Column(length = 7, decimalLength = 2)
     @ColumnComment("题目分数")
     private Double qscore;
@@ -65,14 +61,6 @@ public class UserPaperQuestion extends BaseEntity implements Serializable {
 
     public void setAnswer(String answer) {
         this.answer = answer;
-    }
-
-    public String getAnswertime() {
-        return answertime;
-    }
-
-    public void setAnswertime(String answertime) {
-        this.answertime = answertime;
     }
 
     public Double getQscore() {

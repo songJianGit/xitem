@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.xxsword.xitem.admin.constant.Constant;
 import com.xxsword.xitem.admin.domain.exam.convert.QuestionConvert;
+import com.xxsword.xitem.admin.domain.exam.convert.QuestionOptionConvert;
 import com.xxsword.xitem.admin.domain.exam.entity.Question;
 import com.xxsword.xitem.admin.domain.exam.entity.QuestionOption;
 import com.xxsword.xitem.admin.domain.exam.entity.UserPaperQuestion;
@@ -368,7 +369,7 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
                     option.setTitle(ExamUtil.convertNumberToLetter(i) + ".&nbsp;" + option.getTitle());
                 }
             }
-            questionVO.setQuestionOptionList(questionOptionList);
+            questionVO.setQuestionOptionList(QuestionOptionConvert.INSTANCE.toQuestionOptionVO(questionOptionList));
         }
         return questionVO;
     }

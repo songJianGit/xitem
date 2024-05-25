@@ -49,5 +49,5 @@ public interface UserPaperQuestionService extends IService<UserPaperQuestion> {
      * @param answers
      * @return
      */
-    void upUserPaperQuestionAnswers(String userPaperQuestionId, String answers);
+    void upUserPaperQuestionAnswers(UserInfo userInfo, String userPaperQuestionId, String answers);
 }

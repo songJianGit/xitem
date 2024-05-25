@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="zh">
 <head>
-    <title>考试</title>
+    <title>${examTitle!}</title>
     <#include "../commons/head.ftl"/>
     <style>
         .q-item-title {
@@ -41,7 +41,7 @@
             width: 100%;
             padding: 7px;
             background-color: #fff;
-            border-bottom: 3px solid #e7e7e7;
+            border-bottom: 2px solid #e7e7e7;
         }
 
         .bottom-btns {
@@ -53,7 +53,7 @@
             justify-content: space-around;
             padding: 7px;
             background-color: #fff;
-            border-top: 3px solid #e7e7e7;
+            border-top: 2px solid #e7e7e7;
         }
 
         .q-item-box {
@@ -88,7 +88,7 @@
         </div>
     </div>
     <div class="bottom-btns pc-auto">
-        <button type="button" class="btn btn-primary bottom-btn" id="paperQinfo">答题卡</button>
+        <button type="button" class="btn btn-primary bottom-btn" id="examSheet">答题卡</button>
         <button type="button" class="btn btn-primary bottom-btn" id="prevBtn">上一题</button>
         <button type="button" class="btn btn-primary bottom-btn" id="nextBtn">下一题</button>
     </div>
@@ -102,6 +102,10 @@
     $(function () {
         getQuestion();// 第一个问题显示
         timeInfo();// 计时
+    });
+
+    $("#examSheet").click(function () {
+        saveAnswer(4);
     });
 
     $("#prevBtn").click(function () {
@@ -121,6 +125,15 @@
             layer.msg("已是最后一题");
         }
     });
+
+    /**
+     * 答题卡题目跳转回调
+     * @param qNum
+     */
+    function examSheetCallback(qNum) {
+        pageNum = qNum;
+        getQuestion();
+    }
 
     /**
      * 获取题目信息
@@ -155,14 +168,14 @@
     }
 
     /**
-     * functiontype
+     * 保存题目答案，并在成功响应后，调用各类事件。
      * @param functiontype 0-上一页 1-下一页 2-检查未答题目后交卷 3-交卷
      */
     function saveAnswer(functiontype) {
-        let answers = getAnswer();
         let indexLoad = layer.load(1, {// 遮罩层
             shade: [0.5, '#fff']
         });
+        let answers = getAnswer();
         $.ajax({
             url: "${ctx.contextPath}/pc/exam/saveAnswer",
             cache: false,// 不缓存
@@ -181,6 +194,9 @@
                     }
                     if (functiontype == 3) {
                         onSubFUN();
+                    }
+                    if (functiontype == 4) {
+                        layer_show("答题卡", "${ctx.contextPath}/pc/exam/examSheet?userPaperId=${userPaperId!}");
                     }
                 } else {
                     layer.msg(data.msg);
@@ -217,6 +233,11 @@
         }
     }
 
+    /**
+     * 获取题目的选项html
+     * @param question
+     * @returns {string}
+     */
     function getQuestionOptionHtm(question) {
         let questionOptionList = question.questionOptionList;
         let type = question.qtype;// 0-是非 1-单选 2-多选
@@ -234,6 +255,13 @@
         return htm;
     }
 
+    /**
+     * 题目选项的html元素拼接
+     * @param lable
+     * @param val
+     * @param type
+     * @returns {string}
+     */
     function optionHtm(lable, val, type) {
         let htm = '';
         if (isNotBlank(lable)) {
@@ -277,6 +305,9 @@
         });
     }
 
+    /**
+     * 交卷
+     */
     function onSubFUN() {
         let indexLoadSub = layer.load(1, {// 遮罩层
             shade: [0.5, '#fff']
@@ -298,6 +329,10 @@
         });
     }
 
+    /**
+     * 1.倒计时显示
+     * 2.结束时间过后的自动提交
+     */
     function timeInfo() {
         let time = setInterval(function () {
             countdownInfo('${endTime!}');

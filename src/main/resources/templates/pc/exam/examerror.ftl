@@ -5,20 +5,22 @@
     <#include "../commons/head.ftl"/>
 </head>
 <body>
-<div class="card p-5 text-center" style="border: 0">
+<div class="card" style="border: 0">
     <#if exStatus??>
-        <div>
+        <div class="card-title">
             ${exStatus}
         </div>
     </#if>
-    <#if '超过考试时长未交卷'==exStatus>
-        <div>
-            考试规定时长：${duration!}分钟<br/>
-            开始答题时间：${cDate!}<br/>
-            当前时间：${nowDate!}<br/>
-            <button type="button" class="btn btn-primary" onclick="onSubFUN()">交卷</button>
-        </div>
-    </#if>
+    <div class="card-body text-center">
+        <#if '超过考试时长未交卷'==exStatus>
+            <div>
+                考试规定时长：${duration!}分钟<br/>
+                开始答题时间：${cDate!}<br/>
+                当前时间：${nowDate!}<br/>
+                <button type="button" class="btn btn-primary" onclick="onSubFUN()">交卷</button>
+            </div>
+        </#if>
+    </div>
 </div>
 <#include "../commons/js.ftl"/>
 <script type="text/javascript">

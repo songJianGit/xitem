@@ -36,5 +36,5 @@ public interface UserPaperService extends IService<UserPaper> {
     /**
      * 更新用户答题记录状态，计算用户总成绩
      */
-    UserPaper userPaperSub(String userPaperId);
+    UserPaper userPaperSub(UserInfo userInfo, String userPaperId);
 }

@@ -73,7 +73,7 @@ public class PcExamController {
             return "/pc/exam/examerror";
         }
         List<String> userPaperQuestionIds = userPaperQuestionService.getPaperQ(userPaper).stream().map(UserPaperQuestion::getId).collect(Collectors.toList());
-        model.addAttribute("exam", exam);
+        model.addAttribute("examTitle", exam.getTitle());
         model.addAttribute("userPaperQuestionIds", String.join(",", userPaperQuestionIds));
         model.addAttribute("endTime", ExamUtil.examEndTime(exam, userPaper));
         model.addAttribute("userPaperId", userPaper.getId());
@@ -149,7 +149,8 @@ public class PcExamController {
         if (StringUtils.isBlank(answers)) {
             return RestResult.OK("未作答");
         }
-        userPaperQuestionService.upUserPaperQuestionAnswers(qid, answers);
+        UserInfo userInfo = Utils.getUserInfo(request);
+        userPaperQuestionService.upUserPaperQuestionAnswers(userInfo, qid, answers);
         return RestResult.OK();
     }
 
@@ -161,8 +162,9 @@ public class PcExamController {
      */
     @RequestMapping("examPageSubmit")
     @ResponseBody
-    public RestResult examPageSubmit(String userPaperId) {
-        userPaperService.userPaperSub(userPaperId);
+    public RestResult examPageSubmit(HttpServletRequest request, String userPaperId) {
+        UserInfo userInfo = Utils.getUserInfo(request);
+        userPaperService.userPaperSub(userInfo, userPaperId);
         return RestResult.OK();
     }
 
@@ -182,11 +184,28 @@ public class PcExamController {
         return "/pc/exam/examok";
     }
 
+    /**
+     * 哪些题目未作答
+     *
+     * @param userPaperId
+     * @return
+     */
     @RequestMapping("checkBlankNum")
     @ResponseBody
     public RestResult checkBlankNum(String userPaperId) {
         UserPaper userPaper = userPaperService.getById(userPaperId);
         List<Integer> integerList = userPaperQuestionService.checkBlankNum(userPaper);
         return RestResult.OK(integerList);
+    }
+
+    /**
+     * 答题卡显示
+     */
+    @RequestMapping("examSheet")
+    public String examSheet(String userPaperId, Model model) {
+        UserPaper userPaper = userPaperService.getById(userPaperId);
+        List<UserPaperQuestion> userPaperQuestionList = userPaperQuestionService.getPaperQ(userPaper);
+        model.addAttribute("userPaperQuestionList", userPaperQuestionList);
+        return "/pc/exam/examsheet";
     }
 }
