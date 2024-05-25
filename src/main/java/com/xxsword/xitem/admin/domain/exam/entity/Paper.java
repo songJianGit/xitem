@@ -13,7 +13,7 @@ import java.io.Serializable;
 public class Paper extends BaseEntity implements Serializable {
 
     private static final long serialVersionUID = 202L;
-    @Column
+    @Column(length = 100)
     @ColumnComment("试卷标题")
     private String title;
 

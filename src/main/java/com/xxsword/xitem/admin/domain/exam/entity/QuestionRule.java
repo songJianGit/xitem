@@ -14,7 +14,7 @@ import java.io.Serializable;
 public class QuestionRule extends BaseEntity implements Serializable {
 
     private static final long serialVersionUID = 206L;
-    @Column
+    @Column(length = 100)
     @ColumnComment("标题")
     private String title;
 

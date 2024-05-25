@@ -55,17 +55,6 @@
 
     <div class="card-body">
         <div id="custom-toolbar">
-            <#--            <div class="form-inline" role="form">-->
-            <#--                <button type="button" id="saveBtn" class="btn btn-primary m-r-5">-->
-            <#--                    保存-->
-            <#--                </button>-->
-            <#--                <button type="button" id="addQuestion" class="btn btn-primary m-r-5">-->
-            <#--                    选择考题-->
-            <#--                </button>-->
-            <#--                <button type="button" id="delBtn" class="btn btn-primary m-r-5">-->
-            <#--                    删除-->
-            <#--                </button>-->
-            <#--            </div>-->
             <form class="form-inline" action="#!" role="form">
                 <div class="input-group m-r-5">
                     <div class="input-group-prepend">
@@ -73,7 +62,7 @@
                     </div>
                     <input type="text" class="form-control" id="questionRuleTitle" name="title"
                            value="${questionRule.title!}"
-                           placeholder="规则名称">
+                           placeholder="规则名称" maxlength="100">
                 </div>
                 <div class="input-group m-r-5">
                     <div class="input-group-prepend">

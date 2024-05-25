@@ -28,7 +28,7 @@
                                     <input type="hidden" name="id" value="${paper.id!}"/>
                                     <div class="form-group col-12">
                                         <label for="title">试卷标题</label>
-                                        <textarea class="form-control" name="title">${paper.title!}</textarea>
+                                        <input id="title" maxlength="100" class="form-control" name="title" value="${paper.title!}"/>
                                     </div>
                                     <div class="form-group col-md-12">
                                         <button type="submit" class="btn btn-primary">保 存</button>

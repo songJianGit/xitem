@@ -28,7 +28,7 @@
                                     <input type="hidden" name="id" value="${exam.id!}"/>
                                     <div class="form-group col-6">
                                         <label for="title">考试标题</label>
-                                        <input type="text" class="form-control" id="title" name="title"
+                                        <input type="text" class="form-control" id="title" name="title" maxlength="100"
                                                value="${exam.title!}" placeholder="考试标题" required/>
                                     </div>
                                     <div class="form-group col-6">

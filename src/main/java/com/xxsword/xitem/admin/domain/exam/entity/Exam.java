@@ -14,7 +14,7 @@ import java.io.Serializable;
 public class Exam extends BaseEntity implements Serializable {
 
     private static final long serialVersionUID = 201L;
-    @Column
+    @Column(length = 100)
     @ColumnComment("考试标题")
     private String title;
 

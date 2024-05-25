@@ -28,7 +28,7 @@
                                     <input type="hidden" name="id" value="${question.id!}"/>
                                     <div class="form-group col-12">
                                         <label for="title">题目描述</label>
-                                        <textarea class="form-control" name="title">${question.title!}</textarea>
+                                        <textarea maxlength="255" class="form-control" name="title">${question.title!}</textarea>
                                     </div>
                                     <div class="form-group col-6">
                                         <label for="qclass">题目分类</label>
@@ -143,8 +143,8 @@
 
     $('#addOption').click(function () {
         let num = $('#optionBox').find('.optionRow').length;
-        if (num >= 26) {
-            layer.msg("最多26个选项");
+        if (num >= 12) {
+            layer.msg("最多12个选项");
         } else {
             $('#optionBox').append(getHtm('', qtype, '', 0, num));
         }
@@ -208,7 +208,7 @@
         }
         htm += '<div class="form-row m-b-5 optionRow" data-optionid="' + optionid + '">';
         htm += '<div class="col-7">';
-        htm += '<input ' + readonly + ' type="text" class="form-control" value="' + title + '" name="optionTitle">';
+        htm += '<input ' + readonly + ' type="text" class="form-control" value="' + title + '" name="optionTitle" maxlength="255">';
         htm += '</div>';
         htm += '<div class="col-2">';
         htm += '<select class="form-control" name="optionRight">';

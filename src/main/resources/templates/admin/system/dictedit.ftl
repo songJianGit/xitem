@@ -28,17 +28,17 @@
                                     <input type="hidden" name="id" value="${dict.id!}"/>
                                     <div class="form-group col-6">
                                         <label for="name">描述</label>
-                                        <input type="text" class="form-control" id="name" name="name"
+                                        <input type="text" class="form-control" id="name" name="name" maxlength="255"
                                                value="${dict.name!}" placeholder="描述" required/>
                                     </div>
                                     <div class="form-group col-6">
                                         <label for="val">值</label>
-                                        <input type="text" class="form-control" id="val" name="val"
-                                               value="${dict.val!}" placeholder="值" />
+                                        <input type="text" class="form-control" id="val" name="val" maxlength="255"
+                                               value="${dict.val!}" placeholder="值"/>
                                     </div>
                                     <div class="form-group col-6">
                                         <label for="type">类型</label>
-                                        <input type="text" class="form-control" id="type" name="type"
+                                        <input type="text" class="form-control" id="type" name="type" maxlength="255"
                                                value="${dict.type!}" placeholder="类型" required/>
                                     </div>
                                     <div class="form-group col-6">

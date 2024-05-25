@@ -68,7 +68,7 @@
                                             <th data-field="etime">结束时间</th>
                                             <th data-field="duration">考试时长（分钟）</th>
                                             <th data-field="exstatus" data-formatter="exstatus">状态</th>
-                                            <th data-field="id" data-formatter="caozuo">操作</th>
+                                            <th data-field="id" data-formatter="caozuo" data-width="145px">操作</th>
                                         </tr>
                                         </thead>
                                     </table>

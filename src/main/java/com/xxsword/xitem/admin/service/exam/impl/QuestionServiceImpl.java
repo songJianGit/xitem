@@ -240,7 +240,11 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
         saveOrUpdate(question);
         List<QuestionOption> questionOptionList = new ArrayList<>();
         JSONArray jsonArray = JSONArray.parseArray(optionJson);
-        for (int i = 0; i < jsonArray.size(); i++) {
+        int optionSize = jsonArray.size();
+        if (optionSize > 12) {
+            optionSize = 12;// 最多12个，因为12*19+11=240刚好在255以内，存储答案的字段能存下
+        }
+        for (int i = 0; i < optionSize; i++) {
             JSONObject option = jsonArray.getJSONObject(i);
             String optionId = option.getString("optionId");
             String optionTitle = option.getString("optionTitle");
