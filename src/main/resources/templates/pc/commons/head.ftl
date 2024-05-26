@@ -5,3 +5,4 @@
 <link href="${ctx.contextPath}/static/plugins/admin-template/css/materialdesignicons.min.css" rel="stylesheet">
 <#--动画效果-->
 <link href="${ctx.contextPath}/static/plugins/admin-template/css/animate.min.css" rel="stylesheet">
+<link href="${ctx.contextPath}/static/pc/commons/css/style.css" rel="stylesheet">

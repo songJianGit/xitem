@@ -1,5 +1,6 @@
 package com.xxsword.xitem.pc;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.xxsword.xitem.admin.domain.exam.entity.*;
 import com.xxsword.xitem.admin.domain.exam.vo.QuestionVO;
 import com.xxsword.xitem.admin.domain.system.entity.UserInfo;
@@ -34,19 +35,26 @@ public class PcExamController {
     @Autowired
     private QuestionRuleService questionRuleService;
 
+    @RequestMapping("index")
+    public String index( Model model) {
+        LambdaQueryWrapper<Exam> examQ = new LambdaQueryWrapper<Exam>().eq(Exam::getStatus, 1);
+        List<Exam> examList = examService.list(examQ);
+        model.addAttribute("examList", examList);
+        return "/pc/exam/examindex";
+    }
     /**
-     * 扫码后显示页面，此页面填写参考人的个人信息
+     * 考试简介页
      *
      * @param eid
      * @param model
      * @return
      */
-    @RequestMapping("index/{eid}")
-    public String index(@PathVariable String eid, Model model) {
+    @RequestMapping("{eid}")
+    public String examid(@PathVariable String eid, Model model) {
         Exam exam = examService.getById(eid);
         model.addAttribute("exam", exam);
         model.addAttribute("paperScore", questionRuleService.getPaperScore(exam.getPaperid()));
-        return "/pc/exam/index";
+        return "/pc/exam/exam";
     }
 
     /**
@@ -139,7 +147,7 @@ public class PcExamController {
             QuestionVO questionVO = questionService.getQuestionVO(userPaperQuestion, true, false, true);
             return RestResult.OK(questionVO);
         } else {
-            return RestResult.Fail("考试状态异常，试下重新进入");
+            return RestResult.Fail("考试状态异常，请重新进入");
         }
     }
 
@@ -179,7 +187,7 @@ public class PcExamController {
         Exam exam = examService.getById(userPaper.getExamid());
         model.addAttribute("score", userPaper.getScore());// 得分
         model.addAttribute("maxscore", questionRuleService.getPaperScore(exam.getPaperid()));// 总分
-        model.addAttribute("examname", exam.getTitle());
+        model.addAttribute("examtitle", exam.getTitle());
         model.addAttribute("paperduration", DateUtil.sToHHmmss(DateUtil.differSecond(userPaper.getCdate(), userPaper.getSubdate(), DateUtil.sdfA1)));// 考试用时
         return "/pc/exam/examok";
     }

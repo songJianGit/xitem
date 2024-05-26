@@ -1,18 +1,23 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh">
 <head>
     <title>考试完成</title>
     <#include "../commons/head.ftl"/>
+    <style>
+        .exam-item {
+            margin: 13px 0;
+        }
+    </style>
 </head>
-<body>
-<div class="card">
-    <div class="card-body text-center">
-        <div>考试标题：${examname!}</div>
-        <div>考试得分：${score!}</div>
-        <div>姓名：${Session.puser.username!}</div>
-        <div>总分：${maxscore!}</div>
-        <div>用时：${paperduration!}</div>
-        <a href="${ctx.contextPath}/pc/index">返回首页</a>
+<body class="center-vh">
+<div class="card card-clear-420">
+    <div class="card-body">
+        <div class="exam-item">考试标题：${examtitle!}</div>
+        <div class="exam-item">考试得分：${score!}</div>
+        <div class="exam-item">姓名：${Session.puser.username!}</div>
+        <div class="exam-item">总分：${maxscore!}</div>
+        <div class="exam-item">用时：${paperduration!}</div>
+        <div class="exam-item"><a href="${ctx.contextPath}/pcindex">返回首页</a></div>
     </div>
 </div>
 </body>

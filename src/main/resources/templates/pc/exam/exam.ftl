@@ -9,8 +9,8 @@
         }
     </style>
 </head>
-<body>
-<div class="card" style="border: 0">
+<body class="center-vh">
+<div class="card card-clear-420">
     <div class="card-body">
         <div class="exam-item">考试标题：${exam.title!}</div>
         <div class="exam-item">开始时间：${exam.stime!}</div>

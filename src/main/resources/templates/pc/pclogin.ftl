@@ -4,16 +4,6 @@
     <title>登录</title>
     <#include "commons/head.ftl"/>
     <style>
-        /* 垂直水平居中 */
-        .center-vh {
-            display: -webkit-box;
-            display: flex;
-            -webkit-box-pack: center;
-            justify-content: center;
-            -webkit-box-align: center;
-            align-items: center;
-            height: 100%;
-        }
         .login-form .has-feedback {
             position: relative;
         }
@@ -119,7 +109,7 @@
                 },
                 success: function (data) {
                     if (data.result) {
-                        window.location.href = '${ctx.contextPath}/pc/index';
+                        window.location.href = '${ctx.contextPath}/pcindex';
                     } else {
                         $('#captchaInput').val("");
                         changeImage();

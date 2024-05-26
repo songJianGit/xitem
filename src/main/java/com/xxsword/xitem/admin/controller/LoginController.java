@@ -66,6 +66,7 @@ public class LoginController extends BaseController {
         }
         userInfoService.setUserInfoRoleAndFun(userInfo, true, true);
         httpSession.setAttribute(Constant.USER_INFO, userInfo);
+        userInfoService.clearLockUser(userInfo.getId());
         return RestResult.Codes(Codes.LOGIN_OK);
     }
 

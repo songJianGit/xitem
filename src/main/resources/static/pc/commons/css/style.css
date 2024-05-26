@@ -1,0 +1,60 @@
+/* 垂直水平居中 */
+.center-vh {
+    display: -webkit-box;
+    display: flex;
+    -webkit-box-pack: center;
+    justify-content: center;
+    -webkit-box-align: center;
+    align-items: center;
+    height: 100%;
+}
+
+.card-clear-420 {
+    border: 0;
+    width: 420px;
+    margin: 13px;
+    background-color: #eeeeee;
+
+}
+
+.pc-main {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.pc-body {
+    padding-top: 13px;
+}
+
+.pc-header {
+    display: flex;
+    justify-content: space-between;
+    background-color: #4d5259;
+}
+
+.pc-header-menu {
+    display: flex;
+    background-color: #4d5259;
+}
+
+.pc-header-menu-item {
+    padding: 13px;
+}
+
+.pc-header-menu-item a {
+    color: #fff;
+}
+
+.pc-header-login {
+    display: flex;
+    justify-content: space-around;
+}
+
+.pc-header-login-item {
+    padding: 13px;
+    color: #fff;
+}
+
+.pc-header-login-item a {
+    color: #fff;
+}

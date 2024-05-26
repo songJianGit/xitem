@@ -37,7 +37,7 @@ public interface UserInfoService extends IService<UserInfo> {
      * 校验本手机号是否可用
      *
      * @param phoneNo
-     * @param userId    当前用户
+     * @param userId  当前用户
      * @return true-还没有人用  false-已有人使用
      */
     boolean checkPhoneNo(String phoneNo, String userId);
@@ -65,12 +65,20 @@ public interface UserInfoService extends IService<UserInfo> {
     UserInfo getUserInfoByloginName(String loginName);
 
     /**
-     * 检查用户输入错误次数，是否在1分钟内超过5次错误，超过则锁定。
+     * 用户登录次数，是否在1分钟内超过5次还没成功触发clearLockUser，则锁定。
      *
      * @param loginName
      * @return false-未被锁定 true-已锁定
      */
     boolean lockUser(String loginName);
+
+    /**
+     * 清除该用户的登录记录
+     *
+     * @param userId
+     * @return
+     */
+    void clearLockUser(String userId);
 
     /**
      * 修改用户密码

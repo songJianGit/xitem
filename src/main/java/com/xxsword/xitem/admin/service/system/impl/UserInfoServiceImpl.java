@@ -173,6 +173,14 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
     }
 
     @Override
+    public void clearLockUser(String userId) {
+        UserInfo userInfoUp = new UserInfo();
+        userInfoUp.setId(userId);
+        userInfoUp.setPassworderror("");
+        updateById(userInfoUp);
+    }
+
+    @Override
     public RestResult changePwd(String userId, String p, String p1, String p2) {
         UserInfo user = getById(userId);
         if (p.equals(user.getPassword())) {
