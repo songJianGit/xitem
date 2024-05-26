@@ -29,7 +29,7 @@ public class LoginInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
-        // 验证用户是否登陆
+        // 验证用户是否登录
         Object o = request.getSession().getAttribute(Constant.USER_INFO);
         if (o == null) {
             return back(request, response);

@@ -2,334 +2,93 @@ package com.xxsword.xitem.admin.utils;
 
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.RenderingHints;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.Arrays;
 import java.util.Random;
 import javax.imageio.ImageIO;
 
-/**
- * 这个工具类是参考这篇文章https://www.jianshu.com/p/ea1e3f20e001而来
- */
 public class CaptchaUtils {
-
-    //使用到Algerian字体，系统里没有的话需要安装字体，字体只显示大写，去掉了几个容易混淆的字符
-    public static final String VERIFY_CODES = "23456789ABCDEFXY";
-    // 纯数字
-    public static final String VERIFY_CODES_NUM = "0123456789";
-    private static Random random = new Random();
-
-
-    /**
-     * 验证码对象
-     *
-     * @author
-     */
-    public static class Verify {
-
-        private String code;//如 1 + 2
-
-        private Integer value;//如  3
-
-        public String getCode() {
-            return code;
-        }
-
-        public void setCode(String code) {
-            this.code = code;
-        }
-
-        public Integer getValue() {
-            return value;
-        }
-
-        public void setValue(Integer value) {
-            this.value = value;
-        }
-    }
-
-    /**
-     * 使用系统默认字符源生成验证码
-     *
-     * @return
-     */
-    public static Verify generateVerify() {
-        int number1 = new Random().nextInt(10) + 1;
-        int number2 = new Random().nextInt(10) + 1;
-        Verify entity = new Verify();
-        entity.setCode(number1 + " x " + number2);
-        entity.setValue(number1 + number2);
-        return entity;
-    }
-
-    /**
-     * 使用系统默认字符源生成验证码
-     *
-     * @param verifySize 验证码长度
-     * @return
-     */
-    public static String generateVerifyCode(int verifySize) {
-        return generateVerifyCode(verifySize, VERIFY_CODES);
-    }
-
-    /**
-     * 生成验证码(纯数字)
-     *
-     * @param verifySize
-     * @return
-     */
-    public static String generateVerifyCodeNum(int verifySize) {
-        return generateVerifyCode(verifySize, VERIFY_CODES_NUM);
-    }
+    private static final String CHARACTERS = "ABCDEFGHJKMNPRSTUVWXYZ12345678";
+    private static final int DEFAULT_WIDTH = 100;
+    private static final int DEFAULT_HEIGHT = 40;
+    private static final int CODE_LENGTH = 4;
+    private static final Random RANDOM = new Random();
 
 
     /**
-     * 使用指定源生成验证码
+     * 生成验证码并输出到OutputStream.
      *
-     * @param verifySize 验证码长度
-     * @param sources    验证码字符源
-     * @return
+     * @param width        图像宽度
+     * @param height       图像高度
+     * @param outputStream 输出流
+     * @return 验证码文本内容
      */
-    public static String generateVerifyCode(int verifySize, String sources) {
-        if (sources == null || sources.length() == 0) {
-            sources = VERIFY_CODES;
-        }
-        int codesLen = sources.length();
-        Random rand = new Random(System.currentTimeMillis());
-        StringBuilder verifyCode = new StringBuilder(verifySize);
-        for (int i = 0; i < verifySize; i++) {
-            verifyCode.append(sources.charAt(rand.nextInt(codesLen - 1)));
-        }
-        return verifyCode.toString();
-    }
+    public static String generateCaptcha(int width, int height, OutputStream outputStream) throws IOException {
+        // 设置默认尺寸
+        if (width <= 0) width = DEFAULT_WIDTH;
+        if (height <= 0) height = DEFAULT_HEIGHT;
 
-    /**
-     * 生成随机验证码文件,并返回验证码值
-     *
-     * @param w
-     * @param h
-     * @param outputFile
-     * @param verifySize
-     * @return
-     * @throws IOException
-     */
-    public static String outputVerifyImage(int w, int h, File outputFile, int verifySize) throws IOException {
-        String verifyCode = generateVerifyCode(verifySize);
-        outputImage(w, h, outputFile, verifyCode);
-        return verifyCode;
-    }
+        // 创建BufferedImage对象
+        BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+        Graphics2D g = image.createGraphics();
 
-    /**
-     * 输出随机验证码图片流,并返回验证码值
-     *
-     * @param w
-     * @param h
-     * @param os
-     * @param verifySize
-     * @return
-     * @throws IOException
-     */
-    public static String outputVerifyImage(int w, int h, OutputStream os, int verifySize) throws IOException {
-        String verifyCode = generateVerifyCode(verifySize);
-        outputImage(w, h, os, verifyCode);
-        return verifyCode;
-    }
+        // 设置背景色
+        g.setColor(Color.WHITE);
+        g.fillRect(0, 0, width, height);
 
-    /**
-     * 生成指定验证码图像文件
-     *
-     * @param w
-     * @param h
-     * @param outputFile
-     * @param code
-     * @throws IOException
-     */
-    public static void outputImage(int w, int h, File outputFile, String code) throws IOException {
-        if (outputFile == null) {
-            return;
-        }
-        File dir = outputFile.getParentFile();
-        if (!dir.exists()) {
-            dir.mkdirs();
-        }
-        try {
-            outputFile.createNewFile();
-            FileOutputStream fos = new FileOutputStream(outputFile);
-            outputImage(w, h, fos, code);
-            fos.close();
-        } catch (IOException e) {
-            throw e;
-        }
-    }
+        // 设置字体
+        Font font = new Font("DejaVu Sans", Font.PLAIN, height * 3 / 4);
+        g.setFont(font);
+        // 生成验证码文本
+        StringBuilder captchaText = new StringBuilder(CODE_LENGTH);
+        for (int i = 0; i < CODE_LENGTH; i++) {
+            char randomChar = CHARACTERS.charAt(RANDOM.nextInt(CHARACTERS.length()));
+            captchaText.append(randomChar);
 
-    /**
-     * 输出指定验证码图片流
-     *
-     * @param w
-     * @param h
-     * @param os
-     * @param code
-     * @throws IOException
-     */
-    public static void outputImage(int w, int h, OutputStream os, String code) throws IOException {
-        int verifySize = code.length();
-        BufferedImage image = new BufferedImage(w, h, BufferedImage.TYPE_INT_RGB);
-        Random rand = new Random();
-        Graphics2D g2 = image.createGraphics();
-        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        Color[] colors = new Color[5];
-        Color[] colorSpaces = new Color[]{Color.WHITE, Color.CYAN,
-                Color.GRAY, Color.LIGHT_GRAY, Color.MAGENTA, Color.ORANGE,
-                Color.PINK, Color.YELLOW};
-        float[] fractions = new float[colors.length];
-        for (int i = 0; i < colors.length; i++) {
-            colors[i] = colorSpaces[rand.nextInt(colorSpaces.length)];
-            fractions[i] = rand.nextFloat();
-        }
-        Arrays.sort(fractions);
+            // 计算字符位置
+            AffineTransform affineTransform = new AffineTransform();
+            affineTransform.setToRotation(Math.toRadians(RANDOM.nextBoolean() ? -5 : 5), Utils.div(i * width, CODE_LENGTH, 2), Utils.div(height, 2, 2));
+            g.setTransform(affineTransform);
 
-        g2.setColor(Color.GRAY);// 设置边框色
-        g2.fillRect(0, 0, w, h);
-
-        Color c = getRandColor(200, 250);
-        g2.setColor(c);// 设置背景色
-        g2.fillRect(0, 2, w, h - 4);
-
-        //绘制干扰线
-        Random random = new Random();
-        g2.setColor(getRandColor(160, 200));// 设置线条的颜色
-        for (int i = 0; i < 20; i++) {
-            int x = random.nextInt(w - 1);
-            int y = random.nextInt(h - 1);
-            int xl = random.nextInt(6) + 1;
-            int yl = random.nextInt(12) + 1;
-            g2.drawLine(x, y, x + xl + 40, y + yl + 20);
+            // 绘制字符
+            g.setColor(new Color(RANDOM.nextInt(100), RANDOM.nextInt(100), RANDOM.nextInt(100)));
+            g.drawString(String.valueOf(randomChar), i * width / CODE_LENGTH, height / 2 + height / 4);
         }
 
-        // 添加噪点
-        /*float yawpRate = 0.05f;// 噪声率
-        int area = (int) (yawpRate * w * h);
+        // 控制噪点的颜色和透明度
+        int alpha = 255; // Alpha值，255表示完全不透明，0表示完全透明==》【好像没有用】
+//        int red = RANDOM.nextInt(256); // 随机红色分量
+//        int green = RANDOM.nextInt(256); // 随机绿色分量
+//        int blue = RANDOM.nextInt(256); // 随机蓝色分量
+        int red = 240, green = 240, blue = 240;
+        // 结合Alpha通道得到最终的RGB值
+        int rgb = (alpha << 24) | (red << 16) | (green << 8) | blue;
+
+        // 添加噪点，控制噪点大小
+        float yawpRate = 0.002f; // 噪声率
+        int area = (int) (yawpRate * width * height);
+        int noiseSize = 7; // 新增：定义噪点的大小（例如2x2像素的方块）
         for (int i = 0; i < area; i++) {
-            int x = random.nextInt(w);
-            int y = random.nextInt(h);
-            int rgb = getRandomIntColor();
-            image.setRGB(x, y, rgb);
-        }*/
+            int x = RANDOM.nextInt(width - noiseSize + 1); // 确保噪声块不会超出边界
+            int y = RANDOM.nextInt(height - noiseSize + 1);
 
-        shear(g2, w, h, c);// 使图片扭曲
-
-        g2.setColor(getRandColor(100, 160));
-        int fontSize = h - 4;
-//        Font font = new Font("Algerian", Font.ITALIC, fontSize);
-        Font font = new Font("Campanile", Font.ITALIC, fontSize);
-        g2.setFont(font);
-        char[] chars = code.toCharArray();
-        for (int i = 0; i < verifySize; i++) {
-            AffineTransform affine = new AffineTransform();
-            affine.setToRotation(Math.PI / 4 * rand.nextDouble() * (rand.nextBoolean() ? 1 : -1), (w / verifySize) * i + fontSize / 2, h / 2);
-            g2.setTransform(affine);
-            g2.drawChars(chars, i, 1, ((w - 10) / verifySize) * i + 5, h / 2 + fontSize / 2 - 5);
-        }
-
-        g2.dispose();
-        ImageIO.write(image, "jpg", os);
-    }
-
-    private static Color getRandColor(int fc, int bc) {
-        if (fc > 255)
-            fc = 255;
-        if (bc > 255)
-            bc = 255;
-        int r = fc + random.nextInt(bc - fc);
-        int g = fc + random.nextInt(bc - fc);
-        int b = fc + random.nextInt(bc - fc);
-        return new Color(r, g, b);
-    }
-
-    private static int getRandomIntColor() {
-        int[] rgb = getRandomRgb();
-        int color = 0;
-        for (int c : rgb) {
-            color = color << 8;
-            color = color | c;
-        }
-        return color;
-    }
-
-    private static int[] getRandomRgb() {
-        int[] rgb = new int[3];
-        for (int i = 0; i < 3; i++) {
-            rgb[i] = random.nextInt(255);
-        }
-        return rgb;
-    }
-
-    private static void shear(Graphics g, int w1, int h1, Color color) {
-        shearX(g, w1, h1, color);
-        shearY(g, w1, h1, color);
-    }
-
-    private static void shearX(Graphics g, int w1, int h1, Color color) {
-
-        int period = random.nextInt(2);
-
-        boolean borderGap = true;
-        int frames = 1;
-        int phase = random.nextInt(2);
-
-        for (int i = 0; i < h1; i++) {
-            double d = (double) (period >> 1)
-                    * Math.sin((double) i / (double) period
-                    + (6.2831853071795862D * (double) phase)
-                    / (double) frames);
-            g.copyArea(0, i, w1, 1, (int) d, 0);
-            if (borderGap) {
-                g.setColor(color);
-                g.drawLine((int) d, i, 0, i);
-                g.drawLine((int) d + w1, i, w1, i);
+            // 画一个noiseSize x noiseSize的矩形噪点
+            for (int dx = 0; dx < noiseSize; dx++) {
+                for (int dy = 0; dy < noiseSize; dy++) {
+                    image.setRGB(x + dx, y + dy, rgb);
+                }
             }
         }
 
+        // 输出到OutputStream
+        ImageIO.write(image, "JPEG", outputStream);
+        outputStream.flush();
+        outputStream.close();
+
+        return captchaText.toString().toUpperCase();
     }
-
-    private static void shearY(Graphics g, int w1, int h1, Color color) {
-
-        int period = random.nextInt(40) + 10; // 50;
-
-        boolean borderGap = true;
-        int frames = 20;
-        int phase = 7;
-        for (int i = 0; i < w1; i++) {
-            double d = (double) (period >> 1)
-                    * Math.sin((double) i / (double) period
-                    + (6.2831853071795862D * (double) phase)
-                    / (double) frames);
-            g.copyArea(i, 0, 1, h1, 0, (int) d);
-            if (borderGap) {
-                g.setColor(color);
-                g.drawLine(i, (int) d, i, 0);
-                g.drawLine(i, (int) d + h1, i, h1);
-            }
-
-        }
-
-    }
-
-//    public static void main(String[] args) throws IOException {
-//        File dir = new File("F:/verifies");
-//        int w = 200, h = 80;
-//        for (int i = 0; i < 50; i++) {
-//            String verifyCode = generateVerifyCode(4);
-//            File file = new File(dir, verifyCode + ".jpg");
-//            outputImage(w, h, file, verifyCode);
-//        }
-//    }
 
 }

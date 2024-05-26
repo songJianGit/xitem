@@ -4,6 +4,16 @@
     <title>登录</title>
     <#include "commons/head.ftl"/>
     <style>
+        /* 垂直水平居中 */
+        .center-vh {
+            display: -webkit-box;
+            display: flex;
+            -webkit-box-pack: center;
+            justify-content: center;
+            -webkit-box-align: center;
+            align-items: center;
+            height: 100%;
+        }
         .login-form .has-feedback {
             position: relative;
         }
@@ -32,10 +42,10 @@
         }
     </style>
 </head>
-<body>
-<div class="card p-5" style="border: 0">
-    <div class="text-center mb-3">
-        <h5>xitem</h5>
+<body class="center-vh">
+<div class="p-5 mt-5">
+    <div class="text-center mb-4">
+        <h3>xitem</h3>
     </div>
     <form action="#!" method="post" class="login-form">
         <div class="form-group has-feedback">
@@ -54,7 +64,7 @@
                 <input type="text" id="captchaInput" class="form-control" placeholder="验证码" value="1234">
             </div>
             <div class="col-6 text-right">
-                <img src="${ctx.contextPath}/getCaptcha" class="pull-right" id="captchaImg" style="cursor: pointer;"
+                <img src="${ctx.contextPath}/getCaptcha" class="pull-right" id="captchaImg" style="cursor: pointer;border: 1px solid #eeeeee;"
                      onclick="changeImage();"
                      title="点击刷新" alt="captcha">
             </div>
@@ -64,7 +74,6 @@
             <button type="button" class="btn btn-block btn-primary" onclick="logBtn()">立即登录</button>
         </div>
     </form>
-
 </div>
 <script type="text/javascript" src="${ctx.contextPath}/static/plugins/admin-template/js/jquery.min.js"></script>
 <script type="text/javascript" src="${ctx.contextPath}/static/plugins/admin-template/js/bootstrap.min.js"></script>

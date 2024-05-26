@@ -79,15 +79,9 @@ public class LoginController extends BaseController {
             response.setHeader("Cache-Control", "no-cache");
             response.setDateHeader("Expires", 0);
             response.setContentType("image/jpeg");
-            //生成随机字串
-//            String verifyCode = CaptchaUtils.generateVerifyCode(4);
-            String verifyCode = "1234";
-            //存入会话session
-            HttpSession session = request.getSession(true);
-            session.setAttribute(Constant.CAPTCHA, verifyCode.toLowerCase());
-            //生成图片
-            int w = 120, h = 38;
-            CaptchaUtils.outputImage(w, h, response.getOutputStream(), verifyCode);
+            String verifyCode = CaptchaUtils.generateCaptcha(0, 37, response.getOutputStream());
+            verifyCode = "1234";
+            request.getSession().setAttribute(Constant.CAPTCHA, verifyCode.toLowerCase());
         } catch (Exception e) {
             log.error("获取验证码异常：{}", e.getMessage());
         }
