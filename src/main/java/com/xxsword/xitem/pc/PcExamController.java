@@ -36,12 +36,13 @@ public class PcExamController {
     private QuestionRuleService questionRuleService;
 
     @RequestMapping("index")
-    public String index( Model model) {
+    public String index(Model model) {
         LambdaQueryWrapper<Exam> examQ = new LambdaQueryWrapper<Exam>().eq(Exam::getStatus, 1);
         List<Exam> examList = examService.list(examQ);
         model.addAttribute("examList", examList);
         return "/pc/exam/examindex";
     }
+
     /**
      * 考试简介页
      *
@@ -134,9 +135,9 @@ public class PcExamController {
      */
     @RequestMapping("getQuestion")
     @ResponseBody
-    public RestResult getQuestion(HttpServletRequest request, String userPaperId, String nextQid) {
+    public RestResult getQuestion(HttpServletRequest request, String nextQid) {
         UserPaperQuestion userPaperQuestion = userPaperQuestionService.getById(nextQid);
-        UserPaper userPaper = userPaperService.getById(userPaperId);
+        UserPaper userPaper = userPaperService.getById(userPaperQuestion.getUserpaperid());
         if (userPaper == null) {
             return RestResult.Fail("参数异常");
         }

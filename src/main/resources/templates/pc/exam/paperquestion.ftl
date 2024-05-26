@@ -149,7 +149,6 @@
             url: "${ctx.contextPath}/pc/exam/getQuestion",
             cache: false,// 不缓存
             data: {
-                userPaperId: '${userPaperId!}',
                 nextQid: userPaperQuestions[pageNum - 1]
             },
             success: function (data) {
