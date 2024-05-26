@@ -1,15 +1,15 @@
 package com.xxsword.xitem.admin.domain.system.vo;
 
 public class UpFileVO {
-    private String path;
+    private String url;
     private String name;
 
-    public String getPath() {
-        return path;
+    public String getUrl() {
+        return url;
     }
 
-    public void setPath(String path) {
-        this.path = path;
+    public void setUrl(String url) {
+        this.url = url;
     }
 
     public String getName() {

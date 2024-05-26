@@ -14,7 +14,6 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.*;
-import java.net.URLEncoder;
 import java.nio.file.Files;
 import java.util.*;
 
@@ -47,7 +46,7 @@ public class UpLoadUtil {
         List<UpFileVO> list = new ArrayList<>();
         for (MultipartFile item : files) {
             UpFileVO m = new UpFileVO();
-            m.setPath(upload(item, path));
+            m.setUrl(upload(item, path));
             m.setName(item.getOriginalFilename());
             list.add(m);
         }

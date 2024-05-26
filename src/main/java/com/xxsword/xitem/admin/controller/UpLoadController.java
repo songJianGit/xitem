@@ -4,10 +4,13 @@ import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.xxsword.xitem.admin.constant.Constant;
+import com.xxsword.xitem.admin.domain.system.entity.UserInfo;
 import com.xxsword.xitem.admin.model.RestResult;
 import com.xxsword.xitem.admin.model.UpState;
+import com.xxsword.xitem.admin.service.system.UploadLogService;
 import com.xxsword.xitem.admin.utils.UpLoadUtil;
 import com.xxsword.xitem.admin.utils.Utils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,6 +25,9 @@ import java.util.Map;
 @Controller
 @RequestMapping("admin/upload")
 public class UpLoadController {
+
+    @Autowired
+    private UploadLogService uploadLogService;
 
     /**
      * 分片上传
@@ -103,7 +109,7 @@ public class UpLoadController {
      */
     @RequestMapping("saveFile")
     @ResponseBody
-    public RestResult saveFile(String infos) {
+    public RestResult saveFile(HttpServletRequest request, String infos) {
         if (StringUtils.isBlank(infos)) {
             return null;
         }
@@ -120,6 +126,8 @@ public class UpLoadController {
             map.put("size", size);
             urls.add(map);
         }
+        UserInfo userInfo = Utils.getUserInfo(request);
+        uploadLogService.saveUploadLogList(userInfo.getId(), urls);
         return RestResult.OK(urls);
     }
 
