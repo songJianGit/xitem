@@ -3,20 +3,18 @@
 <head>
     <title>考试</title>
     <#include "../commons/head.ftl"/>
-    <style>
-        .exam-item {
-            padding: 7px;
-            margin-bottom: 3px;
-        }
-    </style>
 </head>
 <body>
 <div class="pc-main">
     <#include "../commons/header.ftl"/>
     <div class="pc-body">
         <#list examList as item>
-            <div class="exam-item">
-                <a href="${ctx.contextPath}/pc/exam/${item.id!}">${item.title!}</a>
+            <div class="card mb-3">
+                <div class="card-body">
+                    <div>${item.title!}</div>
+                    <div>${item.stime!}&nbsp;-&nbsp;${item.etime!}</div>
+                </div>
+                <div class="card-footer"><a href="${ctx.contextPath}/pc/exam/${item.id!}">进入</a></div>
             </div>
         </#list>
     </div>

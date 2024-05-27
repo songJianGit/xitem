@@ -36,7 +36,8 @@ public class LoginController extends BaseController {
      * 用户登录
      */
     @GetMapping("login")
-    public String login() {
+    public String login(HttpServletRequest request) {
+        request.getSession();
         return "/admin/login";
     }
 

@@ -13,6 +13,7 @@ public class PcLoginController extends BaseController {
 
     @GetMapping("pclogin")
     public String pclogin(HttpServletRequest request) {
+        request.getSession();
         return "/pc/pclogin";
     }
 
