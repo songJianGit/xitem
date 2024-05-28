@@ -13,7 +13,6 @@ import java.io.Serializable;
 public class QRS extends BaseEntity implements Serializable {
 
     private static final long serialVersionUID = 203L;
-    @Index
     @Column(length = 50)
     @Unique(columns = {"qrid", "qid"})
     @ColumnComment("规则id")
@@ -23,6 +22,7 @@ public class QRS extends BaseEntity implements Serializable {
     @ColumnComment("问题id")
     private String qid;
 
+    @Index
     @Column
     @ColumnComment("排序")
     private Integer seq;

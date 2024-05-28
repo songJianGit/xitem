@@ -1,10 +1,7 @@
 package com.xxsword.xitem.admin.domain.exam.entity;
 
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.gitee.sunchenbin.mybatis.actable.annotation.Column;
-import com.gitee.sunchenbin.mybatis.actable.annotation.ColumnComment;
-import com.gitee.sunchenbin.mybatis.actable.annotation.TableComment;
-import com.gitee.sunchenbin.mybatis.actable.annotation.TableEngine;
+import com.gitee.sunchenbin.mybatis.actable.annotation.*;
 import com.gitee.sunchenbin.mybatis.actable.constants.MySqlEngineConstant;
 import com.xxsword.xitem.admin.domain.system.entity.BaseEntity;
 
@@ -16,6 +13,7 @@ import java.io.Serializable;
 public class QuestionOption extends BaseEntity implements Serializable {
     private static final long serialVersionUID = 205L;
 
+    @Index
     @Column
     @ColumnComment("题目id")
     private String qid;

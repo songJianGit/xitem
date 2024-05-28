@@ -23,6 +23,7 @@ public class QuestionRule extends BaseEntity implements Serializable {
     @ColumnComment("试卷id")
     private String paperid;
 
+    @Index
     @Column
     @ColumnComment("排序(将时间用作排序标识)")
     private Long seq;
