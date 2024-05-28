@@ -19,7 +19,6 @@ public class RoleFunctions implements Serializable {
     private String id;
 
     @Unique(columns = {"roleid", "funid"})
-    @Index(columns = {"roleid", "funid"})
     @Column(length = 50)
     @ColumnComment("角色id")
     private String roleid;

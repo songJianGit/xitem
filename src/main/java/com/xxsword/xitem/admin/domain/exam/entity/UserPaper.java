@@ -17,7 +17,6 @@ import java.io.Serializable;
 public class UserPaper extends BaseEntity implements Serializable {
 
     private static final long serialVersionUID = 207L;
-    @Index
     @Column(length = 50)
     @ColumnComment("试卷id")
     private String paperid;
@@ -26,12 +25,11 @@ public class UserPaper extends BaseEntity implements Serializable {
     @ColumnComment("考试id")
     private String examid;
 
-    @Index
+    @Index(columns = {"userid", "paperid", "examid", "substatus"})
     @Column(length = 50)
     @ColumnComment("用户id")
     private String userid;
 
-    @Index
     @Column
     @ColumnComment("提交状态(0-初始 1-已提交)")
     private Integer substatus;
