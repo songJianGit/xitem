@@ -26,4 +26,7 @@ public class Constant {
     // 题目分类的字典type
     public static final String DICT_TYPE_QCLASS = "dictTypeQclass";
 
+    // 最大用户数
+    public static final String DICT_ID_MAX_USER_COUNT = "dictidmaxusercount";
+
 }

@@ -1,19 +1,10 @@
 package com.xxsword.xitem.admin.service.system;
 
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.xxsword.xitem.admin.domain.system.dto.UserInfoDto;
 import com.xxsword.xitem.admin.domain.system.entity.UserInfo;
 import com.xxsword.xitem.admin.model.RestResult;
 
 public interface UserInfoService extends IService<UserInfo> {
-    /**
-     * 获取用户列表
-     *
-     * @param
-     * @return
-     */
-    Page<UserInfo> pageUserInfo(Page<UserInfo> page, UserInfoDto userInfoDto);
 
     /**
      * 获取用户角色和菜单信息

@@ -117,4 +117,26 @@
         }
         return Number.isInteger(numValue) && numValue > 0;
     }
+
+    // 当前登录用户的修改密码
+    function loginUserPassword() {
+        layer.prompt({title: '请输入新密码', formType: 1}, function (pass, index) {
+            $.ajax({
+                url: '${ctx.contextPath}/admin/system/resetPassword',
+                cache: false,
+                data: {
+                    'userId': '${Session.puser.id}',
+                    'password': pass
+                },
+                success: function (data) {
+                    if (data.result) {
+                        layer.msg('修改成功')
+                    } else {
+                        layer.msg(data.msg)
+                    }
+                }
+            });
+            layer.close(index);
+        });
+    }
 </script>

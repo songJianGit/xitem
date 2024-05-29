@@ -30,12 +30,6 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
     private UserInfoRoleService userInfoRoleService;
 
     @Override
-    public Page<UserInfo> pageUserInfo(Page<UserInfo> page, UserInfoDto userInfoDto) {
-        LambdaQueryWrapper<UserInfo> query = userInfoDto.toQuery();
-        return page(page, query);
-    }
-
-    @Override
     public UserInfo setUserInfoRoleAndFun(UserInfo user, boolean role, boolean functions) {
         if (role) {
             List<Role> roleList = userInfoRoleService.listRoleByUserId(user.getId());

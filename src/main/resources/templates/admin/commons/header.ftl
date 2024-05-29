@@ -14,15 +14,15 @@
                         <span>${Session.puser.username!}</span>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-right">
+<#--                        <li>-->
+<#--                            <a class="dropdown-item" href="#!"><i class="mdi mdi-account"></i> 个人信息</a>-->
+<#--                        </li>-->
                         <li>
-                            <a class="dropdown-item" href="#"><i class="mdi mdi-account"></i> 个人信息</a>
+                            <a class="dropdown-item" href="#!" onclick="loginUserPassword()"><i class="mdi mdi-lock-outline"></i> 修改密码</a>
                         </li>
-                        <li>
-                            <a class="dropdown-item" href="#"><i class="mdi mdi-lock-outline"></i> 修改密码</a>
-                        </li>
-                        <li>
-                            <a class="dropdown-item" href="#!"><i class="mdi mdi-delete"></i> 清空缓存</a>
-                        </li>
+<#--                        <li>-->
+<#--                            <a class="dropdown-item" href="#!"><i class="mdi mdi-delete"></i> 清空缓存</a>-->
+<#--                        </li>-->
                         <li class="dropdown-divider"></li>
                         <li>
                             <a class="dropdown-item" href="${ctx.contextPath}/loginOut"><i class="mdi mdi-logout-variant"></i> 退出登录</a>

@@ -1,7 +1,9 @@
 package com.xxsword.xitem.admin.controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.xxsword.xitem.admin.constant.Constant;
 import com.xxsword.xitem.admin.domain.system.dto.*;
 import com.xxsword.xitem.admin.domain.system.entity.*;
 import com.xxsword.xitem.admin.domain.system.vo.UserInfoRoleVO;
@@ -9,6 +11,7 @@ import com.xxsword.xitem.admin.model.*;
 import com.xxsword.xitem.admin.service.system.*;
 import com.xxsword.xitem.admin.utils.MenuUtil;
 import com.xxsword.xitem.admin.utils.Utils;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,6 +22,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.List;
 
+@Slf4j
 @Controller
 @RequestMapping("admin/system")
 public class SystemController extends BaseController {
@@ -68,7 +72,7 @@ public class SystemController extends BaseController {
     @RequestMapping("userListData")
     @ResponseBody
     public RestPaging<UserInfo> userListData(HttpServletRequest request, Page<UserInfo> page, UserInfoDto userInfoDto) {
-        Page<UserInfo> userInfoPage = userInfoService.pageUserInfo(page, userInfoDto);
+        Page<UserInfo> userInfoPage = userInfoService.page(page, userInfoDto.toQuery());
         return new RestPaging<>(userInfoPage.getTotal(), userInfoPage.getRecords());
     }
 
@@ -93,10 +97,29 @@ public class SystemController extends BaseController {
      */
     @RequestMapping("userSave")
     public String userSave(HttpServletRequest request, UserInfo userInfo) {
-        UserInfo user = Utils.getUserInfo(request);
-        userInfo.setBaseInfo(user);
-        userInfoService.saveOrUpdate(userInfo);
+        long num = userInfoService.count(new LambdaQueryWrapper<UserInfo>().eq(UserInfo::getStatus, 1));
+        if (num <= maxUserNum()) {
+            UserInfo user = Utils.getUserInfo(request);
+            userInfo.setBaseInfo(user);
+            userInfoService.saveOrUpdate(userInfo);
+        } else {
+            log.warn("已达到最大用户数限制 UserNum:{}", num);
+        }
         return "redirect:userList";
+    }
+
+    /**
+     * 查询最大用户数
+     *
+     * @return
+     */
+    private long maxUserNum() {
+        Dict dict = dictService.getById(Constant.DICT_ID_MAX_USER_COUNT);
+        if (dict == null || StringUtils.isBlank(dict.getVal())) {
+            return 500L;// 默认500
+        } else {
+            return Long.parseLong(dict.getVal());
+        }
     }
 
     @RequestMapping("checkLonginName")
@@ -130,6 +153,21 @@ public class SystemController extends BaseController {
         }
         UserInfo userInfo = Utils.getUserInfo(request);
         userInfoService.delUserInfoByIds(userIds);
+        userInfoService.upLastInfo(userInfo, userIds);
+        return RestResult.OK();
+    }
+
+    /**
+     * 用户 启用/停用
+     */
+    @RequestMapping("userStatus")
+    @ResponseBody
+    public RestResult userStatus(HttpServletRequest request, String userIds) {
+        if (StringUtils.isBlank(userIds)) {
+            return RestResult.Fail("参数缺失");
+        }
+        UserInfo userInfo = Utils.getUserInfo(request);
+        userInfoService.upUserInfoStatus(userIds);
         userInfoService.upLastInfo(userInfo, userIds);
         return RestResult.OK();
     }

@@ -39,9 +39,22 @@
                                         <input type="text" class="form-control" value="" name="loginName"
                                                placeholder="登录名">
                                     </div>
+
+                                    <div class="input-group m-r-5">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">状态</span>
+                                        </div>
+                                        <select class="form-control" name="status">
+                                            <option value="">-状态-</option>
+                                            <option value="1">启用</option>
+                                            <option value="2">停用</option>
+                                        </select>
+                                    </div>
+
                                     <div class="input-group">
                                         <div class="btn-group">
-                                            <button type="button" id="searchBtn" class="btn btn-primary m-r-5">搜索</button>
+                                            <button type="button" id="searchBtn" class="btn btn-primary m-r-5">搜索
+                                            </button>
                                             <button type="reset" class="btn btn-default">重置</button>
                                         </div>
                                     </div>
@@ -56,6 +69,9 @@
                                         </button>
                                         <button type="button" id="del" class="btn btn-primary m-r-5">
                                             删除
+                                        </button>
+                                        <button type="button" id="status" class="btn btn-primary m-r-5">
+                                            启用/停用
                                         </button>
                                     </div>
                                 </div>
@@ -76,6 +92,7 @@
                                             <th data-field="loginname">登录名</th>
                                             <th data-field="email">邮箱</th>
                                             <th data-field="phoneno">手机号码</th>
+                                            <th data-field="status" data-formatter="status">状态</th>
                                             <th data-field="cdate">创建时间</th>
                                             <th data-field="id" data-formatter="caozuo">操作</th>
                                         </tr>
@@ -162,6 +179,24 @@
                         text: '取消',
                         action: function () {
                         }
+                    }
+                }
+            });
+        }
+    });
+
+    $('#status').click(function () {
+        if (getSelectionIds() != false) {
+            $.ajax({
+                url: "${ctx.contextPath}/admin/system/userStatus",
+                data: {
+                    'userIds': getSelectionIds().join(',')
+                },
+                success: function (data) {
+                    if (data.result) {
+                        $("#table-pagination").bootstrapTable('refresh');
+                    } else {
+                        alert(data.msg);
                     }
                 }
             });

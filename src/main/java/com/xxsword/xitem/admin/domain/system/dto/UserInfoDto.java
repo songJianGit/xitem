@@ -9,6 +9,7 @@ public class UserInfoDto {
     private String userName;
     private String phoneNo;
     private String roleId;
+    private Integer status;
 
     public String getLoginName() {
         return loginName;
@@ -42,8 +43,18 @@ public class UserInfoDto {
         this.roleId = roleId;
     }
 
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
+
     public LambdaQueryWrapper<UserInfo> toQuery() {
-        return new LambdaQueryWrapper<UserInfo>().eq(UserInfo::getStatus, 1)
+        return new LambdaQueryWrapper<UserInfo>()
+                .in(status == null, UserInfo::getStatus, 1, 2)
+                .eq(status != null, UserInfo::getStatus, status)
                 .like(StringUtils.isNotBlank(loginName), UserInfo::getLoginname, loginName)
                 .like(StringUtils.isNotBlank(userName), UserInfo::getUsername, userName)
                 .like(StringUtils.isNotBlank(phoneNo), UserInfo::getPhoneno, phoneNo)
