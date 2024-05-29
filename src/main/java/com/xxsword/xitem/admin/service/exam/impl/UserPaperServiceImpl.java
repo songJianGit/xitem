@@ -2,11 +2,15 @@ package com.xxsword.xitem.admin.service.exam.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.xxsword.xitem.admin.domain.exam.convert.UserPaperConvert;
 import com.xxsword.xitem.admin.domain.exam.entity.UserPaper;
 import com.xxsword.xitem.admin.domain.exam.entity.UserPaperQuestion;
+import com.xxsword.xitem.admin.domain.exam.vo.UserPaperVO;
 import com.xxsword.xitem.admin.domain.system.entity.UserInfo;
 import com.xxsword.xitem.admin.mapper.exam.UserPaperMapper;
+import com.xxsword.xitem.admin.service.exam.ExamService;
 import com.xxsword.xitem.admin.service.exam.UserPaperQuestionService;
 import com.xxsword.xitem.admin.service.exam.UserPaperService;
 import com.xxsword.xitem.admin.utils.DateUtil;
@@ -22,6 +26,8 @@ import java.util.List;
 public class UserPaperServiceImpl extends ServiceImpl<UserPaperMapper, UserPaper> implements UserPaperService {
     @Autowired
     private UserPaperQuestionService userPaperQuestionService;
+    @Autowired
+    private ExamService examService;
 
     @Override
     public void upLastInfo(UserInfo doUserInfo, String ids) {
@@ -87,6 +93,24 @@ public class UserPaperServiceImpl extends ServiceImpl<UserPaperMapper, UserPaper
         return userPaperUp;
     }
 
+    @Override
+    public Page<UserPaper> pageUserPaperByUser(Page<UserPaper> page, String userId) {
+        LambdaQueryWrapper<UserPaper> query = Wrappers.lambdaQuery();
+        query.eq(UserPaper::getStatus, 1);
+        query.eq(UserPaper::getUserid, userId);
+        query.isNotNull(UserPaper::getExamid);
+        return page(page, query);
+    }
+
+    @Override
+    public List<UserPaperVO> listUserPaperVOByUserPaper(List<UserPaper> list) {
+        List<UserPaperVO> voList = UserPaperConvert.INSTANCE.toPaperVO(list);
+        for (UserPaperVO item : voList) {
+            item.setDuration(DateUtil.sToHHmmss(DateUtil.differSecond(item.getCdate(), item.getSubdate(), DateUtil.sdfA1)));
+        }
+        return voList;
+    }
+
     /**
      * 算分
      */
@@ -104,6 +128,7 @@ public class UserPaperServiceImpl extends ServiceImpl<UserPaperMapper, UserPaper
         if (subStatus != null) {
             q.eq(UserPaper::getSubstatus, subStatus);
         }
+        q.isNotNull(UserPaper::getExamid);
         q.orderByDesc(UserPaper::getCdate, UserPaper::getId);
         return q;
     }

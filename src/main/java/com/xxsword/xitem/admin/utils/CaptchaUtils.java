@@ -88,7 +88,7 @@ public class CaptchaUtils {
         outputStream.flush();
         outputStream.close();
 
-        return captchaText.toString().toUpperCase();
+        return captchaText.toString();
     }
 
 }

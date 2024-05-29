@@ -1,8 +1,11 @@
 package com.xxsword.xitem.pc;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.xxsword.xitem.admin.domain.exam.entity.*;
 import com.xxsword.xitem.admin.domain.exam.vo.QuestionVO;
+import com.xxsword.xitem.admin.domain.exam.vo.UserPaperVO;
 import com.xxsword.xitem.admin.domain.system.entity.UserInfo;
 import com.xxsword.xitem.admin.model.RestResult;
 import com.xxsword.xitem.admin.service.exam.*;
@@ -37,9 +40,10 @@ public class PcExamController {
 
     @RequestMapping("index")
     public String index(Model model) {
-        LambdaQueryWrapper<Exam> examQ = new LambdaQueryWrapper<Exam>().eq(Exam::getStatus, 1);
-        List<Exam> examList = examService.list(examQ);
-        model.addAttribute("examList", examList);
+        LambdaQueryWrapper<Exam> examQ = Wrappers.lambdaQuery();
+        examQ.eq(Exam::getStatus, 1);
+        Page<Exam> examPage = examService.page(new Page<>(1, 50), examQ);
+        model.addAttribute("examList", examPage.getRecords());
         return "/pc/exam/examindex";
     }
 
@@ -51,10 +55,15 @@ public class PcExamController {
      * @return
      */
     @RequestMapping("{eid}")
-    public String examid(@PathVariable String eid, Model model) {
+    public String examid(HttpServletRequest request, @PathVariable String eid, Model model) {
+        UserInfo userInfo = Utils.getUserInfo(request);
         Exam exam = examService.getById(eid);
+        List<UserPaper> userPaperList = userPaperService.listUserPaper(userInfo.getId(), exam.getPaperid(), exam.getId(), 1);
+        List<UserPaperVO> userPaperVOList = userPaperService.listUserPaperVOByUserPaper(userPaperList);
         model.addAttribute("exam", exam);
         model.addAttribute("paperScore", questionRuleService.getPaperScore(exam.getPaperid()));
+        model.addAttribute("examStatus", ExamUtil.getExamStatus(exam));
+        model.addAttribute("listUserPaper", userPaperVOList);
         return "/pc/exam/exam";
     }
 

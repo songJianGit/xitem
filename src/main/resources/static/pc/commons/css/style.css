@@ -12,6 +12,7 @@
 .card-clear-420 {
     border: 0;
     max-width: 420px;
+    min-width: 357px;
     margin: 13px;
     background-color: #eeeeee;
 
@@ -23,7 +24,7 @@
 }
 
 .pc-body {
-    padding: 13px 0;
+    padding: 13px 7px;
 }
 
 .pc-header {

@@ -82,19 +82,30 @@ public class QuestionRuleServiceImpl extends ServiceImpl<QuestionRuleMapper, Que
 
     @Override
     public List<QuestionRule> listQuestionRuleByPid(String pid) {
+        return listQuestionRuleByPid(pid, true);
+    }
+
+    /**
+     * @param pid
+     * @param orderFlag 是否需要排序查询
+     * @return
+     */
+    private List<QuestionRule> listQuestionRuleByPid(String pid, boolean orderFlag) {
         LambdaQueryWrapper<QuestionRule> q = Wrappers.lambdaQuery();
         q.eq(QuestionRule::getStatus, 1);
         q.eq(QuestionRule::getPaperid, pid);
-        q.orderByAsc(QuestionRule::getSeq, QuestionRule::getId);
+        if (orderFlag) {
+            q.orderByAsc(QuestionRule::getSeq, QuestionRule::getId);
+        }
         return list(q);
     }
 
     @Override
     public Double getPaperScore(String paperId) {
-        List<QuestionRule> questionRuleList = listQuestionRuleByPid(paperId);// 抽题规则
+        List<QuestionRule> questionRuleList = listQuestionRuleByPid(paperId, false);// 抽题规则
         double score = 0D;
         for (QuestionRule questionRule : questionRuleList) {
-            List<QRS> qrsList = qrsService.listQRSByQrid(questionRule.getId());
+            List<QRS> qrsList = qrsService.listQRSByQrid(questionRule.getId(), false);
             if (qrsList == null || qrsList.isEmpty()) {
                 continue;
             }

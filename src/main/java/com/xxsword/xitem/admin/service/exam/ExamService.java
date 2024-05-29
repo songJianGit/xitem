@@ -12,4 +12,5 @@ public interface ExamService extends IService<Exam> {
     void upLastInfo(UserInfo doUserInfo, String ids);
 
     void delExamByIds(String ids);
+
 }

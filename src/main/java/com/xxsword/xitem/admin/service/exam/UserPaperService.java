@@ -1,7 +1,9 @@
 package com.xxsword.xitem.admin.service.exam;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.xxsword.xitem.admin.domain.exam.entity.UserPaper;
+import com.xxsword.xitem.admin.domain.exam.vo.UserPaperVO;
 import com.xxsword.xitem.admin.domain.system.entity.UserInfo;
 
 import java.util.List;
@@ -37,4 +39,22 @@ public interface UserPaperService extends IService<UserPaper> {
      * 更新用户答题记录状态，计算用户总成绩
      */
     UserPaper userPaperSub(UserInfo userInfo, String userPaperId);
+
+    /**
+     * 该用户的考试纪录
+     *
+     * @param userId
+     * @return
+     */
+    Page<UserPaper> pageUserPaperByUser(Page<UserPaper> page, String userId);
+
+    /**
+     * 对象转VO
+     * <p>
+     * 赋值考试用时
+     *
+     * @param list
+     * @return
+     */
+    List<UserPaperVO> listUserPaperVOByUserPaper(List<UserPaper> list);
 }

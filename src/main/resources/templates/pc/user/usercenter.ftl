@@ -10,8 +10,8 @@
     <div class="pc-body">
         <ul class="list-group">
             <li class="list-group-item">个人信息</li>
-            <li class="list-group-item">课程</li>
-            <li class="list-group-item">考试</li>
+            <li class="list-group-item">课程纪录</li>
+            <li class="list-group-item"><a href="${ctx.contextPath}/pc/user/userExam">考试纪录</a></li>
         </ul>
     </div>
 </div>

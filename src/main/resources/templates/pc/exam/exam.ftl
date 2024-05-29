@@ -17,19 +17,47 @@
         <div class="exam-item">结束时间：${exam.etime!}</div>
         <#if exam.duration??>
             <#if exam.duration==-1>
-                <div class="exam-item">考试时长：不限</div>
+                <div class="exam-item">考试限时：不限</div>
             <#else>
-                <div class="exam-item">考试时长：${exam.duration!}分钟</div>
+                <div class="exam-item">考试限时：${exam.duration!}分钟</div>
             </#if>
         </#if>
         <div class="exam-item">考试总分：${paperScore!}</div>
+        <#if exam.duration??>
+            <#if exam.maxnum==-1>
+                <div class="exam-item">重考次数：不限</div>
+            <#else>
+                <div class="exam-item">重考次数：${exam.maxnum!}</div>
+            </#if>
+        </#if>
     </div>
     <div class="card-body text-center">
-        <a href="${ctx.contextPath}/pc/exam/examPageShow?eid=${exam.id!}" class="btn btn-primary">开始考试</a>
+        <table class="table">
+            <thead>
+            <tr>
+                <td>开始时间</td>
+                <td>用时</td>
+                <td>分数</td>
+            </tr>
+            </thead>
+            <tbody>
+            <#list listUserPaper as item>
+                <tr>
+                    <td>${item.cdate!}</td>
+                    <td>${item.duration!}</td>
+                    <td>${item.score!}</td>
+                </tr>
+            </#list>
+            </tbody>
+        </table>
+        <#if examStatus==1>
+            <div class="card-body text-center">
+                <a href="${ctx.contextPath}/pc/exam/examPageShow?eid=${exam.id!}" class="btn btn-primary">开始考试</a>
+            </div>
+        </#if>
     </div>
-</div>
-<#include "../commons/js.ftl"/>
-<script type="text/javascript">
-</script>
+    <#include "../commons/js.ftl"/>
+    <script type="text/javascript">
+    </script>
 </body>
 </html>

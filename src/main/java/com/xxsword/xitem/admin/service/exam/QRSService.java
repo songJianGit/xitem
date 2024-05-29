@@ -65,7 +65,10 @@ public interface QRSService extends IService<QRS> {
      * 查询该规则下的QRS信息
      *
      * @param qrid
+     * @param orderFlag 是否需要排序查询
      * @return
      */
+    List<QRS> listQRSByQrid(String qrid, boolean orderFlag);
+
     List<QRS> listQRSByQrid(String qrid);
 }

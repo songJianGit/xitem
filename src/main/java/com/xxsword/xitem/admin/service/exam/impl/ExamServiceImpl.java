@@ -13,6 +13,7 @@ import java.util.List;
 
 @Service
 public class ExamServiceImpl extends ServiceImpl<ExamMapper, Exam> implements ExamService {
+
     @Override
     public List<Exam> setExamexstatus(List<Exam> list) {
         for (Exam item : list) {
@@ -46,4 +47,5 @@ public class ExamServiceImpl extends ServiceImpl<ExamMapper, Exam> implements Ex
         }
         updateBatchById(listUp);
     }
+
 }

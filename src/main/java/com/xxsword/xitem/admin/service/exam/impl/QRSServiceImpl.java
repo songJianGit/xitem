@@ -113,10 +113,17 @@ public class QRSServiceImpl extends ServiceImpl<QRSMapper, QRS> implements QRSSe
     }
 
     @Override
-    public List<QRS> listQRSByQrid(String qrid) {
+    public List<QRS> listQRSByQrid(String qrid, boolean orderFlag) {
         LambdaQueryWrapper<QRS> q = Wrappers.lambdaQuery();
         q.eq(QRS::getQrid, qrid);
-        q.orderByAsc(QRS::getSeq, QRS::getId);
+        if (orderFlag) {
+            q.orderByAsc(QRS::getSeq, QRS::getId);
+        }
         return list(q);
+    }
+
+    @Override
+    public List<QRS> listQRSByQrid(String qrid) {
+        return listQRSByQrid(qrid, true);
     }
 }

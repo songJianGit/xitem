@@ -14,7 +14,7 @@
                     <div>${item.title!}</div>
                     <div>${item.stime!}&nbsp;-&nbsp;${item.etime!}</div>
                 </div>
-                <div class="card-footer"><a href="${ctx.contextPath}/pc/exam/${item.id!}">进入</a></div>
+                <div class="card-footer"><a href="${ctx.contextPath}/pc/exam/${item.id!}">查看</a></div>
             </div>
         </#list>
     </div>
