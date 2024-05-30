@@ -4,6 +4,9 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.xxsword.xitem.admin.domain.system.entity.UserInfo;
 import com.xxsword.xitem.admin.model.RestResult;
 
+import java.util.Map;
+import java.util.Set;
+
 public interface UserInfoService extends IService<UserInfo> {
 
     /**
@@ -96,4 +99,12 @@ public interface UserInfoService extends IService<UserInfo> {
      * 刷新用户最后更新人和最后更新时间
      */
     void upLastInfo(UserInfo doUserInfo, String userIds);
+
+    /**
+     * 获取用户
+     *
+     * @param userIds
+     * @return
+     */
+    Map<String, UserInfo> mapsUser(Set<String> userIds);
 }

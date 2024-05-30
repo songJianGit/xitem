@@ -7,6 +7,7 @@ public class UserPaperVO {
     private String paperid;
     private String examid;
     private String userid;
+    private String username;// 用户名
     private Integer substatus;// 提交状态(0-初始 1-已提交)
     private String subdate;// 提交时间
     private Double score;// 用户总分
@@ -50,6 +51,14 @@ public class UserPaperVO {
 
     public void setUserid(String userid) {
         this.userid = userid;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public Integer getSubstatus() {

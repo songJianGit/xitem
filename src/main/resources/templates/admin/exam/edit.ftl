@@ -58,16 +58,16 @@
                                         <input type="text" class="form-control" id="papername" value="${exam.papertitle!}" placeholder="试卷" readonly/>
                                         <input type="hidden" value="${exam.paperid!}" name="paperid" id="paperid">
                                     </div>
-                                    <div class="form-group col-12">
-                                        <label>二维码</label>
-                                        <#if exam.id??>
-                                            <img src="${ctx.contextPath}/admin/qrcode/get?content=${ctx.contextPath}/pc/exam/${exam.id!}"
-                                                 alt="二维码">
-                                        <#else>
-                                            <div>保存后，自动生成二维码。</div>
-                                        </#if>
-                                        <a target="_blank" href="${ctx.contextPath}/pc/exam/${exam.id!}">进入</a>
-                                    </div>
+<#--                                    <div class="form-group col-12">-->
+<#--                                        <label>二维码</label>-->
+<#--                                        <#if exam.id??>-->
+<#--                                            <img src="${ctx.contextPath}/admin/qrcode/get?content=${ctx.contextPath}/pc/exam/${exam.id!}"-->
+<#--                                                 alt="二维码">-->
+<#--                                        <#else>-->
+<#--                                            <div>保存后，自动生成二维码。</div>-->
+<#--                                        </#if>-->
+<#--                                        <a target="_blank" href="${ctx.contextPath}/pc/exam/${exam.id!}">进入</a>-->
+<#--                                    </div>-->
                                     <div class="form-group col-12">
                                         <button type="submit" class="btn btn-primary">保 存
                                         </button>

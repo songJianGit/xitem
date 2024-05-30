@@ -2,6 +2,7 @@ package com.xxsword.xitem.admin.service.exam;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.xxsword.xitem.admin.domain.exam.dto.UserPaperDto;
 import com.xxsword.xitem.admin.domain.exam.entity.UserPaper;
 import com.xxsword.xitem.admin.domain.exam.vo.UserPaperVO;
 import com.xxsword.xitem.admin.domain.system.entity.UserInfo;
@@ -57,4 +58,12 @@ public interface UserPaperService extends IService<UserPaper> {
      * @return
      */
     List<UserPaperVO> listUserPaperVOByUserPaper(List<UserPaper> list);
+
+    /**
+     * 考试成绩查询(重考以最高分为准)
+     *
+     * @param page
+     * @return
+     */
+    Page<UserPaperVO> pageExamScore(Page<UserPaper> page, UserPaperDto userPaperDto);
 }

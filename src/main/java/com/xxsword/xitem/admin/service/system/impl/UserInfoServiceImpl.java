@@ -20,6 +20,10 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Service
 public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> implements UserInfoService {
@@ -216,6 +220,11 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
             listUp.add(userInfoUp);
         }
         updateBatchById(listUp);
+    }
+
+    @Override
+    public Map<String, UserInfo> mapsUser(Set<String> userIds) {
+        return listByIds(userIds).stream().collect(Collectors.toMap(UserInfo::getId, Function.identity()));
     }
 
 }

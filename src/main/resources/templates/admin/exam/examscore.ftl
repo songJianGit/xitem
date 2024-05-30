@@ -25,12 +25,20 @@
                             <div class="card-header">
                                 <form class="form-inline" method="post" action="#!" role="form" id="searchform">
 
+                                    <div class="input-group  m-r-5">
+                                        <div class="btn-group">
+                                            <button type="button" class="btn btn-default"
+                                                    onclick="javascript:history.back(-1);return false;">返 回
+                                            </button>
+                                        </div>
+                                    </div>
+
                                     <div class="input-group m-r-5">
                                         <div class="input-group-prepend">
-                                            <span class="input-group-text">考试标题</span>
+                                            <span class="input-group-text">姓名</span>
                                         </div>
-                                        <input type="text" class="form-control" name="title"
-                                               placeholder="考试标题">
+                                        <input type="text" class="form-control" name="userName"
+                                               placeholder="姓名">
                                     </div>
 
                                     <div class="input-group">
@@ -44,31 +52,20 @@
                             </div>
 
                             <div class="card-body">
-                                <div id="custom-toolbar">
-                                    <div class="form-inline" role="form">
-                                        <button type="button" id="add" class="btn btn-primary">
-                                            新增
-                                        </button>
-                                    </div>
-                                </div>
                                 <div class="table-responsive">
                                     <table id="table-pagination"
-                                           data-toolbar="#custom-toolbar"
                                            data-toggle="table"
                                            data-pagination="true"
                                            data-page-list="[10, 20, 50, 100, 200]"
                                            data-click-to-select="true"
-                                           data-url="${ctx.contextPath}/admin/exam/data"
+                                           data-url="${ctx.contextPath}/admin/exam/examScoreData?examId=${examId!}"
                                            data-query-params="pageQueryParams"
                                            data-side-pagination="server">
                                         <thead>
                                         <tr>
-                                            <th data-field="title">考试标题</th>
-                                            <th data-field="stime" data-width="160px">开始时间</th>
-                                            <th data-field="etime" data-width="160px">结束时间</th>
-                                            <th data-field="duration">考试时长（分钟）</th>
-                                            <th data-field="exstatus" data-formatter="exstatus" data-width="65px">状态</th>
-                                            <th data-field="id" data-formatter="caozuo" data-width="145px">操作</th>
+                                            <th data-field="username">姓名</th>
+                                            <th data-field="score">分数</th>
+                                            <th data-field="id" data-formatter="caozuo">操作</th>
                                         </tr>
                                         </thead>
                                     </table>
@@ -86,51 +83,21 @@
 </div>
 <#include "../commons/js.ftl"/>
 <script type="text/javascript">
-    $('#add').click(function () {
-        window.location.href = '${ctx.contextPath}/admin/exam/edit';
-    });
-
     function caozuo(value, row) {
         let htm = '';
         htm += '<div class="btn-group">';
-        htm += '<a class="btn btn-sm btn-default m-r-5" href="${ctx.contextPath}/admin/exam/edit?id=' + value + '" title="编辑">编辑</a>';
-        htm += '<a class="btn btn-sm btn-default" href="${ctx.contextPath}/admin/exam/examScore?examId=' + value + '" title="考试成绩">考试成绩</a>';
+        htm += '<button type="button" class="btn btn-sm btn-default" onclick="showExamPaper(\'' + row.userid + '\')" title="查看详情">查看详情</button>';
         htm += '</div>';
         return htm;
     }
 
-    function del(id) {
-        $.confirm({
-            title: '提示',
-            content: '是否删除？',
-            buttons: {
-                confirm: {
-                    text: '确认',
-                    action: function () {
-                        $.ajax({
-                            url: "${ctx.contextPath}/admin/exam/del?id=" + id,
-                            success: function (data) {
-                                if (data.result) {
-                                    $("#table-pagination").bootstrapTable('refresh');
-                                } else {
-                                    alert(data.msg);
-                                }
-                            }
-                        });
-                    }
-                },
-                cancel: {
-                    text: '取消',
-                    action: function () {
-                    }
-                }
-            }
-        });
+    function showExamPaper(userid) {
+        layer_show("记录", "${ctx.contextPath}/admin/exam/userPaper?examId=${examId!}&userId=" + userid);
     }
 
     $('#searchBtn').click(function () {
         $("#table-pagination").bootstrapTable('refresh', {
-            url: "${ctx.contextPath}/admin/exam/data?" + $("#searchform").serialize()
+            url: "${ctx.contextPath}/admin/exam/examScoreData?examId=${examId!}&" + $("#searchform").serialize()
         });
     });
 

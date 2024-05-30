@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.xxsword.xitem.admin.domain.exam.convert.UserPaperConvert;
+import com.xxsword.xitem.admin.domain.exam.dto.UserPaperDto;
 import com.xxsword.xitem.admin.domain.exam.entity.UserPaper;
 import com.xxsword.xitem.admin.domain.exam.entity.UserPaperQuestion;
 import com.xxsword.xitem.admin.domain.exam.vo.UserPaperVO;
@@ -13,6 +14,7 @@ import com.xxsword.xitem.admin.mapper.exam.UserPaperMapper;
 import com.xxsword.xitem.admin.service.exam.ExamService;
 import com.xxsword.xitem.admin.service.exam.UserPaperQuestionService;
 import com.xxsword.xitem.admin.service.exam.UserPaperService;
+import com.xxsword.xitem.admin.service.system.UserInfoService;
 import com.xxsword.xitem.admin.utils.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,13 +23,16 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class UserPaperServiceImpl extends ServiceImpl<UserPaperMapper, UserPaper> implements UserPaperService {
     @Autowired
     private UserPaperQuestionService userPaperQuestionService;
     @Autowired
-    private ExamService examService;
+    private UserInfoService userInfoService;
 
     @Override
     public void upLastInfo(UserInfo doUserInfo, String ids) {
@@ -109,6 +114,19 @@ public class UserPaperServiceImpl extends ServiceImpl<UserPaperMapper, UserPaper
             item.setDuration(DateUtil.sToHHmmss(DateUtil.differSecond(item.getCdate(), item.getSubdate(), DateUtil.sdfA1)));
         }
         return voList;
+    }
+
+    @Override
+    public Page<UserPaperVO> pageExamScore(Page<UserPaper> page, UserPaperDto userPaperDto) {
+        Page<UserPaper> paperPage = baseMapper.pageExamScore(page, userPaperDto);
+        List<UserPaperVO> userPaperVOList = UserPaperConvert.INSTANCE.toPaperVO(paperPage.getRecords());
+        Map<String, UserInfo> user = userInfoService.mapsUser(userPaperVOList.stream().map(UserPaperVO::getUserid).collect(Collectors.toSet()));
+        for (UserPaperVO item : userPaperVOList) {
+            item.setUsername(user.get(item.getUserid()).getUsername());
+        }
+        Page<UserPaperVO> voPage = new Page<>(paperPage.getCurrent(), paperPage.getPages(), paperPage.getTotal());
+        voPage.setRecords(userPaperVOList);
+        return voPage;
     }
 
     /**
