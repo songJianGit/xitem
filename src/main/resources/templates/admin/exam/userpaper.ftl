@@ -13,12 +13,12 @@
             <table id="table-pagination"
                    data-toggle="table"
                    data-click-to-select="true"
-                   data-url="${ctx.contextPath}/admin/exam/userPaperData?examId=${examId!}&userId=${userId!}"
+                   data-url="${ctx.contextPath}/admin/exam/userPaperData?examId=${examId!}&userId=${userId!}&subStatus=1"
                    data-side-pagination="server">
                 <thead>
                 <tr>
-                    <th data-field="cdate">开始时间</th>
-                    <th data-field="subdate">结束时间</th>
+                    <th data-field="createDate">开始时间</th>
+                    <th data-field="subDate">结束时间</th>
                     <th data-field="duration">用时</th>
                     <th data-field="score">分数</th>
                     <th data-field="id" data-formatter="caozuo">操作</th>

@@ -77,7 +77,7 @@
                     <th data-field="title">题目标题</th>
                     <th data-field="qtype" data-formatter="qtype">题型</th>
                     <th data-field="qclassname">题目分类</th>
-                    <th data-field="cdate" data-width="160px">创建时间</th>
+                    <th data-field="createDate" data-width="160px">创建时间</th>
                 </tr>
                 </thead>
             </table>

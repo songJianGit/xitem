@@ -149,7 +149,7 @@
     });
 
     function edit(id) {
-        layer_show('编辑', '${ctx.contextPath}/admin/paper/listQRS?qrid=' + id);
+        layer_show('编辑', '${ctx.contextPath}/admin/paper/listQRS?qrId=' + id);
     }
 
     function del(id) {

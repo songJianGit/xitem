@@ -32,9 +32,9 @@ public class SystemController extends BaseController {
     @Autowired
     private RoleService roleService;
     @Autowired
-    private FunctionsService functionsService;
+    private FunctionService functionService;
     @Autowired
-    private RoleFunctionsService roleFunctionsService;
+    private RoleFunctionService roleFunctionService;
     @Autowired
     private UserInfoRoleService userInfoRoleService;
     @Autowired
@@ -53,7 +53,7 @@ public class SystemController extends BaseController {
         UserInfo userInfo = Utils.getUserInfo(request);
         HttpSession session = request.getSession();
         if (session.getAttribute("treeMenuList") == null) {
-            List<TreeMenu> treeMenuList = MenuUtil.listTreeMenuByFunctions(MenuUtil.listFunctionsByRoles(userInfo.getRolelist()), false);
+            List<TreeMenu> treeMenuList = MenuUtil.listTreeMenuByFunctions(MenuUtil.listFunctionByRoles(userInfo.getRoleList()), false);
             session.setAttribute("treeMenuList", treeMenuList);
         }
         return "/admin/index";
@@ -85,8 +85,8 @@ public class SystemController extends BaseController {
         if (userInfo == null) {
             userInfo = new UserInfo();
         } else {
-            Organ organ = organService.getById(userInfo.getOrganid());
-            userInfo.setOrganname(organ == null ? "" : organ.getName());
+            Organ organ = organService.getById(userInfo.getOrganId());
+            userInfo.setOrganName(organ == null ? "" : organ.getName());
         }
         model.addAttribute("user", userInfo);
         return "/admin/system/useredit";
@@ -194,10 +194,10 @@ public class SystemController extends BaseController {
      * 编辑角色
      */
     @RequestMapping("roleEdit")
-    public String roleEdit(HttpServletRequest request, String roleid, Model model) {
+    public String roleEdit(HttpServletRequest request, String roleId, Model model) {
         Role role = new Role();
-        if (StringUtils.isNotBlank(roleid)) {
-            role = roleService.getById(roleid);
+        if (StringUtils.isNotBlank(roleId)) {
+            role = roleService.getById(roleId);
         }
         model.addAttribute("role", role);
         return "/admin/system/roleedit";
@@ -281,105 +281,105 @@ public class SystemController extends BaseController {
     /**
      * 分配权限
      */
-    @RequestMapping("roleFunctions")
-    public String roleFunctions(HttpServletRequest request, String roleId, Model model) {
+    @RequestMapping("roleFunction")
+    public String roleFunction(HttpServletRequest request, String roleId, Model model) {
         UserInfo userInfo = Utils.getUserInfo(request);
-        List<Functions> listFunctions = MenuUtil.listFunctionsByRoles(userInfo.getRolelist());
-        List<Functions> listFunctionsSeq = MenuUtil.sortList(listFunctions);
+        List<Function> listFunctions = MenuUtil.listFunctionByRoles(userInfo.getRoleList());
+        List<Function> listFunctionsSeq = MenuUtil.sortList(listFunctions);
         Role role = roleService.getRoleById(roleId, true);
-        model.addAttribute("roleFunctions", role.getFunctionlist());
-        model.addAttribute("listFunctions", listFunctionsSeq);
+        model.addAttribute("roleFunction", role.getFunctionList());
+        model.addAttribute("listFunction", listFunctionsSeq);
         model.addAttribute("role", role);
-        return "/admin/system/rolefunctions";
+        return "/admin/system/rolefunction";
     }
 
     /**
      * 保存分配的权限
      */
-    @RequestMapping("roleFunctionsSave")
+    @RequestMapping("roleFunctionSave")
     public String roleFunctionsSave(HttpServletRequest request, String roleId, String funIds) {
-        roleFunctionsService.roleFunctionsSave(roleId, funIds);
+        roleFunctionService.roleFunctionSave(roleId, funIds);
         return "redirect:roleList";
     }
 
     /**
      * 菜单列表
      */
-    @RequestMapping("functionsList")
-    public String functionsList(FunctionsDto functionsDto, Model model) {
-        List<Functions> listFunctions = functionsService.list(functionsDto.toQuery());// 所有可用菜单
-        List<Functions> listFunctionsSeq = MenuUtil.sortList(listFunctions);
+    @RequestMapping("functionList")
+    public String functionList(FunctionsDto functionsDto, Model model) {
+        List<Function> listFunctions = functionService.list(functionsDto.toQuery());// 所有可用菜单
+        List<Function> listFunctionsSeq = MenuUtil.sortList(listFunctions);
         model.addAttribute("listFunctions", listFunctionsSeq);
-        return "/admin/system/functionslist";
+        return "/admin/system/functionlist";
     }
 
     /**
      * 菜单编辑
      */
-    @RequestMapping("functionsEdit")
-    public String functionsEdit(String functionsId, Model model) {
-        Functions functions;
-        Functions pfunctions = null;
+    @RequestMapping("functionEdit")
+    public String functionEdit(String functionsId, Model model) {
+        Function functions;
+        Function pfunctions = null;
         if (StringUtils.isNotBlank(functionsId)) {
-            functions = functionsService.getById(functionsId);
+            functions = functionService.getById(functionsId);
             if (functions != null && StringUtils.isNotBlank(functions.getPid())) {
-                pfunctions = functionsService.getById(functions.getPid());
+                pfunctions = functionService.getById(functions.getPid());
             }
         } else {
-            functions = new Functions();
-            functions.setShowflag(1);
+            functions = new Function();
+            functions.setShowFlag(1);
         }
         if (pfunctions == null) {
-            pfunctions = new Functions();
-            pfunctions.setShowflag(1);
+            pfunctions = new Function();
+            pfunctions.setShowFlag(1);
         }
-        model.addAttribute("functions", functions);
-        model.addAttribute("pfunctions", pfunctions);
-        return "/admin/system/functionsedit";
+        model.addAttribute("function", functions);
+        model.addAttribute("pfunction", pfunctions);
+        return "/admin/system/functionedit";
     }
 
     /**
      * 菜单添加
      */
-    @RequestMapping("functionsAdd")
-    public String functionsAdd(String functionsId, Model model) {
-        Functions pfunctions = null;
+    @RequestMapping("functionAdd")
+    public String functionAdd(String functionsId, Model model) {
+        Function pfunctions = null;
         if (StringUtils.isNotBlank(functionsId)) {
-            pfunctions = functionsService.getById(functionsId);
+            pfunctions = functionService.getById(functionsId);
         } else {
-            pfunctions = new Functions();
-            pfunctions.setShowflag(1);
+            pfunctions = new Function();
+            pfunctions.setShowFlag(1);
         }
-        Functions f = new Functions();
-        f.setShowflag(1);
-        model.addAttribute("functions", f);
-        model.addAttribute("pfunctions", pfunctions);
-        return "/admin/system/functionsedit";
+        Function f = new Function();
+        f.setShowFlag(1);
+        model.addAttribute("function", f);
+        model.addAttribute("pfunction", pfunctions);
+        return "/admin/system/functionedit";
     }
 
     /**
      * 菜单保存
      */
-    @RequestMapping("functionsSave")
-    public String functionsSave(HttpServletRequest request, Functions functions) {
+    @RequestMapping("functionSave")
+    public String functionSave(HttpServletRequest request, Function functions) {
         UserInfo user = Utils.getUserInfo(request);
         functions.setBaseInfo(user);
-        functionsService.saveOrUpdate(functions);
-        return "redirect:functionsList";
+        functionService.saveOrUpdate(functions);
+        return "redirect:functionList";
     }
 
     /**
      * 菜单删除（逻辑删除）
      */
-    @RequestMapping("functionsDelete")
+    @RequestMapping("functionDelete")
     @ResponseBody
-    public RestResult functionsDelete(HttpServletRequest request, String functionsId) {
-        if (StringUtils.isBlank(functionsId)) {
+    public RestResult functionDelete(HttpServletRequest request, String functionId) {
+        if (StringUtils.isBlank(functionId)) {
             return RestResult.Fail("参数缺失");
         }
         UserInfo userInfo = Utils.getUserInfo(request);
-        functionsService.delFunctionsById(functionsId);
-        functionsService.upLastInfo(userInfo, functionsId);
+        functionService.delFunctionById(functionId);
+        functionService.upLastInfo(userInfo, functionId);
         return RestResult.OK();
     }
 
@@ -388,7 +388,7 @@ public class SystemController extends BaseController {
      */
     @RequestMapping("functionsSelect")
     public String functionsSelect(FunctionsDto functionsDto, Model model) {
-        List<Functions> listFunctions = functionsService.list(functionsDto.toQuery());// 所有可用菜单
+        List<Function> listFunctions = functionService.list(functionsDto.toQuery());// 所有可用菜单
         model.addAttribute("listFunctions", listFunctions);
         return "/admin/system/functionsselect";
     }
@@ -398,8 +398,8 @@ public class SystemController extends BaseController {
      */
     @RequestMapping("functionsSeq")
     public String functionsSeq(String ids, String seqs) {
-        functionsService.saveFunctionsSeq(ids, seqs);
-        return "redirect:functionsList";
+        functionService.saveFunctionSeq(ids, seqs);
+        return "redirect:functionList";
     }
 
     /**

@@ -63,7 +63,7 @@ public class PcUserController extends BaseController {
             pageSize = 100;
         }
         Page<UserPaper> userPaperPage = userPaperService.pageUserExamRecord(new Page<>(pageNum, pageSize), userInfo.getId());
-        Set<String> examIds = userPaperPage.getRecords().stream().map(UserPaper::getExamid).collect(Collectors.toSet());
+        Set<String> examIds = userPaperPage.getRecords().stream().map(UserPaper::getExamId).collect(Collectors.toSet());
         if (examIds.isEmpty()) {
             return RestResult.OK();
         }

@@ -51,7 +51,7 @@
                     <th data-field="title">试卷标题</th>
                     <th data-field="snum">总题数</th>
                     <th data-field="score">总分</th>
-                    <th data-field="cdate" data-width="160px">创建时间</th>
+                    <th data-field="createDate" data-width="160px">创建时间</th>
                 </tr>
                 </thead>
             </table>

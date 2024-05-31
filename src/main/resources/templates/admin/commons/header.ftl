@@ -11,7 +11,7 @@
             <ul class="navbar-right d-flex align-items-center">
                 <li class="dropdown dropdown-profile">
                     <a href="#!" data-toggle="dropdown" class="dropdown-toggle">
-                        <span>${Session.puser.username!}</span>
+                        <span>${Session.puser.userName!}</span>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-right">
 <#--                        <li>-->

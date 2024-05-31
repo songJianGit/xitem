@@ -14,9 +14,9 @@ public class UserInfoRoleDto {
 
     public LambdaQueryWrapper<UserInfo> toQuery() {
         return new LambdaQueryWrapper<UserInfo>().eq(UserInfo::getStatus, 1)
-                .like(StringUtils.isNotBlank(loginName), UserInfo::getLoginname, loginName)
-                .like(StringUtils.isNotBlank(userName), UserInfo::getUsername, userName)
-                .like(StringUtils.isNotBlank(phoneNo), UserInfo::getPhoneno, phoneNo)
+                .like(StringUtils.isNotBlank(loginName), UserInfo::getLoginName, loginName)
+                .like(StringUtils.isNotBlank(userName), UserInfo::getUserName, userName)
+                .like(StringUtils.isNotBlank(phoneNo), UserInfo::getPhoneNo, phoneNo)
                 .orderByDesc(UserInfo::getId);
     }
 }

@@ -35,7 +35,7 @@
                                         <div class="input-group-prepend">
                                             <span class="input-group-text">URL</span>
                                         </div>
-                                        <input type="text" class="form-control" name="dopath" placeholder="URL">
+                                        <input type="text" class="form-control" name="doPath" placeholder="URL">
                                     </div>
                                     <div class="input-group m-r-5">
                                         <div class="input-group-prepend">
@@ -62,13 +62,13 @@
                                            data-side-pagination="server">
                                         <thead>
                                         <tr>
-                                            <th data-field="userid">操作用户ID</th>
-                                            <th data-field="dopath">URI</th>
+                                            <th data-field="userId">操作用户ID</th>
+                                            <th data-field="doPath">URI</th>
                                             <th data-field="method">提交方式</th>
                                             <th data-field="params">提交参数</th>
                                             <th data-field="ips">IP</th>
                                             <th data-field="useragent">浏览器信息</th>
-                                            <th data-field="cdate">操作时间</th>
+                                            <th data-field="createDate">操作时间</th>
                                         </tr>
                                         </thead>
                                     </table>

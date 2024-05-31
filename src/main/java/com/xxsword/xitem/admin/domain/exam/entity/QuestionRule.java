@@ -23,7 +23,7 @@ public class QuestionRule extends BaseEntity implements Serializable {
     @Index
     @Column(length = 50)
     @ColumnComment("试卷id")
-    private String paperid;
+    private String paperId;
 
     @Index
     @Column

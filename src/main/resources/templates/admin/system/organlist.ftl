@@ -71,7 +71,7 @@
                                                 <thead>
                                                 <tr>
                                                     <th data-field="name">名称</th>
-                                                    <th data-field="organnum">编号</th>
+                                                    <th data-field="organNum">编号</th>
                                                     <th data-field="seq">排序</th>
                                                     <th data-formatter="caozuo">操作</th>
                                                 </tr>
@@ -101,7 +101,7 @@
     }
 
     $('#add').click(function () {
-        layer_show('新增', "${ctx.contextPath}/admin/organ/organedit");
+        layer_show('新增', "${ctx.contextPath}/admin/organ/organEdit");
     });
 
     $("#searchBtn").click(function () {

@@ -9,9 +9,9 @@ import java.io.Serializable;
 
 @Data
 @TableComment("菜单表")
-@TableName("t_sys_functions")
+@TableName("t_sys_function")
 @TableEngine(MySqlEngineConstant.InnoDB)
-public class Functions extends BaseEntity implements Serializable {
+public class Function extends BaseEntity implements Serializable {
 
     private static final long serialVersionUID = 102L;
     @Column(length = 100)
@@ -38,7 +38,7 @@ public class Functions extends BaseEntity implements Serializable {
 
     @Column
     @ColumnComment("可见 1-显示 0-隐藏")
-    private Integer showflag;// 是否显示在菜单中，有些菜单只作为权限标识，不显示
+    private Integer showFlag;// 是否显示在菜单中，有些菜单只作为权限标识，不显示
 
     @Column
     @ColumnComment("图标")

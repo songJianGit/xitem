@@ -34,7 +34,7 @@ public class QuestionRuleServiceImpl extends ServiceImpl<QuestionRuleMapper, Que
         questionRule.setTitle("规则" + (countByPaperId(paperId) + 1));
         questionRule.setSeq(DateTime.now().getMillis());
         questionRule.setNum(0);
-        questionRule.setPaperid(paperId);
+        questionRule.setPaperId(paperId);
         save(questionRule);
         return questionRule;
     }
@@ -70,7 +70,7 @@ public class QuestionRuleServiceImpl extends ServiceImpl<QuestionRuleMapper, Que
 
     @Override
     public Long countByPaperId(String paperId) {
-        return count(new LambdaQueryWrapper<QuestionRule>().eq(QuestionRule::getStatus, 1).eq(QuestionRule::getPaperid, paperId));
+        return count(new LambdaQueryWrapper<QuestionRule>().eq(QuestionRule::getStatus, 1).eq(QuestionRule::getPaperId, paperId));
     }
 
     @Override
@@ -94,7 +94,7 @@ public class QuestionRuleServiceImpl extends ServiceImpl<QuestionRuleMapper, Que
     private List<QuestionRule> listQuestionRuleByPid(String pid, boolean orderFlag) {
         LambdaQueryWrapper<QuestionRule> q = Wrappers.lambdaQuery();
         q.eq(QuestionRule::getStatus, 1);
-        q.eq(QuestionRule::getPaperid, pid);
+        q.eq(QuestionRule::getPaperId, pid);
         if (orderFlag) {
             q.orderByAsc(QuestionRule::getSeq, QuestionRule::getId);
         }

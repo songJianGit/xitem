@@ -6,10 +6,10 @@ import lombok.Data;
 public class UserInfoRoleVO {
 
     private String id;
-    private String userid;
-    private String loginname;
-    private String username;
-    private String phoneno;
-    private String roleid;
+    private String userId;
+    private String loginName;
+    private String userName;
+    private String phoneNo;
+    private String roleId;
 
 }

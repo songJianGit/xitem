@@ -172,7 +172,7 @@
             }
         } else {
             <#list questionOption as option>
-            $('#optionBox').append(getHtm('${option.id}', qtype, '${option.title}', `${option.optionright}`, `${option_index}`));
+            $('#optionBox').append(getHtm('${option.id}', qtype, '${option.title}', `${option.optionRight}`, `${option_index}`));
             </#list>
             if (qtype == 0) {
                 qtypeInitTitle0();

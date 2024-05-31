@@ -13,6 +13,6 @@ public class PaperDto {
     public LambdaQueryWrapper<Paper> toQuery() {
         return new LambdaQueryWrapper<Paper>().eq(Paper::getStatus, 1)
                 .like(StringUtils.isNotBlank(title), Paper::getTitle, title)
-                .orderByDesc(Paper::getCdate, Paper::getId);
+                .orderByDesc(Paper::getCreateDate, Paper::getId);
     }
 }

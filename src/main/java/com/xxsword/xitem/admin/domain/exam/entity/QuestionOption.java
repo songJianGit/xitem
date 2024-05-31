@@ -26,6 +26,6 @@ public class QuestionOption extends BaseEntity implements Serializable {
 
     @Column
     @ColumnComment("是否正确答案(0-否 1-是)")
-    private Integer optionright;
+    private Integer optionRight;
 
 }

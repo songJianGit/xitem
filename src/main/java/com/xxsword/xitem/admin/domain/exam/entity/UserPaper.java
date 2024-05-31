@@ -21,25 +21,25 @@ public class UserPaper extends BaseEntity implements Serializable {
     private static final long serialVersionUID = 207L;
     @Column(length = 50)
     @ColumnComment("试卷id")
-    private String paperid;
+    private String paperId;
 
     @Index
     @Column(length = 50)
     @ColumnComment("考试id")
-    private String examid;
+    private String examId;
 
-    @Index(columns = {"userid", "paperid", "examid", "substatus"})
+    @Index(columns = {"user_id", "paper_id", "exam_id", "sub_status"})
     @Column(length = 50)
     @ColumnComment("用户id")
-    private String userid;
+    private String userId;
 
     @Column
     @ColumnComment("提交状态(0-初始 1-已提交)")
-    private Integer substatus;
+    private Integer subStatus;
 
     @Column(length = 19)
     @ColumnComment("提交时间")
-    private String subdate;
+    private String subDate;
 
     @Column(length = 7, decimalLength = 2)
     @ColumnComment("用户总分")

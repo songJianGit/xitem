@@ -21,13 +21,13 @@ public class UserInfoRole implements Serializable {
     @Column(length = 50)
     private String id;
 
-    @Unique(columns = {"userid", "roleid"})
+    @Unique(columns = {"user_id", "role_id"})
     @Column(length = 50)
     @ColumnComment("用户id")
-    private String userid;
+    private String userId;
 
     @Column(length = 50)
     @ColumnComment("角色id")
-    private String roleid;
+    private String roleId;
 
 }

@@ -27,7 +27,7 @@
                                 <form action="${ctx.contextPath}/admin/system/roleSave" method="post" class="row">
                                     <input type="hidden" name="id" value="${role.id!}"/>
                                     <div class="form-group col-12">
-                                        <label for="username">角色名</label>
+                                        <label for="name">角色名</label>
                                         <input type="text" class="form-control" id="name" name="name" value="${role.name!}" placeholder="角色名" maxlength="100" required/>
                                     </div>
                                     <div class="form-group col-12">

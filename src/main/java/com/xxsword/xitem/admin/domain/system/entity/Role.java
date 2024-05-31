@@ -22,6 +22,6 @@ public class Role extends BaseEntity implements Serializable {
 
     // 在将用户保存到session的时候，剔除了菜单信息，所以根据request获取的用户是没有菜单信息的
     @TableField(exist = false)
-    private List<Functions> functionlist;
+    private List<Function> functionList;
 
 }

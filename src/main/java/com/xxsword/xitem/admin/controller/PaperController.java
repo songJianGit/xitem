@@ -190,7 +190,7 @@ public class PaperController {
      */
     @RequestMapping("listQRS")
     public String listQRS(HttpServletRequest request, QRSDto qrsDto, Model model) {
-        QuestionRule questionRule = questionRuleService.getById(qrsDto.getQrid());
+        QuestionRule questionRule = questionRuleService.getById(qrsDto.getQrId());
         model.addAttribute("questionRule", questionRule);
         return "admin/exam/paper/listqrs";
     }
@@ -301,7 +301,7 @@ public class PaperController {
     @RequestMapping("userPaperPreview")
     public String userPaperPreview(HttpServletRequest request, String userPaperId, Model model) {
         UserPaper userPaper = userPaperService.getById(userPaperId);
-        Paper paper = paperService.getById(userPaper.getPaperid());
+        Paper paper = paperService.getById(userPaper.getPaperId());
         List<QuestionVO> questionVOList = userPaperQuestionService.listQuestionByUserPaper(userPaper, true, true, true);
         PaperVO paperVO = PaperConvert.INSTANCE.toPaperVO(paper);
         paperVO.setQuestionVOList(questionVOList);

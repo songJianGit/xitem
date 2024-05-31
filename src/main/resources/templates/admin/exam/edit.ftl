@@ -33,15 +33,15 @@
                                     </div>
                                     <div class="form-group col-6">
                                         <label>考试类型</label>
-                                        <select class="form-control" name="extype">
-                                            <option value="1" <#if exam.extype??><#if exam.extype==1>selected</#if></#if> >公开考试</option>
-                                            <option value="0" <#if exam.extype??><#if exam.extype==0>selected</#if></#if> >授权考试</option>
+                                        <select class="form-control" name="exType">
+                                            <option value="1" <#if exam.exType??><#if exam.exType==1>selected</#if></#if> >公开考试</option>
+                                            <option value="0" <#if exam.exType??><#if exam.exType==0>selected</#if></#if> >授权考试</option>
                                         </select>
                                     </div>
                                     <div class="form-group col-6">
                                         <label for="title">最大重考次数（-1表示不限制）</label>
-                                        <input type="text" class="form-control" id="title" name="maxnum"
-                                               value="${exam.maxnum!}" placeholder="最大重考次数" required/>
+                                        <input type="text" class="form-control" id="title" name="maxNum"
+                                               value="${exam.maxNum!}" placeholder="最大重考次数" required/>
                                     </div>
                                     <div class="form-group col-6">
                                         <label for="stime">开始时间</label>
@@ -62,8 +62,8 @@
                                     </div>
                                     <div class="form-group col-6">
                                         <label for="title">试卷</label>
-                                        <input type="text" class="form-control" id="papername" value="${exam.papertitle!}" placeholder="试卷" readonly/>
-                                        <input type="hidden" value="${exam.paperid!}" name="paperid" id="paperid">
+                                        <input type="text" class="form-control" id="papername" value="${exam.paperTitle!}" placeholder="试卷" readonly/>
+                                        <input type="hidden" value="${exam.paperId!}" name="paperId" id="paperid">
                                     </div>
 <#--                                    <div class="form-group col-12">-->
 <#--                                        <label>二维码</label>-->

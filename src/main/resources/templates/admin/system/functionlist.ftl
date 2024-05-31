@@ -67,13 +67,13 @@
                                                     ${func.tag!}
                                                 </td>
                                                 <td>
-                                                    <#if func.showflag==1>显示</#if>
-                                                    <#if func.showflag==0>隐藏</#if>
+                                                    <#if func.showFlag==1>显示</#if>
+                                                    <#if func.showFlag==0>隐藏</#if>
                                                 </td>
                                                 <td>
-                                                    <a href="${ctx.contextPath}/admin/system/functionsEdit?functionsId=${func.id}">修改</a>
+                                                    <a href="${ctx.contextPath}/admin/system/functionEdit?functionsId=${func.id}">修改</a>
                                                     <a href="#!" class="functionsDelete" data-id="${func.id}">删除</a>
-                                                    <a href="${ctx.contextPath}/admin/system/functionsAdd?functionsId=${func.id}">新增下级菜单</a>
+                                                    <a href="${ctx.contextPath}/admin/system/functionAdd?functionsId=${func.id}">新增下级菜单</a>
                                                 </td>
                                             </tr>
                                         </#list>
@@ -93,15 +93,15 @@
 <script type="text/javascript">
     $('#treeTable').treeTable({expandLevel: 6}).show();
     $('.functionsDelete').click(function () {
-        let functionsId = $(this).data('id');
+        let functionId = $(this).data('id');
         layer.confirm('确定删除本菜单和其下级所有菜单？', {
             btn: ['确定', '取消'] //按钮
         }, function () {
             $.ajax({
-                url: '${ctx.contextPath}/admin/system/functionsDelete',
+                url: '${ctx.contextPath}/admin/system/functionDelete',
                 cache: false,
                 data: {
-                    'functionsId': functionsId
+                    'functionId': functionId
                 },
                 success: function (data) {
                     if (data.result) {
@@ -116,7 +116,7 @@
     });
 
     $('#add').click(function () {
-        window.location.href = '${ctx.contextPath}/admin/system/functionsAdd';
+        window.location.href = '${ctx.contextPath}/admin/system/functionAdd';
     });
 
     // 提交前校验

@@ -69,7 +69,7 @@
                                             <th data-field="val">值</th>
                                             <th data-field="type">类型</th>
                                             <th data-field="seq">排序</th>
-                                            <th data-field="cdate">创建时间</th>
+                                            <th data-field="createDate">创建时间</th>
                                             <th data-field="id" data-formatter="caozuo">操作</th>
                                         </tr>
                                         </thead>

@@ -34,28 +34,28 @@ public class Exam extends BaseEntity implements Serializable {
 
     @Column
     @ColumnComment("用户的最大考试次数")
-    private Integer maxnum;
+    private Integer maxNum;
 
     @Column(length = 50)
     @ColumnComment("试卷id")
-    private String paperid;
+    private String paperId;
 
     @TableField(exist = false)
-    private String papertitle;
+    private String paperTitle;
 
     @Column
     @ColumnComment("发布状态（0-初始 1-发布 2-下架）")
-    private Integer releasestatus;// 该考试是否显示到前台
+    private Integer releaseStatus;// 该考试是否显示到前台
 
     @Column
     @ColumnComment("考试类型（1-公开考试 0-授权考试）")
-    private Integer extype;
+    private Integer exType;
 
     /**
      * 考试状态(通过考试的开始和结束时间进行赋值)
      * 0-未开始 1-进行中 2-已结束
      */
     @TableField(exist = false)
-    private Integer exstatus;
+    private Integer exStatus;
 
 }

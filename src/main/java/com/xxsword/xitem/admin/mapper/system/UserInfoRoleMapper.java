@@ -12,20 +12,20 @@ import org.springframework.stereotype.Repository;
 public interface UserInfoRoleMapper extends BaseMapper<UserInfoRole> {
     @Select("<script>" +
             "select " +
-            "b.*,c.username,c.loginname,c.phoneno " +
-            "from t_sys_user_role b left join t_sys_userinfo c on b.userid=c.id " +
+            "b.*,c.user_name,c.login_name,c.phone_no " +
+            "from t_sys_user_role b left join t_sys_userinfo c on b.user_id=c.id " +
             "where 1=1 " +
             "<if test='dto.loginName!=null and dto.loginName!=\"\"'>" +
-            "and c.loginname=#{dto.loginName} " +
+            "and c.login_name=#{dto.loginName} " +
             "</if>" +
             "<if test='dto.userName!=null and dto.userName!=\"\"'>" +
-            "and c.username=#{dto.userName} " +
+            "and c.user_name=#{dto.userName} " +
             "</if>" +
             "<if test='dto.phoneNo!=null and dto.phoneNo!=\"\"'>" +
-            "and c.phoneno=#{dto.phoneNo} " +
+            "and c.phone_no=#{dto.phoneNo} " +
             "</if>" +
             "<if test='dto.roleId!=null and dto.roleId!=\"\"'>" +
-            "and b.roleid=#{dto.roleId} " +
+            "and b.role_id=#{dto.roleId} " +
             "</if>" +
             "</script>")
     Page<UserInfoRoleVO> pageUserBuRoleId(Page<UserInfoRole> page, UserInfoRoleDto dto);

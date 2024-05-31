@@ -21,7 +21,7 @@
                     <div class="col-12">
                         <div class="card">
                             <div class="card-header">
-                                <h4>${Session.puser.nickname!}，欢迎回来</h4>
+                                <h4>${Session.puser.nickName!}，欢迎回来</h4>
                             </div>
                             <div class="card-body">
                                 欢迎使用xitem。

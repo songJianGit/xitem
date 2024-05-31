@@ -21,7 +21,7 @@ public class Organ extends BaseEntity implements Serializable {
 
     @Column(length = 100)
     @ColumnComment("机构编号")
-    private String organnum;
+    private String organNum;
 
     @Column(length = 50)
     @Index

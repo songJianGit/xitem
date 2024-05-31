@@ -70,8 +70,8 @@
                                                         <thead>
                                                         <tr>
                                                             <th data-checkbox="true"></th>
-                                                            <th data-field="username">姓名</th>
-                                                            <th data-field="loginname">登录名</th>
+                                                            <th data-field="userName">姓名</th>
+                                                            <th data-field="loginName">登录名</th>
                                                         </tr>
                                                         </thead>
                                                     </table>
@@ -111,7 +111,7 @@
                                                 <div id="custom-toolbarB">
                                                     <div class="form-inline" role="form">
                                                         <button type="button" id="add" class="btn btn-primary">
-                                                            新增授权
+                                                            添加授权
                                                         </button>
                                                     </div>
                                                 </div>
@@ -128,8 +128,8 @@
                                                         <thead>
                                                         <tr>
                                                             <th data-field="state" data-checkbox="true"></th>
-                                                            <th data-field="username">姓名</th>
-                                                            <th data-field="loginname">登录名</th>
+                                                            <th data-field="userName">姓名</th>
+                                                            <th data-field="loginName">登录名</th>
                                                         </tr>
                                                         </thead>
                                                     </table>

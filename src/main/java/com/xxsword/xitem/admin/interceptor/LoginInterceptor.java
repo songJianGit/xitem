@@ -3,12 +3,12 @@ package com.xxsword.xitem.admin.interceptor;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.xxsword.xitem.admin.constant.Constant;
-import com.xxsword.xitem.admin.domain.system.entity.Functions;
+import com.xxsword.xitem.admin.domain.system.entity.Function;
 import com.xxsword.xitem.admin.domain.system.entity.Role;
-import com.xxsword.xitem.admin.domain.system.entity.RoleFunctions;
+import com.xxsword.xitem.admin.domain.system.entity.RoleFunction;
 import com.xxsword.xitem.admin.domain.system.entity.UserInfo;
-import com.xxsword.xitem.admin.service.system.FunctionsService;
-import com.xxsword.xitem.admin.service.system.RoleFunctionsService;
+import com.xxsword.xitem.admin.service.system.FunctionService;
+import com.xxsword.xitem.admin.service.system.RoleFunctionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -23,9 +23,9 @@ import java.util.stream.Collectors;
 public class LoginInterceptor implements HandlerInterceptor {
 
     @Autowired
-    private FunctionsService functionsService;
+    private FunctionService functionService;
     @Autowired
-    private RoleFunctionsService roleFunctionsService;
+    private RoleFunctionService roleFunctionService;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
@@ -35,7 +35,7 @@ public class LoginInterceptor implements HandlerInterceptor {
             return back(request, response);
         }
         UserInfo userInfo = (UserInfo) o;
-        List<Role> roleSet = userInfo.getRolelist();
+        List<Role> roleSet = userInfo.getRoleList();
         if (roleSet == null || roleSet.isEmpty()) {
             return back(request, response);
         }
@@ -43,12 +43,12 @@ public class LoginInterceptor implements HandlerInterceptor {
         if (StringUtils.isBlank(url)) {
             return back(request, response);
         }
-        Functions functions = checkF(url);
-        if (functions == null) {
+        Function function = checkF(url);
+        if (function == null) {
             return true;// 没有配置该url，默认放行。
         } else {
             List<String> roleIds = roleSet.stream().map(Role::getId).collect(Collectors.toList());
-            if (checkRF(roleIds, functions)) {
+            if (checkRF(roleIds, function)) {
                 return true;
             }
         }
@@ -69,8 +69,8 @@ public class LoginInterceptor implements HandlerInterceptor {
      *
      * @return
      */
-    private Functions checkF(String url) {
-        List<Functions> haveFun = functionsService.list(new LambdaQueryWrapper<Functions>().select(Functions::getId).eq(Functions::getStatus, 1).eq(Functions::getUrl, url));
+    private Function checkF(String url) {
+        List<Function> haveFun = functionService.list(new LambdaQueryWrapper<Function>().select(Function::getId).eq(Function::getStatus, 1).eq(Function::getUrl, url));
         if (haveFun.isEmpty()) {
             return null;
         }
@@ -83,8 +83,8 @@ public class LoginInterceptor implements HandlerInterceptor {
      * @param roleIds
      * @return true-有 false-没有
      */
-    private boolean checkRF(List<String> roleIds, Functions functions) {
-        long roleFunctionsCount = roleFunctionsService.count(new LambdaQueryWrapper<RoleFunctions>().in(RoleFunctions::getRoleid, roleIds).eq(RoleFunctions::getFunid, functions.getId()));
+    private boolean checkRF(List<String> roleIds, Function function) {
+        long roleFunctionsCount = roleFunctionService.count(new LambdaQueryWrapper<RoleFunction>().in(RoleFunction::getRoleId, roleIds).eq(RoleFunction::getFunId, function.getId()));
         return roleFunctionsCount != 0;
     }
 }

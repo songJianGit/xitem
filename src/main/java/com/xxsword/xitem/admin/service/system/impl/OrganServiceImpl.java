@@ -198,16 +198,16 @@ public class OrganServiceImpl extends ServiceImpl<OrganMapper, Organ> implements
             case PermissionType.USERINFO:
                 LambdaQueryWrapper<UserInfo> qUser = query;
                 if (userPermissionType.equals(0)) {
-                    qUser.eq(UserInfo::getCuserid, userId);
+                    qUser.eq(UserInfo::getCreateUserId, userId);
                 }
                 if (userPermissionType.equals(1)) {
-                    qUser.in(UserInfo::getCorganid, permissionIdsAll);
+                    qUser.in(UserInfo::getCreateOrganId, permissionIdsAll);
                 }
                 break;
             case PermissionType.ORGAN:
                 LambdaQueryWrapper<Organ> qOrgan = query;
                 if (userPermissionType.equals(0)) {
-                    qOrgan.eq(Organ::getCuserid, userId);
+                    qOrgan.eq(Organ::getCreateUserId, userId);
                 }
                 if (userPermissionType.equals(1)) {
                     qOrgan.in(Organ::getId, permissionIdsAll);
@@ -244,10 +244,10 @@ public class OrganServiceImpl extends ServiceImpl<OrganMapper, Organ> implements
      */
     private List<String> getPermissionsIds(UserInfo userInfo) {
         List<String> list = new ArrayList<>();
-        if (StringUtils.isNotBlank(userInfo.getPermissionids())) {
-            return new ArrayList<>(Arrays.asList(userInfo.getPermissionids().split(",")));
+        if (StringUtils.isNotBlank(userInfo.getPermissionIds())) {
+            return new ArrayList<>(Arrays.asList(userInfo.getPermissionIds().split(",")));
         }
-        list.add(userInfo.getOrganid());
+        list.add(userInfo.getOrganId());
         return list;
     }
 

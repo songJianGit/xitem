@@ -17,9 +17,9 @@ public class UserInfoDto {
         return new LambdaQueryWrapper<UserInfo>()
                 .in(status == null, UserInfo::getStatus, 1, 2)
                 .eq(status != null, UserInfo::getStatus, status)
-                .like(StringUtils.isNotBlank(loginName), UserInfo::getLoginname, loginName)
-                .like(StringUtils.isNotBlank(userName), UserInfo::getUsername, userName)
-                .like(StringUtils.isNotBlank(phoneNo), UserInfo::getPhoneno, phoneNo)
+                .like(StringUtils.isNotBlank(loginName), UserInfo::getLoginName, loginName)
+                .like(StringUtils.isNotBlank(userName), UserInfo::getUserName, userName)
+                .like(StringUtils.isNotBlank(phoneNo), UserInfo::getPhoneNo, phoneNo)
                 .orderByDesc(UserInfo::getId);
     }
 }

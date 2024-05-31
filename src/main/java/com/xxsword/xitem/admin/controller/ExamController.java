@@ -54,9 +54,9 @@ public class ExamController {
         Exam exam = new Exam();
         if (StringUtils.isNotBlank(id)) {
             exam = examService.getById(id);
-            if (StringUtils.isNotBlank(exam.getPaperid())) {
-                Paper paper = paperService.getById(exam.getPaperid());
-                exam.setPapertitle(paper.getTitle());
+            if (StringUtils.isNotBlank(exam.getPaperId())) {
+                Paper paper = paperService.getById(exam.getPaperId());
+                exam.setPaperTitle(paper.getTitle());
             }
         }
         model.addAttribute("exam", exam);
@@ -67,8 +67,8 @@ public class ExamController {
     public String save(HttpServletRequest request, Exam exam) {
         UserInfo userInfo = Utils.getUserInfo(request);
         exam.setBaseInfo(userInfo);
-        if (exam.getReleasestatus() == null) {
-            exam.setReleasestatus(0);
+        if (exam.getReleaseStatus() == null) {
+            exam.setReleaseStatus(0);
         }
         examService.saveOrUpdate(exam);
         return "redirect:list";

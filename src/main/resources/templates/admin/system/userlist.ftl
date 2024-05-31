@@ -88,12 +88,12 @@
                                         <thead>
                                         <tr>
                                             <th data-checkbox="true"></th>
-                                            <th data-field="username">姓名</th>
-                                            <th data-field="loginname">登录名</th>
+                                            <th data-field="userName">姓名</th>
+                                            <th data-field="loginName">登录名</th>
                                             <th data-field="email">邮箱</th>
-                                            <th data-field="phoneno">手机号码</th>
+                                            <th data-field="phoneNo">手机号码</th>
                                             <th data-field="status" data-formatter="status">状态</th>
-                                            <th data-field="cdate">创建时间</th>
+                                            <th data-field="createDate">创建时间</th>
                                             <th data-field="id" data-formatter="caozuo">操作</th>
                                         </tr>
                                         </thead>

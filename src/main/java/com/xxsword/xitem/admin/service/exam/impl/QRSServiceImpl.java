@@ -24,7 +24,7 @@ public class QRSServiceImpl extends ServiceImpl<QRSMapper, QRS> implements QRSSe
     @Override
     public Long countQRSByQrid(String qrid) {
         LambdaQueryWrapper<QRS> q = Wrappers.lambdaQuery();
-        q.eq(QRS::getQrid, qrid);
+        q.eq(QRS::getQrId, qrid);
         return count(q);
     }
 
@@ -45,7 +45,7 @@ public class QRSServiceImpl extends ServiceImpl<QRSMapper, QRS> implements QRSSe
     public void addQRS(UserInfo userInfo, String qrid, String qids, Double score) {
         String[] ids = qids.split(",");
         int seq = 0;
-        List<QRS> qrsList = list(new Page<>(1, 1), new LambdaQueryWrapper<QRS>().eq(QRS::getStatus, 1).eq(QRS::getQrid, qrid).orderByDesc(QRS::getSeq));
+        List<QRS> qrsList = list(new Page<>(1, 1), new LambdaQueryWrapper<QRS>().eq(QRS::getStatus, 1).eq(QRS::getQrId, qrid).orderByDesc(QRS::getSeq));
         if (!qrsList.isEmpty()) {
             seq = qrsList.get(0).getSeq();
         }
@@ -56,7 +56,7 @@ public class QRSServiceImpl extends ServiceImpl<QRSMapper, QRS> implements QRSSe
                 qrs = new QRS();
                 qrs.setQid(item);
                 qrs.setScore(score);
-                qrs.setQrid(qrid);
+                qrs.setQrId(qrid);
                 qrs.setSeq(++seq);
                 qrs.setBaseInfo(userInfo);
                 qrsListSave.add(qrs);
@@ -68,7 +68,7 @@ public class QRSServiceImpl extends ServiceImpl<QRSMapper, QRS> implements QRSSe
     @Override
     public QRS getQrs(String qrid, String qid) {
         LambdaQueryWrapper<QRS> q = Wrappers.lambdaQuery();
-        q.eq(QRS::getQrid, qrid);
+        q.eq(QRS::getQrId, qrid);
         q.eq(QRS::getQid, qid);
         return getOne(q);
     }
@@ -115,7 +115,7 @@ public class QRSServiceImpl extends ServiceImpl<QRSMapper, QRS> implements QRSSe
     @Override
     public List<QRS> listQRSByQrid(String qrid, boolean orderFlag) {
         LambdaQueryWrapper<QRS> q = Wrappers.lambdaQuery();
-        q.eq(QRS::getQrid, qrid);
+        q.eq(QRS::getQrId, qrid);
         if (orderFlag) {
             q.orderByAsc(QRS::getSeq, QRS::getId);
         }

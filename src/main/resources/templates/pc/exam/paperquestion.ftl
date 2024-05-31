@@ -155,10 +155,10 @@
                 layer.close(indexLoad);
                 if (data.result) {
                     let question = data.data;
-                    action_user_paper_question_id = question.userpaperquestionid;// 当前题目id
+                    action_user_paper_question_id = question.userPaperQuestionId;// 当前题目id
                     $(".q-item-title").html(pageNum + ".&nbsp;" + question.title);// 题目标题
                     $(".q-item-op-box").html(getQuestionOptionHtm(question));// 选项
-                    setAnswer(question.useranswerIds);
+                    setAnswer(question.userAnswerIds);
                 } else {
                     layer.msg(data.msg);
                 }

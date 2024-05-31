@@ -22,15 +22,15 @@ public class Record implements Serializable {
 
     @Column(length = 50)
     @ColumnComment("用户id")
-    private String userid;
+    private String userId;
 
     @Column(length = 19)
     @ColumnComment("创建时间")
-    private String cdate;
+    private String createDate;
 
     @Column
     @ColumnComment("访问路径")
-    private String dopath;
+    private String doPath;
 
     @Column
     @ColumnComment("IP地址")

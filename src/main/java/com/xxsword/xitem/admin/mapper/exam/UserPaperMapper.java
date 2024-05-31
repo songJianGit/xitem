@@ -19,14 +19,17 @@ public interface UserPaperMapper extends BaseMapper<UserPaper> {
      */
     @Select("<script>" +
             "select " +
-            "a.userid userid,b.username username, max(a.score) score " +
-            "from t_ex_user_paper a left join t_sys_userinfo b on a.userid=b.id " +
+            "a.user_id user_id,b.user_name user_name, max(a.score) score " +
+            "from t_ex_user_paper a left join t_sys_userinfo b on a.user_id=b.id " +
             "where " +
-            "examid=#{dto.examId} " +
+            "exam_id=#{dto.examId} " +
             "<if test='dto.userName!=null and dto.userName!=\"\"'>" +
-            "and b.username like concat('%', #{dto.userName}, '%') " +
+            "and b.user_name like concat('%', #{dto.userName}, '%') " +
             "</if>" +
-            "group by a.userid,b.username " +
+            "<if test='dto.subStatus!=null'>" +
+            "and a.sub_status = #{dto.subStatus} " +
+            "</if>" +
+            "group by a.user_id,b.user_name " +
             "</script>")
     Page<UserPaper> pageExamScore(Page<UserPaper> page, UserPaperDto dto);
 

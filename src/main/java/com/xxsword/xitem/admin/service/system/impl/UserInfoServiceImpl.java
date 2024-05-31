@@ -3,15 +3,13 @@ package com.xxsword.xitem.admin.service.system.impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.xxsword.xitem.admin.domain.system.dto.UserInfoDto;
-import com.xxsword.xitem.admin.domain.system.entity.Functions;
+import com.xxsword.xitem.admin.domain.system.entity.Function;
 import com.xxsword.xitem.admin.domain.system.entity.Role;
 import com.xxsword.xitem.admin.domain.system.entity.UserInfo;
 import com.xxsword.xitem.admin.mapper.system.UserInfoMapper;
 import com.xxsword.xitem.admin.model.RestResult;
-import com.xxsword.xitem.admin.service.system.RoleFunctionsService;
+import com.xxsword.xitem.admin.service.system.RoleFunctionService;
 import com.xxsword.xitem.admin.service.system.UserInfoRoleService;
 import com.xxsword.xitem.admin.service.system.UserInfoService;
 import com.xxsword.xitem.admin.utils.DateUtil;
@@ -22,29 +20,28 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Service
 public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> implements UserInfoService {
 
     @Autowired
-    private RoleFunctionsService roleFunctionsService;
+    private RoleFunctionService roleFunctionService;
     @Autowired
     private UserInfoRoleService userInfoRoleService;
 
     @Override
-    public UserInfo setUserInfoRoleAndFun(UserInfo user, boolean role, boolean functions) {
+    public UserInfo setUserInfoRoleAndFun(UserInfo user, boolean role, boolean function) {
         if (role) {
             List<Role> roleList = userInfoRoleService.listRoleByUserId(user.getId());
             if (!roleList.isEmpty()) {
-                if (functions) {
+                if (function) {
                     for (Role r : roleList) {
-                        List<Functions> functionsList = roleFunctionsService.listFunctionsByRoleId(r.getId());
-                        r.setFunctionlist(functionsList);
+                        List<Function> functionList = roleFunctionService.listFunctionByRoleId(r.getId());
+                        r.setFunctionList(functionList);
                     }
                 }
-                user.setRolelist(roleList);
+                user.setRoleList(roleList);
             }
         }
         return user;
@@ -58,7 +55,7 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
             loginName = loginName.trim();
         }
         LambdaQueryWrapper<UserInfo> q = Wrappers.lambdaQuery();
-        q.eq(UserInfo::getLoginname, loginName);
+        q.eq(UserInfo::getLoginName, loginName);
 //        q.eq(UserInfo::getStatus, 1);不论有效还是无效，都要检查唯一
         if (StringUtils.isNotBlank(userId)) {
             q.ne(UserInfo::getId, userId);
@@ -74,7 +71,7 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
             phoneNo = phoneNo.trim();
         }
         LambdaQueryWrapper<UserInfo> q = Wrappers.lambdaQuery();
-        q.eq(UserInfo::getPhoneno, phoneNo);
+        q.eq(UserInfo::getPhoneNo, phoneNo);
 //        q.eq(UserInfo::getStatus, 1);不论有效还是无效，都要检查唯一
         if (StringUtils.isNotBlank(userId)) {
             q.ne(UserInfo::getId, userId);
@@ -115,9 +112,9 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
         }
         LambdaQueryWrapper<UserInfo> query = Wrappers.lambdaQuery();
         query.eq(UserInfo::getStatus, 1);
-        query.eq(UserInfo::getLoginname, loginName);
+        query.eq(UserInfo::getLoginName, loginName);
         query.eq(UserInfo::getPassword, passWord);
-        query.ge(UserInfo::getLifedate, DateUtil.now());
+        query.ge(UserInfo::getLifeDate, DateUtil.now());
         UserInfo userInfo = getOne(query);
         if (userInfo == null) {
             return null;
@@ -132,7 +129,7 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
         }
         LambdaQueryWrapper<UserInfo> query = Wrappers.lambdaQuery();
         query.eq(UserInfo::getStatus, 1);
-        query.eq(UserInfo::getLoginname, loginName);
+        query.eq(UserInfo::getLoginName, loginName);
         return getOne(query);
     }
 
@@ -147,7 +144,7 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
             return false;
         }
         String nowTime = DateUtil.now(DateUtil.sdfA2);
-        String pwdError = userInfo.getPassworderror();
+        String pwdError = userInfo.getPasswordError();
         if (StringUtils.isBlank(pwdError)) {
             pwdError = DateUtil.now(DateUtil.sdfA2) + ",1";
         } else {
@@ -165,7 +162,7 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
         }
         UserInfo userInfoUp = new UserInfo();
         userInfoUp.setId(userInfo.getId());
-        userInfoUp.setPassworderror(pwdError);
+        userInfoUp.setPasswordError(pwdError);
         updateById(userInfoUp);
         return flag;
     }
@@ -174,7 +171,7 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
     public void clearLockUser(String userId) {
         UserInfo userInfoUp = new UserInfo();
         userInfoUp.setId(userId);
-        userInfoUp.setPassworderror("");
+        userInfoUp.setPasswordError("");
         updateById(userInfoUp);
     }
 
@@ -224,7 +221,7 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
 
     @Override
     public Map<String, UserInfo> mapsUser(Set<String> userIds) {
-        return listByIds(userIds).stream().collect(Collectors.toMap(UserInfo::getId, Function.identity()));
+        return listByIds(userIds).stream().collect(Collectors.toMap(UserInfo::getId, java.util.function.Function.identity()));
     }
 
 }

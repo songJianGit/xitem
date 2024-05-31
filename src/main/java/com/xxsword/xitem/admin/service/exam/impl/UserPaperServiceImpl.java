@@ -83,14 +83,14 @@ public class UserPaperServiceImpl extends ServiceImpl<UserPaperMapper, UserPaper
     @Transactional
     public UserPaper userPaperSub(UserInfo userInfo, String userPaperId) {
         UserPaper userPaper = getById(userPaperId);
-        if (userPaper.getSubstatus().equals(1)) {// 已提交则无需重复提交
+        if (userPaper.getSubStatus().equals(1)) {// 已提交则无需重复提交
             return userPaper;
         }
         UserPaper userPaperUp = new UserPaper();
         userPaperUp.setId(userPaperId);
         userPaperUp.setBaseInfo(userInfo);
-        userPaperUp.setSubstatus(1);
-        userPaperUp.setSubdate(DateUtil.now());
+        userPaperUp.setSubStatus(1);
+        userPaperUp.setSubDate(DateUtil.now());
         userPaperUp.setScore(this.sumScore(userPaper));
         updateById(userPaperUp);
         return userPaperUp;
@@ -100,11 +100,11 @@ public class UserPaperServiceImpl extends ServiceImpl<UserPaperMapper, UserPaper
     public Page<UserPaper> pageUserExamRecord(Page<UserPaper> page, String userId) {
         LambdaQueryWrapper<UserPaper> query = Wrappers.lambdaQuery();
         query.eq(UserPaper::getStatus, 1);
-        query.eq(UserPaper::getUserid, userId);
-        query.isNotNull(UserPaper::getExamid);
+        query.eq(UserPaper::getUserId, userId);
+        query.isNotNull(UserPaper::getExamId);
 
-        query.select(UserPaper::getExamid);
-        query.groupBy(UserPaper::getExamid);
+        query.select(UserPaper::getExamId);
+        query.groupBy(UserPaper::getExamId);
         return page(page, query);
     }
 
@@ -112,7 +112,7 @@ public class UserPaperServiceImpl extends ServiceImpl<UserPaperMapper, UserPaper
     public List<UserPaperVO> listUserPaperVOByUserPaper(List<UserPaper> list) {
         List<UserPaperVO> voList = UserPaperConvert.INSTANCE.toPaperVO(list);
         for (UserPaperVO item : voList) {
-            item.setDuration(DateUtil.sToHHmmss(DateUtil.differSecond(item.getCdate(), item.getSubdate(), DateUtil.sdfA1)));
+            item.setDuration(DateUtil.sToHHmmss(DateUtil.differSecond(item.getCreateDate(), item.getSubDate(), DateUtil.sdfA1)));
         }
         return voList;
     }
@@ -121,9 +121,11 @@ public class UserPaperServiceImpl extends ServiceImpl<UserPaperMapper, UserPaper
     public Page<UserPaperVO> pageExamScore(Page<UserPaper> page, UserPaperDto userPaperDto) {
         Page<UserPaper> paperPage = baseMapper.pageExamScore(page, userPaperDto);
         List<UserPaperVO> userPaperVOList = UserPaperConvert.INSTANCE.toPaperVO(paperPage.getRecords());
-        Map<String, UserInfo> user = userInfoService.mapsUser(userPaperVOList.stream().map(UserPaperVO::getUserid).collect(Collectors.toSet()));
-        for (UserPaperVO item : userPaperVOList) {
-            item.setUsername(user.get(item.getUserid()).getUsername());
+        if (!userPaperVOList.isEmpty()) {
+            Map<String, UserInfo> user = userInfoService.mapsUser(userPaperVOList.stream().map(UserPaperVO::getUserId).collect(Collectors.toSet()));
+            for (UserPaperVO item : userPaperVOList) {
+                item.setUserName(user.get(item.getUserId()).getUserName());
+            }
         }
         Page<UserPaperVO> voPage = new Page<>(paperPage.getCurrent(), paperPage.getPages(), paperPage.getTotal());
         voPage.setRecords(userPaperVOList);
@@ -141,14 +143,14 @@ public class UserPaperServiceImpl extends ServiceImpl<UserPaperMapper, UserPaper
     private LambdaQueryWrapper<UserPaper> getUserPaperLambdaQueryWrapper(String userId, String paperId, String examId, Integer subStatus) {
         LambdaQueryWrapper<UserPaper> q = Wrappers.lambdaQuery();
         q.eq(UserPaper::getStatus, 1);
-        q.eq(UserPaper::getUserid, userId);
-        q.eq(UserPaper::getPaperid, paperId);
-        q.eq(UserPaper::getExamid, examId);
+        q.eq(UserPaper::getUserId, userId);
+        q.eq(UserPaper::getPaperId, paperId);
+        q.eq(UserPaper::getExamId, examId);
         if (subStatus != null) {
-            q.eq(UserPaper::getSubstatus, subStatus);
+            q.eq(UserPaper::getSubStatus, subStatus);
         }
-        q.isNotNull(UserPaper::getExamid);
-        q.orderByDesc(UserPaper::getCdate, UserPaper::getId);
+        q.isNotNull(UserPaper::getExamId);
+        q.orderByDesc(UserPaper::getCreateDate, UserPaper::getId);
         return q;
     }
 
@@ -180,10 +182,10 @@ public class UserPaperServiceImpl extends ServiceImpl<UserPaperMapper, UserPaper
     private UserPaper newUserPaper(UserInfo userInfo, String paperId, String examId) {
         UserPaper userPaper = new UserPaper();
         userPaper.setBaseInfo(userInfo);
-        userPaper.setSubstatus(0);
-        userPaper.setExamid(examId);
-        userPaper.setPaperid(paperId);
-        userPaper.setUserid(userInfo.getId());
+        userPaper.setSubStatus(0);
+        userPaper.setExamId(examId);
+        userPaper.setPaperId(paperId);
+        userPaper.setUserId(userInfo.getId());
         save(userPaper);
         userPaperQuestionService.newPaperQ(userPaper, userInfo);// 给新的试卷生成新的题目
         return userPaper;

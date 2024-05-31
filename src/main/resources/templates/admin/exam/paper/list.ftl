@@ -69,7 +69,7 @@
                                         <tr>
                                             <th data-checkbox="true"></th>
                                             <th data-field="title">试卷标题</th>
-                                            <th data-field="cdate" data-width="160px">创建时间</th>
+                                            <th data-field="createDate" data-width="160px">创建时间</th>
                                             <th data-field="id" data-formatter="caozuo" data-width="145px">操作</th>
                                         </tr>
                                         </thead>

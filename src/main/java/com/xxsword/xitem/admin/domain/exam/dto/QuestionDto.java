@@ -17,6 +17,6 @@ public class QuestionDto {
                 .like(StringUtils.isNotBlank(title), Question::getTitle, title)
                 .eq(StringUtils.isNotBlank(qclass), Question::getQclass, qclass)
                 .eq(qtype != null, Question::getQtype, qtype)
-                .orderByDesc(Question::getCdate, Question::getId);
+                .orderByDesc(Question::getCreateDate, Question::getId);
     }
 }

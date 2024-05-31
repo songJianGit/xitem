@@ -78,7 +78,7 @@
                    data-toolbar="#custom-toolbar"
                    data-toggle="table"
                    data-click-to-select="true"
-                   data-url="${ctx.contextPath}/admin/paper/listQRSData?qrid=${questionRule.id!}"
+                   data-url="${ctx.contextPath}/admin/paper/listQRSData?qrId=${questionRule.id!}"
                    data-side-pagination="server">
                 <thead>
                 <tr>
@@ -250,7 +250,7 @@
 
     $('#searchBtn').click(function () {
         $("#table-pagination").bootstrapTable('refresh', {
-            url: "${ctx.contextPath}/admin/paper/listQRSData?qrid=${questionRule.id!}&" + $("#searchform").serialize()
+            url: "${ctx.contextPath}/admin/paper/listQRSData?qrId=${questionRule.id!}&" + $("#searchform").serialize()
         });
     });
 </script>

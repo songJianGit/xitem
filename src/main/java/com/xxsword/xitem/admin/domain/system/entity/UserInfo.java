@@ -19,17 +19,17 @@ public class UserInfo extends BaseEntity implements Serializable {
     private static final long serialVersionUID = 107L;
     @Column(length = 50)
     @ColumnComment("用户昵称")
-    private String nickname;
+    private String nickName;
 
     @Column(length = 100)
     @ColumnComment("用户姓名")
-    private String username;
+    private String userName;
 
     @Index
     @Unique
     @Column(length = 50)
     @ColumnComment("登录名")
-    private String loginname;
+    private String loginName;
 
     @Column(length = 100)
     @Index
@@ -38,7 +38,7 @@ public class UserInfo extends BaseEntity implements Serializable {
 
     @Column(length = 50)
     @ColumnComment("密码错误次数(分钟,错误次数)")
-    private String passworderror;
+    private String passwordError;
 
     @Column(length = 100)
     @ColumnComment("邮箱")
@@ -47,14 +47,14 @@ public class UserInfo extends BaseEntity implements Serializable {
     @Unique
     @Column(length = 20)
     @ColumnComment("联系电话")
-    private String phoneno;
+    private String phoneNo;
 
     @Column(length = 50)
     @ColumnComment("用户机构")
-    private String organid;
+    private String organId;
 
     @TableField(exist = false)
-    private String organname;
+    private String organName;
 
     @Column
     @ColumnComment("权限类型(0-自己创建的数据 1-管辖机构的当前级及以下数据 2-全部数据)")
@@ -62,14 +62,14 @@ public class UserInfo extends BaseEntity implements Serializable {
 
     @Column(type = MySqlTypeConstant.TEXT)
     @ColumnComment("权限")
-    private String permissionids;
+    private String permissionIds;
 
     @Index
     @Column(length = 19)
     @ColumnComment("账号有效期(超过该日期后无法登录)")
-    private String lifedate;
+    private String lifeDate;
 
     @TableField(exist = false)
-    private List<Role> rolelist;
+    private List<Role> roleList;
 
 }

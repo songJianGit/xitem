@@ -9,15 +9,15 @@
     <div class="card">
         <div class="card-body">
             <div class="form-group col-6">
-                <label for="organname">机构名称</label>
-                <input type="text" class="form-control" id="organname" name="organname"
+                <label for="name">机构名称</label>
+                <input type="text" class="form-control" id="name" name="name"
                        value="${organ.name!}" placeholder="机构名称" maxlength="100" required/>
             </div>
 
             <div class="form-group col-6">
                 <label for="organnum">机构编号</label>
-                <input type="text" class="form-control" id="organnum" name="organnum"
-                       value="${organ.organnum!}" placeholder="机构编号" maxlength="100" required/>
+                <input type="text" class="form-control" id="organnum" name="organNum"
+                       value="${organ.organNum!}" placeholder="机构编号" maxlength="100" required/>
             </div>
             <div class="form-group col-6">
                 <label for="seq">排序信息</label>

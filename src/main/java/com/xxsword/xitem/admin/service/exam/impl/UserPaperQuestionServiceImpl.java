@@ -50,7 +50,7 @@ public class UserPaperQuestionServiceImpl extends ServiceImpl<UserPaperQuestionM
      */
     @Override
     public void newPaperQ(UserPaper userPaper, UserInfo userInfo) {
-        List<QuestionRule> questionRuleList = questionRuleService.listQuestionRuleByPid(userPaper.getPaperid());// 抽题规则
+        List<QuestionRule> questionRuleList = questionRuleService.listQuestionRuleByPid(userPaper.getPaperId());// 抽题规则
         List<UserPaperQuestion> userPaperQuestionList = new ArrayList<>();
         int seq = 0;
         for (QuestionRule item : questionRuleList) {
@@ -59,8 +59,8 @@ public class UserPaperQuestionServiceImpl extends ServiceImpl<UserPaperQuestionM
                 UserPaperQuestion userPaperQuestion = new UserPaperQuestion();
                 userPaperQuestion.setBaseInfo(userInfo);
                 userPaperQuestion.setQid(ite.getQid());
-                userPaperQuestion.setUserpaperid(userPaper.getId());
-                userPaperQuestion.setCdate(DateUtil.now());
+                userPaperQuestion.setUserPaperId(userPaper.getId());
+                userPaperQuestion.setCreateDate(DateUtil.now());
                 userPaperQuestion.setQscore(ite.getScore());// 取中间表的分数
                 userPaperQuestion.setSeq(seq);
                 seq++;
@@ -84,7 +84,7 @@ public class UserPaperQuestionServiceImpl extends ServiceImpl<UserPaperQuestionM
     @Override
     public List<UserPaperQuestion> getPaperQ(UserPaper userPaper) {
         LambdaQueryWrapper<UserPaperQuestion> q = Wrappers.lambdaQuery();
-        q.eq(UserPaperQuestion::getUserpaperid, userPaper.getId());
+        q.eq(UserPaperQuestion::getUserPaperId, userPaper.getId());
         q.orderByAsc(UserPaperQuestion::getSeq, UserPaperQuestion::getId);
         return list(q);
     }
@@ -148,7 +148,7 @@ public class UserPaperQuestionServiceImpl extends ServiceImpl<UserPaperQuestionM
         Set<String> userAIds = Arrays.stream(answers.split(",")).collect(Collectors.toSet());
         Question question = questionService.getById(qid);
         List<QuestionOption> questionOption = questionOptionService.questionOptionListByQid(qid);
-        Set<String> aIds = questionOption.stream().filter(item -> item.getOptionright().equals(1)).map(QuestionOption::getId).collect(Collectors.toSet());
+        Set<String> aIds = questionOption.stream().filter(item -> item.getOptionRight().equals(1)).map(QuestionOption::getId).collect(Collectors.toSet());
         if (question == null) {
             return false;
         }

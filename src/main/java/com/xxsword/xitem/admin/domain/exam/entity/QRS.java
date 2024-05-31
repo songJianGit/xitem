@@ -16,9 +16,9 @@ public class QRS extends BaseEntity implements Serializable {
 
     private static final long serialVersionUID = 203L;
     @Column(length = 50)
-    @Unique(columns = {"qrid", "qid"})
+    @Unique(columns = {"qr_id", "qid"})
     @ColumnComment("规则id")
-    private String qrid;
+    private String qrId;
 
     @Column(length = 50)
     @ColumnComment("问题id")

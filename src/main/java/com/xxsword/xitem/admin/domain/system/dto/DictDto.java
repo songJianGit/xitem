@@ -14,6 +14,6 @@ public class DictDto {
         return new LambdaQueryWrapper<Dict>().eq(Dict::getStatus, 1)
                 .like(StringUtils.isNotBlank(name), Dict::getName, name)
                 .eq(StringUtils.isNotBlank(type), Dict::getType, type)
-                .orderByDesc(Dict::getCdate, Dict::getId);
+                .orderByDesc(Dict::getCreateDate, Dict::getId);
     }
 }

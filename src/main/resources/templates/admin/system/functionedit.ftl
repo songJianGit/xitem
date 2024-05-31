@@ -24,34 +24,34 @@
                         <div class="card">
                             <div class="card-body">
 
-                                <form action="${ctx.contextPath}/admin/system/functionsSave" method="post" class="row">
-                                    <input type="hidden" name="id" value="${functions.id!}"/>
+                                <form action="${ctx.contextPath}/admin/system/functionSave" method="post" class="row">
+                                    <input type="hidden" name="id" value="${function.id!}"/>
                                     <div class="form-group col-6">
                                         <label for="name">菜单名称</label>
-                                        <input type="text" class="form-control" id="name" name="name" value="${functions.name!}" placeholder="菜单名称" maxlength="100" required/>
+                                        <input type="text" class="form-control" id="name" name="name" value="${function.name!}" placeholder="菜单名称" maxlength="100" required/>
                                     </div>
                                     <div class="form-group col-6">
                                         <label for="url">链接</label>
-                                        <input type="text" class="form-control" id="url" name="url" value="${functions.url!}" placeholder="链接"/>
+                                        <input type="text" class="form-control" id="url" name="url" value="${function.url!}" placeholder="链接"/>
                                     </div>
                                     <div class="form-group col-6">
                                         <label for="seq">排序</label>
-                                        <input type="number" class="form-control" id="seq" name="seq" value="${functions.seq!}" placeholder="排序" required/>
+                                        <input type="number" class="form-control" id="seq" name="seq" value="${function.seq!}" placeholder="排序" required/>
                                     </div>
                                     <div class="form-group col-6">
                                         <label for="tag">标识</label>
-                                        <input type="text" class="form-control" id="tag" name="tag" value="${functions.tag!}" placeholder="标识" required/>
+                                        <input type="text" class="form-control" id="tag" name="tag" value="${function.tag!}" placeholder="标识" required/>
                                     </div>
 
                                     <div class="form-group col-6">
                                         <label>是否显示</label>
                                         <div>
                                             <div class="form-check form-check-inline">
-                                                <input class="form-check-input" type="radio" name="showflag" id="showflag1" value="1" <#if functions.showflag==1>checked</#if>>
+                                                <input class="form-check-input" type="radio" name="showFlag" id="showflag1" value="1" <#if function.showFlag==1>checked</#if>>
                                                 <label class="form-check-label" for="showflag1">显示</label>
                                             </div>
                                             <div class="form-check form-check-inline">
-                                                <input class="form-check-input" type="radio" name="showflag" id="showflag0" value="0" <#if functions.showflag==0>checked</#if>>
+                                                <input class="form-check-input" type="radio" name="showFlag" id="showflag0" value="0" <#if function.showFlag==0>checked</#if>>
                                                 <label class="form-check-label" for="showflag0">隐藏</label>
                                             </div>
                                         </div>
@@ -60,8 +60,8 @@
                                     <div class="form-group col-6">
                                         <label>上级菜单</label>
                                         <div>
-                                            <input type="text" placeholder="上级菜单" class="form-control" value="${pfunctions.name!'无'}" id="upFunctionsName" readonly/>
-                                            <input type="hidden" name="pid" value="${pfunctions.id!0}" id="upFunctionsId"/>
+                                            <input type="text" placeholder="上级菜单" class="form-control" value="${pfunction.name!'无'}" id="upFunctionsName" readonly/>
+                                            <input type="hidden" name="pid" value="${pfunction.id!0}" id="upFunctionsId"/>
                                         </div>
                                     </div>
                                     <div class="form-group col-12">

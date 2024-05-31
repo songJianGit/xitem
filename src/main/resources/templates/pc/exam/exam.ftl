@@ -24,10 +24,10 @@
         </#if>
         <div class="exam-item">考试总分：${paperScore!}</div>
         <#if exam.duration??>
-            <#if exam.maxnum==-1>
+            <#if exam.maxNum==-1>
                 <div class="exam-item">重考次数：不限</div>
             <#else>
-                <div class="exam-item">重考次数：${exam.maxnum!}</div>
+                <div class="exam-item">重考次数：${exam.maxNum!}</div>
             </#if>
         </#if>
     </div>
@@ -43,7 +43,7 @@
             <tbody>
             <#list listUserPaper as item>
                 <tr>
-                    <td>${item.cdate!}</td>
+                    <td>${item.createDate!}</td>
                     <td>${item.duration!}</td>
                     <td><a title="查卷"
                            href="${ctx.contextPath}/pc/exam/userPaperPreview?userPaperId=${item.id!}">${item.score!}</a>

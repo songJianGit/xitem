@@ -16,7 +16,7 @@ public class QuestionRuleDto {
     public LambdaQueryWrapper<QuestionRule> toQuery() {
         return new LambdaQueryWrapper<QuestionRule>().eq(QuestionRule::getStatus, 1)
                 .like(StringUtils.isNotBlank(title), QuestionRule::getTitle, title)
-                .eq(StringUtils.isNotBlank(paperId), QuestionRule::getPaperid, paperId)
+                .eq(StringUtils.isNotBlank(paperId), QuestionRule::getPaperId, paperId)
                 .orderByAsc(QuestionRule::getSeq, QuestionRule::getId);
     }
 }

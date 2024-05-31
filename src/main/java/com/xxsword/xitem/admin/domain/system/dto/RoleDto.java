@@ -12,6 +12,6 @@ public class RoleDto {
     public LambdaQueryWrapper<Role> toQuery() {
         return new LambdaQueryWrapper<Role>().eq(Role::getStatus, 1)
                 .like(StringUtils.isNotBlank(name), Role::getName, name)
-                .orderByDesc(Role::getCdate, Role::getId);
+                .orderByDesc(Role::getCreateDate, Role::getId);
     }
 }

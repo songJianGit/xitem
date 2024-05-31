@@ -18,8 +18,8 @@ public interface QRSMapper extends BaseMapper<QRS> {
             "a.*,b.title,b.qtype " +
             "from t_ex_qrs a left join t_ex_question b on a.qid=b.id " +
             "where 1=1 " +
-            "<if test='qrsDto.qrid!=null and qrsDto.qrid!=\"\"'>" +
-            "and a.qrid=#{qrsDto.qrid} " +
+            "<if test='qrsDto.qrId!=null and qrsDto.qrId!=\"\"'>" +
+            "and a.qr_id=#{qrsDto.qrId} " +
             "</if>" +
             "<if test='questionDto.title!=null and questionDto.title!=\"\"'>" +
             "and b.title like concat('%', #{questionDto.title}, '%') " +

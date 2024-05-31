@@ -11,22 +11,22 @@ import java.io.Serializable;
 
 @Data
 @TableComment("角色菜单多对多表")
-@TableName("t_sys_role_functions")
+@TableName("t_sys_role_function")
 @TableEngine(MySqlEngineConstant.InnoDB)
-public class RoleFunctions implements Serializable {
+public class RoleFunction implements Serializable {
     private static final long serialVersionUID = 106L;
     @TableId(value = "id", type = IdType.ASSIGN_ID)
     @ColumnComment("主键id")
     @Column(length = 50)
     private String id;
 
-    @Unique(columns = {"roleid", "funid"})
+    @Unique(columns = {"role_id", "fun_id"})
     @Column(length = 50)
     @ColumnComment("角色id")
-    private String roleid;
+    private String roleId;
 
     @Column(length = 50)
     @ColumnComment("菜单id")
-    private String funid;
+    private String funId;
 
 }

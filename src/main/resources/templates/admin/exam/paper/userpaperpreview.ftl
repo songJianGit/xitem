@@ -28,8 +28,8 @@
             <div>
                 正确答案：${item.answer!}
             </div>
-            <div  <#if item.answer==(item.useranswer!)> class="text-success" </#if> >
-                用户答案：${item.useranswer!}
+            <div  <#if item.answer==(item.userAnswer!)> class="text-success" </#if> >
+                用户答案：${item.userAnswer!}
             </div>
         </div>
     </#list>

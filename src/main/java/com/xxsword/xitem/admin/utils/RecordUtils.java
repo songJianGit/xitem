@@ -11,11 +11,11 @@ public class RecordUtils {
 
     public static Record httpToRecord(HttpServletRequest request, String userId) {
         Record record = new Record();
-        record.setCdate(DateUtil.now());
-        record.setUserid(userId);
+        record.setCreateDate(DateUtil.now());
+        record.setUserId(userId);
         record.setIps(IPUtil.getIpAddr(request));
         record.setUseragent(request.getHeader("user-agent"));
-        record.setDopath(request.getRequestURI());
+        record.setDoPath(request.getRequestURI());
         record.setParams(JSON.toJSONString(request.getParameterMap()));
         record.setMethod(request.getMethod());
         record.setType(1);
@@ -24,7 +24,7 @@ public class RecordUtils {
 
     public static Record errorToRecord(String errorMsg) {
         Record record = new Record();
-        record.setCdate(DateUtil.now());
+        record.setCreateDate(DateUtil.now());
         record.setParams(errorMsg);
         record.setType(2);
         return record;

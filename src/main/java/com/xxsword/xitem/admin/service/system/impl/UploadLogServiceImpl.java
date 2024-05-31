@@ -19,8 +19,8 @@ public class UploadLogServiceImpl extends ServiceImpl<UploadLogMapper, UploadLog
         List<UploadLog> uploadLogListUp = new ArrayList<>();
         for (Map<String, String> item : list) {
             UploadLog uploadLog = new UploadLog();
-            uploadLog.setCdate(DateUtil.now());
-            uploadLog.setUserid(userId);
+            uploadLog.setCreateDate(DateUtil.now());
+            uploadLog.setUserId(userId);
             uploadLog.setName(item.get("name"));
             uploadLog.setUrl(item.get("url"));
             uploadLog.setSize(Long.valueOf(item.get("size")));

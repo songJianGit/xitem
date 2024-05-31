@@ -17,7 +17,7 @@ public class ExamServiceImpl extends ServiceImpl<ExamMapper, Exam> implements Ex
     @Override
     public List<Exam> setExamexstatus(List<Exam> list) {
         for (Exam item : list) {
-            item.setExstatus(ExamUtil.getExamStatus(item));
+            item.setExStatus(ExamUtil.getExamStatus(item));
         }
         return list;
     }
@@ -54,11 +54,11 @@ public class ExamServiceImpl extends ServiceImpl<ExamMapper, Exam> implements Ex
         Exam examUp = new Exam();
         examUp.setId(id);
         examUp.setBaseInfo(userInfo);
-        if (exam.getReleasestatus() == null || exam.getReleasestatus() == 0 || exam.getReleasestatus() == 2) {
-            examUp.setReleasestatus(1);
+        if (exam.getReleaseStatus() == null || exam.getReleaseStatus() == 0 || exam.getReleaseStatus() == 2) {
+            examUp.setReleaseStatus(1);
         }
-        if (exam.getReleasestatus() == 1) {
-            examUp.setReleasestatus(2);
+        if (exam.getReleaseStatus() == 1) {
+            examUp.setReleaseStatus(2);
         }
         updateById(examUp);
     }

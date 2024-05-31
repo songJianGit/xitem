@@ -37,7 +37,7 @@
                                         <div class="input-group-prepend">
                                             <span class="input-group-text">考试类型</span>
                                         </div>
-                                        <select class="form-control" name="extype">
+                                        <select class="form-control" name="exType">
                                             <option value="">---考试类型---</option>
                                             <option value="1">公开考试</option>
                                             <option value="0">授权考试</option>
@@ -48,7 +48,7 @@
                                         <div class="input-group-prepend">
                                             <span class="input-group-text">发布状态</span>
                                         </div>
-                                        <select class="form-control" name="releasestatus">
+                                        <select class="form-control" name="releaseStatus">
                                             <option value="">---发布状态---</option>
                                             <option value="0">未发布</option>
                                             <option value="1">已发布</option>
@@ -87,11 +87,11 @@
                                         <thead>
                                         <tr>
                                             <th data-field="title">考试标题</th>
-                                            <th data-field="extype" data-formatter="extype">考试类型</th>
+                                            <th data-field="exType" data-formatter="extype">考试类型</th>
                                             <th data-field="stime" data-width="160px">开始时间</th>
                                             <th data-field="etime" data-width="160px">结束时间</th>
                                             <th data-field="duration" data-formatter="duration">考试时长</th>
-                                            <th data-field="releasestatus" data-formatter="exreleasestatus">发布状态
+                                            <th data-field="releaseStatus" data-formatter="exreleasestatus">发布状态
                                             </th>
                                             <th data-field="id" data-formatter="caozuo" data-width="185px">操作</th>
                                         </tr>
@@ -124,10 +124,10 @@
         htm += '<div class="btn-group">';
         htm += '<a class="btn btn-sm btn-default m-r-5" href="${ctx.contextPath}/admin/exam/edit?id=' + value + '" title="编辑">编辑</a>';
 
-        if (row.releasestatus == 0 || row.releasestatus == 2) {
+        if (row.releaseStatus == 0 || row.releaseStatus == 2) {
             htm += '<button type="button" class="btn btn-sm btn-default m-r-5" onclick="release(\''+value+'\')">发布</button>';
         }
-        if (row.releasestatus == 1) {
+        if (row.releaseStatus == 1) {
             htm += '<button type="button" class="btn btn-sm btn-default m-r-5" onclick="release(\''+value+'\')">下架</button>';
         }
 

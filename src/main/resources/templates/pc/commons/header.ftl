@@ -7,7 +7,7 @@
     <div class="pc-header-login">
         <#if Session.puser??>
             <div class="pc-header-login-item">
-                <a class="pc-header-login-username" href="${ctx.contextPath}/pc/user/userCenter">${Session.puser.nickname!}</a>
+                <a class="pc-header-login-username" href="${ctx.contextPath}/pc/user/userCenter">${Session.puser.nickName!}</a>
             </div>
             <div class="pc-header-login-item"><a href="${ctx.contextPath}/pc/outLogin">退出</a></div>
         <#else>

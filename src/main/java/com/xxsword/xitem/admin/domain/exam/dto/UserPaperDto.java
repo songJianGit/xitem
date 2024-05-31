@@ -16,11 +16,11 @@ public class UserPaperDto {
 
     public LambdaQueryWrapper<UserPaper> toQuery() {
         return new LambdaQueryWrapper<UserPaper>().eq(UserPaper::getStatus, 1)
-                .eq(StringUtils.isNotBlank(paperId), UserPaper::getPaperid, paperId)
-                .eq(StringUtils.isNotBlank(examId), UserPaper::getExamid, examId)
-                .eq(StringUtils.isNotBlank(userId), UserPaper::getUserid, userId)
-                .eq(subStatus != null, UserPaper::getSubstatus, subStatus)
-                .eq(subStatus == null, UserPaper::getSubstatus, 1)// 默认查询已提交的
-                .orderByDesc(UserPaper::getCdate, UserPaper::getId);
+                .eq(StringUtils.isNotBlank(paperId), UserPaper::getPaperId, paperId)
+                .eq(StringUtils.isNotBlank(examId), UserPaper::getExamId, examId)
+                .eq(StringUtils.isNotBlank(userId), UserPaper::getUserId, userId)
+                .eq(subStatus != null, UserPaper::getSubStatus, subStatus)
+                .eq(subStatus == null, UserPaper::getSubStatus, 1)// 默认查询已提交的
+                .orderByDesc(UserPaper::getCreateDate, UserPaper::getId);
     }
 }

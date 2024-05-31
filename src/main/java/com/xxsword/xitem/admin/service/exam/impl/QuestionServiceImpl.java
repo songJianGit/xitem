@@ -46,7 +46,7 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
     public List<Question> setQuestionQclass(List<Question> list) {
         Map<String, Dict> mapDict = dictService.mapDictByType(Constant.DICT_TYPE_QCLASS);
         for (Question item : list) {
-            item.setQclassname(mapDict.get(item.getQclass()).getName());
+            item.setQclassName(mapDict.get(item.getQclass()).getName());
         }
         return list;
     }
@@ -186,20 +186,20 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
                 QuestionOption questionOptionA = new QuestionOption();
                 questionOptionA.setBaseInfo(userInfo);
                 questionOptionA.setTitle("正确");
-                questionOptionA.setOptionright(0);
+                questionOptionA.setOptionRight(0);
                 questionOptionA.setQid(question.getId());
 
                 QuestionOption questionOptionB = new QuestionOption();
                 questionOptionB.setBaseInfo(userInfo);
                 questionOptionB.setTitle("错误");
-                questionOptionB.setOptionright(0);
+                questionOptionB.setOptionRight(0);
                 questionOptionB.setQid(question.getId());
 
                 if (StringUtils.isNotBlank(item.getQanswer())) {
                     if ("正确".equals(item.getQanswer())) {
-                        questionOptionA.setOptionright(1);
+                        questionOptionA.setOptionRight(1);
                     } else {
-                        questionOptionB.setOptionright(1);
+                        questionOptionB.setOptionRight(1);
                     }
                 }
 
@@ -214,14 +214,14 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
                         QuestionOption questionOption = new QuestionOption();
                         questionOption.setBaseInfo(userInfo);
                         questionOption.setTitle(option.trim());
-                        questionOption.setOptionright(0);
+                        questionOption.setOptionRight(0);
                         questionOption.setQid(question.getId());
 
                         String[] qanswers = item.getQanswer().split("\\|");
                         for (String aw : qanswers) {
                             aw = Utils.getString(aw);
                             if (option.equals(aw)) {
-                                questionOption.setOptionright(1);
+                                questionOption.setOptionRight(1);
                                 break;
                             }
                         }
@@ -256,7 +256,7 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
             questionOption.setBaseInfo(userInfo);
             questionOption.setQid(question.getId());
             questionOption.setTitle(optionTitle);
-            questionOption.setOptionright(optionRight);
+            questionOption.setOptionRight(optionRight);
             questionOptionList.add(questionOption);
         }
         questionOptionService.saveOrUpdateBatch(questionOptionList);
@@ -313,7 +313,7 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
         LambdaQueryWrapper<Question> q = Wrappers.lambdaQuery();
         q.eq(Question::getStatus, 1);
         q.eq(Question::getTitle, title);
-        q.orderByDesc(Question::getCdate, Question::getId);
+        q.orderByDesc(Question::getCreateDate, Question::getId);
         long count = count(q);
         return count != 0;
     }
@@ -349,8 +349,8 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
         Question question = getById(userPaperQuestion.getQid());
         QuestionVO questionVO = QuestionConvert.INSTANCE.toQuestionVO(question);
         questionVO.setQscore(userPaperQuestion.getQscore());
-        questionVO.setUserpaperquestionid(userPaperQuestion.getId());
-        questionVO.setUseranswerIds(userPaperQuestion.getAnswer());
+        questionVO.setUserPaperQuestionId(userPaperQuestion.getId());
+        questionVO.setUserAnswerIds(userPaperQuestion.getAnswer());
         List<QuestionOption> questionOptionList = new ArrayList<>();
         if (setOption) {
             questionOptionList = questionOptionService.questionOptionListByQid(questionVO.getId());
@@ -358,14 +358,14 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
                 StringBuilder answer = new StringBuilder();
                 for (int i = 0; i < questionOptionList.size(); i++) {
                     QuestionOption option = questionOptionList.get(i);
-                    if (option.getOptionright().equals(1)) {
+                    if (option.getOptionRight().equals(1)) {
                         answer.append(ExamUtil.convertNumberToLetter(i));
                     }
                 }
                 questionVO.setAnswer(answer.toString());
             } else {
                 for (QuestionOption option : questionOptionList) {
-                    option.setOptionright(null);// 不显示答案
+                    option.setOptionRight(null);// 不显示答案
                 }
             }
             if (setABC) {
@@ -388,7 +388,7 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
                     as.append(ExamUtil.convertNumberToLetter(i));
                 }
             }
-            questionVO.setUseranswer(as.toString());
+            questionVO.setUserAnswer(as.toString());
         }
         return questionVO;
     }

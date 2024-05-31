@@ -29,18 +29,18 @@
                                     <input type="hidden" name="id" value="${user.id!}"/>
                                     <div class="form-group col-6">
                                         <label for="nickname">昵称</label>
-                                        <input type="text" class="form-control" id="nickname" name="nickname"
-                                               value="${user.nickname!}" placeholder="昵称" maxlength="50" required/>
+                                        <input type="text" class="form-control" id="nickname" name="nickName"
+                                               value="${user.nickName!}" placeholder="昵称" maxlength="50" required/>
                                     </div>
                                     <div class="form-group col-6">
                                         <label for="username">姓名</label>
-                                        <input type="text" class="form-control" id="username" name="username"
-                                               value="${user.username!}" placeholder="姓名" maxlength="100" required/>
+                                        <input type="text" class="form-control" id="username" name="userName"
+                                               value="${user.userName!}" placeholder="姓名" maxlength="100" required/>
                                     </div>
                                     <div class="form-group col-6">
                                         <label for="loginname">登录名</label>
-                                        <input type="text" class="form-control" id="loginname" name="loginname"
-                                               value="${user.loginname!}" placeholder="登录名" maxlength="50" required/>
+                                        <input type="text" class="form-control" id="loginname" name="loginName"
+                                               value="${user.loginName!}" placeholder="登录名" maxlength="50" required/>
                                     </div>
                                     <div class="form-group col-6">
                                         <label for="email">邮箱</label>
@@ -49,24 +49,24 @@
                                     </div>
                                     <div class="form-group col-6">
                                         <label for="phoneno">手机号码</label>
-                                        <input type="text" class="form-control" id="phoneno" name="phoneno"
+                                        <input type="text" class="form-control" id="phoneno" name="phoneNo"
                                                pattern="[1-9]\d{10}" maxlength="20"
-                                               value="${user.phoneno!}" placeholder="手机号码" required/>
+                                               value="${user.phoneNo!}" placeholder="手机号码" required/>
                                     </div>
                                     <div class="form-group col-6">
                                         <label for="organid">部门</label>
-                                        <input type="text" class="form-control" id="organname" name="organname"
-                                               value="${user.organname!}" placeholder="单位" required readonly
+                                        <input type="text" class="form-control" id="organname" name="organName"
+                                               value="${user.organName!}" placeholder="单位" required readonly
                                                autocomplete="off"/>
                                         <input type="hidden" id="organid" name="organid"
-                                               value="${user.organid!}"/>
+                                               value="${user.organId!}"/>
 
                                     </div>
                                     <div class="form-group col-6">
                                         <label for="lifedate">账号有效期</label>
-                                        <input type="text" class="form-control" id="lifedate" name="lifedate" autocomplete="off"
+                                        <input type="text" class="form-control" id="lifedate" name="lifeDate" autocomplete="off"
                                                onClick="WdatePicker({el:this,dateFmt:'yyyy-MM-dd HH:mm:ss'})"
-                                               value="${user.lifedate!}" placeholder="账号有效期" required/>
+                                               value="${user.lifeDate!}" placeholder="账号有效期" required/>
                                     </div>
                                     <div class="form-group col-12">
                                         <button type="submit" class="btn btn-primary">确 定</button>

@@ -23,7 +23,7 @@
                     <div class="col-12">
                         <div class="card">
                             <div class="card-body">
-                                <form action="${ctx.contextPath}/admin/system/roleFunctionsSave" method="post">
+                                <form action="${ctx.contextPath}/admin/system/roleFunctionSave" method="post">
                                     <input type="hidden" value="${role.id}" name="roleId"/>
                                     <button type="button" class="btn btn-primary" onclick="history.back();">返回
                                     </button>
@@ -35,7 +35,7 @@
                                             <th><input type="checkbox" id="checkAll">全选</th>
                                         </tr>
                                         </thead>
-                                        <#list listFunctions as func>
+                                        <#list listFunction as func>
                                             <tr id="${func.id}" pId="${func.pid}">
                                                 <td>
                                                     <input type="checkbox"
@@ -71,10 +71,10 @@
         });
 
         // 还原本角色信息
-        <#list roleFunctions as item >
+        <#list roleFunction as item >
         $('.inputid' + '${item.id}').prop('checked', true);
         </#list>
-        <#if roleFunctions?? && roleFunctions?size!=0>
+        <#if roleFunction?? && roleFunction?size!=0>
             $('#checkAll').prop('checked', true);
         </#if>
     });

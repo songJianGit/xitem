@@ -18,7 +18,7 @@ public class UserPaperQuestion extends BaseEntity implements Serializable {
     @Index
     @Column(length = 50)
     @ColumnComment("用户答题记录id")
-    private String userpaperid;
+    private String userPaperId;
 
     @Column(length = 50)
     @ColumnComment("问题id")

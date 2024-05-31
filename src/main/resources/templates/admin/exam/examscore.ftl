@@ -58,12 +58,12 @@
                                            data-pagination="true"
                                            data-page-list="[10, 20, 50, 100, 200]"
                                            data-click-to-select="true"
-                                           data-url="${ctx.contextPath}/admin/exam/examScoreData?examId=${examId!}"
+                                           data-url="${ctx.contextPath}/admin/exam/examScoreData?examId=${examId!}&subStatus=1"
                                            data-query-params="pageQueryParams"
                                            data-side-pagination="server">
                                         <thead>
                                         <tr>
-                                            <th data-field="username">姓名</th>
+                                            <th data-field="userName">姓名</th>
                                             <th data-field="score">分数</th>
                                             <th data-field="id" data-formatter="caozuo">操作</th>
                                         </tr>
@@ -86,18 +86,18 @@
     function caozuo(value, row) {
         let htm = '';
         htm += '<div class="btn-group">';
-        htm += '<button type="button" class="btn btn-sm btn-default" onclick="showExamPaper(\'' + row.userid + '\')" title="查看详情">查看详情</button>';
+        htm += '<button type="button" class="btn btn-sm btn-default" onclick="showExamPaper(\'' + row.userId + '\')" title="查看详情">查看详情</button>';
         htm += '</div>';
         return htm;
     }
 
-    function showExamPaper(userid) {
-        layer_show("记录", "${ctx.contextPath}/admin/exam/userPaper?examId=${examId!}&userId=" + userid);
+    function showExamPaper(userId) {
+        layer_show("记录", "${ctx.contextPath}/admin/exam/userPaper?examId=${examId!}&userId=" + userId);
     }
 
     $('#searchBtn').click(function () {
         $("#table-pagination").bootstrapTable('refresh', {
-            url: "${ctx.contextPath}/admin/exam/examScoreData?examId=${examId!}&" + $("#searchform").serialize()
+            url: "${ctx.contextPath}/admin/exam/examScoreData?examId=${examId!}&subStatus=1&" + $("#searchform").serialize()
         });
     });
 

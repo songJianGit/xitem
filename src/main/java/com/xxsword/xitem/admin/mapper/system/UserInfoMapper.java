@@ -14,7 +14,7 @@ public interface UserInfoMapper extends BaseMapper<UserInfo> {
             "from t_sys_user_role b left join t_sys_userinfo c on b.userid=c.id " +
             "where 1=1 " +
             "<if test='roleId!=null and roleId!=\"\"'>" +
-            "and b.roleid=#{roleId} " +
+            "and b.role_id=#{roleId} " +
             "</if>" +
             "</script>")
     int countUserBuRoleId(String roleId);

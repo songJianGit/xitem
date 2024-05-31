@@ -8,11 +8,11 @@ import lombok.Data;
 @Data
 public class QRSDto {
 
-    private String qrid;
+    private String qrId;
 
     public LambdaQueryWrapper<QRS> toQuery() {
         return new LambdaQueryWrapper<QRS>().eq(QRS::getStatus, 1)
-                .eq(StringUtils.isNotBlank(qrid), QRS::getQrid, qrid)
+                .eq(StringUtils.isNotBlank(qrId), QRS::getQrId, qrId)
                 .orderByAsc(QRS::getSeq, QRS::getId);
     }
 }

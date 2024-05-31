@@ -5,11 +5,11 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.xxsword.xitem.admin.domain.system.dto.RoleDto;
-import com.xxsword.xitem.admin.domain.system.entity.Functions;
+import com.xxsword.xitem.admin.domain.system.entity.Function;
 import com.xxsword.xitem.admin.domain.system.entity.Role;
 import com.xxsword.xitem.admin.domain.system.entity.UserInfo;
 import com.xxsword.xitem.admin.mapper.system.RoleMapper;
-import com.xxsword.xitem.admin.service.system.RoleFunctionsService;
+import com.xxsword.xitem.admin.service.system.RoleFunctionService;
 import com.xxsword.xitem.admin.service.system.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,13 +20,13 @@ import java.util.List;
 @Service
 public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements RoleService {
     @Autowired
-    private RoleFunctionsService roleFunctionsService;
+    private RoleFunctionService roleFunctionService;
 
     @Override
     public List<Role> roleAll() {
         LambdaQueryWrapper<Role> query = Wrappers.lambdaQuery();
         query.eq(Role::getStatus, 1);
-        query.orderByDesc(Role::getCdate, Role::getId);
+        query.orderByDesc(Role::getCreateDate, Role::getId);
         return list(query);
     }
 
@@ -40,8 +40,8 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
     public Role getRoleById(String roleId, boolean b) {
         Role role = getById(roleId);
         if (b) {
-            List<Functions> functionsList = roleFunctionsService.listFunctionsByRoleId(role.getId());
-            role.setFunctionlist(functionsList);
+            List<Function> functionList = roleFunctionService.listFunctionByRoleId(role.getId());
+            role.setFunctionList(functionList);
         }
         return role;
     }

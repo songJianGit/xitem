@@ -7,15 +7,15 @@ import lombok.Data;
 
 @Data
 public class RecordDto {
-    private String dopath;
+    private String doPath;
     private String ips;
     private String params;
 
     public LambdaQueryWrapper<Record> toQuery() {
         return new LambdaQueryWrapper<Record>()
-                .like(StringUtils.isNotBlank(dopath), Record::getDopath, dopath)
+                .like(StringUtils.isNotBlank(doPath), Record::getDoPath, doPath)
                 .like(StringUtils.isNotBlank(ips), Record::getIps, ips)
                 .like(StringUtils.isNotBlank(params), Record::getParams, params)
-                .orderByDesc(Record::getCdate, Record::getId);
+                .orderByDesc(Record::getCreateDate, Record::getId);
     }
 }

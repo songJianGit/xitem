@@ -41,7 +41,7 @@ public class QuestionController {
     @RequestMapping("list")
     public String list(Model model) {
         List<Dict> dictList = dictService.listDictByType(Constant.DICT_TYPE_QCLASS);
-        model.addAttribute("qclasslist", dictList);
+        model.addAttribute("qClassList", dictList);
         return "/admin/exam/question/list";
     }
 

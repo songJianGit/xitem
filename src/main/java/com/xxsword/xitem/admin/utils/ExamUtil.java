@@ -56,7 +56,7 @@ public class ExamUtil {
         if (exam.getDuration() < 0) {
             return exam.getEtime();
         }
-        DateTime tt = DateUtil.getMinute(DateTime.parse(userPaper.getCdate(), DateUtil.sdfA1), exam.getDuration());
+        DateTime tt = DateUtil.getMinute(DateTime.parse(userPaper.getCreateDate(), DateUtil.sdfA1), exam.getDuration());
         return tt.toString(DateUtil.sdfA1);
     }
 
@@ -81,7 +81,7 @@ public class ExamUtil {
         if (exam.getDuration() < 0) {
             return true;// 不限制
         }
-        Long l = DateUtil.differSecond(DateTime.parse(userPaper.getCdate(), DateUtil.sdfA1), DateTime.now());
+        Long l = DateUtil.differSecond(DateTime.parse(userPaper.getCreateDate(), DateUtil.sdfA1), DateTime.now());
         int duration = exam.getDuration() * 60;
         return duration >= l;
     }

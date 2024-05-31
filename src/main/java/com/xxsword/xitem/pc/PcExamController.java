@@ -50,13 +50,13 @@ public class PcExamController {
     @RequestMapping("index")
     public String index(Model model) {
         ExamDto examDto1 = new ExamDto();
-        examDto1.setReleasestatus(1);
-        examDto1.setExtype(1);
+        examDto1.setReleaseStatus(1);
+        examDto1.setExType(1);
         List<Exam> examList1 = examService.list(new Page<>(1, 10), examDto1.toQuery());
 
         ExamDto examDto2 = new ExamDto();
-        examDto2.setReleasestatus(1);
-        examDto2.setExtype(0);
+        examDto2.setReleaseStatus(1);
+        examDto2.setExType(0);
         List<Exam> examList0 = examService.list(new Page<>(1, 10), examDto2.toQuery());
 
         model.addAttribute("examList1", examList1);
@@ -74,8 +74,8 @@ public class PcExamController {
             pageSize = 100;
         }
         ExamDto examDto = new ExamDto();
-        examDto.setReleasestatus(1);
-        examDto.setExtype(exType == null ? 1 : exType);
+        examDto.setReleaseStatus(1);
+        examDto.setExType(exType == null ? 1 : exType);
         Page<Exam> examPage = examService.page(new Page<>(pageNum, pageSize), examDto.toQuery());
         return RestResult.OK(examPage.getRecords());
     }
@@ -91,10 +91,10 @@ public class PcExamController {
     public String examid(HttpServletRequest request, @PathVariable String eid, Model model) {
         UserInfo userInfo = Utils.getUserInfo(request);
         Exam exam = examService.getById(eid);
-        List<UserPaper> userPaperList = userPaperService.listUserPaper(userInfo.getId(), exam.getPaperid(), exam.getId(), 1);
+        List<UserPaper> userPaperList = userPaperService.listUserPaper(userInfo.getId(), exam.getPaperId(), exam.getId(), 1);
         List<UserPaperVO> userPaperVOList = userPaperService.listUserPaperVOByUserPaper(userPaperList);
         model.addAttribute("exam", exam);
-        model.addAttribute("paperScore", questionRuleService.getPaperScore(exam.getPaperid()));
+        model.addAttribute("paperScore", questionRuleService.getPaperScore(exam.getPaperId()));
         model.addAttribute("examStatus", ExamUtil.getExamStatus(exam));
         model.addAttribute("listUserPaper", userPaperVOList);
         return "/pc/exam/exam";
@@ -114,12 +114,12 @@ public class PcExamController {
         if (!examExamStatusCheck(exam, model)) {
             return "/pc/exam/examerror";
         }
-        Long countUserPaper = userPaperService.countUserPaper(userInfo.getId(), exam.getPaperid(), exam.getId(), 1);
-        if (countUserPaper >= exam.getMaxnum() && exam.getMaxnum() > 0) {
+        Long countUserPaper = userPaperService.countUserPaper(userInfo.getId(), exam.getPaperId(), exam.getId(), 1);
+        if (countUserPaper >= exam.getMaxNum() && exam.getMaxNum() > 0) {
             model.addAttribute("exStatus", "已超过最大考试次数");
             return "/pc/exam/examerror";
         }
-        UserPaper userPaper = userPaperService.getUserPaper(userInfo, exam.getPaperid(), exam.getId(), 1);
+        UserPaper userPaper = userPaperService.getUserPaper(userInfo, exam.getPaperId(), exam.getId(), 1);
         if (!examCheckUserPaper(exam, userPaper, model)) {
             return "/pc/exam/examerror";
         }
@@ -161,7 +161,7 @@ public class PcExamController {
     private boolean examCheckUserPaper(Exam exam, UserPaper userPaper, Model model) {
         if (!ExamUtil.examDurationCheck(exam, userPaper)) {
             model.addAttribute("duration", exam.getDuration());
-            model.addAttribute("cDate", userPaper.getCdate());
+            model.addAttribute("cDate", userPaper.getCreateDate());
             model.addAttribute("nowDate", DateUtil.now());
             model.addAttribute("exStatus", "超过考试时长未交卷");
             model.addAttribute("userPaperId", userPaper.getId());
@@ -179,14 +179,14 @@ public class PcExamController {
     @ResponseBody
     public RestResult getQuestion(HttpServletRequest request, String nextQid) {
         UserPaperQuestion userPaperQuestion = userPaperQuestionService.getById(nextQid);
-        UserPaper userPaper = userPaperService.getById(userPaperQuestion.getUserpaperid());
+        UserPaper userPaper = userPaperService.getById(userPaperQuestion.getUserPaperId());
         if (userPaper == null) {
             return RestResult.Fail("参数异常");
         }
-        if (!ExamUtil.examDurationCheck(examService.getById(userPaper.getExamid()), userPaper)) {
+        if (!ExamUtil.examDurationCheck(examService.getById(userPaper.getExamId()), userPaper)) {
             return RestResult.Fail("已超过考试时长，请提交试卷");
         }
-        if (userPaper.getStatus() == 1 && userPaper.getSubstatus() == 0) {
+        if (userPaper.getStatus() == 1 && userPaper.getSubStatus() == 0) {
             QuestionVO questionVO = questionService.getQuestionVO(userPaperQuestion, true, false, true);
             return RestResult.OK(questionVO);
         } else {
@@ -227,11 +227,11 @@ public class PcExamController {
     @RequestMapping("examSubmitOk")
     public String examSubmitOk(String userPaperId, Model model) {
         UserPaper userPaper = userPaperService.getById(userPaperId);
-        Exam exam = examService.getById(userPaper.getExamid());
+        Exam exam = examService.getById(userPaper.getExamId());
         model.addAttribute("score", userPaper.getScore());// 得分
-        model.addAttribute("maxscore", questionRuleService.getPaperScore(exam.getPaperid()));// 总分
+        model.addAttribute("maxscore", questionRuleService.getPaperScore(exam.getPaperId()));// 总分
         model.addAttribute("examtitle", exam.getTitle());
-        model.addAttribute("paperduration", DateUtil.sToHHmmss(DateUtil.differSecond(userPaper.getCdate(), userPaper.getSubdate(), DateUtil.sdfA1)));// 考试用时
+        model.addAttribute("paperduration", DateUtil.sToHHmmss(DateUtil.differSecond(userPaper.getCreateDate(), userPaper.getSubDate(), DateUtil.sdfA1)));// 考试用时
         return "/pc/exam/examok";
     }
 
@@ -269,7 +269,7 @@ public class PcExamController {
     @RequestMapping("userPaperPreview")
     public String userPaperPreview(HttpServletRequest request, String userPaperId, Model model) {
         UserPaper userPaper = userPaperService.getById(userPaperId);
-        Paper paper = paperService.getById(userPaper.getPaperid());
+        Paper paper = paperService.getById(userPaper.getPaperId());
         List<QuestionVO> questionVOList = userPaperQuestionService.listQuestionByUserPaper(userPaper, true, true, true);
         PaperVO paperVO = PaperConvert.INSTANCE.toPaperVO(paper);
         paperVO.setQuestionVOList(questionVOList);
