@@ -191,8 +191,8 @@ public class OrganServiceImpl extends ServiceImpl<OrganMapper, Organ> implements
         }
         List<String> permissionIdsAll = null;
         if (userPermissionType.equals(1)) {
-            List<String> permissionsIds = getPermissionsIds(userInfo);
-            permissionIdsAll = listOrganIdByOrganId(permissionsIds);
+            List<String> permissionIds = getPermissionIds(userInfo);
+            permissionIdsAll = listOrganIdByOrganId(permissionIds);
         }
         switch (permissionType) {
             case PermissionType.USERINFO:
@@ -224,16 +224,16 @@ public class OrganServiceImpl extends ServiceImpl<OrganMapper, Organ> implements
 
     @Override
     public String getPermissionDown(UserInfo userInfo) {
-        List<String> permissionsIds = getPermissionsIds(userInfo);
-        List<String> permissionsIdsAll = listOrganIdByOrganId(permissionsIds);
-        return " AND " + Constant.permissionKey + " ('" + String.join("','", permissionsIdsAll) + "')";
+        List<String> permissionIds = getPermissionIds(userInfo);
+        List<String> permissionIdsAll = listOrganIdByOrganId(permissionIds);
+        return " AND " + Constant.permissionKey + " ('" + String.join("','", permissionIdsAll) + "')";
     }
 
     @Override
     public String getPermissionDown(String as, UserInfo userInfo) {
-        List<String> permissionsIds = getPermissionsIds(userInfo);
-        List<String> permissionsIdsAll = listOrganIdByOrganId(permissionsIds);
-        return " AND " + as + "." + Constant.permissionKey + " ('" + String.join("','", permissionsIdsAll) + "')";
+        List<String> permissionIds = getPermissionIds(userInfo);
+        List<String> permissionIdsAll = listOrganIdByOrganId(permissionIds);
+        return " AND " + as + "." + Constant.permissionKey + " ('" + String.join("','", permissionIdsAll) + "')";
     }
 
     /**
@@ -242,7 +242,7 @@ public class OrganServiceImpl extends ServiceImpl<OrganMapper, Organ> implements
      * @param userInfo
      * @return
      */
-    private List<String> getPermissionsIds(UserInfo userInfo) {
+    private List<String> getPermissionIds(UserInfo userInfo) {
         List<String> list = new ArrayList<>();
         if (StringUtils.isNotBlank(userInfo.getPermissionIds())) {
             return new ArrayList<>(Arrays.asList(userInfo.getPermissionIds().split(",")));
