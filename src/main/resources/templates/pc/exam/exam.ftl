@@ -45,18 +45,20 @@
                 <tr>
                     <td>${item.cdate!}</td>
                     <td>${item.duration!}</td>
-                    <td><a title="查卷" href="${ctx.contextPath}/pc/exam/userPaperPreview?userPaperId=${item.id!}">${item.score!}</a></td>
+                    <td><a title="查卷"
+                           href="${ctx.contextPath}/pc/exam/userPaperPreview?userPaperId=${item.id!}">${item.score!}</a>
+                    </td>
                 </tr>
             </#list>
             </tbody>
         </table>
-        <#if examStatus==1>
-            <div class="card-body text-center">
+        <div class="card-body text-center">
+            <#if examStatus==1>
                 <a href="${ctx.contextPath}/pc/exam/examPageShow?eid=${exam.id!}" class="btn btn-primary">开始考试</a>
-            </div>
-        <#else>
-            <button type="button" class="btn btn-secondary" onclick="javascript:history.back(-1);return false;">返回</button>
-        </#if>
+            </#if>
+            <button type="button" class="btn btn-secondary" onclick="javascript:history.back(-1);return false;">返回
+            </button>
+        </div>
     </div>
     <#include "../commons/js.ftl"/>
     <script type="text/javascript">

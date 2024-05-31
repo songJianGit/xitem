@@ -1,8 +1,10 @@
 .paper-box {
+    max-width: 900px;
     padding: 7px;
+    margin: 0 auto 37px;
 }
 
-.paper-desc{
+.paper-desc {
     padding: 7px;
     text-align: center;
 }

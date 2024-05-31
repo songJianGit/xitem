@@ -232,7 +232,7 @@ public class PcExamController {
     }
 
     /**
-     * 用户答题试卷的查看
+     * 用户自己的查卷
      *
      * @param request
      * @return
