@@ -33,9 +33,9 @@ public interface QuestionService extends IService<Question> {
     /**
      * 根据题目，获取题目VO
      *
-     * @param setOption 是否给题目，赋值选项
-     * @param setRight  是否给选项，赋值答案（1.选项是否携带答案 2-answer字段是否赋值）
-     * @param setABC    是否给选项，赋值ABC前缀
+     * @param setOption 题目，是否赋值选项
+     * @param setRight  选项，是否赋值答案（true-选项携带答案,answer字段赋值 false-选项不携带答案，answer字段不赋值）
+     * @param setABC    选项，是否赋值ABC前缀
      * @return
      */
     QuestionVO getQuestionVO(UserPaperQuestion userPaperQuestion, boolean setOption, boolean setRight, boolean setABC);

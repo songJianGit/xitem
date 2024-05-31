@@ -19,6 +19,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Service
 public class QuestionRuleServiceImpl extends ServiceImpl<QuestionRuleMapper, QuestionRule> implements QuestionRuleService {
@@ -110,14 +111,14 @@ public class QuestionRuleServiceImpl extends ServiceImpl<QuestionRuleMapper, Que
                 continue;
             }
             if (questionRule.getNum() >= qrsList.size()) {// 抽取题目数，大于等于题目总数
-                double qrsScore = qrsList.stream().filter(item -> item.getScore() != null).map(item -> BigDecimal.valueOf(item.getScore())).reduce(BigDecimal.ZERO, BigDecimal::add).doubleValue();
+                double qrsScore = Utils.sum(qrsList.stream().map(QRS::getScore).filter(Objects::nonNull).collect(Collectors.toList()));
                 score = Utils.sum(score, qrsScore);
             } else {
                 Double referenceScore = qrsList.get(0).getScore();
                 boolean eq = qrsList.stream().allMatch(user -> Objects.equals(user.getScore(), referenceScore));
                 if (eq) {// 抽取的题目书中，题目分值全部相等，分数才有意义
                     List<QRS> qrsListSub = qrsList.subList(0, questionRule.getNum());
-                    double qrsScore = qrsListSub.stream().filter(item -> item.getScore() != null).map(item -> BigDecimal.valueOf(item.getScore())).reduce(BigDecimal.ZERO, BigDecimal::add).doubleValue();
+                    double qrsScore = Utils.sum(qrsListSub.stream().map(QRS::getScore).filter(Objects::nonNull).collect(Collectors.toList()));
                     score = Utils.sum(score, qrsScore);
                 } else {
                     return -1D;// 不等则直接返回-1，表示分数无效

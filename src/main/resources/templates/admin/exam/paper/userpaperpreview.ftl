@@ -2,12 +2,11 @@
 <html lang="zh">
 <head>
     <#include "../../commons/head.ftl"/>
-    <link href="${ctx.contextPath}/static/admin/exam/css/style.css" rel="stylesheet">
+    <link href="${ctx.contextPath}/static/pc/exam/css/style.css" rel="stylesheet">
 </head>
 <body style="background-color: #fff">
-<div class="callout callout-success">
-    <div>总题数：${paperVO.snum!}&nbsp;题</div>
-    <div>当前总分：${paperVO.score!}&nbsp;分</div>
+<div class="paper-desc">
+    <div>总题数：${paperVO.snum!}&nbsp;题&nbsp;&nbsp;总分：${paperVO.score!}&nbsp;分</div>
 </div>
 <div class="paper-box">
     <div class="paper-title">${paperVO.title!}</div>
@@ -20,22 +19,17 @@
             <div class="q-item-op-box">
                 <#list item.questionOptionList as option>
                     <div class="q-item-op">
-                        <#if item.qtype==0 || item.qtype==1>
-                            <input class="q-item-op-ipt" id="lable-i${option.id!}"
-                                   name="q-item-op-i${item.id!}" value="${option.id!}" type="radio"/>
-                        </#if>
-                        <#if item.qtype==2>
-                            <input class="q-item-op-ipt" id="lable-i${option.id!}"
-                                   name="q-item-op-i${item.id!}" value="${option.id!}" type="checkbox"/>
-                        </#if>
-                        <label class="q-item-op-label" for="lable-i${option.id!}">
+                        <label class="q-item-op-label">
                             ${option.title!}
                         </label>
                     </div>
                 </#list>
             </div>
             <div>
-                答案：${item.answer!}
+                正确答案：${item.answer!}
+            </div>
+            <div  <#if item.answer==(item.useranswer!)> class="text-success" </#if> >
+                用户答案：${item.useranswer!}
             </div>
         </div>
     </#list>

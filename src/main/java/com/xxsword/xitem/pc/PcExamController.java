@@ -3,7 +3,9 @@ package com.xxsword.xitem.pc;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.xxsword.xitem.admin.domain.exam.convert.PaperConvert;
 import com.xxsword.xitem.admin.domain.exam.entity.*;
+import com.xxsword.xitem.admin.domain.exam.vo.PaperVO;
 import com.xxsword.xitem.admin.domain.exam.vo.QuestionVO;
 import com.xxsword.xitem.admin.domain.exam.vo.UserPaperVO;
 import com.xxsword.xitem.admin.domain.system.entity.UserInfo;
@@ -37,6 +39,8 @@ public class PcExamController {
     private UserPaperQuestionService userPaperQuestionService;
     @Autowired
     private QuestionRuleService questionRuleService;
+    @Autowired
+    private PaperService paperService;
 
     @RequestMapping("index")
     public String index(Model model) {
@@ -225,5 +229,25 @@ public class PcExamController {
         List<UserPaperQuestion> userPaperQuestionList = userPaperQuestionService.getPaperQ(userPaper);
         model.addAttribute("userPaperQuestionList", userPaperQuestionList);
         return "/pc/exam/examsheet";
+    }
+
+    /**
+     * 用户答题试卷的查看
+     *
+     * @param request
+     * @return
+     */
+    @RequestMapping("userPaperPreview")
+    public String userPaperPreview(HttpServletRequest request, String userPaperId, Model model) {
+        UserPaper userPaper = userPaperService.getById(userPaperId);
+        Paper paper = paperService.getById(userPaper.getPaperid());
+        List<QuestionVO> questionVOList = userPaperQuestionService.listQuestionByUserPaper(userPaper, true, true, true);
+        PaperVO paperVO = PaperConvert.INSTANCE.toPaperVO(paper);
+        paperVO.setQuestionVOList(questionVOList);
+        paperVO.setSnum(questionVOList.size());
+        paperVO.setScore(Utils.sum(questionVOList.stream().map(QuestionVO::getQscore).collect(Collectors.toList())));
+
+        model.addAttribute("paperVO", paperVO);
+        return "/pc/exam/userpaperpreview";
     }
 }

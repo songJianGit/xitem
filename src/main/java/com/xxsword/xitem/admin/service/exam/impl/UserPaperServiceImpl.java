@@ -16,15 +16,13 @@ import com.xxsword.xitem.admin.service.exam.UserPaperQuestionService;
 import com.xxsword.xitem.admin.service.exam.UserPaperService;
 import com.xxsword.xitem.admin.service.system.UserInfoService;
 import com.xxsword.xitem.admin.utils.DateUtil;
+import com.xxsword.xitem.admin.utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -134,7 +132,7 @@ public class UserPaperServiceImpl extends ServiceImpl<UserPaperMapper, UserPaper
      */
     private double sumScore(UserPaper userPaper) {
         List<UserPaperQuestion> list = userPaperQuestionService.getPaperQ(userPaper);
-        return list.stream().filter(item -> item.getScore() != null).map(item -> BigDecimal.valueOf(item.getScore())).reduce(BigDecimal.ZERO, BigDecimal::add).doubleValue();
+        return Utils.sum(list.stream().map(UserPaperQuestion::getScore).filter(Objects::nonNull).collect(Collectors.toList()));
     }
 
     private LambdaQueryWrapper<UserPaper> getUserPaperLambdaQueryWrapper(String userId, String paperId, String examId, Integer subStatus) {

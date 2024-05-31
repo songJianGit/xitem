@@ -34,15 +34,15 @@
     function caozuo(value, row) {
         let htm = '';
         htm += '<div class="btn-group">';
-        htm += '<button type="button" class="btn btn-sm btn-default" title="查看" onclick="showPaper()">查看</button>';
+        htm += '<button type="button" class="btn btn-sm btn-default" title="查看" onclick="showPaper(\'' + value + '\')">查看</button>';
         htm += '</div>';
         return htm;
     }
 
-    function showPaper() {
-        let examId = '${examId!}';
-        let userId = '${userId!}';
+    function showPaper(userPaperId) {
+        layer_show("查看", "${ctx.contextPath}/admin/paper/userPaperPreview?userPaperId=" + userPaperId);
     }
+
 </script>
 </body>
 </html>

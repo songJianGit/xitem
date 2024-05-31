@@ -3,26 +3,12 @@ package com.xxsword.xitem.admin.domain.system.dto;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.xxsword.xitem.admin.domain.system.entity.Functions;
+import lombok.Data;
 
+@Data
 public class FunctionsDto {
     private String name;
     private String pid;
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getPid() {
-        return pid;
-    }
-
-    public void setPid(String pid) {
-        this.pid = pid;
-    }
 
     public LambdaQueryWrapper<Functions> toQuery() {
         return new LambdaQueryWrapper<Functions>().eq(Functions::getStatus, 1)

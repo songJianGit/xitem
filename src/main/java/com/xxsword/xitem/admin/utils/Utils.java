@@ -3,13 +3,13 @@ package com.xxsword.xitem.admin.utils;
 import com.xxsword.xitem.admin.constant.Constant;
 import com.xxsword.xitem.admin.domain.system.entity.UserInfo;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.poi.ss.usermodel.Cell;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.security.MessageDigest;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.regex.Matcher;
@@ -95,6 +95,16 @@ public class Utils {
         BigDecimal bd1 = new BigDecimal(Double.toString(d1));
         BigDecimal bd2 = new BigDecimal(Double.toString(d2));
         return bd1.add(bd2).doubleValue();
+    }
+
+    /**
+     * double 相加
+     *
+     * @param list
+     * @return
+     */
+    public static double sum(List<Double> list) {
+        return list.stream().map(BigDecimal::valueOf).reduce(BigDecimal.ZERO, BigDecimal::add).doubleValue();
     }
 
     /**

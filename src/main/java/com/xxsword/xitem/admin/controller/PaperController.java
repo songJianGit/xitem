@@ -3,10 +3,7 @@ package com.xxsword.xitem.admin.controller;
 import com.alibaba.fastjson2.JSONArray;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.xxsword.xitem.admin.domain.exam.convert.PaperConvert;
-import com.xxsword.xitem.admin.domain.exam.dto.PaperDto;
-import com.xxsword.xitem.admin.domain.exam.dto.QRSDto;
-import com.xxsword.xitem.admin.domain.exam.dto.QuestionDto;
-import com.xxsword.xitem.admin.domain.exam.dto.QuestionRuleDto;
+import com.xxsword.xitem.admin.domain.exam.dto.*;
 import com.xxsword.xitem.admin.domain.exam.entity.*;
 import com.xxsword.xitem.admin.domain.exam.vo.PaperVO;
 import com.xxsword.xitem.admin.domain.exam.vo.QRSVO;
@@ -16,6 +13,7 @@ import com.xxsword.xitem.admin.model.Codes;
 import com.xxsword.xitem.admin.model.RestPaging;
 import com.xxsword.xitem.admin.model.RestResult;
 import com.xxsword.xitem.admin.service.exam.*;
+import com.xxsword.xitem.admin.service.system.UserInfoService;
 import com.xxsword.xitem.admin.utils.Utils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -26,8 +24,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
+import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 @Slf4j
@@ -43,7 +43,8 @@ public class PaperController {
     private UserPaperService userPaperService;
     @Autowired
     private UserPaperQuestionService userPaperQuestionService;
-
+    @Autowired
+    private UserInfoService userInfoService;
 
     @RequestMapping("list")
     public String list() {
@@ -289,6 +290,26 @@ public class PaperController {
 
         model.addAttribute("paperVO", paperVO);
         return "/admin/exam/paper/paperpreview";
+    }
+
+    /**
+     * 用户答题试卷的查看
+     *
+     * @param request
+     * @return
+     */
+    @RequestMapping("userPaperPreview")
+    public String userPaperPreview(HttpServletRequest request, String userPaperId, Model model) {
+        UserPaper userPaper = userPaperService.getById(userPaperId);
+        Paper paper = paperService.getById(userPaper.getPaperid());
+        List<QuestionVO> questionVOList = userPaperQuestionService.listQuestionByUserPaper(userPaper, true, true, true);
+        PaperVO paperVO = PaperConvert.INSTANCE.toPaperVO(paper);
+        paperVO.setQuestionVOList(questionVOList);
+        paperVO.setSnum(questionVOList.size());
+        paperVO.setScore(Utils.sum(questionVOList.stream().map(QuestionVO::getQscore).collect(Collectors.toList())));
+
+        model.addAttribute("paperVO", paperVO);
+        return "/admin/exam/paper/userpaperpreview";
     }
 
     @RequestMapping("paperShow")

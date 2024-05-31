@@ -21,6 +21,7 @@ public class UserPaper extends BaseEntity implements Serializable {
     @ColumnComment("试卷id")
     private String paperid;
 
+    @Index
     @Column(length = 50)
     @ColumnComment("考试id")
     private String examid;

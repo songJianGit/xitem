@@ -7,6 +7,7 @@ import lombok.Data;
 
 @Data
 public class UserPaperDto {
+    private String id;
     private String paperId;// 试卷id
     private String examId;// 考试id
     private String userId;// 用户id

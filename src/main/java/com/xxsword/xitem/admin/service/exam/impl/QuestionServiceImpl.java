@@ -348,11 +348,12 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
     public QuestionVO getQuestionVO(UserPaperQuestion userPaperQuestion, boolean setOption, boolean setRight, boolean setABC) {
         Question question = getById(userPaperQuestion.getQid());
         QuestionVO questionVO = QuestionConvert.INSTANCE.toQuestionVO(question);
-        questionVO.setScore(userPaperQuestion.getQscore());
+        questionVO.setQscore(userPaperQuestion.getQscore());
         questionVO.setUserpaperquestionid(userPaperQuestion.getId());
         questionVO.setUseranswerIds(userPaperQuestion.getAnswer());
+        List<QuestionOption> questionOptionList = new ArrayList<>();
         if (setOption) {
-            List<QuestionOption> questionOptionList = questionOptionService.questionOptionListByQid(questionVO.getId());
+            questionOptionList = questionOptionService.questionOptionListByQid(questionVO.getId());
             if (setRight) {
                 StringBuilder answer = new StringBuilder();
                 for (int i = 0; i < questionOptionList.size(); i++) {
@@ -374,6 +375,20 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
                 }
             }
             questionVO.setQuestionOptionList(QuestionOptionConvert.INSTANCE.toQuestionOptionVO(questionOptionList));
+        }
+        if (StringUtils.isNotBlank(userPaperQuestion.getAnswer())) {// 用户是否回答
+            if (questionOptionList.isEmpty()) {
+                // setOption如果为false，questionOptionList就不会赋值，需要获取一下
+                questionOptionList = questionOptionService.questionOptionListByQid(questionVO.getId());
+            }
+            StringBuilder as = new StringBuilder();
+            Set<String> set = Arrays.stream(userPaperQuestion.getAnswer().split(",")).collect(Collectors.toSet());
+            for (int i = 0; i < questionOptionList.size(); i++) {
+                if (set.contains(questionOptionList.get(i).getId())) {
+                    as.append(ExamUtil.convertNumberToLetter(i));
+                }
+            }
+            questionVO.setUseranswer(as.toString());
         }
         return questionVO;
     }
