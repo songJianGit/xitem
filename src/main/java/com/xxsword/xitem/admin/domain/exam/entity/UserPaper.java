@@ -5,6 +5,7 @@ import com.gitee.sunchenbin.mybatis.actable.annotation.*;
 import com.gitee.sunchenbin.mybatis.actable.constants.MySqlEngineConstant;
 import com.xxsword.xitem.admin.domain.system.entity.BaseEntity;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.io.Serializable;
 
@@ -12,6 +13,7 @@ import java.io.Serializable;
  * 用户-试卷-多对多
  * 答题记录
  */
+@EqualsAndHashCode(callSuper = true)
 @Data
 @TableComment("用户-试卷-多对多")
 @TableName("t_ex_user_paper")
