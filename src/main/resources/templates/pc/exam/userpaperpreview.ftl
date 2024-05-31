@@ -34,7 +34,7 @@
         </div>
     </#list>
 </div>
-<div style="position: fixed;bottom: 0;background-color: #fff;text-align: center;width: 100%">
+<div style="position: fixed;bottom: 0;background-color: #fff;text-align: center;width: 100%;padding: 3px">
     <button type="button" class="btn btn-secondary" onclick="javascript:history.back(-1);return false;">返回</button>
 </div>
 <#include "../commons/js.ftl"/>

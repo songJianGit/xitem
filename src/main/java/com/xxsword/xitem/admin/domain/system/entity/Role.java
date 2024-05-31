@@ -4,10 +4,12 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.gitee.sunchenbin.mybatis.actable.annotation.*;
 import com.gitee.sunchenbin.mybatis.actable.constants.MySqlEngineConstant;
+import lombok.Data;
 
 import java.io.Serializable;
 import java.util.List;
 
+@Data
 @TableComment("角色表")
 @TableName("t_sys_role")
 @TableEngine(MySqlEngineConstant.InnoDB)
@@ -22,19 +24,4 @@ public class Role extends BaseEntity implements Serializable {
     @TableField(exist = false)
     private List<Functions> functionlist;
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public List<Functions> getFunctionlist() {
-        return functionlist;
-    }
-
-    public void setFunctionlist(List<Functions> functionlist) {
-        this.functionlist = functionlist;
-    }
 }

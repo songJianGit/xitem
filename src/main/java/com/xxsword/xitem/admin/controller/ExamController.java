@@ -46,7 +46,6 @@ public class ExamController {
     @ResponseBody
     public RestPaging<Exam> data(HttpServletRequest request, Page<Exam> page, ExamDto examDto) {
         Page<Exam> data = examService.page(page, examDto.toQuery());
-        examService.setExamexstatus(data.getRecords());
         return new RestPaging<>(data.getTotal(), data.getRecords());
     }
 
@@ -68,6 +67,9 @@ public class ExamController {
     public String save(HttpServletRequest request, Exam exam) {
         UserInfo userInfo = Utils.getUserInfo(request);
         exam.setBaseInfo(userInfo);
+        if (exam.getReleasestatus() == null) {
+            exam.setReleasestatus(0);
+        }
         examService.saveOrUpdate(exam);
         return "redirect:list";
     }
@@ -76,6 +78,14 @@ public class ExamController {
     @ResponseBody
     public RestResult del(HttpServletRequest request, String ids) {
         examService.delExamByIds(ids);
+        return RestResult.OK();
+    }
+
+    @RequestMapping("release")
+    @ResponseBody
+    public RestResult release(HttpServletRequest request, String id) {
+        UserInfo userInfo = Utils.getUserInfo(request);
+        examService.release(userInfo, id);
         return RestResult.OK();
     }
 

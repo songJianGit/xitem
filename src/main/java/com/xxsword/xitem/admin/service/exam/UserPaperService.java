@@ -45,9 +45,9 @@ public interface UserPaperService extends IService<UserPaper> {
      * 该用户的考试纪录
      *
      * @param userId
-     * @return
+     * @return 考试id
      */
-    Page<UserPaper> pageUserPaperByUser(Page<UserPaper> page, String userId);
+    Page<UserPaper> pageUserExamRecord(Page<UserPaper> page, String userId);
 
     /**
      * 对象转VO

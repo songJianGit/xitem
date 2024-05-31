@@ -8,12 +8,15 @@ import lombok.Data;
 @Data
 public class ExamDto {
 
-    // 考试标题
-    private String title;
+    private String title;// 考试标题
+    private Integer extype;// 考试类型
+    private Integer releasestatus;// 发布状态
 
     public LambdaQueryWrapper<Exam> toQuery() {
         return new LambdaQueryWrapper<Exam>().eq(Exam::getStatus, 1)
                 .like(StringUtils.isNotBlank(title), Exam::getTitle, title)
+                .eq(extype != null, Exam::getExtype, extype)
+                .eq(releasestatus != null, Exam::getReleasestatus, releasestatus)
                 .orderByDesc(Exam::getCdate, Exam::getId);
     }
 }

@@ -5,10 +5,12 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import com.gitee.sunchenbin.mybatis.actable.annotation.*;
 import com.gitee.sunchenbin.mybatis.actable.constants.MySqlEngineConstant;
 import com.gitee.sunchenbin.mybatis.actable.constants.MySqlTypeConstant;
+import lombok.Data;
 
 import java.io.Serializable;
 import java.util.List;
 
+@Data
 @TableComment("用户表")
 @TableName("t_sys_userinfo")
 @TableEngine(MySqlEngineConstant.InnoDB)
@@ -70,107 +72,4 @@ public class UserInfo extends BaseEntity implements Serializable {
     @TableField(exist = false)
     private List<Role> rolelist;
 
-    public String getNickname() {
-        return nickname;
-    }
-
-    public void setNickname(String nickname) {
-        this.nickname = nickname;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getLoginname() {
-        return loginname;
-    }
-
-    public void setLoginname(String loginname) {
-        this.loginname = loginname;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getPassworderror() {
-        return passworderror;
-    }
-
-    public void setPassworderror(String passworderror) {
-        this.passworderror = passworderror;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getPhoneno() {
-        return phoneno;
-    }
-
-    public void setPhoneno(String phoneno) {
-        this.phoneno = phoneno;
-    }
-
-    public String getOrganid() {
-        return organid;
-    }
-
-    public void setOrganid(String organid) {
-        this.organid = organid;
-    }
-
-    public String getOrganname() {
-        return organname;
-    }
-
-    public void setOrganname(String organname) {
-        this.organname = organname;
-    }
-
-    public List<Role> getRolelist() {
-        return rolelist;
-    }
-
-    public void setRolelist(List<Role> rolelist) {
-        this.rolelist = rolelist;
-    }
-
-    public Integer getPermissionType() {
-        return permissionType;
-    }
-
-    public void setPermissionType(Integer permissionType) {
-        this.permissionType = permissionType;
-    }
-
-    public String getPermissionids() {
-        return permissionids;
-    }
-
-    public void setPermissionids(String permissionids) {
-        this.permissionids = permissionids;
-    }
-
-    public String getLifedate() {
-        return lifedate;
-    }
-
-    public void setLifedate(String lifedate) {
-        this.lifedate = lifedate;
-    }
 }

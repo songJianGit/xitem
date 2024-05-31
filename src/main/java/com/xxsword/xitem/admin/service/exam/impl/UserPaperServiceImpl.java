@@ -97,11 +97,14 @@ public class UserPaperServiceImpl extends ServiceImpl<UserPaperMapper, UserPaper
     }
 
     @Override
-    public Page<UserPaper> pageUserPaperByUser(Page<UserPaper> page, String userId) {
+    public Page<UserPaper> pageUserExamRecord(Page<UserPaper> page, String userId) {
         LambdaQueryWrapper<UserPaper> query = Wrappers.lambdaQuery();
         query.eq(UserPaper::getStatus, 1);
         query.eq(UserPaper::getUserid, userId);
         query.isNotNull(UserPaper::getExamid);
+
+        query.select(UserPaper::getExamid);
+        query.groupBy(UserPaper::getExamid);
         return page(page, query);
     }
 

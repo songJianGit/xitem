@@ -5,9 +5,11 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import com.gitee.sunchenbin.mybatis.actable.annotation.*;
 import com.gitee.sunchenbin.mybatis.actable.constants.MySqlEngineConstant;
 import com.xxsword.xitem.admin.domain.system.entity.BaseEntity;
+import lombok.Data;
 
 import java.io.Serializable;
 
+@Data
 @TableComment("考试表")
 @TableName("t_ex_exam")
 @TableEngine(MySqlEngineConstant.InnoDB)
@@ -41,6 +43,14 @@ public class Exam extends BaseEntity implements Serializable {
     @TableField(exist = false)
     private String papertitle;
 
+    @Column
+    @ColumnComment("发布状态（0-初始 1-发布 2-下架）")
+    private Integer releasestatus;// 该考试是否显示到前台
+
+    @Column
+    @ColumnComment("考试类型（1-公开考试 0-授权考试）")
+    private Integer extype;
+
     /**
      * 考试状态(通过考试的开始和结束时间进行赋值)
      * 0-未开始 1-进行中 2-已结束
@@ -48,67 +58,4 @@ public class Exam extends BaseEntity implements Serializable {
     @TableField(exist = false)
     private Integer exstatus;
 
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getStime() {
-        return stime;
-    }
-
-    public void setStime(String stime) {
-        this.stime = stime;
-    }
-
-    public String getEtime() {
-        return etime;
-    }
-
-    public void setEtime(String etime) {
-        this.etime = etime;
-    }
-
-    public Integer getDuration() {
-        return duration;
-    }
-
-    public void setDuration(Integer duration) {
-        this.duration = duration;
-    }
-
-    public Integer getMaxnum() {
-        return maxnum;
-    }
-
-    public void setMaxnum(Integer maxnum) {
-        this.maxnum = maxnum;
-    }
-
-    public String getPaperid() {
-        return paperid;
-    }
-
-    public void setPaperid(String paperid) {
-        this.paperid = paperid;
-    }
-
-    public String getPapertitle() {
-        return papertitle;
-    }
-
-    public void setPapertitle(String papertitle) {
-        this.papertitle = papertitle;
-    }
-
-    public Integer getExstatus() {
-        return exstatus;
-    }
-
-    public void setExstatus(Integer exstatus) {
-        this.exstatus = exstatus;
-    }
 }

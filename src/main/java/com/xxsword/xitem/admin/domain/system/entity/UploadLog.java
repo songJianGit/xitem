@@ -8,9 +8,11 @@ import com.gitee.sunchenbin.mybatis.actable.annotation.ColumnComment;
 import com.gitee.sunchenbin.mybatis.actable.annotation.TableComment;
 import com.gitee.sunchenbin.mybatis.actable.annotation.TableEngine;
 import com.gitee.sunchenbin.mybatis.actable.constants.MySqlEngineConstant;
+import lombok.Data;
 
 import java.io.Serializable;
 
+@Data
 @TableComment("分片方式上传的文件信息记录")
 @TableName("t_sys_upload_log")
 @TableEngine(MySqlEngineConstant.InnoDB)
@@ -40,51 +42,4 @@ public class UploadLog implements Serializable {
     @ColumnComment("文件大小(单位：字节)")
     private Long size;
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getUserid() {
-        return userid;
-    }
-
-    public void setUserid(String userid) {
-        this.userid = userid;
-    }
-
-    public String getCdate() {
-        return cdate;
-    }
-
-    public void setCdate(String cdate) {
-        this.cdate = cdate;
-    }
-
-    public String getUrl() {
-        return url;
-    }
-
-    public void setUrl(String url) {
-        this.url = url;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Long getSize() {
-        return size;
-    }
-
-    public void setSize(Long size) {
-        this.size = size;
-    }
 }

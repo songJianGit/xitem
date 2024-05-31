@@ -5,9 +5,11 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.gitee.sunchenbin.mybatis.actable.annotation.*;
 import com.gitee.sunchenbin.mybatis.actable.constants.MySqlEngineConstant;
+import lombok.Data;
 
 import java.io.Serializable;
 
+@Data
 @TableComment("角色菜单多对多表")
 @TableName("t_sys_role_functions")
 @TableEngine(MySqlEngineConstant.InnoDB)
@@ -27,27 +29,4 @@ public class RoleFunctions implements Serializable {
     @ColumnComment("菜单id")
     private String funid;
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getRoleid() {
-        return roleid;
-    }
-
-    public void setRoleid(String roleid) {
-        this.roleid = roleid;
-    }
-
-    public String getFunid() {
-        return funid;
-    }
-
-    public void setFunid(String funid) {
-        this.funid = funid;
-    }
 }

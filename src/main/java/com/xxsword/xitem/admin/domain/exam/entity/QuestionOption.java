@@ -4,9 +4,11 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import com.gitee.sunchenbin.mybatis.actable.annotation.*;
 import com.gitee.sunchenbin.mybatis.actable.constants.MySqlEngineConstant;
 import com.xxsword.xitem.admin.domain.system.entity.BaseEntity;
+import lombok.Data;
 
 import java.io.Serializable;
 
+@Data
 @TableComment("题目的选项")
 @TableName("t_ex_question_option")
 @TableEngine(MySqlEngineConstant.InnoDB)
@@ -26,27 +28,4 @@ public class QuestionOption extends BaseEntity implements Serializable {
     @ColumnComment("是否正确答案(0-否 1-是)")
     private Integer optionright;
 
-    public String getQid() {
-        return qid;
-    }
-
-    public void setQid(String qid) {
-        this.qid = qid;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public Integer getOptionright() {
-        return optionright;
-    }
-
-    public void setOptionright(Integer optionright) {
-        this.optionright = optionright;
-    }
 }

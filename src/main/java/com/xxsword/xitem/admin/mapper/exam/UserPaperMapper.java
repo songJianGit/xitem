@@ -10,6 +10,13 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface UserPaperMapper extends BaseMapper<UserPaper> {
 
+    /**
+     * 考试分数查询
+     *
+     * @param page
+     * @param dto
+     * @return 用户信息和考试最高分
+     */
     @Select("<script>" +
             "select " +
             "a.userid userid,b.username username, max(a.score) score " +
@@ -22,4 +29,5 @@ public interface UserPaperMapper extends BaseMapper<UserPaper> {
             "group by a.userid,b.username " +
             "</script>")
     Page<UserPaper> pageExamScore(Page<UserPaper> page, UserPaperDto dto);
+
 }

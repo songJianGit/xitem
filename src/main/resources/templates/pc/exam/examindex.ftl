@@ -3,20 +3,42 @@
 <head>
     <title>考试</title>
     <#include "../commons/head.ftl"/>
+    <style>
+        .exam-item {
+            margin: 5px;
+        }
+    </style>
 </head>
 <body>
 <div class="pc-main">
     <#include "../commons/header.ftl"/>
     <div class="pc-body">
-        <#list examList as item>
-            <div class="card mb-3">
-                <div class="card-body">
-                    <div>${item.title!}</div>
-                    <div>${item.stime!}&nbsp;-&nbsp;${item.etime!}</div>
-                </div>
-                <div class="card-footer"><a href="${ctx.contextPath}/pc/exam/${item.id!}">查看</a></div>
+        <div class="card">
+            <div class="card-header">授权考试</div>
+            <div class="card-body">
+                <ul class="list-group list-group-flush">
+                    <#list examList1 as item>
+                        <li class="list-group-item">
+                            <a href="${ctx.contextPath}/pc/exam/e/${item.id!}">${item.title!}</a>【${item.stime!}&nbsp;-&nbsp;${item.etime!}】
+                        </li>
+                    </#list>
+                </ul>
+                <a href="${ctx.contextPath}/pc/exam/examType?exType=1">更多>></a>
             </div>
-        </#list>
+        </div>
+        <div class="card mt-3">
+            <div class="card-header">公开考试</div>
+            <div class="card-body">
+                <ul class="list-group list-group-flush">
+                    <#list examList0 as item>
+                        <li class="list-group-item">
+                            <a href="${ctx.contextPath}/pc/exam/e/${item.id!}">${item.title!}</a>【${item.stime!}&nbsp;-&nbsp;${item.etime!}】
+                        </li>
+                    </#list>
+                </ul>
+                <a href="${ctx.contextPath}/pc/exam/examType?exType=0">更多>></a>
+            </div>
+        </div>
     </div>
 </div>
 <#include "../commons/js.ftl"/>

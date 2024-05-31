@@ -45,7 +45,7 @@
                                             <span class="input-group-text">状态</span>
                                         </div>
                                         <select class="form-control" name="status">
-                                            <option value="">-状态-</option>
+                                            <option value="">---状态---</option>
                                             <option value="1">启用</option>
                                             <option value="2">停用</option>
                                         </select>

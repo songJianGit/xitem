@@ -40,12 +40,27 @@ public class ExamServiceImpl extends ServiceImpl<ExamMapper, Exam> implements Ex
         String[] idsS = ids.split(",");
         List<Exam> listUp = new ArrayList<>();
         for (String id : idsS) {
-            Exam exam = new Exam();
-            exam.setId(id);
-            exam.setStatus(0);
-            listUp.add(exam);
+            Exam examUp = new Exam();
+            examUp.setId(id);
+            examUp.setStatus(0);
+            listUp.add(examUp);
         }
         updateBatchById(listUp);
+    }
+
+    @Override
+    public void release(UserInfo userInfo, String id) {
+        Exam exam = getById(id);
+        Exam examUp = new Exam();
+        examUp.setId(id);
+        examUp.setBaseInfo(userInfo);
+        if (exam.getReleasestatus() == null || exam.getReleasestatus() == 0 || exam.getReleasestatus() == 2) {
+            examUp.setReleasestatus(1);
+        }
+        if (exam.getReleasestatus() == 1) {
+            examUp.setReleasestatus(2);
+        }
+        updateById(examUp);
     }
 
 }

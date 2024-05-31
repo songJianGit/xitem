@@ -1,9 +1,8 @@
 package com.xxsword.xitem.pc;
 
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.xxsword.xitem.admin.domain.exam.convert.PaperConvert;
+import com.xxsword.xitem.admin.domain.exam.dto.ExamDto;
 import com.xxsword.xitem.admin.domain.exam.entity.*;
 import com.xxsword.xitem.admin.domain.exam.vo.PaperVO;
 import com.xxsword.xitem.admin.domain.exam.vo.QuestionVO;
@@ -42,13 +41,43 @@ public class PcExamController {
     @Autowired
     private PaperService paperService;
 
+    @RequestMapping("examType")
+    public String examType(Integer exType, Model model) {
+        model.addAttribute("exType", exType == null ? 1 : exType);
+        return "/pc/exam/examtype";
+    }
+
     @RequestMapping("index")
     public String index(Model model) {
-        LambdaQueryWrapper<Exam> examQ = Wrappers.lambdaQuery();
-        examQ.eq(Exam::getStatus, 1);
-        Page<Exam> examPage = examService.page(new Page<>(1, 50), examQ);
-        model.addAttribute("examList", examPage.getRecords());
+        ExamDto examDto1 = new ExamDto();
+        examDto1.setReleasestatus(1);
+        examDto1.setExtype(1);
+        List<Exam> examList1 = examService.list(new Page<>(1, 10), examDto1.toQuery());
+
+        ExamDto examDto2 = new ExamDto();
+        examDto2.setReleasestatus(1);
+        examDto2.setExtype(0);
+        List<Exam> examList0 = examService.list(new Page<>(1, 10), examDto2.toQuery());
+
+        model.addAttribute("examList1", examList1);
+        model.addAttribute("examList0", examList0);
         return "/pc/exam/examindex";
+    }
+
+    @RequestMapping("examTypeData")
+    @ResponseBody
+    public RestResult examTypeData(Integer exType, Integer pageNum, Integer pageSize) {
+        if (pageSize == null) {
+            pageSize = 20;
+        }
+        if (pageSize > 100) {
+            pageSize = 100;
+        }
+        ExamDto examDto = new ExamDto();
+        examDto.setReleasestatus(1);
+        examDto.setExtype(exType == null ? 1 : exType);
+        Page<Exam> examPage = examService.page(new Page<>(pageNum, pageSize), examDto.toQuery());
+        return RestResult.OK(examPage.getRecords());
     }
 
     /**
@@ -58,7 +87,7 @@ public class PcExamController {
      * @param model
      * @return
      */
-    @RequestMapping("{eid}")
+    @RequestMapping("/e/{eid}")
     public String examid(HttpServletRequest request, @PathVariable String eid, Model model) {
         UserInfo userInfo = Utils.getUserInfo(request);
         Exam exam = examService.getById(eid);

@@ -32,6 +32,13 @@
                                                value="${exam.title!}" placeholder="考试标题" required/>
                                     </div>
                                     <div class="form-group col-6">
+                                        <label>考试类型</label>
+                                        <select class="form-control" name="extype">
+                                            <option value="1" <#if exam.extype??><#if exam.extype==1>selected</#if></#if> >公开考试</option>
+                                            <option value="0" <#if exam.extype??><#if exam.extype==0>selected</#if></#if> >授权考试</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group col-6">
                                         <label for="title">最大重考次数（-1表示不限制）</label>
                                         <input type="text" class="form-control" id="title" name="maxnum"
                                                value="${exam.maxnum!}" placeholder="最大重考次数" required/>

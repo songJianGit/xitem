@@ -1,12 +1,16 @@
 <!DOCTYPE html>
 <html lang="zh">
 <head>
-    <title>考试纪录</title>
+    <title>考试</title>
     <#include "../commons/head.ftl"/>
 </head>
 <body>
 <div class="pc-main">
     <#include "../commons/header.ftl"/>
+    <div style="width: 100%;text-align: center;font-size: 17px;margin-top: 5px;">
+        <#if exType==1>公开考试</#if>
+        <#if exType==0>授权考试</#if>
+    </div>
     <div class="pc-body exam-list">
         <div id="nodata">暂无数据</div>
     </div>
@@ -29,15 +33,16 @@
 
     function loadData(pageNum) {
         $.ajax({
-            url: '${ctx.contextPath}/pc/user/userExamData',
+            url: '${ctx.contextPath}/pc/exam/examTypeData',
             data: {
+                exType: `${exType!}`,
                 pageNum: pageNum,
                 pageSize: pageSize2024
             },
             success: function (data) {
                 if (data.result) {
                     let datas = data.data;
-                    if(isNotBlank(datas)){
+                    if (isNotBlank(datas)) {
                         $("#nodata").remove();
                         let htm = '';
                         for (let i = 0; i < datas.length; i++) {
@@ -50,7 +55,7 @@
                             }
                             $(".netPageBtn").hide();
                         }
-                    }else {
+                    } else {
                         if (pageNum2024 > 1) {
                             layer.msg("已全部加载")
                         }

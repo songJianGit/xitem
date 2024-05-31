@@ -11,6 +11,30 @@
         }
         return value;
     }
+
+    function extype(value, row) {
+        if (value == 0) {
+            return '授权考试';
+        }
+        if (value == 1) {
+            return '公开考试';
+        }
+        return value;
+    }
+
+    function exreleasestatus(value, row){
+        if (value == 0) {
+            return '未发布';
+        }
+        if (value == 1) {
+            return '已发布';
+        }
+        if (value == 2) {
+            return '已下架';
+        }
+        return value;
+    }
+
     function exstatus(value, row) {
         if (value == 0) {
             return '未开始';
@@ -24,7 +48,7 @@
         return value;
     }
 
-    function status(value, row){
+    function status(value, row) {
         if (value == 0) {
             return '删除';
         }

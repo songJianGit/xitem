@@ -13,4 +13,11 @@ public interface ExamService extends IService<Exam> {
 
     void delExamByIds(String ids);
 
+    /**
+     * 考试的发布和下架
+     *
+     * @param id
+     */
+    void release(UserInfo userInfo, String id);
+
 }

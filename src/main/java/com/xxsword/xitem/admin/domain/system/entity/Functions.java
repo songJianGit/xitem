@@ -3,9 +3,11 @@ package com.xxsword.xitem.admin.domain.system.entity;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.gitee.sunchenbin.mybatis.actable.annotation.*;
 import com.gitee.sunchenbin.mybatis.actable.constants.MySqlEngineConstant;
+import lombok.Data;
 
 import java.io.Serializable;
 
+@Data
 @TableComment("菜单表")
 @TableName("t_sys_functions")
 @TableEngine(MySqlEngineConstant.InnoDB)
@@ -45,69 +47,5 @@ public class Functions extends BaseEntity implements Serializable {
     @Column(defaultValue = "_self", length = 50)
     @ColumnComment("菜单打开方式")
     private String target;
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getUrl() {
-        return url;
-    }
-
-    public void setUrl(String url) {
-        this.url = url;
-    }
-
-    public String getTag() {
-        return tag;
-    }
-
-    public void setTag(String tag) {
-        this.tag = tag;
-    }
-
-    public String getPid() {
-        return pid;
-    }
-
-    public void setPid(String pid) {
-        this.pid = pid;
-    }
-
-    public Integer getSeq() {
-        return seq;
-    }
-
-    public void setSeq(Integer seq) {
-        this.seq = seq;
-    }
-
-    public Integer getShowflag() {
-        return showflag;
-    }
-
-    public void setShowflag(Integer showflag) {
-        this.showflag = showflag;
-    }
-
-    public String getIcon() {
-        return icon;
-    }
-
-    public void setIcon(String icon) {
-        this.icon = icon;
-    }
-
-    public String getTarget() {
-        return target;
-    }
-
-    public void setTarget(String target) {
-        this.target = target;
-    }
 
 }

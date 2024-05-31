@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import com.gitee.sunchenbin.mybatis.actable.annotation.*;
 import com.gitee.sunchenbin.mybatis.actable.constants.MySqlEngineConstant;
 import com.xxsword.xitem.admin.domain.system.entity.BaseEntity;
+import lombok.Data;
 
 import java.io.Serializable;
 
@@ -11,6 +12,7 @@ import java.io.Serializable;
  * 用户-试卷-多对多
  * 答题记录
  */
+@Data
 @TableComment("用户-试卷-多对多")
 @TableName("t_ex_user_paper")
 @TableEngine(MySqlEngineConstant.InnoDB)
@@ -43,51 +45,4 @@ public class UserPaper extends BaseEntity implements Serializable {
     @ColumnComment("用户总分")
     private Double score;
 
-    public String getPaperid() {
-        return paperid;
-    }
-
-    public void setPaperid(String paperid) {
-        this.paperid = paperid;
-    }
-
-    public String getExamid() {
-        return examid;
-    }
-
-    public void setExamid(String examid) {
-        this.examid = examid;
-    }
-
-    public String getUserid() {
-        return userid;
-    }
-
-    public void setUserid(String userid) {
-        this.userid = userid;
-    }
-
-    public Integer getSubstatus() {
-        return substatus;
-    }
-
-    public void setSubstatus(Integer substatus) {
-        this.substatus = substatus;
-    }
-
-    public String getSubdate() {
-        return subdate;
-    }
-
-    public void setSubdate(String subdate) {
-        this.subdate = subdate;
-    }
-
-    public Double getScore() {
-        return score;
-    }
-
-    public void setScore(Double score) {
-        this.score = score;
-    }
 }

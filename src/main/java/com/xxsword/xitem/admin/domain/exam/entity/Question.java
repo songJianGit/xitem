@@ -6,10 +6,12 @@ import com.gitee.sunchenbin.mybatis.actable.annotation.*;
 import com.gitee.sunchenbin.mybatis.actable.constants.MySqlEngineConstant;
 import com.gitee.sunchenbin.mybatis.actable.constants.MySqlTypeConstant;
 import com.xxsword.xitem.admin.domain.system.entity.BaseEntity;
+import lombok.Data;
 
 import java.io.Serializable;
 import java.util.List;
 
+@Data
 @TableComment("考试的题目")
 @TableName("t_ex_question")
 @TableEngine(MySqlEngineConstant.InnoDB)
@@ -30,37 +32,5 @@ public class Question extends BaseEntity implements Serializable {
     @Column
     @ColumnComment("题目类型(0-是非 1-单选 2-多选)")
     private Integer qtype;
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getQclass() {
-        return qclass;
-    }
-
-    public void setQclass(String qclass) {
-        this.qclass = qclass;
-    }
-
-    public String getQclassname() {
-        return qclassname;
-    }
-
-    public void setQclassname(String qclassname) {
-        this.qclassname = qclassname;
-    }
-
-    public Integer getQtype() {
-        return qtype;
-    }
-
-    public void setQtype(Integer qtype) {
-        this.qtype = qtype;
-    }
 
 }

@@ -4,10 +4,11 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.gitee.sunchenbin.mybatis.actable.annotation.*;
 import com.gitee.sunchenbin.mybatis.actable.constants.MySqlEngineConstant;
+import lombok.Data;
 
 import java.io.Serializable;
 
-
+@Data
 @TableComment("机构表")
 @TableName("t_sys_organ")
 @TableEngine(MySqlEngineConstant.InnoDB)
@@ -40,51 +41,4 @@ public class Organ extends BaseEntity implements Serializable {
     @ColumnComment("排序")
     private Integer seq;
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getOrgannum() {
-        return organnum;
-    }
-
-    public void setOrgannum(String organnum) {
-        this.organnum = organnum;
-    }
-
-    public String getPid() {
-        return pid;
-    }
-
-    public void setPid(String pid) {
-        this.pid = pid;
-    }
-
-    public String getPname() {
-        return pname;
-    }
-
-    public void setPname(String pname) {
-        this.pname = pname;
-    }
-
-    public String getPids() {
-        return pids;
-    }
-
-    public void setPids(String pids) {
-        this.pids = pids;
-    }
-
-    public Integer getSeq() {
-        return seq;
-    }
-
-    public void setSeq(Integer seq) {
-        this.seq = seq;
-    }
 }
