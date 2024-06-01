@@ -11,7 +11,7 @@ public interface ExamService extends IService<Exam> {
 
     void upLastInfo(UserInfo doUserInfo, String ids);
 
-    void delExamByIds(String ids);
+    void delExamByIds(UserInfo userInfo, String ids);
 
     /**
      * 考试的发布和下架

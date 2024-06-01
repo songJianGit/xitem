@@ -69,8 +69,11 @@
                             <div class="card-body">
                                 <div id="custom-toolbar">
                                     <div class="form-inline" role="form">
-                                        <button type="button" id="add" class="btn btn-primary">
+                                        <button type="button" id="add" class="btn btn-primary m-r-5">
                                             新增
+                                        </button>
+                                        <button type="button" id="del" class="btn btn-primary">
+                                            删除
                                         </button>
                                     </div>
                                 </div>
@@ -81,11 +84,13 @@
                                            data-pagination="true"
                                            data-page-list="[10, 20, 50, 100, 200]"
                                            data-click-to-select="true"
+                                           data-show-refresh="true"
                                            data-url="${ctx.contextPath}/admin/exam/data"
                                            data-query-params="pageQueryParams"
                                            data-side-pagination="server">
                                         <thead>
                                         <tr>
+                                            <th data-checkbox="true"></th>
                                             <th data-field="title">考试标题</th>
                                             <th data-field="exType" data-formatter="extype">考试类型</th>
                                             <th data-field="stime" data-width="160px">开始时间</th>
@@ -150,34 +155,39 @@
         });
     }
 
-    function del(id) {
-        $.confirm({
-            title: '提示',
-            content: '是否删除？',
-            buttons: {
-                confirm: {
-                    text: '确认',
-                    action: function () {
-                        $.ajax({
-                            url: "${ctx.contextPath}/admin/exam/del?id=" + id,
-                            success: function (data) {
-                                if (data.result) {
-                                    $("#table-pagination").bootstrapTable('refresh');
-                                } else {
-                                    alert(data.msg);
+    $('#del').click(function () {
+        if (getSelectionIds() != false) {
+            $.confirm({
+                title: '提示',
+                content: '是否删除？',
+                buttons: {
+                    confirm: {
+                        text: '确认',
+                        action: function () {
+                            $.ajax({
+                                url: "${ctx.contextPath}/admin/exam/del",
+                                data: {
+                                    ids: getSelectionIds().join(',')
+                                },
+                                success: function (data) {
+                                    if (data.result) {
+                                        $("#table-pagination").bootstrapTable('refresh');
+                                    } else {
+                                        alert(data.msg);
+                                    }
                                 }
-                            }
-                        });
-                    }
-                },
-                cancel: {
-                    text: '取消',
-                    action: function () {
+                            });
+                        }
+                    },
+                    cancel: {
+                        text: '取消',
+                        action: function () {
+                        }
                     }
                 }
-            }
-        });
-    }
+            });
+        }
+    });
 
     $('#searchBtn').click(function () {
         $("#table-pagination").bootstrapTable('refresh', {
