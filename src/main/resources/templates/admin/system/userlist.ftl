@@ -62,15 +62,15 @@
                             </div>
 
                             <div class="card-body">
-                                <div id="custom-toolbar d-flex flex-column flex-md-row">
+                                <div id="custom-toolbar">
                                     <div class="toolbar-btn-action">
-                                        <button type="button" id="add" class="btn btn-primary m-r-5">
+                                        <button type="button" id="add" class="btn btn-primary">
                                             新增
                                         </button>
-                                        <button type="button" id="del" class="btn btn-primary m-r-5">
+                                        <button type="button" id="del" class="btn btn-primary">
                                             删除
                                         </button>
-                                        <button type="button" id="status" class="btn btn-primary m-r-5">
+                                        <button type="button" id="status" class="btn btn-primary">
                                             启用/停用
                                         </button>
                                     </div>
@@ -82,6 +82,7 @@
                                            data-pagination="true"
                                            data-page-list="[10, 20, 50, 100, 200]"
                                            data-click-to-select="true"
+                                           data-show-refresh="true"
                                            data-url="${ctx.contextPath}/admin/system/userListData"
                                            data-query-params="pageQueryParams"
                                            data-side-pagination="server">

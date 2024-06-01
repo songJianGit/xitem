@@ -35,8 +35,8 @@
                             </div>
                             <div class="card-body">
                                 <div id="custom-toolbar">
-                                    <div class="form-inline" role="form">
-                                        <button type="button" id="add" class="btn btn-primary m-r-5 animated flipInX">
+                                    <div class="toolbar-btn-action">
+                                        <button type="button" id="add" class="btn btn-primary animated flipInX">
                                             新增
                                         </button>
                                     </div>
@@ -46,6 +46,7 @@
                                            data-toolbar="#custom-toolbar"
                                            data-toggle="table"
                                            data-click-to-select="true"
+                                           data-show-refresh="true"
                                            data-url="${ctx.contextPath}/admin/paper/questionRuleData?paperId=${paper.id!}"
                                            data-side-pagination="server">
                                         <thead>

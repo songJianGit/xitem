@@ -13,6 +13,7 @@
             <table id="table-pagination"
                    data-toggle="table"
                    data-click-to-select="true"
+                   data-show-refresh="true"
                    data-url="${ctx.contextPath}/admin/exam/userPaperData?examId=${examId!}&userId=${userId!}&subStatus=1"
                    data-side-pagination="server">
                 <thead>

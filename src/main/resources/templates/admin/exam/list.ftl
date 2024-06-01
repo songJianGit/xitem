@@ -68,8 +68,8 @@
 
                             <div class="card-body">
                                 <div id="custom-toolbar">
-                                    <div class="form-inline" role="form">
-                                        <button type="button" id="add" class="btn btn-primary m-r-5">
+                                    <div class="toolbar-btn-action">
+                                        <button type="button" id="add" class="btn btn-primary">
                                             新增
                                         </button>
                                         <button type="button" id="del" class="btn btn-primary">

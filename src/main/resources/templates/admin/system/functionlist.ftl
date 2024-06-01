@@ -28,10 +28,10 @@
                             <div class="card">
                                 <div class="card-header">
                                     <div class="toolbar-btn-action">
-                                        <button type="button" id="add" class="btn btn-primary m-r-5" href="#!"><i
+                                        <button type="button" id="add" class="btn btn-primary" href="#!"><i
                                                     class="mdi mdi-plus"></i> 新增菜单
                                         </button>
-                                        <button type="submit" class="btn btn-primary m-r-5" href="#!"><i
+                                        <button type="submit" class="btn btn-primary" href="#!"><i
                                                     class="mdi mdi-check"></i>
                                             保存排序
                                         </button>

@@ -51,7 +51,7 @@
 
                                             <div class="card-body">
                                                 <div id="custom-toolbarA">
-                                                    <div class="form-inline" role="form">
+                                                    <div class="toolbar-btn-action">
                                                         <button type="button" id="del" class="btn btn-primary">
                                                             删除授权
                                                         </button>
@@ -64,6 +64,7 @@
                                                            data-pagination="true"
                                                            data-page-list="[10, 20, 50, 100, 200]"
                                                            data-click-to-select="true"
+                                                           data-show-refresh="true"
                                                            data-url="${ctx.contextPath}/admin/system/userListByRoleData?roleId=${roleId}"
                                                            data-query-params="pageQueryParams"
                                                            data-side-pagination="server">
@@ -109,7 +110,7 @@
                                             </div>
                                             <div class="card-body">
                                                 <div id="custom-toolbarB">
-                                                    <div class="form-inline" role="form">
+                                                    <div class="toolbar-btn-action">
                                                         <button type="button" id="add" class="btn btn-primary">
                                                             添加授权
                                                         </button>
@@ -122,6 +123,7 @@
                                                            data-pagination="true"
                                                            data-page-list="[10, 20, 50, 100, 200]"
                                                            data-click-to-select="true"
+                                                           data-show-refresh="true"
                                                            data-url="${ctx.contextPath}/admin/system/userListData"
                                                            data-query-params="pageQueryParams"
                                                            data-side-pagination="server">

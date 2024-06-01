@@ -52,7 +52,7 @@
                                     <div class="card-body">
                                         <h4 class="card-title">机构列表</h4>
                                         <div id="custom-toolbar">
-                                            <div class="form-inline" role="form">
+                                            <div class="toolbar-btn-action">
                                                 <button type="button" id="add" class="btn btn-primary">
                                                     机构新增
                                                 </button>
@@ -65,6 +65,7 @@
                                                    data-pagination="true"
                                                    data-page-list="[10, 20, 50, 100, 200]"
                                                    data-click-to-select="true"
+                                                   data-show-refresh="true"
                                                    data-url="${ctx.contextPath}/admin/organ/pageById"
                                                    data-query-params="pageQueryParams"
                                                    data-side-pagination="server">

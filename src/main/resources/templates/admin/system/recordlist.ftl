@@ -57,6 +57,7 @@
                                            data-pagination="true"
                                            data-page-list="[10, 20, 50, 100, 200]"
                                            data-click-to-select="true"
+                                           data-show-refresh="true"
                                            data-url="${ctx.contextPath}/admin/record/recordListData"
                                            data-query-params="pageQueryParams"
                                            data-side-pagination="server">

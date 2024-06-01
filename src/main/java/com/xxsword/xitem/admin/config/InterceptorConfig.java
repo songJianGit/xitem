@@ -1,9 +1,6 @@
 package com.xxsword.xitem.admin.config;
 
-import com.xxsword.xitem.admin.interceptor.LoginInterceptor;
-import com.xxsword.xitem.admin.interceptor.MenuInterceptor;
-import com.xxsword.xitem.admin.interceptor.PcLoginInterceptor;
-import com.xxsword.xitem.admin.interceptor.RecordInterceptor;
+import com.xxsword.xitem.admin.interceptor.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistration;
@@ -20,6 +17,8 @@ public class InterceptorConfig implements WebMvcConfigurer {
     private RecordInterceptor recordInterceptor;
     @Autowired
     private MenuInterceptor menuInterceptor;
+    @Autowired
+    private CSRFRecordInterceptor csrfRecordInterceptor;
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
@@ -38,6 +37,10 @@ public class InterceptorConfig implements WebMvcConfigurer {
         // 前端拦截器
         InterceptorRegistration pc = registry.addInterceptor(pcLoginInterceptor);
         pc.addPathPatterns("/pc/**");
+        // csrf防护
+        InterceptorRegistration csrf = registry.addInterceptor(csrfRecordInterceptor);
+        csrf.addPathPatterns("/pc/**");
+        csrf.addPathPatterns("/admin/**");
     }
 
 }

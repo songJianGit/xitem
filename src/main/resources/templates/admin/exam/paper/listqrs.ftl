@@ -40,11 +40,11 @@
     </div>
     <div class="card-toolbar d-flex flex-column flex-md-row">
         <div class="toolbar-btn-action">
-            <button type="button" id="saveBtn" class="btn btn-label btn-primary m-r-5">
+            <button type="button" id="saveBtn" class="btn btn-label btn-primary">
                 <label><i class="mdi mdi-checkbox-marked-circle-outline"></i></label>
                 保存
             </button>
-            <button type="button" id="addQuestion" class="btn btn-primary m-r-5">
+            <button type="button" id="addQuestion" class="btn btn-primary">
                 添加考题
             </button>
             <button type="button" id="delBtn" class="btn btn-primary m-r-5">
@@ -78,6 +78,7 @@
                    data-toolbar="#custom-toolbar"
                    data-toggle="table"
                    data-click-to-select="true"
+                   data-show-refresh="true"
                    data-url="${ctx.contextPath}/admin/paper/listQRSData?qrId=${questionRule.id!}"
                    data-side-pagination="server">
                 <thead>

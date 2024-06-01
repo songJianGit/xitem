@@ -72,14 +72,14 @@
 
                             <div class="card-body">
                                 <div id="custom-toolbar">
-                                    <div class="form-inline" role="form">
-                                        <button type="button" id="add" class="btn btn-primary m-r-5">
+                                    <div class="toolbar-btn-action">
+                                        <button type="button" id="add" class="btn btn-primary">
                                             新增
                                         </button>
-                                        <button type="button" id="addQuestionExcel" class="btn btn-primary m-r-5">
+                                        <button type="button" id="addQuestionExcel" class="btn btn-primary">
                                             导入
                                         </button>
-                                        <button type="button" id="del" class="btn btn-primary m-r-5">
+                                        <button type="button" id="del" class="btn btn-primary">
                                             删除
                                         </button>
                                     </div>
@@ -91,6 +91,7 @@
                                            data-pagination="true"
                                            data-page-list="[10, 20, 50, 100, 200]"
                                            data-click-to-select="true"
+                                           data-show-refresh="true"
                                            data-url="${ctx.contextPath}/admin/question/data"
                                            data-query-params="pageQueryParams"
                                            data-side-pagination="server">
