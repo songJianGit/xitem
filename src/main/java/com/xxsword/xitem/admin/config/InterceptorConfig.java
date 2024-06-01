@@ -23,17 +23,17 @@ public class InterceptorConfig implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         // 后台拦截器
-        InterceptorRegistration ir = registry.addInterceptor(loginInterceptor);
+        InterceptorRegistration admin = registry.addInterceptor(loginInterceptor);
         // 配置不拦截的路径
-        // ir.excludePathPatterns("/admin/system/login");
+        // admin.excludePathPatterns("/admin/system/login");
         // 配置拦截的路径
-        ir.addPathPatterns("/admin/**");
+        admin.addPathPatterns("/admin/**");
         // 后台菜单拦截器
-        InterceptorRegistration av = registry.addInterceptor(menuInterceptor);
-        av.addPathPatterns("/admin/**");
+        InterceptorRegistration menu = registry.addInterceptor(menuInterceptor);
+        menu.addPathPatterns("/admin/**");
         // 后台操作日志记录拦截器
-        InterceptorRegistration re = registry.addInterceptor(recordInterceptor);
-        re.addPathPatterns("/admin/**");
+        InterceptorRegistration record = registry.addInterceptor(recordInterceptor);
+        record.addPathPatterns("/admin/**");
         // 前端拦截器
         InterceptorRegistration pc = registry.addInterceptor(pcLoginInterceptor);
         pc.addPathPatterns("/pc/**");
