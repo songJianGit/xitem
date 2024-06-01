@@ -9,9 +9,9 @@
         src="${ctx.contextPath}/static/plugins/admin-template/js/jquery-confirm/jquery-confirm.min.js"></script>
 <script type="text/javascript" src="${ctx.contextPath}/static/plugins/layer-3.5.1/layer.js"></script>
 <script type="text/javascript" src="${ctx.contextPath}/static/plugins/My97DatePicker/WdatePicker.js"></script>
-<script type="text/javascript" src="${ctx.contextPath}/static/plugins/bootstrap-table/bootstrap-table.js"></script>
+<script type="text/javascript" src="${ctx.contextPath}/static/plugins/admin-template/js/bootstrap-table/bootstrap-table.js"></script>
 <script type="text/javascript"
-        src="${ctx.contextPath}/static/plugins/bootstrap-table/locale/bootstrap-table-zh-CN.min.js"></script>
+        src="${ctx.contextPath}/static/plugins/admin-template/js/bootstrap-table/locale/bootstrap-table-zh-CN.min.js"></script>
 <script type="text/javascript"> var contextPath = '${ctx.contextPath}';</script>
 <#include "./dict.ftl"/>
 <script type="text/javascript">

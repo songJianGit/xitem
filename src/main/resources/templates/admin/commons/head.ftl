@@ -11,5 +11,5 @@
 <link href="${ctx.contextPath}/static/plugins/admin-template/css/animate.min.css" rel="stylesheet">
 <#--光年基础样式-->
 <link href="${ctx.contextPath}/static/plugins/admin-template/css/style.min.css" rel="stylesheet">
-<link href="${ctx.contextPath}/static/plugins/bootstrap-table/bootstrap-table.min.css" rel="stylesheet">
+<link href="${ctx.contextPath}/static/plugins/admin-template/js/bootstrap-table/bootstrap-table.min.css" rel="stylesheet">
 <link href="${ctx.contextPath}/static/plugins/admin-template/js/jquery-confirm/jquery-confirm.min.css" rel="stylesheet">

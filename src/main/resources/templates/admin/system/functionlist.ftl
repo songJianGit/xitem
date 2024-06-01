@@ -71,7 +71,7 @@
                                                     <#if func.showFlag==0>隐藏</#if>
                                                 </td>
                                                 <td>
-                                                    <a href="${ctx.contextPath}/admin/system/functionEdit?functionsId=${func.id}">修改</a>
+                                                    <a href="${ctx.contextPath}/admin/system/functionEdit?functionsId=${func.id}">编辑</a>
                                                     <a href="#!" class="functionsDelete" data-id="${func.id}">删除</a>
                                                     <a href="${ctx.contextPath}/admin/system/functionAdd?functionsId=${func.id}">新增下级菜单</a>
                                                 </td>

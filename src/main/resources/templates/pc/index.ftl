@@ -17,32 +17,32 @@
 <body>
 <div class="pc-main">
     <#include "commons/header.ftl">
-    <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
-        <ol class="carousel-indicators">
-            <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
-            <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
-            <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
-        </ol>
-        <div class="carousel-inner">
-            <div class="carousel-item active">
-                <img src="${ctx.contextPath}/fileinfo/def/2024/05/26/xxx.png">
+    <#if bannerList?size==0>
+        暂无数据
+        <#else>
+            <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+                <ol class="carousel-indicators">
+                    <#list bannerList as item>
+                        <li data-target="#carouselExampleIndicators" data-slide-to="${item_index}" <#if item_index==0>class="active"</#if>></li>
+                    </#list>
+                </ol>
+                <div class="carousel-inner">
+                    <#list bannerList as item>
+                        <div class="carousel-item <#if item_index==0>active</#if> ">
+                            <img src="${ctx.contextPath}${item.url!}" alt="轮播图">
+                        </div>
+                    </#list>
+                </div>
+                <button class="carousel-control-prev" type="button" data-target="#carouselExampleIndicators" data-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="sr-only">上一个</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-target="#carouselExampleIndicators" data-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="sr-only">下一个</span>
+                </button>
             </div>
-            <div class="carousel-item">
-                <img src="${ctx.contextPath}/fileinfo/def/2024/05/26/xxx.png">
-            </div>
-            <div class="carousel-item">
-                <img src="${ctx.contextPath}/fileinfo/def/2024/05/26/xxx.png">
-            </div>
-        </div>
-        <button class="carousel-control-prev" type="button" data-target="#carouselExampleIndicators" data-slide="prev">
-            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-            <span class="sr-only">Previous</span>
-        </button>
-        <button class="carousel-control-next" type="button" data-target="#carouselExampleIndicators" data-slide="next">
-            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-            <span class="sr-only">Next</span>
-        </button>
-    </div>
+    </#if>
 </div>
 <#include "commons/js.ftl"/>
 <script type="text/javascript">

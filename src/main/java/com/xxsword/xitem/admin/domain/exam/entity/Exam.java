@@ -47,7 +47,7 @@ public class Exam extends BaseEntity implements Serializable {
 
     @Column
     @ColumnComment("发布状态（0-初始 1-发布 2-下架）")
-    private Integer releaseStatus;// 该考试是否显示到前台
+    private Integer releaseStatus;// 是否显示到前台
 
     @Column
     @ColumnComment("考试类型（1-公开考试 0-授权考试）")

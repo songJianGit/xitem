@@ -45,7 +45,6 @@
                                     <table id="table-pagination"
                                            data-toolbar="#custom-toolbar"
                                            data-toggle="table"
-                                           data-click-to-select="true"
                                            data-show-refresh="true"
                                            data-url="${ctx.contextPath}/admin/paper/questionRuleData?paperId=${paper.id!}"
                                            data-side-pagination="server">

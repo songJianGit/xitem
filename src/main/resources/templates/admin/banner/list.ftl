@@ -27,27 +27,13 @@
 
                                     <div class="input-group m-r-5">
                                         <div class="input-group-prepend">
-                                            <span class="input-group-text">姓名</span>
+                                            <span class="input-group-text">发布状态</span>
                                         </div>
-                                        <input type="text" class="form-control" name="userName" placeholder="姓名">
-                                    </div>
-
-                                    <div class="input-group m-r-5">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text">登录名</span>
-                                        </div>
-                                        <input type="text" class="form-control" value="" name="loginName"
-                                               placeholder="登录名">
-                                    </div>
-
-                                    <div class="input-group m-r-5">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text">状态</span>
-                                        </div>
-                                        <select class="form-control" name="status">
-                                            <option value="">---状态---</option>
-                                            <option value="1">启用</option>
-                                            <option value="2">停用</option>
+                                        <select class="form-control" name="releaseStatus">
+                                            <option value="">---发布状态---</option>
+                                            <option value="0">未发布</option>
+                                            <option value="1">已发布</option>
+                                            <option value="2">已下架</option>
                                         </select>
                                     </div>
 
@@ -60,19 +46,15 @@
                                     </div>
                                 </form>
                             </div>
-
                             <div class="card-body">
                                 <div id="custom-toolbar">
                                     <div class="toolbar-btn-action">
-                                        <button type="button" id="add" class="btn btn-primary">
+                                        <a id="add" class="btn btn-primary">
                                             新增
-                                        </button>
-                                        <button type="button" id="del" class="btn btn-primary">
+                                        </a>
+                                        <a id="del" class="btn btn-primary">
                                             删除
-                                        </button>
-                                        <button type="button" id="status" class="btn btn-primary">
-                                            启用/停用
-                                        </button>
+                                        </a>
                                     </div>
                                 </div>
                                 <div class="table-responsive">
@@ -82,18 +64,17 @@
                                            data-pagination="true"
                                            data-page-list="[10, 20, 50, 100, 200]"
                                            data-show-refresh="true"
-                                           data-url="${ctx.contextPath}/admin/system/userListData"
+                                           data-url="${ctx.contextPath}/admin/banner/listData"
                                            data-query-params="pageQueryParams"
                                            data-side-pagination="server">
                                         <thead>
                                         <tr>
                                             <th data-checkbox="true"></th>
-                                            <th data-field="userName">姓名</th>
-                                            <th data-field="loginName">登录名</th>
-                                            <th data-field="email">邮箱</th>
-                                            <th data-field="phoneNo">手机号码</th>
-                                            <th data-field="status" data-formatter="status">状态</th>
+                                            <th data-field="url" data-formatter="previewImg">图片</th>
                                             <th data-field="createDate">创建时间</th>
+                                            <th data-field="releaseStatus" data-formatter="bannerreleasestatus">
+                                                发布状态
+                                            </th>
                                             <th data-field="id" data-formatter="caozuo">操作</th>
                                         </tr>
                                         </thead>
@@ -103,53 +84,67 @@
                         </div>
                     </div>
                 </div>
-
             </div>
-
         </main>
         <!--End 页面主要内容-->
     </div>
 </div>
 <#include "../commons/js.ftl"/>
 <script type="text/javascript">
+    function previewImg(value, row) {
+        return '<img style="width:100px;" src="${ctx.contextPath}' + value + '"/>';
+    }
+
     function caozuo(value, row) {
         let htm = '';
         htm += '<div class="btn-group">';
-        htm += '<button type="button" class="btn btn-sm btn-default m-r-5" onclick="edit(\'' + value + '\')" title="编辑">编辑</button>';
-        htm += '<button type="button" class="btn btn-sm btn-default" onclick="resetpassword(\'' + value + '\')" title="重置密码">重置密码</button>';
+
+        if (row.releaseStatus == 0 || row.releaseStatus == 2) {
+            htm += '<button type="button" class="btn btn-sm btn-default m-r-5" onclick="release(\'' + value + '\')">发布</button>';
+        }
+        if (row.releaseStatus == 1) {
+            htm += '<button type="button" class="btn btn-sm btn-default m-r-5" onclick="release(\'' + value + '\')">下架</button>';
+        }
+
+        htm += '<a class="btn btn-sm btn-default m-r-5" href="${ctx.contextPath}/admin/banner/edit?id=' + value + '" title="编辑">编辑</a>';
+        htm += '<button type="button" class="btn btn-sm btn-default" title="拖动排序" draggable="true" ondragstart="dragStart(event,\'' + value + '\')" ondrop="drop(event,\'' + value + '\')" ondragover="allowDrop(event)">';
+        htm += '<span class="mdi mdi-cursor-move"></span>';
+        htm += '</button>';
         htm += '</div>';
         return htm;
     }
 
-    $('#add').click(function () {
-        window.location.href = '${ctx.contextPath}/admin/system/userEdit';
-    });
-
-    function edit(id) {
-        window.location.href = '${ctx.contextPath}/admin/system/userEdit?userId=' + id;
+    function allowDrop(event) {
+        event.preventDefault();
     }
 
-    function resetpassword(id) {
-        layer.prompt({title: '请输入新密码', formType: 1}, function (pass, index) {
-            $.ajax({
-                url: '${ctx.contextPath}/admin/system/resetPassword',
-                type: "post",
-                cache: false,
-                data: {
-                    'userId': id,
-                    'password': pass
-                },
-                success: function (data) {
-                    if (data.result) {
-                        layer.msg('重置成功')
-                    } else {
-                        layer.msg(data.msg)
-                    }
+    function dragStart(event, id) {
+        event.dataTransfer.setData("objId", id);
+    }
+
+    function drop(event, id) {
+        event.preventDefault();
+        let objId = event.dataTransfer.getData("objId");
+        // console.log(objId + "放到了" + id)
+        $.ajax({
+            url: "${ctx.contextPath}/admin/banner/bannerSeq",
+            data: {
+                id1: objId,
+                id2: id
+            },
+            success: function (data) {
+                if (data.result) {
+                    $("#table-pagination").bootstrapTable('refresh');
+                } else {
+                    alert(data.msg);
                 }
-            });
-            layer.close(index);
+            }
         });
     }
+
+    $('#add').click(function () {
+        window.location.href = '${ctx.contextPath}/admin/banner/edit';
+    });
 
     $('#del').click(function () {
         if (getSelectionIds() != false) {
@@ -159,12 +154,11 @@
                 buttons: {
                     confirm: {
                         text: '确认',
-                        btnClass: 'btn-blue',
                         action: function () {
                             $.ajax({
-                                url: "${ctx.contextPath}/admin/system/userDelete",
+                                url: "${ctx.contextPath}/admin/banner/del",
                                 data: {
-                                    'userIds': getSelectionIds().join(',')
+                                    ids: getSelectionIds().join(',')
                                 },
                                 success: function (data) {
                                     if (data.result) {
@@ -186,31 +180,25 @@
         }
     });
 
-    $('#status').click(function () {
-        if (getSelectionIds() != false) {
-            $.ajax({
-                url: "${ctx.contextPath}/admin/system/userStatus",
-                type: "post",
-                data: {
-                    'userIds': getSelectionIds().join(',')
-                },
-                success: function (data) {
-                    if (data.result) {
-                        $("#table-pagination").bootstrapTable('refresh');
-                    } else {
-                        alert(data.msg);
-                    }
+    function release(id) {
+        $.ajax({
+            url: "${ctx.contextPath}/admin/banner/release?id=" + id,
+            success: function (data) {
+                if (data.result) {
+                    layer.msg(data.msg);
+                    $("#table-pagination").bootstrapTable('refresh');
+                } else {
+                    alert(data.msg);
                 }
-            });
-        }
-    });
+            }
+        });
+    }
 
     $('#searchBtn').click(function () {
         $("#table-pagination").bootstrapTable('refresh', {
-            url: "${ctx.contextPath}/admin/system/userListData?" + $("#searchform").serialize()
+            url: "${ctx.contextPath}/admin/banner/listData?" + $("#searchform").serialize()
         });
     });
-
 </script>
 </body>
 </html>

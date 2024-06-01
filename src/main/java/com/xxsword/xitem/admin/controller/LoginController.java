@@ -28,7 +28,8 @@ public class LoginController extends BaseController {
      */
     @RequestMapping("loginOut")
     public String loginOut(HttpServletRequest request) {
-        request.getSession().removeAttribute(Constant.USER_INFO);
+        request.getSession().invalidate();
+        request.getSession();
         return "redirect:login";
     }
 

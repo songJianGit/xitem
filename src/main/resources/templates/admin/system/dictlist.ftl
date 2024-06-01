@@ -58,7 +58,6 @@
                                            data-toggle="table"
                                            data-pagination="true"
                                            data-page-list="[10, 20, 50, 100, 200]"
-                                           data-click-to-select="true"
                                            data-show-refresh="true"
                                            data-url="${ctx.contextPath}/admin/system/dictListData"
                                            data-query-params="pageQueryParams"
@@ -92,7 +91,7 @@
     function caozuo(value, row) {
         let htm = '';
         htm += '<div class="btn-group">';
-        htm += '<a class="btn btn-sm btn-default" href="${ctx.contextPath}/admin/system/dictEdit?id='+value+'" title="修改">修改</a>';
+        htm += '<a class="btn btn-sm btn-default" href="${ctx.contextPath}/admin/system/dictEdit?id='+value+'" title="编辑">编辑</a>';
         htm += '</div>';
         return htm;
     }
