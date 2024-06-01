@@ -206,22 +206,22 @@ public class PaperController {
      * 题目与抽提规则的关联
      *
      * @param request
-     * @param qrid
-     * @param qids
+     * @param qrId
+     * @param qIds
      * @param score
      * @return
      */
     @RequestMapping("addQRS")
     @ResponseBody
-    public RestResult addQRS(HttpServletRequest request, String qrid, String qids, Double score) {
-        if (StringUtils.isBlank(qrid)) {
+    public RestResult addQRS(HttpServletRequest request, String qrId, String qIds, Double score) {
+        if (StringUtils.isBlank(qrId)) {
             return RestResult.Fail();
         }
-        if (StringUtils.isBlank(qids)) {
+        if (StringUtils.isBlank(qIds)) {
             return RestResult.Fail();
         }
         UserInfo userInfo = Utils.getUserInfo(request);
-        qrsService.addQRS(userInfo, qrid, qids, score);
+        qrsService.addQRS(userInfo, qrId, qIds, score);
         return RestResult.OK();
     }
 

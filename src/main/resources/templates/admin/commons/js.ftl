@@ -124,6 +124,7 @@
             $.ajax({
                 url: '${ctx.contextPath}/admin/system/resetPassword',
                 cache: false,
+                type: "post",
                 data: {
                     'userId': '${Session.puser.id}',
                     'password': pass

@@ -134,6 +134,7 @@
         layer.prompt({title: '请输入新密码', formType: 1}, function (pass, index) {
             $.ajax({
                 url: '${ctx.contextPath}/admin/system/resetPassword',
+                type: "post",
                 cache: false,
                 data: {
                     'userId': id,
@@ -190,6 +191,7 @@
         if (getSelectionIds() != false) {
             $.ajax({
                 url: "${ctx.contextPath}/admin/system/userStatus",
+                type: "post",
                 data: {
                     'userIds': getSelectionIds().join(',')
                 },

@@ -93,9 +93,10 @@
                 if (!isNaN(value) && value.trim() !== '') {
                     $.ajax({
                         url: "${ctx.contextPath}/admin/paper/addQRS",
+                        type: "post",
                         data: {
-                            qids: getSelectionIds().join(','),
-                            qrid: '${qrid}',
+                            qIds: getSelectionIds().join(','),
+                            qrId: '${qrid}',
                             score: value.trim()
                         },
                         success: function (data) {

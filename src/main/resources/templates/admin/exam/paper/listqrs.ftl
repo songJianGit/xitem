@@ -175,6 +175,7 @@
         if (isPositiveInteger(num)) {
             $.ajax({
                 url: "${ctx.contextPath}/admin/paper/upQuestionRule",
+                type: "post",
                 data: {
                     id: '${questionRule.id}',
                     title: title,
@@ -207,6 +208,7 @@
         });
         $.ajax({
             url: "${ctx.contextPath}/admin/paper/upQRSSeq",
+            type: "post",
             data: {
                 "jsonSeq": JSON.stringify(jsonSeq)
             },
@@ -231,6 +233,7 @@
         });
         $.ajax({
             url: "${ctx.contextPath}/admin/paper/upQRSScore",
+            type: "post",
             data: {
                 "jsonScore": JSON.stringify(jsonScore)
             },

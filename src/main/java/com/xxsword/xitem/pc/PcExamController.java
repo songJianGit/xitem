@@ -49,18 +49,18 @@ public class PcExamController {
 
     @RequestMapping("index")
     public String index(Model model) {
+        ExamDto examDto0 = new ExamDto();
+        examDto0.setReleaseStatus(1);
+        examDto0.setExType(0);
+        List<Exam> examList0 = examService.list(new Page<>(1, 10), examDto0.toQuery());
+
         ExamDto examDto1 = new ExamDto();
         examDto1.setReleaseStatus(1);
         examDto1.setExType(1);
         List<Exam> examList1 = examService.list(new Page<>(1, 10), examDto1.toQuery());
 
-        ExamDto examDto2 = new ExamDto();
-        examDto2.setReleaseStatus(1);
-        examDto2.setExType(0);
-        List<Exam> examList0 = examService.list(new Page<>(1, 10), examDto2.toQuery());
-
-        model.addAttribute("examList1", examList1);
         model.addAttribute("examList0", examList0);
+        model.addAttribute("examList1", examList1);
         return "/pc/exam/examindex";
     }
 

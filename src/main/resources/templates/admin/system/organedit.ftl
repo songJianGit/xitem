@@ -45,6 +45,7 @@
         $.ajax({
             url: "${ctx.contextPath}/admin/organ/saveOrgan",
             cache: false,// 不缓存
+            type: "post",
             data: $("#organform").serialize(),
             success: function (d) {
                 layer.msg(d.msg);

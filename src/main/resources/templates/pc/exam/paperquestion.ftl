@@ -178,6 +178,7 @@
         $.ajax({
             url: "${ctx.contextPath}/pc/exam/saveAnswer",
             cache: false,// 不缓存
+            type: "post",
             data: {
                 qid: action_user_paper_question_id,
                 answers: answers

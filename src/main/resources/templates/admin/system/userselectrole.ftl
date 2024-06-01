@@ -156,6 +156,7 @@
         if(ids!=false){
             $.ajax({
                 url: '${ctx.contextPath}/admin/system/userLinkRole',
+                type: "post",
                 cache: false,
                 data: {
                     'userIds': ids.join(","),
@@ -178,6 +179,7 @@
         if(ids!=false){
             $.ajax({
                 url: '${ctx.contextPath}/admin/system/userSplitRole',
+                type: "post",
                 cache: false,
                 data: {
                     'urIds': ids.join(","),

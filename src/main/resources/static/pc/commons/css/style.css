@@ -54,7 +54,7 @@
 .pc-header-login-username {
     display: block;
     padding-right: 0;
-    width: 80px;
+    max-width: 80px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
