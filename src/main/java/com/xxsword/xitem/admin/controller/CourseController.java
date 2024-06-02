@@ -1,15 +1,17 @@
 package com.xxsword.xitem.admin.controller;
 
+import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.xxsword.xitem.admin.domain.course.dto.CourseDto;
 import com.xxsword.xitem.admin.domain.course.entity.Course;
+import com.xxsword.xitem.admin.domain.course.entity.CourseFile;
 import com.xxsword.xitem.admin.domain.system.entity.UserInfo;
 import com.xxsword.xitem.admin.model.RestPaging;
 import com.xxsword.xitem.admin.model.RestResult;
+import com.xxsword.xitem.admin.service.course.CourseFileService;
 import com.xxsword.xitem.admin.service.course.CourseService;
 import com.xxsword.xitem.admin.utils.UpLoadUtil;
 import com.xxsword.xitem.admin.utils.Utils;
-import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -26,6 +28,8 @@ import javax.servlet.http.HttpServletRequest;
 public class CourseController extends BaseController {
     @Autowired
     private CourseService courseService;
+    @Autowired
+    private CourseFileService courseFileService;
 
     @RequestMapping("list")
     public String list() {
@@ -44,6 +48,10 @@ public class CourseController extends BaseController {
         Course course = new Course();
         if (StringUtils.isNotBlank(id)) {
             course = courseService.getById(id);
+        }
+        if (StringUtils.isNotBlank(course.getCourseFileId())) {
+            CourseFile courseFile = courseFileService.getById(course.getCourseFileId());
+            model.addAttribute("courseFileName", courseFile.getTitle());
         }
         model.addAttribute("course", course);
         return "/admin/course/edit";

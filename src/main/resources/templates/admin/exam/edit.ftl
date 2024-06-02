@@ -61,9 +61,9 @@
                                                value="${exam.duration!}" placeholder="考试时长（单位：分钟）" required/>
                                     </div>
                                     <div class="form-group col-6">
-                                        <label for="title">试卷</label>
-                                        <input type="text" class="form-control" id="papername" value="${exam.paperTitle!}" placeholder="试卷" readonly/>
-                                        <input type="hidden" value="${exam.paperId!}" name="paperId" id="paperid">
+                                        <label for="paperTitle">试卷</label>
+                                        <input type="text" class="form-control" id="paperTitle" value="${exam.paperTitle!}" placeholder="试卷" readonly/>
+                                        <input type="hidden" value="${exam.paperId!}" name="paperId" id="paperId">
                                     </div>
 <#--                                    <div class="form-group col-12">-->
 <#--                                        <label>二维码</label>-->
@@ -98,12 +98,12 @@
 </div>
 <#include "../commons/js.ftl"/>
 <script type="text/javascript">
-    $("#papername").click(function () {
+    $("#paperTitle").click(function () {
         layer_show("试卷", "${ctx.contextPath}/admin/paper/paperShow");
     });
     function paperCallback(paper){
-        $("#paperid").val(paper.id);
-        $("#papertitle").val(paper.title);
+        $("#paperId").val(paper.id);
+        $("#paperTitle").val(paper.title);
     }
 </script>
 </body>

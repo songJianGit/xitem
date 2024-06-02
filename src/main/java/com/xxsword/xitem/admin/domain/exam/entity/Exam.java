@@ -45,10 +45,12 @@ public class Exam extends BaseEntity implements Serializable {
     @TableField(exist = false)
     private String paperTitle;
 
+    @Index
     @Column
     @ColumnComment("发布状态（0-初始 1-发布 2-下架）")
     private Integer releaseStatus;// 是否显示到前台
 
+    @Index
     @Column
     @ColumnComment("考试类型（1-公开考试 0-授权考试）")
     private Integer exType;

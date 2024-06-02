@@ -27,22 +27,10 @@
 
                                     <div class="input-group m-r-5">
                                         <div class="input-group-prepend">
-                                            <span class="input-group-text">课程标题</span>
+                                            <span class="input-group-text">课件标题</span>
                                         </div>
                                         <input type="text" class="form-control" name="title"
-                                               placeholder="课程标题">
-                                    </div>
-
-                                    <div class="input-group m-r-5">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text">发布状态</span>
-                                        </div>
-                                        <select class="form-control" name="releaseStatus">
-                                            <option value="">---发布状态---</option>
-                                            <option value="0">未发布</option>
-                                            <option value="1">已发布</option>
-                                            <option value="2">已下架</option>
-                                        </select>
+                                               placeholder="课件标题">
                                     </div>
 
                                     <div class="input-group">
@@ -72,18 +60,15 @@
                                            data-pagination="true"
                                            data-page-list="[10, 20, 50, 100, 200]"
                                            data-show-refresh="true"
-                                           data-url="${ctx.contextPath}/admin/course/listData"
+                                           data-url="${ctx.contextPath}/admin/coursefile/listData"
                                            data-query-params="pageQueryParams"
                                            data-side-pagination="server">
                                         <thead>
                                         <tr>
                                             <th data-checkbox="true"></th>
-                                            <th data-field="title">课程标题</th>
-                                            <th data-field="learnTime" data-formatter="learnTime">课程时长</th>
+                                            <th data-field="title">课件标题</th>
+                                            <th data-field="remarks">课件备注</th>
                                             <th data-field="createDate" data-width="160px">创建时间</th>
-                                            <th data-field="releaseStatus" data-formatter="releaseStatus">
-                                                发布状态
-                                            </th>
                                             <th data-field="id" data-formatter="caozuo">操作</th>
                                         </tr>
                                         </thead>
@@ -100,59 +85,17 @@
 </div>
 <#include "../commons/js.ftl"/>
 <script type="text/javascript">
-    function learnTime(value, row) {
-        return value + '&nbsp;分钟'
-    }
 
     function caozuo(value, row) {
         let htm = '';
         htm += '<div class="btn-group">';
-
-        if (row.releaseStatus == 0 || row.releaseStatus == 2) {
-            htm += '<button type="button" class="btn btn-sm btn-default m-r-5" onclick="release(\'' + value + '\')">发布</button>';
-        }
-        if (row.releaseStatus == 1) {
-            htm += '<button type="button" class="btn btn-sm btn-default m-r-5" onclick="release(\'' + value + '\')">下架</button>';
-        }
-
-        htm += '<a class="btn btn-sm btn-default m-r-5" href="${ctx.contextPath}/admin/course/edit?id=' + value + '" title="编辑">编辑</a>';
-        htm += '<button type="button" class="btn btn-sm btn-default" title="拖动排序" draggable="true" ondragstart="dragStart(event,\'' + value + '\')" ondrop="drop(event,\'' + value + '\')" ondragover="allowDrop(event)">';
-        htm += '<span class="mdi mdi-cursor-move"></span>';
-        htm += '</button>';
+        htm += '<a class="btn btn-sm btn-default m-r-5" href="${ctx.contextPath}/admin/coursefile/edit?id=' + value + '" title="编辑">编辑</a>';
         htm += '</div>';
         return htm;
     }
 
-    function allowDrop(event) {
-        event.preventDefault();
-    }
-
-    function dragStart(event, id) {
-        event.dataTransfer.setData("objId", id);
-    }
-
-    function drop(event, id) {
-        event.preventDefault();
-        let objId = event.dataTransfer.getData("objId");
-        // console.log(objId + "放到了" + id)
-        $.ajax({
-            url: "${ctx.contextPath}/admin/course/courseSeq",
-            data: {
-                id1: objId,
-                id2: id
-            },
-            success: function (data) {
-                if (data.result) {
-                    $("#table-pagination").bootstrapTable('refresh');
-                } else {
-                    alert(data.msg);
-                }
-            }
-        });
-    }
-
     $('#add').click(function () {
-        window.location.href = '${ctx.contextPath}/admin/course/edit';
+        window.location.href = '${ctx.contextPath}/admin/coursefile/edit';
     });
 
     $('#del').click(function () {
@@ -165,7 +108,7 @@
                         text: '确认',
                         action: function () {
                             $.ajax({
-                                url: "${ctx.contextPath}/admin/course/del",
+                                url: "${ctx.contextPath}/admin/coursefile/del",
                                 data: {
                                     ids: getSelectionIds().join(',')
                                 },
@@ -189,23 +132,9 @@
         }
     });
 
-    function release(id) {
-        $.ajax({
-            url: "${ctx.contextPath}/admin/course/release?id=" + id,
-            success: function (data) {
-                if (data.result) {
-                    layer.msg(data.msg);
-                    $("#table-pagination").bootstrapTable('refresh');
-                } else {
-                    alert(data.msg);
-                }
-            }
-        });
-    }
-
     $('#searchBtn').click(function () {
         $("#table-pagination").bootstrapTable('refresh', {
-            url: "${ctx.contextPath}/admin/course/listData?" + $("#searchform").serialize()
+            url: "${ctx.contextPath}/admin/coursefile/listData?" + $("#searchform").serialize()
         });
     });
 </script>

@@ -3,6 +3,7 @@ package com.xxsword.xitem.admin.domain.course.entity;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.gitee.sunchenbin.mybatis.actable.annotation.Column;
 import com.gitee.sunchenbin.mybatis.actable.annotation.ColumnComment;
+import com.gitee.sunchenbin.mybatis.actable.annotation.Index;
 import com.gitee.sunchenbin.mybatis.actable.annotation.TableComment;
 import com.xxsword.xitem.admin.domain.system.entity.BaseEntity;
 import lombok.Data;
@@ -21,6 +22,7 @@ public class Course extends BaseEntity implements Serializable {
     @ColumnComment("课程分类")
     private String courseCategory;
 
+    @Index
     @Column(length = 100)
     @ColumnComment("标题")
     private String title;
@@ -41,6 +43,7 @@ public class Course extends BaseEntity implements Serializable {
     @ColumnComment("排序字段")
     private Long seq;
 
+    @Index
     @Column
     @ColumnComment("发布状态（0-初始 1-发布 2-下架）")
     private Integer releaseStatus;

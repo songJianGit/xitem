@@ -27,6 +27,11 @@
                                       onsubmit="return check();">
                                     <input type="hidden" name="id" value="${course.id!}"/>
 
+                                    <div class="form-group col-6">
+                                        <label for="title">课程标题</label>
+                                        <input id="title" maxlength="100" class="form-control" name="title" value="${course.title!}"/>
+                                    </div>
+
                                     <div class="form-group col-12">
                                         <label>课程封面</label>
                                         <input type="file" class="form-control-file" name="fileinfo"/>
@@ -34,18 +39,19 @@
                                     </div>
 
                                     <div class="form-group col-12">
-                                        <label for="title">课程标题</label>
-                                        <input id="title" maxlength="100" class="form-control" name="title" value="${course.title!}"/>
+                                        <label for="content">课程简介</label>
+                                        <textarea id="content" maxlength="255" class="form-control" name="content">${course.content!}</textarea>
                                     </div>
 
-                                    <div class="form-group col-12">
-                                        <label for="describe">课程简介</label>
-                                        <input id="describe" maxlength="255" class="form-control" name="describe" value="${course.describe!}"/>
-                                    </div>
-
-                                    <div class="form-group col-12">
+                                    <div class="form-group col-6">
                                         <label for="learnTime">课程时长（分钟）</label>
                                         <input type="number" id="learnTime" class="form-control" name="learnTime" value="${course.learnTime!}"/>
+                                    </div>
+
+                                    <div class="form-group col-6">
+                                        <label for="courseFileName">课件</label>
+                                        <input id="courseFileName" class="form-control" value="${courseFileName!}" readonly/>
+                                        <input id="courseFileId" type="hidden" name="courseFileId" value="${course.courseFileId!}"/>
                                     </div>
 
                                     <div class="form-group col-12">
@@ -71,6 +77,15 @@
 </div>
 <#include "../commons/js.ftl"/>
 <script type="text/javascript">
+
+    $("#courseFileName").click(function (){
+        layer_show("课件", '${ctx.contextPath}/admin/coursefile/courseFileShow');
+    });
+
+    function courseFileCallback(data){
+        $("#courseFileId").val(data.id);
+        $("#courseFileName").val(data.title);
+    }
 </script>
 </body>
 </html>

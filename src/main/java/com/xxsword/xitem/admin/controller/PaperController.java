@@ -43,8 +43,6 @@ public class PaperController {
     private UserPaperService userPaperService;
     @Autowired
     private UserPaperQuestionService userPaperQuestionService;
-    @Autowired
-    private UserInfoService userInfoService;
 
     @RequestMapping("list")
     public String list() {
