@@ -16,7 +16,7 @@ import java.io.Serializable;
 @TableName("t_cus_course_file_item")
 public class CourseFileItem extends BaseEntity implements Serializable {
 
-    private static final long serialVersionUID = 402L;
+    private static final long serialVersionUID = 403L;
 
     @Column(length = 50)
     @ColumnComment("课件id")
