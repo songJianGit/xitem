@@ -21,9 +21,9 @@
                 <div class="input-group-prepend">
                     <span class="input-group-text">题目分类</span>
                 </div>
-                <select class="form-control" name="qclass">
+                <select class="form-control" name="qcategory">
                     <option value="">---请选择---</option>
-                    <#list qclasslist as item>
+                    <#list qcategoryList as item>
                         <option value="${item.id!}">${item.name!}</option>
                     </#list>
                 </select>
@@ -76,7 +76,7 @@
                     <th data-checkbox="true"></th>
                     <th data-field="title">题目标题</th>
                     <th data-field="qtype" data-formatter="qtype">题型</th>
-                    <th data-field="qclassname">题目分类</th>
+                    <th data-field="qcategoryName">题目分类</th>
                     <th data-field="createDate" data-width="160px">创建时间</th>
                 </tr>
                 </thead>

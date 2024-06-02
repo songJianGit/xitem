@@ -72,7 +72,7 @@
                                             <th data-checkbox="true"></th>
                                             <th data-field="url" data-formatter="previewImg">图片</th>
                                             <th data-field="createDate">创建时间</th>
-                                            <th data-field="releaseStatus" data-formatter="bannerreleasestatus">
+                                            <th data-field="releaseStatus" data-formatter="releaseStatus">
                                                 发布状态
                                             </th>
                                             <th data-field="id" data-formatter="caozuo">操作</th>
@@ -91,10 +91,6 @@
 </div>
 <#include "../commons/js.ftl"/>
 <script type="text/javascript">
-    function previewImg(value, row) {
-        return '<img style="width:100px;" src="${ctx.contextPath}' + value + '"/>';
-    }
-
     function caozuo(value, row) {
         let htm = '';
         htm += '<div class="btn-group">';

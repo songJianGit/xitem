@@ -144,7 +144,7 @@ public class QuestionRuleServiceImpl extends ServiceImpl<QuestionRuleMapper, Que
     }
 
     @Override
-    public void questionRuleSeq(UserInfo userInfo, String id1, String id2) {
+    public void seq(UserInfo userInfo, String id1, String id2) {
         QuestionRule questionRule1 = getById(id1);
         QuestionRule questionRule2 = getById(id2);
         QuestionRule questionRule1Up = new QuestionRule();

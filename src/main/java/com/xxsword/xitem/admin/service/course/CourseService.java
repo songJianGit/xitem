@@ -1,10 +1,10 @@
-package com.xxsword.xitem.admin.service.banner;
+package com.xxsword.xitem.admin.service.course;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.xxsword.xitem.admin.domain.banner.entity.Banner;
+import com.xxsword.xitem.admin.domain.course.entity.Course;
 import com.xxsword.xitem.admin.domain.system.entity.UserInfo;
 
-public interface BannerService extends IService<Banner> {
+public interface CourseService extends IService<Course> {
 
     void delByIds(UserInfo userInfo, String ids);
 

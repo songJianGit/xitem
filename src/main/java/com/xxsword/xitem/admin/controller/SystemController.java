@@ -152,7 +152,7 @@ public class SystemController extends BaseController {
             return RestResult.Fail("参数缺失");
         }
         UserInfo userInfo = Utils.getUserInfo(request);
-        userInfoService.delUserInfoByIds(userIds);
+        userInfoService.delByIds(userIds);
         userInfoService.upLastInfo(userInfo, userIds);
         return RestResult.OK();
     }
@@ -230,7 +230,7 @@ public class SystemController extends BaseController {
             return RestResult.Fail("本角色被引用，请勿删除");
         }
         UserInfo userInfo = Utils.getUserInfo(request);
-        roleService.delRoleByIds(roleIds);
+        roleService.delByIds(roleIds);
         roleService.upLastInfo(userInfo, roleIds);
         return RestResult.OK();
     }
@@ -549,7 +549,7 @@ public class SystemController extends BaseController {
     @ResponseBody
     public RestResult delDict(HttpServletRequest request, String dictIds) {
         UserInfo userInfo = Utils.getUserInfo(request);
-        dictService.delDictByIds(dictIds);
+        dictService.delByIds(dictIds);
         dictService.upLastInfo(userInfo, dictIds);
         return RestResult.OK();
     }

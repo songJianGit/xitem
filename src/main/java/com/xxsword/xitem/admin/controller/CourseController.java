@@ -1,13 +1,12 @@
 package com.xxsword.xitem.admin.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.xxsword.xitem.admin.domain.banner.dto.BannerDto;
-import com.xxsword.xitem.admin.domain.banner.entity.Banner;
+import com.xxsword.xitem.admin.domain.course.dto.CourseDto;
+import com.xxsword.xitem.admin.domain.course.entity.Course;
 import com.xxsword.xitem.admin.domain.system.entity.UserInfo;
 import com.xxsword.xitem.admin.model.RestPaging;
 import com.xxsword.xitem.admin.model.RestResult;
-import com.xxsword.xitem.admin.service.banner.BannerService;
-import com.xxsword.xitem.admin.utils.DateUtil;
+import com.xxsword.xitem.admin.service.course.CourseService;
 import com.xxsword.xitem.admin.utils.UpLoadUtil;
 import com.xxsword.xitem.admin.utils.Utils;
 import org.apache.commons.lang3.StringUtils;
@@ -23,48 +22,48 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 
 @Controller
-@RequestMapping("admin/banner")
-public class BannerController extends BaseController {
+@RequestMapping("admin/course")
+public class CourseController extends BaseController {
     @Autowired
-    private BannerService bannerService;
+    private CourseService courseService;
 
     @RequestMapping("list")
     public String list() {
-        return "/admin/banner/list";
+        return "/admin/course/list";
     }
 
     @RequestMapping("listData")
     @ResponseBody
-    public RestPaging<Banner> listData(HttpServletRequest request, BannerDto bannerDto, Page<Banner> page) {
-        Page<Banner> data = bannerService.page(page, bannerDto.toQuery());
+    public RestPaging<Course> listData(HttpServletRequest request, CourseDto courseDto, Page<Course> page) {
+        Page<Course> data = courseService.page(page, courseDto.toQuery());
         return new RestPaging<>(data.getTotal(), data.getRecords());
     }
 
     @RequestMapping("edit")
     public String edit(String id, Model model) {
-        Banner banner = new Banner();
+        Course course = new Course();
         if (StringUtils.isNotBlank(id)) {
-            banner = bannerService.getById(id);
+            course = courseService.getById(id);
         }
-        model.addAttribute("banner", banner);
-        return "/admin/banner/edit";
+        model.addAttribute("course", course);
+        return "/admin/course/edit";
     }
 
     @RequestMapping("save")
-    public String save(HttpServletRequest request, Banner banner, @RequestParam(value = "fileinfo") MultipartFile multipartFile) {
+    public String save(HttpServletRequest request, Course course, @RequestParam(value = "fileinfo") MultipartFile multipartFile) {
         UserInfo userInfo = Utils.getUserInfo(request);
-        String path = UpLoadUtil.upload(multipartFile, "/bannerimg");
+        String path = UpLoadUtil.upload(multipartFile, "/coursecover");
         if (StringUtils.isNotBlank(path)) {
-            banner.setUrl(path);
+            course.setCover(path);
         }
-        banner.setBaseInfo(userInfo);
-        if (banner.getReleaseStatus() == null) {
-            banner.setReleaseStatus(0);
+        if (course.getReleaseStatus() == null) {
+            course.setReleaseStatus(0);
         }
-        if (StringUtils.isBlank(banner.getId())) {
-            banner.setSeq(DateTime.now().getMillis());
+        if (StringUtils.isBlank(course.getId())) {
+            course.setSeq(DateTime.now().getMillis());
         }
-        bannerService.saveOrUpdate(banner);
+        course.setBaseInfo(userInfo);
+        courseService.saveOrUpdate(course);
         return "redirect:list";
     }
 
@@ -72,7 +71,7 @@ public class BannerController extends BaseController {
     @ResponseBody
     public RestResult del(HttpServletRequest request, String ids) {
         UserInfo userInfo = Utils.getUserInfo(request);
-        bannerService.delByIds(userInfo, ids);
+        courseService.delByIds(userInfo, ids);
         return RestResult.OK();
     }
 
@@ -80,9 +79,10 @@ public class BannerController extends BaseController {
     @ResponseBody
     public RestResult release(HttpServletRequest request, String id) {
         UserInfo userInfo = Utils.getUserInfo(request);
-        bannerService.release(userInfo, id);
+        courseService.release(userInfo, id);
         return RestResult.OK();
     }
+
     /**
      * banner的拖拽
      * 排序字段的交换
@@ -90,11 +90,11 @@ public class BannerController extends BaseController {
      * @param request
      * @return
      */
-    @RequestMapping("bannerSeq")
+    @RequestMapping("courseSeq")
     @ResponseBody
-    public RestResult bannerSeq(HttpServletRequest request, String id1, String id2) {
+    public RestResult courseSeq(HttpServletRequest request, String id1, String id2) {
         UserInfo userInfo = Utils.getUserInfo(request);
-        bannerService.seq(userInfo, id1, id2);
+        courseService.seq(userInfo, id1, id2);
         return RestResult.OK();
     }
 }

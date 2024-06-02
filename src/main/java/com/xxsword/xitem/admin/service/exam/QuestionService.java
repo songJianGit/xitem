@@ -16,7 +16,7 @@ public interface QuestionService extends IService<Question> {
      * @param list
      * @return
      */
-    List<Question> setQuestionQclass(List<Question> list);
+    List<Question> setQuestionQCategory(List<Question> list);
 
     /**
      * excel导入解析
@@ -28,7 +28,7 @@ public interface QuestionService extends IService<Question> {
 
     void upLastInfo(UserInfo doUserInfo, String ids);
 
-    void delQuestionByIds(String ids);
+    void delByIds(String ids);
 
     /**
      * 根据题目，获取题目VO

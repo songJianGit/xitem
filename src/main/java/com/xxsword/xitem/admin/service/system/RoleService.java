@@ -32,7 +32,7 @@ public interface RoleService extends IService<Role> {
      *
      * @param roleIds
      */
-    void delRoleByIds(String roleIds);
+    void delByIds(String roleIds);
 
     /**
      * 启用和停用

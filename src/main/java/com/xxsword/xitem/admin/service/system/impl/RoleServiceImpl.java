@@ -47,7 +47,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
     }
 
     @Override
-    public void delRoleByIds(String roleIds) {
+    public void delByIds(String roleIds) {
         String[] ids = roleIds.split(",");
         List<Role> listUp = new ArrayList<>();
         for (String id : ids) {

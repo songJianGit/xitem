@@ -43,10 +43,10 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
     private QuestionOptionService questionOptionService;
 
     @Override
-    public List<Question> setQuestionQclass(List<Question> list) {
-        Map<String, Dict> mapDict = dictService.mapDictByType(Constant.DICT_TYPE_QCLASS);
+    public List<Question> setQuestionQCategory(List<Question> list) {
+        Map<String, Dict> mapDict = dictService.mapDictByType(Constant.DICT_TYPE_QCATEGORY);
         for (Question item : list) {
-            item.setQclassName(mapDict.get(item.getQclass()).getName());
+            item.setQcategoryName(mapDict.get(item.getQcategory()).getName());
         }
         return list;
     }
@@ -64,8 +64,8 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
             if (row == null) {
                 continue;
             }
-            String qclass = ExcelUtils.getString(row.getCell(0));// 问题分类(字典)
-            Dict dict = dictService.getOne(new LambdaQueryWrapper<Dict>().eq(Dict::getType, Constant.DICT_TYPE_QCLASS).eq(Dict::getName, qclass));
+            String qcategory = ExcelUtils.getString(row.getCell(0));// 问题分类(字典)
+            Dict dict = dictService.getOne(new LambdaQueryWrapper<Dict>().eq(Dict::getType, Constant.DICT_TYPE_QCATEGORY).eq(Dict::getName, qcategory));
             String qtype = ExcelUtils.getString(row.getCell(1));// 问题类型（0-是非 1-单选 2-多选）
             String qtitle = ExcelUtils.getString(row.getCell(2));// 问题描述
             String qoption = ExcelUtils.getString(row.getCell(3));// 问题选项
@@ -73,7 +73,7 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
             if (dict == null) {
                 listError.add("第" + (rowNum + 1) + "行，题目分类异常");
             }
-            if (StringUtils.isBlank(qclass)) {
+            if (StringUtils.isBlank(qcategory)) {
                 listError.add("第" + (rowNum + 1) + "行，题目分类不可为空");
             }
             if (StringUtils.isBlank(qtype)) {
@@ -115,7 +115,7 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
                 }
                 QuestionExcelVO questionExcelVO = new QuestionExcelVO();
                 questionExcelVO.setTitle(qtitle);
-                questionExcelVO.setQclass(dict.getId());
+                questionExcelVO.setQcategory(dict.getId());
                 questionExcelVO.setQtype(qtypeInfo);
                 questionExcelVO.setQoption(qoption);
                 questionExcelVO.setQanswer(qanswer);
@@ -179,7 +179,7 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
             Question question = new Question();// 题目
             question.setBaseInfo(userInfo);
             question.setTitle(item.getTitle().trim());
-            question.setQclass(item.getQclass());
+            question.setQcategory(item.getQcategory());
             question.setQtype(qtypeInfo);
             saveOrUpdate(question);// 题目保存
             if (qtypeInfo == 0) {// 是非题
@@ -332,7 +332,7 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
     }
 
     @Override
-    public void delQuestionByIds(String ids) {
+    public void delByIds(String ids) {
         String[] idsS = ids.split(",");
         List<Question> listUp = new ArrayList<>();
         for (String id : idsS) {

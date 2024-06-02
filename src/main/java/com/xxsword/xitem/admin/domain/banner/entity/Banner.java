@@ -16,7 +16,7 @@ import java.io.Serializable;
 @TableEngine(MySqlEngineConstant.InnoDB)
 public class Banner extends BaseEntity implements Serializable {
 
-    private static final long serialVersionUID = 209L;
+    private static final long serialVersionUID = 301L;
     @Column
     @ColumnComment("图片地址")
     private String url;

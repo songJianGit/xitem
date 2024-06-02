@@ -14,7 +14,7 @@ import java.util.List;
 public class BannerServiceImpl extends ServiceImpl<BannerMapper, Banner> implements BannerService {
 
     @Override
-    public void delBannerByIds(UserInfo userInfo, String ids) {
+    public void delByIds(UserInfo userInfo, String ids) {
         String[] idsS = ids.split(",");
         List<Banner> listUp = new ArrayList<>();
         for (String id : idsS) {
@@ -43,7 +43,7 @@ public class BannerServiceImpl extends ServiceImpl<BannerMapper, Banner> impleme
     }
 
     @Override
-    public void bannerSeq(UserInfo userInfo, String id1, String id2) {
+    public void seq(UserInfo userInfo, String id1, String id2) {
         Banner banner1 = getById(id1);
         Banner banner2 = getById(id2);
         Banner banner1Up = new Banner();

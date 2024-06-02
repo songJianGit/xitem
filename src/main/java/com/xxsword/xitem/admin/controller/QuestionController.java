@@ -40,8 +40,8 @@ public class QuestionController {
 
     @RequestMapping("list")
     public String list(Model model) {
-        List<Dict> dictList = dictService.listDictByType(Constant.DICT_TYPE_QCLASS);
-        model.addAttribute("qClassList", dictList);
+        List<Dict> dictList = dictService.listDictByType(Constant.DICT_TYPE_QCATEGORY);
+        model.addAttribute("qcategoryList", dictList);
         return "/admin/exam/question/list";
     }
 
@@ -49,7 +49,7 @@ public class QuestionController {
     @ResponseBody
     public RestPaging<Question> data(HttpServletRequest request, Page page, QuestionDto questionDto) {
         Page<Question> data = questionService.page(page, questionDto.toQuery());
-        questionService.setQuestionQclass(data.getRecords());
+        questionService.setQuestionQCategory(data.getRecords());
         return new RestPaging<>(data.getTotal(), data.getRecords());
     }
 
@@ -61,8 +61,8 @@ public class QuestionController {
      */
     @RequestMapping("listQuestion")
     public String listQuestion(String qrid, Model model) {
-        List<Dict> dictList = dictService.listDictByType(Constant.DICT_TYPE_QCLASS);
-        model.addAttribute("qclasslist", dictList);
+        List<Dict> dictList = dictService.listDictByType(Constant.DICT_TYPE_QCATEGORY);
+        model.addAttribute("qcategoryList", dictList);
         model.addAttribute("qrid", qrid);
         return "/admin/exam/question/listquestion";
     }
@@ -73,9 +73,9 @@ public class QuestionController {
         if (StringUtils.isNotBlank(id)) {
             question = questionService.getById(id);
         }
-        List<Dict> dictList = dictService.listDictByType(Constant.DICT_TYPE_QCLASS);
+        List<Dict> dictList = dictService.listDictByType(Constant.DICT_TYPE_QCATEGORY);
         model.addAttribute("question", question);
-        model.addAttribute("qclassList", dictList);
+        model.addAttribute("qcategoryList", dictList);
         model.addAttribute("questionOption", questionOptionService.questionOptionListByQid(question.getId()));
         return "/admin/exam/question/edit";
     }
@@ -91,7 +91,7 @@ public class QuestionController {
     @ResponseBody
     public RestResult del(HttpServletRequest request, String ids) {
         UserInfo userInfo = Utils.getUserInfo(request);
-        questionService.delQuestionByIds(ids);
+        questionService.delByIds(ids);
         questionService.upLastInfo(userInfo, ids);
         return RestResult.OK();
     }

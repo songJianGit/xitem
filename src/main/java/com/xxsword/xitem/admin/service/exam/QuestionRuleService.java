@@ -62,5 +62,5 @@ public interface QuestionRuleService extends IService<QuestionRule> {
     /**
      * 交换两个抽题规则的排序字段
      */
-    void questionRuleSeq(UserInfo userInfo, String id1, String id2);
+    void seq(UserInfo userInfo, String id1, String id2);
 }

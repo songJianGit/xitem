@@ -6,7 +6,7 @@ import com.xxsword.xitem.admin.domain.system.entity.UserInfo;
 
 public interface PaperService extends IService<Paper> {
 
-    void delPaperByIds(String ids);
+    void delByIds(String ids);
 
     void upLastInfo(UserInfo doUserInfo, String ids);
 

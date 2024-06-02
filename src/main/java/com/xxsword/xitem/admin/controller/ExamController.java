@@ -78,7 +78,7 @@ public class ExamController {
     @ResponseBody
     public RestResult del(HttpServletRequest request, String ids) {
         UserInfo userInfo = Utils.getUserInfo(request);
-        examService.delExamByIds(userInfo, ids);
+        examService.delByIds(userInfo, ids);
         return RestResult.OK();
     }
 

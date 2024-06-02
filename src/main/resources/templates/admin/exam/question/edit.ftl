@@ -31,12 +31,12 @@
                                         <textarea maxlength="255" class="form-control" name="title">${question.title!}</textarea>
                                     </div>
                                     <div class="form-group col-6">
-                                        <label for="qclass">题目分类</label>
-                                        <select class="form-control" name="qclass" id="qclass">
+                                        <label for="qcategory">题目分类</label>
+                                        <select class="form-control" name="qcategory" id="qcategory">
                                             <option value="">---请选择---</option>
-                                            <#list qclassList as item>
+                                            <#list qcategoryList as item>
                                                 <option value="${item.id!}"
-                                                        <#if question.qclass??><#if question.qclass==item.id>selected</#if></#if>>${item.name!}</option>
+                                                        <#if question.qcategory??><#if question.qcategory==item.id>selected</#if></#if>>${item.name!}</option>
                                             </#list>
                                         </select>
                                     </div>
@@ -111,8 +111,8 @@
             layer.msg("请填写题目描述");
             return false;
         }
-        let qclass = $("#qclass").val();
-        if (isBlank(qclass)) {
+        let qcategory = $("#qcategory").val();
+        if (isBlank(qcategory)) {
             layer.msg("请选择题目分类");
             return false;
         }

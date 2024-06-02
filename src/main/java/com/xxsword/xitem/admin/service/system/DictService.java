@@ -9,7 +9,7 @@ import java.util.Map;
 
 public interface DictService extends IService<Dict> {
 
-    void delDictByIds(String ids);
+    void delByIds(String ids);
 
     /**
      * 刷新菜单最后更新人和最后更新时间

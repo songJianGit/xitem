@@ -14,7 +14,7 @@ import java.util.List;
 public class PaperServiceImpl extends ServiceImpl<PaperMapper, Paper> implements PaperService {
 
     @Override
-    public void delPaperByIds(String ids) {
+    public void delByIds(String ids) {
         String[] idsS = ids.split(",");
         List<Paper> listUp = new ArrayList<>();
         for (String id : idsS) {

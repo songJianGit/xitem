@@ -36,7 +36,7 @@ public class ExamServiceImpl extends ServiceImpl<ExamMapper, Exam> implements Ex
     }
 
     @Override
-    public void delExamByIds(UserInfo userInfo, String ids) {
+    public void delByIds(UserInfo userInfo, String ids) {
         String[] idsS = ids.split(",");
         List<Exam> listUp = new ArrayList<>();
         for (String id : idsS) {

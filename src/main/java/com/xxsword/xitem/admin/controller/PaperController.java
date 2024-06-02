@@ -80,7 +80,7 @@ public class PaperController {
     @ResponseBody
     public RestResult del(HttpServletRequest request, String ids) {
         UserInfo userInfo = Utils.getUserInfo(request);
-        paperService.delPaperByIds(ids);
+        paperService.delByIds(ids);
         paperService.upLastInfo(userInfo, ids);
         return RestResult.OK();
     }
@@ -161,7 +161,7 @@ public class PaperController {
     @ResponseBody
     public RestResult questionRuleSeq(HttpServletRequest request, String id1, String id2) {
         UserInfo userInfo = Utils.getUserInfo(request);
-        questionRuleService.questionRuleSeq(userInfo, id1, id2);
+        questionRuleService.seq(userInfo, id1, id2);
         return RestResult.OK();
     }
 

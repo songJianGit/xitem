@@ -22,7 +22,7 @@
         return value;
     }
 
-    function exreleasestatus(value, row){
+    function releaseStatus(value, row){
         if (value == 0) {
             return '未发布';
         }
@@ -35,17 +35,8 @@
         return value;
     }
 
-    function bannerreleasestatus(value, row){
-        if (value == 0) {
-            return '未发布';
-        }
-        if (value == 1) {
-            return '已发布';
-        }
-        if (value == 2) {
-            return '已下架';
-        }
-        return value;
+    function previewImg(value, row) {
+        return '<img style="width:70px;" src="${ctx.contextPath}' + value + '"/>';
     }
 
     function exstatus(value, row) {

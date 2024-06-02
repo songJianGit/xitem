@@ -24,8 +24,8 @@ public interface QRSMapper extends BaseMapper<QRS> {
             "<if test='questionDto.title!=null and questionDto.title!=\"\"'>" +
             "and b.title like concat('%', #{questionDto.title}, '%') " +
             "</if>" +
-            "<if test='questionDto.qclass!=null and questionDto.qclass!=\"\"'>" +
-            "and b.qclass=#{questionDto.qclass} " +
+            "<if test='questionDto.qcategory!=null and questionDto.qcategory!=\"\"'>" +
+            "and b.qcategory=#{questionDto.qcategory} " +
             "</if>" +
             "<if test='questionDto.qtype!=null'>" +
             "and b.qtype=#{questionDto.qtype} " +

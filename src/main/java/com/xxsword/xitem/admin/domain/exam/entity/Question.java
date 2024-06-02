@@ -25,10 +25,10 @@ public class Question extends BaseEntity implements Serializable {
 
     @Column(length = 50)
     @ColumnComment("题目分类（字典id）")
-    private String qclass;// 只有一层，没有做多级，因为多级可能引起用户的选择困难症。多数情况下，并不需要那么多的分类。
+    private String qcategory;// 只有一层，没有做多级，因为多级可能引起用户的选择困难症。多数情况下，并不需要那么多的分类。
 
     @TableField(exist = false)
-    private String qclassName;
+    private String qcategoryName;
 
     @Column
     @ColumnComment("题目类型(0-是非 1-单选 2-多选)")

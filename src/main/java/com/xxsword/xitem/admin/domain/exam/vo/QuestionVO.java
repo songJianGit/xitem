@@ -9,8 +9,8 @@ public class QuestionVO {
 
     private String id;
     private String title;// 题目标题
-    private String qclass;// 题目分类（字典id）
-    private String qclassName;
+    private String qcategory;// 题目分类（字典id）
+    private String qcategoryName;
     private Integer qtype;// 题目类型(0-是非 1-单选 2-多选)
     private Double qscore;// 题目分值
     private String userPaperQuestionId;// 用户试题t_ex_user_paper_question表的主键id

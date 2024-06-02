@@ -27,21 +27,10 @@
 
                                     <div class="input-group m-r-5">
                                         <div class="input-group-prepend">
-                                            <span class="input-group-text">考试标题</span>
+                                            <span class="input-group-text">课程标题</span>
                                         </div>
                                         <input type="text" class="form-control" name="title"
-                                               placeholder="考试标题">
-                                    </div>
-
-                                    <div class="input-group m-r-5">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text">考试类型</span>
-                                        </div>
-                                        <select class="form-control" name="exType">
-                                            <option value="">---考试类型---</option>
-                                            <option value="1">公开考试</option>
-                                            <option value="0">授权考试</option>
-                                        </select>
+                                               placeholder="课程标题">
                                     </div>
 
                                     <div class="input-group m-r-5">
@@ -65,16 +54,15 @@
                                     </div>
                                 </form>
                             </div>
-
                             <div class="card-body">
                                 <div id="custom-toolbar">
                                     <div class="toolbar-btn-action">
-                                        <button type="button" id="add" class="btn btn-primary">
+                                        <a id="add" class="btn btn-primary">
                                             新增
-                                        </button>
-                                        <button type="button" id="del" class="btn btn-primary">
+                                        </a>
+                                        <a id="del" class="btn btn-primary">
                                             删除
-                                        </button>
+                                        </a>
                                     </div>
                                 </div>
                                 <div class="table-responsive">
@@ -84,20 +72,19 @@
                                            data-pagination="true"
                                            data-page-list="[10, 20, 50, 100, 200]"
                                            data-show-refresh="true"
-                                           data-url="${ctx.contextPath}/admin/exam/data"
+                                           data-url="${ctx.contextPath}/admin/course/listData"
                                            data-query-params="pageQueryParams"
                                            data-side-pagination="server">
                                         <thead>
                                         <tr>
                                             <th data-checkbox="true"></th>
-                                            <th data-field="title">考试标题</th>
-                                            <th data-field="exType" data-formatter="extype">考试类型</th>
-                                            <th data-field="stime" data-width="160px">开始时间</th>
-                                            <th data-field="etime" data-width="160px">结束时间</th>
-                                            <th data-field="duration" data-formatter="duration">考试时长</th>
-                                            <th data-field="releaseStatus" data-formatter="releaseStatus">发布状态
+                                            <th data-field="title">课程标题</th>
+                                            <th data-field="learnTime" data-formatter="learnTime">课程时长</th>
+                                            <th data-field="createDate">创建时间</th>
+                                            <th data-field="releaseStatus" data-formatter="releaseStatus">
+                                                发布状态
                                             </th>
-                                            <th data-field="id" data-formatter="caozuo" data-width="185px">操作</th>
+                                            <th data-field="id" data-formatter="caozuo">操作</th>
                                         </tr>
                                         </thead>
                                     </table>
@@ -106,46 +93,56 @@
                         </div>
                     </div>
                 </div>
-
             </div>
-
         </main>
         <!--End 页面主要内容-->
     </div>
 </div>
 <#include "../commons/js.ftl"/>
 <script type="text/javascript">
-    function duration(value, row) {
-        return value + '&nbsp;分钟';
+    function learnTime(value, row) {
+        return value + '&nbsp;分钟'
     }
-
-    $('#add').click(function () {
-        window.location.href = '${ctx.contextPath}/admin/exam/edit';
-    });
 
     function caozuo(value, row) {
         let htm = '';
         htm += '<div class="btn-group">';
-        htm += '<a class="btn btn-sm btn-default m-r-5" href="${ctx.contextPath}/admin/exam/edit?id=' + value + '" title="编辑">编辑</a>';
 
         if (row.releaseStatus == 0 || row.releaseStatus == 2) {
-            htm += '<button type="button" class="btn btn-sm btn-default m-r-5" onclick="release(\''+value+'\')">发布</button>';
+            htm += '<button type="button" class="btn btn-sm btn-default m-r-5" onclick="release(\'' + value + '\')">发布</button>';
         }
         if (row.releaseStatus == 1) {
-            htm += '<button type="button" class="btn btn-sm btn-default m-r-5" onclick="release(\''+value+'\')">下架</button>';
+            htm += '<button type="button" class="btn btn-sm btn-default m-r-5" onclick="release(\'' + value + '\')">下架</button>';
         }
 
-        htm += '<a class="btn btn-sm btn-default" href="${ctx.contextPath}/admin/exam/examScore?examId=' + value + '" title="考试成绩">考试成绩</a>';
+        htm += '<a class="btn btn-sm btn-default m-r-5" href="${ctx.contextPath}/admin/course/edit?id=' + value + '" title="编辑">编辑</a>';
+        htm += '<button type="button" class="btn btn-sm btn-default" title="拖动排序" draggable="true" ondragstart="dragStart(event,\'' + value + '\')" ondrop="drop(event,\'' + value + '\')" ondragover="allowDrop(event)">';
+        htm += '<span class="mdi mdi-cursor-move"></span>';
+        htm += '</button>';
         htm += '</div>';
         return htm;
     }
 
-    function release(id){
+    function allowDrop(event) {
+        event.preventDefault();
+    }
+
+    function dragStart(event, id) {
+        event.dataTransfer.setData("objId", id);
+    }
+
+    function drop(event, id) {
+        event.preventDefault();
+        let objId = event.dataTransfer.getData("objId");
+        // console.log(objId + "放到了" + id)
         $.ajax({
-            url: "${ctx.contextPath}/admin/exam/release?id=" + id,
+            url: "${ctx.contextPath}/admin/course/courseSeq",
+            data: {
+                id1: objId,
+                id2: id
+            },
             success: function (data) {
                 if (data.result) {
-                    layer.msg(data.msg);
                     $("#table-pagination").bootstrapTable('refresh');
                 } else {
                     alert(data.msg);
@@ -153,6 +150,10 @@
             }
         });
     }
+
+    $('#add').click(function () {
+        window.location.href = '${ctx.contextPath}/admin/course/edit';
+    });
 
     $('#del').click(function () {
         if (getSelectionIds() != false) {
@@ -164,7 +165,7 @@
                         text: '确认',
                         action: function () {
                             $.ajax({
-                                url: "${ctx.contextPath}/admin/exam/del",
+                                url: "${ctx.contextPath}/admin/course/del",
                                 data: {
                                     ids: getSelectionIds().join(',')
                                 },
@@ -188,12 +189,25 @@
         }
     });
 
+    function release(id) {
+        $.ajax({
+            url: "${ctx.contextPath}/admin/course/release?id=" + id,
+            success: function (data) {
+                if (data.result) {
+                    layer.msg(data.msg);
+                    $("#table-pagination").bootstrapTable('refresh');
+                } else {
+                    alert(data.msg);
+                }
+            }
+        });
+    }
+
     $('#searchBtn').click(function () {
         $("#table-pagination").bootstrapTable('refresh', {
-            url: "${ctx.contextPath}/admin/exam/data?" + $("#searchform").serialize()
+            url: "${ctx.contextPath}/admin/course/listData?" + $("#searchform").serialize()
         });
     });
-
 </script>
 </body>
 </html>

@@ -17,7 +17,7 @@ import java.util.Map;
 public class DictServiceImpl extends ServiceImpl<DictMapper, Dict> implements DictService {
 
     @Override
-    public void delDictByIds(String dictIds) {
+    public void delByIds(String dictIds) {
         String[] ids = dictIds.split(",");
         List<Dict> dictListUp = new ArrayList<>();
         for (String id : ids) {

@@ -39,7 +39,7 @@ public interface UserInfoService extends IService<UserInfo> {
     /**
      * 删除用户（逻辑删除）
      */
-    void delUserInfoByIds(String userIds);
+    void delByIds(String userIds);
 
     /**
      * 用户的启用和停用

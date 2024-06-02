@@ -80,7 +80,7 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
     }
 
     @Override
-    public void delUserInfoByIds(String userIds) {
+    public void delByIds(String userIds) {
         String[] ids = userIds.split(",");
         List<UserInfo> listUp = new ArrayList<>();
         for (String id : ids) {
