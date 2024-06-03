@@ -11,7 +11,7 @@
         <div class="card-body">
             <video style="width: 100%;min-height: 500px" controlsList="nodownload" controls autoplay>
                 <h2>您的浏览器不支持视频标记，建议升级浏览器或使用支持视频标记的浏览器</h2>
-                <source src="${ctx.contextPath}${courseFileItem0.filePath!}" type="video/mp4"/>
+                <source src="${ctx.contextPath}/resource/video/courseFileVideo/${courseFile.id!}" type="video/mp4"/>
             </video>
         </div>
     </div>

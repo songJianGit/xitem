@@ -87,13 +87,11 @@ public class CourseFileController extends BaseController {
     public String preview(String courseFileId, Model model) {
         CourseFile courseFile = courseFileService.getById(courseFileId);
         String url = "";
-        List<CourseFileItem> courseFileItemList = courseFileItemService.listCourseFileItem(courseFileId);
         switch (courseFile.getCourseType()) {
             case 1:
                 log.info("预览scorm");
                 break;
             case 2:
-                model.addAttribute("courseFileItem0", courseFileItemList.isEmpty() ? null : courseFileItemList.get(0));
                 url = "/pc/course/playvideo";
                 break;
             case 3:
