@@ -30,20 +30,20 @@
 
                                     <div class="form-group col-6">
                                         <label for="title">课件标题</label>
-                                        <input id="title" maxlength="100" class="form-control" name="title"
+                                        <input id="title" maxlength="100" class="form-control" name="title" required
                                                value="${courseFile.title!}"/>
                                     </div>
 
                                     <div class="form-group col-6">
                                         <label>课件类型</label>
                                         <select class="form-control" name="courseType">
-                                            <#--                                            <option value="1" <#if courseFile.courseType??><#if courseFile.courseType==1>selected</#if></#if> >scorm</option>-->
+                                            <#-- <option value="1" <#if courseFile.courseType??><#if courseFile.courseType==1>selected</#if></#if> >scorm</option>-->
                                             <option value="2"
                                                     <#if courseFile.courseType??><#if courseFile.courseType==2>selected</#if></#if> >
                                                 视频
                                             </option>
-                                            <#--                                            <option value="3" <#if courseFile.courseType??><#if courseFile.courseType==3>selected</#if></#if> >链接</option>-->
-                                            <#--                                            <option value="5" <#if courseFile.courseType??><#if courseFile.courseType==5>selected</#if></#if> >pdf</option>-->
+                                            <#-- <option value="3" <#if courseFile.courseType??><#if courseFile.courseType==3>selected</#if></#if> >链接</option>-->
+                                            <#-- <option value="5" <#if courseFile.courseType??><#if courseFile.courseType==5>selected</#if></#if> >pdf</option>-->
                                         </select>
                                     </div>
 

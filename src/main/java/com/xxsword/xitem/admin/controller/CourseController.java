@@ -12,6 +12,7 @@ import com.xxsword.xitem.admin.service.course.CourseFileService;
 import com.xxsword.xitem.admin.service.course.CourseService;
 import com.xxsword.xitem.admin.utils.UpLoadUtil;
 import com.xxsword.xitem.admin.utils.Utils;
+import lombok.extern.slf4j.Slf4j;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -23,6 +24,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 
+@Slf4j
 @Controller
 @RequestMapping("admin/course")
 public class CourseController extends BaseController {
@@ -105,4 +107,5 @@ public class CourseController extends BaseController {
         courseService.seq(userInfo, id1, id2);
         return RestResult.OK();
     }
+
 }

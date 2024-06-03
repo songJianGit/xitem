@@ -29,7 +29,7 @@
 
                                     <div class="form-group col-6">
                                         <label for="title">课程标题</label>
-                                        <input id="title" maxlength="100" class="form-control" name="title" value="${course.title!}"/>
+                                        <input id="title" maxlength="100" class="form-control" name="title" value="${course.title!}" required/>
                                     </div>
 
                                     <div class="form-group col-12">
@@ -45,7 +45,7 @@
 
                                     <div class="form-group col-6">
                                         <label for="learnTime">课程时长（分钟）</label>
-                                        <input type="number" id="learnTime" class="form-control" name="learnTime" value="${course.learnTime!}"/>
+                                        <input type="number" id="learnTime" class="form-control" name="learnTime" value="${course.learnTime!}" required/>
                                     </div>
 
                                     <div class="form-group col-6">

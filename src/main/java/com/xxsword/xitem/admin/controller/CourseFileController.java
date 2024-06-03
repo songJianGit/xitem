@@ -10,9 +10,8 @@ import com.xxsword.xitem.admin.model.RestPaging;
 import com.xxsword.xitem.admin.model.RestResult;
 import com.xxsword.xitem.admin.service.course.CourseFileItemService;
 import com.xxsword.xitem.admin.service.course.CourseFileService;
-import com.xxsword.xitem.admin.utils.DateUtil;
 import com.xxsword.xitem.admin.utils.Utils;
-import org.joda.time.DateTime;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,6 +21,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
+@Slf4j
 @Controller
 @RequestMapping("admin/coursefile")
 public class CourseFileController extends BaseController {
@@ -74,5 +74,33 @@ public class CourseFileController extends BaseController {
     @RequestMapping("courseFileShow")
     public String courseFileShow(HttpServletRequest request) {
         return "/admin/coursefile/coursefileshow";
+    }
+
+    /**
+     * 课件的预览
+     *
+     * @param courseFileId
+     * @param model
+     * @return
+     */
+    @RequestMapping("preview")
+    public String preview(String courseFileId, Model model) {
+        CourseFile courseFile = courseFileService.getById(courseFileId);
+        String url = "";
+        List<CourseFileItem> courseFileItemList = courseFileItemService.listCourseFileItem(courseFileId);
+        switch (courseFile.getCourseType()) {
+            case 1:
+                log.info("预览scorm");
+                break;
+            case 2:
+                model.addAttribute("courseFileItem0", courseFileItemList.isEmpty() ? null : courseFileItemList.get(0));
+                url = "/pc/course/playvideo";
+                break;
+            case 3:
+                log.info("预览pdf");
+                break;
+        }
+        model.addAttribute("courseFile", courseFile);
+        return url;
     }
 }

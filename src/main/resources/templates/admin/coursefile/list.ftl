@@ -90,6 +90,7 @@
         let htm = '';
         htm += '<div class="btn-group">';
         htm += '<a class="btn btn-sm btn-default m-r-5" href="${ctx.contextPath}/admin/coursefile/edit?id=' + value + '" title="编辑">编辑</a>';
+        htm += '<a class="btn btn-sm btn-default m-r-5" target="_black" href="${ctx.contextPath}/admin/coursefile/preview?courseFileId=' + value + '" title="预览">预览</a>';
         htm += '</div>';
         return htm;
     }

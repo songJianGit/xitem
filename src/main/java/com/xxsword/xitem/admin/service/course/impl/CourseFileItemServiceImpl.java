@@ -26,7 +26,7 @@ public class CourseFileItemServiceImpl extends ServiceImpl<CourseFileItemMapper,
         LambdaQueryWrapper<CourseFileItem> query = Wrappers.lambdaQuery();
         query.eq(CourseFileItem::getStatus, 1);
         query.eq(CourseFileItem::getCourseFileId, courseFileId);
-        query.orderByAsc(CourseFileItem::getSeq);
+        query.orderByAsc(CourseFileItem::getSeq, CourseFileItem::getId);
         return list(query);
     }
 
