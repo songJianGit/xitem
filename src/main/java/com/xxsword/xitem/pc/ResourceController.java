@@ -1,6 +1,8 @@
 package com.xxsword.xitem.pc;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.xxsword.xitem.admin.constant.ResourceType;
 import com.xxsword.xitem.admin.controller.BaseController;
 import com.xxsword.xitem.admin.domain.course.entity.CourseFileItem;
@@ -24,6 +26,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 
+/**
+ * 敏感资源的逻辑读取
+ */
 @Slf4j
 @Controller
 @RequestMapping("resource")
@@ -100,7 +105,10 @@ public class ResourceController extends BaseController {
         switch (resourceType.getCode()) {
             case "courseFileVideo":
             case "courseFileImg":
-                CourseFileItem courseFileItemVideo = courseFileItemService.getById(id);
+                LambdaQueryWrapper<CourseFileItem> query = Wrappers.lambdaQuery();
+                query.select(CourseFileItem::getFilePath);
+                query.eq(CourseFileItem::getId, id);
+                CourseFileItem courseFileItemVideo = courseFileItemService.getOne(query);
                 path = courseFileItemVideo == null ? null : courseFileItemVideo.getFilePath();
                 break;
             case "other":
