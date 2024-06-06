@@ -2,6 +2,16 @@
 <html lang="zh">
 <head>
     <#include "../commons/head.ftl"/>
+    <style>
+        .courseFileShow {
+            margin-top: 7px;
+        }
+
+        .courseFileShow img {
+            width: 300px;
+            border: 1px solid #808080;
+        }
+    </style>
 </head>
 <body>
 <div class="lyear-layout-web">
@@ -36,14 +46,17 @@
 
                                     <div class="form-group col-6">
                                         <label>课件类型</label>
-                                        <select class="form-control" name="courseType">
+                                        <select class="form-control" name="courseType" onchange="typeChange()">
                                             <#-- <option value="1" <#if courseFile.courseType??><#if courseFile.courseType==1>selected</#if></#if> >scorm</option>-->
                                             <option value="2"
                                                     <#if courseFile.courseType??><#if courseFile.courseType==2>selected</#if></#if> >
                                                 视频
                                             </option>
                                             <#-- <option value="3" <#if courseFile.courseType??><#if courseFile.courseType==3>selected</#if></#if> >链接</option>-->
-                                            <#-- <option value="5" <#if courseFile.courseType??><#if courseFile.courseType==5>selected</#if></#if> >pdf</option>-->
+                                            <option value="5"
+                                                    <#if courseFile.courseType??><#if courseFile.courseType==5>selected</#if></#if> >
+                                                pdf
+                                            </option>
                                         </select>
                                     </div>
 
@@ -55,8 +68,8 @@
 
                                     <div class="form-group col-12">
                                         <button type="button" class="btn btn-primary" id="uploadBtn">上传文件</button>
-                                        <input type="hidden" name="fileInfos" id="video-input">
-                                        <div>
+                                        <input type="hidden" name="fileInfos" id="file-input"><#--课件文件-->
+                                        <div class="courseFileShow courseFileShow2">
                                             <video id="video-box" style="width: 600px;height: 400px" controls="controls"
                                                    preload="none" data-setup="{}">
                                                 <#if courseFileItem0??>
@@ -64,6 +77,11 @@
                                                             type="video/mp4">
                                                 </#if>
                                             </video>
+                                        </div>
+                                        <div class="courseFileShow courseFileShow5">
+                                            <#if courseFileItem0??>
+                                                <img src="${ctx.contextPath}${courseFileItem0.filePath!}" alt="图">
+                                            </#if>
                                         </div>
                                     </div>
 
@@ -91,14 +109,37 @@
 <#include "../commons/js.ftl"/>
 <script type="text/javascript">
 
+    $(function () {
+        typeChange();
+    });
+
     $('#uploadBtn').click(function () {
-        layer_show("上传", '${ctx.contextPath}/admin/upload/fileUploadMain?type=mp4', '', '', false, 0);
+        let type = $("select[name='courseType']").val();
+        let type2 = "";
+        if (type == 2) {
+            type2 = "mp4";
+        }
+        if (type == 5) {
+            type2 = "pdf";
+        }
+        layer_show("上传", '${ctx.contextPath}/admin/upload/fileUploadMain?type=' + type2, '', '', false, 0);
     });
 
     function uploadCallback(infos) {
-        console.log("uploadCallback1", infos);
-        $('#video-box').attr("src", '${ctx.contextPath}' + infos[0].url);
-        $("#video-input").val(infos[0].url);
+        let type = $("select[name='courseType']").val();
+        if (type == 2) {
+            $('#video-box').attr("src", '${ctx.contextPath}' + infos[0].url);
+        }
+        if (type == 5) {
+            $(".courseFileShow5").html('<img src="${ctx.contextPath}' + infos[0].url + '" alt="图">');
+        }
+        $("#file-input").val(infos[0].url);
+    }
+
+    function typeChange() {
+        $(".courseFileShow").hide();
+        let type = $("select[name='courseType']").val();
+        $(".courseFileShow" + type).show()
     }
 
 </script>

@@ -23,7 +23,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
-import java.util.List;
 
 @Slf4j
 @Controller
@@ -36,7 +35,7 @@ public class ResourceController extends BaseController {
     /**
      * 视频资源
      */
-    @GetMapping("/video/{type}/{id}")
+    @GetMapping("files/{type}/{id}")
     public ResponseEntity<Resource> videoTypeId(HttpServletRequest request, @PathVariable String type, @PathVariable String id) {
         UserInfo userInfo = Utils.getUserInfo(request);
         if (userInfo == null) {
@@ -47,7 +46,7 @@ public class ResourceController extends BaseController {
 //            log.warn("无该文件权限:{},{},{}", userInfo.getId(), type, id);
 //            return ResponseEntity.notFound().build();
 //        }
-        String path = getVideoFileInfo(ResourceType.getRecordTypeByCode(type), id);
+        String path = getFileInfoPath(ResourceType.getRecordTypeByCode(type), id);
         if (StringUtils.isBlank(path)) {
             log.warn("文件地址获取异常：{},{},{}", path, type, id);
             return ResponseEntity.notFound().build();
@@ -61,7 +60,7 @@ public class ResourceController extends BaseController {
         }
         // 设置响应头，包括Content-Type和Content-Disposition
         HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+        headers.setContentType(getContentType(ResourceType.getRecordTypeByCode(type)));
         headers.setContentDispositionFormData("attachment", FilenameUtils.getName(path));// 文件名称信息
         // 使用FileSystemResource包装文件，并返回
         Resource resource = new FileSystemResource(file);
@@ -71,18 +70,38 @@ public class ResourceController extends BaseController {
                 .body(resource);
     }
 
+    private MediaType getContentType(ResourceType resourceType) {
+        if (resourceType == null) {
+            return null;
+        }
+        MediaType type = null;
+        switch (resourceType.getCode()) {
+            case "courseFileVideo":
+                type = MediaType.APPLICATION_OCTET_STREAM;
+                break;
+            case "courseFileImg":
+                type = MediaType.IMAGE_PNG;
+                break;
+            case "other":
+                log.info("其它视频资源");
+                break;
+        }
+        return type;
+    }
+
     /**
      * 获取各类型视频文件路径
      */
-    private String getVideoFileInfo(ResourceType resourceType, String id) {
+    private String getFileInfoPath(ResourceType resourceType, String id) {
         if (resourceType == null) {
             return null;
         }
         String path = null;
         switch (resourceType.getCode()) {
             case "courseFileVideo":
-                List<CourseFileItem> courseFileItemList = courseFileItemService.listCourseFileItem(id);
-                path = courseFileItemList.isEmpty() ? null : courseFileItemList.get(0).getFilePath();
+            case "courseFileImg":
+                CourseFileItem courseFileItemVideo = courseFileItemService.getById(id);
+                path = courseFileItemVideo == null ? null : courseFileItemVideo.getFilePath();
                 break;
             case "other":
                 log.info("其它视频资源");

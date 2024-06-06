@@ -98,7 +98,7 @@ public class UpLoadUtil {
     /**
      * 获取时间分隔字符
      */
-    private static String getTIMEPath() {
+    public static String getTIMEPath() {
         return "/" + DateUtil.now(DateUtil.sdfA4);
     }
 

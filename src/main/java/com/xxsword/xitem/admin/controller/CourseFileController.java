@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Controller
@@ -92,10 +93,16 @@ public class CourseFileController extends BaseController {
                 log.info("预览scorm");
                 break;
             case 2:
+                List<CourseFileItem> courseFileItemListVideo = courseFileItemService.listCourseFileItem(courseFile.getId());
+                List<String> videoIds = courseFileItemListVideo.stream().map(CourseFileItem::getId).collect(Collectors.toList());
+                model.addAttribute("videoId", videoIds.isEmpty() ? null : videoIds.get(0));
                 url = "/pc/course/playvideo";
                 break;
-            case 3:
-                log.info("预览pdf");
+            case 5:
+                List<CourseFileItem> courseFileItemListPdf = courseFileItemService.listCourseFileItem(courseFile.getId());
+                List<String> pdfIds = courseFileItemListPdf.stream().map(CourseFileItem::getId).collect(Collectors.toList());
+                model.addAttribute("pdfIds", pdfIds);
+                url = "/pc/course/playimg";
                 break;
         }
         model.addAttribute("courseFile", courseFile);

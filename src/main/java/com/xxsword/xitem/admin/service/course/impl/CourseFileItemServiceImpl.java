@@ -9,7 +9,8 @@ import com.xxsword.xitem.admin.domain.course.entity.CourseFileItem;
 import com.xxsword.xitem.admin.domain.system.entity.UserInfo;
 import com.xxsword.xitem.admin.mapper.course.CourseFileItemMapper;
 import com.xxsword.xitem.admin.service.course.CourseFileItemService;
-import org.joda.time.DateTime;
+import com.xxsword.xitem.admin.utils.Pdf2PngUtil;
+import com.xxsword.xitem.admin.utils.UpLoadUtil;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -67,9 +68,27 @@ public class CourseFileItemServiceImpl extends ServiceImpl<CourseFileItemMapper,
             CourseFileItem courseFileItem = new CourseFileItem();
             courseFileItem.setBaseInfo(userInfo);
             courseFileItem.setCourseFileId(courseFile.getId());
-            courseFileItem.setSeq(DateTime.now().getMillis());
+            courseFileItem.setSeq(0);
             courseFileItem.setFilePath(fileInfos);
             save(courseFileItem);
+        }
+        if (courseFile.getCourseType() == 5) {
+            delCourseFileItem(courseFile.getId());
+            String relativePath = UpLoadUtil.PATH_INFO + "/coursepdfimg" + UpLoadUtil.getTIMEPath() + "/" + courseFile.getId();
+            String targetPath = UpLoadUtil.getProjectPath() + relativePath;
+            List<String> listUrl = Pdf2PngUtil.pdfToPng(UpLoadUtil.getProjectPath() + fileInfos, targetPath);
+            List<CourseFileItem> courseFileItemList = new ArrayList<>();
+            if (!listUrl.isEmpty()) {
+                for (int i = 0; i < listUrl.size(); i++) {
+                    CourseFileItem courseFileItem = new CourseFileItem();
+                    courseFileItem.setBaseInfo(userInfo);
+                    courseFileItem.setCourseFileId(courseFile.getId());
+                    courseFileItem.setSeq(i);
+                    courseFileItem.setFilePath(relativePath + listUrl.get(i));
+                    courseFileItemList.add(courseFileItem);
+                }
+            }
+            saveBatch(courseFileItemList);
         }
     }
 

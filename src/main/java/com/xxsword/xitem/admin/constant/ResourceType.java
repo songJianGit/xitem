@@ -3,6 +3,7 @@ package com.xxsword.xitem.admin.constant;
 public enum ResourceType {
 
     COURSE_FILE_VIDEO("courseFileVideo", "课件的视频资源"),
+    COURSE_FILE_IMG("courseFileImg", "课件的图片资源"),
     OTHER("other", "其它资源");
 
     /**

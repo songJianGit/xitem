@@ -30,6 +30,6 @@ public class CourseFileItem extends BaseEntity implements Serializable {
 
     @Column
     @ColumnComment("排序")
-    private Long seq;
+    private Integer seq;
 
 }
