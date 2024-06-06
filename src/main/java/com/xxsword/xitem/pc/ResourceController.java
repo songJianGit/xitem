@@ -112,7 +112,7 @@ public class ResourceController extends BaseController {
                 path = courseFileItemVideo == null ? null : courseFileItemVideo.getFilePath();
                 break;
             case "other":
-                log.info("其它视频资源");
+                log.info("其它资源");
                 break;
         }
         return path;
