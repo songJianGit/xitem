@@ -88,7 +88,7 @@ public class ResourceController extends BaseController {
                 type = MediaType.IMAGE_PNG;
                 break;
             case "other":
-                log.info("其它视频资源");
+                log.info("其它资源类型");
                 break;
         }
         return type;
