@@ -9,7 +9,7 @@
     <div class="card">
         <div class="card-header">${courseFile.title}</div>
         <div class="card-body">
-            <#list pdfIds as id>
+            <#list courseFileItemIds as id>
                 <img style="width: 100%" src="${ctx.contextPath}/resource/files/courseFileImg/${id}" alt="图">
             </#list>
         </div>

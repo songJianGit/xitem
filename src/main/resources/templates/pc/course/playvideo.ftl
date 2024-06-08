@@ -11,10 +11,10 @@
         <div class="card-body">
             <video style="width: 100%;min-height: 500px" controlsList="nodownload" controls autoplay>
                 <h2>您的浏览器不支持视频标记，建议升级浏览器或使用支持视频标记的浏览器</h2>
-                <#if courseFileItemList0??>
-                    <source src="${ctx.contextPath}/resource/files/courseFileVideo/${videoId!}"
+                <#list courseFileItemIds as id>
+                    <source src="${ctx.contextPath}/resource/files/courseFileVideo/${id!}"
                             type="video/mp4"/>
-                </#if>
+                </#list>
             </video>
         </div>
     </div>

@@ -1,6 +1,6 @@
 package com.xxsword.xitem.admin.constant;
 
-public enum RecordTimeType {
+public enum TimerType {
 
     COURSE_PLAY(1, 1, 90, 6 * 60 * 60, "课程播放"),
     NEW_LOOK(2, 1, 60, 2 * 60 * 60, "新闻查看");
@@ -41,7 +41,7 @@ public enum RecordTimeType {
      */
     private Integer timeMax;
 
-    private RecordTimeType(Integer code, Integer type, Integer time, Integer timeMax, String msg) {
+    private TimerType(Integer code, Integer type, Integer time, Integer timeMax, String msg) {
         this.code = code;
         this.type = type;
         this.time = time;
@@ -89,9 +89,9 @@ public enum RecordTimeType {
         this.timeMax = timeMax;
     }
 
-    public static RecordTimeType getRecordTypeByCode(Integer code) {
-        RecordTimeType[] r = RecordTimeType.values();
-        for (RecordTimeType item : r) {
+    public static TimerType getTimerTypeByCode(Integer code) {
+        TimerType[] r = TimerType.values();
+        for (TimerType item : r) {
             if (code.equals(item.getCode())) {
                 return item;
             }

@@ -3,11 +3,6 @@
 <head>
     <title>考试</title>
     <#include "../commons/head.ftl"/>
-    <style>
-        .exam-item {
-            margin: 5px;
-        }
-    </style>
 </head>
 <body>
 <div class="pc-main">

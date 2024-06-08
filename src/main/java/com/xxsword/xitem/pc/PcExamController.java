@@ -88,7 +88,7 @@ public class PcExamController {
      * @return
      */
     @RequestMapping("/e/{eid}")
-    public String examid(HttpServletRequest request, @PathVariable String eid, Model model) {
+    public String examId(HttpServletRequest request, @PathVariable String eid, Model model) {
         UserInfo userInfo = Utils.getUserInfo(request);
         Exam exam = examService.getById(eid);
         List<UserPaper> userPaperList = userPaperService.listUserPaper(userInfo.getId(), exam.getPaperId(), exam.getId(), 1);

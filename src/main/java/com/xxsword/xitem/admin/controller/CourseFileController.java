@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.xxsword.xitem.admin.domain.course.dto.CourseFileDto;
 import com.xxsword.xitem.admin.domain.course.entity.CourseFile;
 import com.xxsword.xitem.admin.domain.course.entity.CourseFileItem;
+import com.xxsword.xitem.admin.domain.course.vo.CoursePlayVO;
 import com.xxsword.xitem.admin.domain.system.entity.UserInfo;
 import com.xxsword.xitem.admin.model.RestPaging;
 import com.xxsword.xitem.admin.model.RestResult;
@@ -86,26 +87,9 @@ public class CourseFileController extends BaseController {
      */
     @RequestMapping("preview")
     public String preview(String courseFileId, Model model) {
-        CourseFile courseFile = courseFileService.getById(courseFileId);
-        String url = "";
-        switch (courseFile.getCourseType()) {
-            case 1:
-                log.info("预览scorm");
-                break;
-            case 2:
-                List<CourseFileItem> courseFileItemListVideo = courseFileItemService.listCourseFileItem(courseFile.getId());
-                List<String> videoIds = courseFileItemListVideo.stream().map(CourseFileItem::getId).collect(Collectors.toList());
-                model.addAttribute("videoId", videoIds.isEmpty() ? null : videoIds.get(0));
-                url = "/pc/course/playvideo";
-                break;
-            case 5:
-                List<CourseFileItem> courseFileItemListPdf = courseFileItemService.listCourseFileItem(courseFile.getId());
-                List<String> pdfIds = courseFileItemListPdf.stream().map(CourseFileItem::getId).collect(Collectors.toList());
-                model.addAttribute("pdfIds", pdfIds);
-                url = "/pc/course/playimg";
-                break;
-        }
-        model.addAttribute("courseFile", courseFile);
-        return url;
+        CoursePlayVO coursePlayVO = courseFileService.courseFile(courseFileId);
+        model.addAttribute("courseFile", coursePlayVO.getCourseFile());
+        model.addAttribute("courseFileItemIds", coursePlayVO.getCourseFileItemIds());
+        return coursePlayVO.getUrl();
     }
 }
