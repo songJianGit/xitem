@@ -7,7 +7,13 @@
 <body>
 <div class="pc-main">
     <div class="card">
-        <div class="card-header">${courseFile.title}</div>
+        <div class="card-header">
+            <#if course??>
+                ${course.title!}
+            <#else>
+                ${courseFile.title!}
+            </#if>
+        </div>
         <div class="card-body">
             <#list courseFileItemIds as id>
                 <img style="width: 100%" src="${ctx.contextPath}/resource/files/courseFileImg/${id}" alt="图">
@@ -16,7 +22,12 @@
     </div>
 </div>
 <#include "../commons/js.ftl"/>
+<script src="${ctx.contextPath}/static/pc/timer/study.timeV3.js"></script>
 <script type="text/javascript">
+    <#if course??>
+    let tracer = new TimerTracker('${ctx.contextPath}/pc/timer/trace', '${course.id}', '${timerType.code}', '${timerType.time}', '${timerType.timeMax}');
+    tracer.start();
+    </#if>
 </script>
 </body>
 </html>

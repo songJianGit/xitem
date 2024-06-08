@@ -1,6 +1,7 @@
 package com.xxsword.xitem.admin.service.timer.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.xxsword.xitem.admin.constant.Device;
@@ -13,9 +14,7 @@ import com.xxsword.xitem.admin.service.timer.PeriodService;
 import com.xxsword.xitem.admin.service.timer.TimerService;
 import com.xxsword.xitem.admin.service.timer.TraceService;
 import com.xxsword.xitem.admin.utils.DateUtil;
-import com.xxsword.xitem.admin.utils.Utils;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 import org.joda.time.Instant;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,41 +36,31 @@ public class TimerServiceImpl extends ServiceImpl<TimerMapper, Timer> implements
 
     @Override
     @Transactional
-    public Trace trace(String userId, String type, String obId, TimerType timerType, String traceId, Device device) {
-        Trace trace = saveTrace(obId, timerType, traceId, type, userId, device);
-        if (Trace.T_END.equalsIgnoreCase(type)) {
-            this.end(userId, trace, obId, timerType, traceId);
+    public Period trace(String userId, String obId, TimerType timerType, String periodId, Device device) {
+        Period period = upPeriod(userId, obId, timerType, periodId);
+        if (period == null) {
+            log.warn("trace warn period is null");
+            return null;
+        } else {
+            this.saveOrUpdateTimer(userId, obId, timerType, period);
+            this.saveTrace(period.getId(), device);
         }
-        return trace;
+        return period;
     }
 
     @Override
-    public boolean outLineTime(String userId, String obId, TimerType timerType, Integer time, Integer device) {
-        List<Trace> traceList = new ArrayList<>();
-        String traceId = Utils.getuuid();
-        Trace trace = new Trace();
-        trace.setObId(obId);
-        trace.setObType(timerType.getCode());
-        trace.setTimeStamp(Instant.now().minus(time * 1000).getMillis());
-        trace.setTraceId(traceId);
-        trace.setTraceType(Trace.T_START);
-        trace.setUserId(userId);
-        trace.setDevice(device);
-        traceList.add(trace);
-
-        Trace traceEnd = new Trace(); // 学习跟踪记录
-        traceEnd.setObId(obId);
-        traceEnd.setObType(timerType.getCode());
-        traceEnd.setTimeStamp(Instant.now().getMillis());
-        traceEnd.setTraceId(traceId);
-        traceEnd.setTraceType(Trace.T_END);
-        traceEnd.setUserId(userId);
-        traceEnd.setDevice(device);
-        traceList.add(traceEnd);
-
-        traceService.saveBatch(traceList);
-        Period x = this.end(userId, traceEnd, obId, timerType, traceId);
-        return x != null;
+    public void outLineTime(String userId, String obId, TimerType timerType, Integer time, Integer device) {
+        Instant instant = Instant.now();
+        Period period = new Period();
+        period.setObId(obId);
+        period.setObType(timerType.getCode());
+        period.setUserId(userId);
+        period.setStartStamp(instant.getMillis());
+        period.setEndStamp(instant.minus(time * 1000).getMillis());
+        Long cost = DateUtil.differSecond(new DateTime(period.getStartStamp()), new DateTime(period.getEndStamp()));
+        period.setCost(cost.intValue());
+        periodService.save(period);
+        this.saveOrUpdateTimer(userId, obId, timerType, period);
     }
 
     @Override
@@ -87,80 +76,53 @@ public class TimerServiceImpl extends ServiceImpl<TimerMapper, Timer> implements
     /**
      * 计算进度
      */
-    private Period end(String userId, Trace trace, String obId, TimerType timerType, String traceId) {
-        /*
-         * 1.保存学习段信息
-         * 2.更新学习进度
-         */
-        Period period = this.savePart(userId, trace, obId, timerType, traceId);
-        this.saveOrUpdateTimer(userId, obId, timerType, period);
+    private Period upPeriod(String userId, String obId, TimerType timerType, String periodId) {
+        long now = Instant.now().getMillis();
+        Period period;
+        if (StringUtils.isBlank(periodId)) {
+            period = new Period();
+            period.setObId(obId);
+            period.setObType(timerType.getCode());
+            period.setUserId(userId);
+            period.setStartStamp(now);
+            period.setEndStamp(now);
+            period.setCost(0);
+            period.setCostItem(0);
+            periodService.save(period);
+        } else {
+            period = periodService.getById(periodId);
+            if (period == null) {
+                log.warn("trace warn periodId:{}", periodId);
+                return null;
+            }
+            Long cost = DateUtil.differSecond(new DateTime(period.getStartStamp()), new DateTime(now));
+            long costItem = cost - period.getCost();
+            Period periodUp = new Period();
+            periodUp.setId(period.getId());
+            periodUp.setEndStamp(now);
+            periodUp.setCost(cost.intValue());
+            periodUp.setCostItem((int) costItem);
+            periodService.updateById(periodUp);
+
+            period.setCost(periodUp.getCost());
+            period.setCostItem(periodUp.getCostItem());
+            period.setEndStamp(now);
+        }
         return period;
     }
 
-    private Trace saveTrace(String obId, TimerType timerType, String traceId, String type, String userId, Device device) {
-        if (StringUtils.isBlank(traceId) && Trace.T_START.equalsIgnoreCase(type)) {
-            traceId = Utils.getuuid();
-        }
+    /**
+     * 流水记录
+     *
+     * @param periodId
+     * @param device
+     */
+    private void saveTrace(String periodId, Device device) {
         Trace trace = new Trace();// 学习跟踪记录
-        trace.setObId(obId);
-        trace.setObType(timerType.getCode());
         trace.setTimeStamp(Instant.now().getMillis());
-        trace.setTraceId(traceId);
-        trace.setUserId(userId);
+        trace.setPeriodId(periodId);
         trace.setDevice(device.getCode());
-        trace.setTraceType(type);
         traceService.save(trace);
-        return trace;
-    }
-
-    /**
-     * 保存学习段信息
-     */
-    private Period savePart(String userId, Trace trace, String obId, TimerType timerType, String traceId) {
-        LambdaQueryWrapper<Trace> q = Wrappers.lambdaQuery();
-        q.eq(Trace::getTraceType, Trace.T_START);
-        q.eq(Trace::getTraceId, traceId);
-        q.eq(Trace::getObId, obId);
-        q.eq(Trace::getObType, timerType.getCode());
-        q.eq(Trace::getUserId, userId);
-        q.orderByDesc(Trace::getTimeStamp);
-        Trace sTrace = traceService.getOne(q);
-        if (sTrace == null) {
-            log.warn("get start trace warn=>userId:{},obId:{},type:{},traceId:{}", userId, obId, timerType.getType(), traceId);
-            return null;
-        }
-        Long start = sTrace.getTimeStamp();// 开始时间戳
-        Long end = trace.getTimeStamp();// 结束时间戳
-        List<Trace> traceEnd = endList(userId, trace, obId, timerType, traceId);
-        if (traceEnd.size() > 0) {// 如果前面有end，则以前面的最后一个end为起点计算
-            start = traceEnd.get(0).getTimeStamp();
-        }
-        Period period = new Period();
-        period.setTraceId(traceId);
-        period.setObId(obId);
-        period.setObType(timerType.getCode());
-        period.setUserId(userId);
-        period.setStartStamp(start);
-        period.setEndStamp(end);
-        Long pCost = DateUtil.differSecond(new DateTime(start), new DateTime(end));// 秒
-        period.setCost(pCost.intValue());// 时间差（秒）
-        periodService.save(period);
-        return period;
-    }
-
-    /**
-     * 查询end
-     */
-    private List<Trace> endList(String userId, Trace trace, String obId, TimerType timerType, String traceId) {
-        LambdaQueryWrapper<Trace> q = Wrappers.lambdaQuery();
-        q.eq(Trace::getTraceType, Trace.T_END);
-        q.eq(Trace::getObId, obId);
-        q.eq(Trace::getObType, timerType.getCode());
-        q.eq(Trace::getTraceId, traceId);
-        q.eq(Trace::getUserId, userId);
-        q.ne(Trace::getId, trace.getId());// 不查这次的end
-        q.orderByDesc(Trace::getTimeStamp);
-        return traceService.list(q);
     }
 
     /**
@@ -173,6 +135,7 @@ public class TimerServiceImpl extends ServiceImpl<TimerMapper, Timer> implements
         q.eq(Timer::getUserId, userId);
         List<Timer> timerList = list(q);
         Timer timer;
+        boolean saveFlag = false;
         if (timerList.size() == 1) {// 只有一个，皆大欢喜
             timer = timerList.get(0);
         } else if (timerList.size() == 0) {// 一个没有，就新建
@@ -182,6 +145,7 @@ public class TimerServiceImpl extends ServiceImpl<TimerMapper, Timer> implements
             timer.setObType(timerType.getCode());
             timer.setTotalTime(0);
             timer.setStartTime(DateUtil.now());
+            saveFlag = true;
         } else {
             /*
              * 查出多条就进入修复程序
@@ -201,8 +165,16 @@ public class TimerServiceImpl extends ServiceImpl<TimerMapper, Timer> implements
             removeBatchByIds(removeTimerIds);
         }
         timer.setLastTime(DateUtil.now());
-        Integer time = timer.getTotalTime() + period.getCost(); // 总时长=原时长+本次时长
+        Integer time = timer.getTotalTime() + period.getCostItem();
         timer.setTotalTime(time);
-        saveOrUpdate(timer);
+        if (saveFlag) {
+            save(timer);
+        } else {
+            Timer timerUp = new Timer();
+            timerUp.setId(timer.getId());
+            timerUp.setLastTime(timer.getLastTime());
+            timerUp.setTotalTime(timer.getTotalTime());
+            updateById(timerUp);
+        }
     }
 }

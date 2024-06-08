@@ -14,42 +14,22 @@ import java.io.Serializable;
 @TableComment("计时跟踪信息")
 @TableEngine(MySqlEngineConstant.InnoDB)
 public class Trace implements Serializable {
-    public static final String T_START = "start";// 开始
-    public static final String T_TRACE = "trace";// 跟踪
-    public static final String T_END = "end";// 结束
-
     private static final long serialVersionUID = 502L;
     @TableId(value = "id", type = IdType.ASSIGN_ID)
     @Column(length = 50)
     private String id;
 
-    @Index(columns = {"user_id", "ob_type", "ob_id", "trace_type", "trace_id", "time_stamp"})
-    @Column
-    @ColumnComment("TimerType的code")
-    private Integer obType;
-
-    @Column(length = 50)
-    @ColumnComment("TimerType的code对应的业务id")
-    private String obId;
-
     @Column
     @ColumnComment("设备信息（Device的code）")
     private Integer device;
 
+    @Index
     @Column
     @ColumnComment("时间戳")
     private Long timeStamp;
 
     @Column(length = 50)
-    @ColumnComment("跟踪id")
-    private String traceId;
-
-    @Column(length = 50)
-    @ColumnComment("用户id")
-    private String userId;
-
-    @Column(length = 5)
-    @ColumnComment("类型（start trace end）")
-    private String traceType;
+    @ColumnComment("段落id")
+    private String periodId;
 
 }

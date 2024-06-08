@@ -1,6 +1,7 @@
 package com.xxsword.xitem.pc;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.xxsword.xitem.admin.constant.TimerType;
 import com.xxsword.xitem.admin.controller.BaseController;
 import com.xxsword.xitem.admin.domain.course.dto.CourseDto;
 import com.xxsword.xitem.admin.domain.course.entity.Course;
@@ -54,6 +55,8 @@ public class PcCourseController extends BaseController {
         CoursePlayVO coursePlayVO = courseFileService.courseFile(course.getCourseFileId());
         model.addAttribute("courseFile", coursePlayVO.getCourseFile());
         model.addAttribute("courseFileItemIds", coursePlayVO.getCourseFileItemIds());
+        model.addAttribute("timerType", TimerType.COURSE_PLAY);
+        model.addAttribute("course", course);
         return coursePlayVO.getUrl();
     }
 

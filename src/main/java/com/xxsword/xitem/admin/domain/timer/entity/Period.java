@@ -28,6 +28,10 @@ public class Period implements Serializable {
     private Integer cost;
 
     @Column
+    @ColumnComment("本段小段时长(秒)")
+    private Integer costItem;
+
+    @Column
     @ColumnComment("TimerType的code")
     private Integer obType;
 
@@ -42,10 +46,6 @@ public class Period implements Serializable {
     @Column
     @ColumnComment("结束时间戳")
     private Long endStamp;
-
-    @Column(length = 50)
-    @ColumnComment("跟踪id")
-    private String traceId;
 
     @Column(length = 50)
     @ColumnComment("用户id")

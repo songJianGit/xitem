@@ -3,10 +3,7 @@ package com.xxsword.xitem.admin.domain.timer.entity;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.gitee.sunchenbin.mybatis.actable.annotation.Column;
-import com.gitee.sunchenbin.mybatis.actable.annotation.ColumnComment;
-import com.gitee.sunchenbin.mybatis.actable.annotation.TableComment;
-import com.gitee.sunchenbin.mybatis.actable.annotation.TableEngine;
+import com.gitee.sunchenbin.mybatis.actable.annotation.*;
 import com.gitee.sunchenbin.mybatis.actable.constants.MySqlEngineConstant;
 import lombok.Data;
 
@@ -24,6 +21,7 @@ public class Timer implements Serializable {
     @Column(length = 50)
     private String id;
 
+    @Index(columns = {"user_id", "ob_id", "ob_type"})
     @Column
     @ColumnComment("TimerType的code")
     private Integer obType;
