@@ -2,7 +2,7 @@ package com.xxsword.xitem.admin.constant;
 
 public enum TimerType {
 
-    COURSE_PLAY(1, 10, 6 * 60 * 60, "课程播放"),
+    COURSE_PLAY(1, 30, 6 * 60 * 60, "课程播放"),
     NEW_LOOK(2, 10, 2 * 60 * 60, "新闻查看");
 
     /**

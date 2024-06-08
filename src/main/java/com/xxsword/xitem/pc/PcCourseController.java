@@ -44,7 +44,7 @@ public class PcCourseController extends BaseController {
     public String index(Model model) {
         CourseDto courseDto = new CourseDto();
         courseDto.setReleaseStatus(1);
-        List<Course> courseList = courseService.list(new Page<>(1, 10), courseDto.toQuery());
+        List<Course> courseList = courseService.list(new Page<>(1, 12), courseDto.toQuery());
         model.addAttribute("courseList", courseList);
         return "/pc/course/courseindex";
     }

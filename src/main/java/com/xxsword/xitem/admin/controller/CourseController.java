@@ -66,11 +66,9 @@ public class CourseController extends BaseController {
         if (StringUtils.isNotBlank(path)) {
             course.setCover(path);
         }
-        if (course.getReleaseStatus() == null) {
-            course.setReleaseStatus(0);
-        }
         if (StringUtils.isBlank(course.getId())) {
             course.setSeq(DateTime.now().getMillis());
+            course.setReleaseStatus(0);
         }
         course.setBaseInfo(userInfo);
         courseService.saveOrUpdate(course);

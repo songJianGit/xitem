@@ -58,11 +58,9 @@ public class BannerController extends BaseController {
             banner.setUrl(path);
         }
         banner.setBaseInfo(userInfo);
-        if (banner.getReleaseStatus() == null) {
-            banner.setReleaseStatus(0);
-        }
         if (StringUtils.isBlank(banner.getId())) {
             banner.setSeq(DateTime.now().getMillis());
+            banner.setReleaseStatus(0);
         }
         bannerService.saveOrUpdate(banner);
         return "redirect:list";
@@ -83,6 +81,7 @@ public class BannerController extends BaseController {
         bannerService.release(userInfo, id);
         return RestResult.OK();
     }
+
     /**
      * banner的拖拽
      * 排序字段的交换

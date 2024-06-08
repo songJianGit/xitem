@@ -3,26 +3,31 @@
 <head>
     <title>课程</title>
     <#include "../commons/head.ftl"/>
+    <style>
+        .course-title {
+            text-align: center;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            margin-top: 7px;
+            color: #000;
+        }
+    </style>
 </head>
 <body>
 <div class="pc-main">
     <#include "../commons/header.ftl"/>
-    <div class="pc-body">
-        <div class="card mt-3">
-            <div class="card-header">课程</div>
-            <div class="card-body">
-                <ul class="list-group list-group-flush">
-                    <#list courseList as item>
-                        <li class="list-group-item">
-                            <a href="${ctx.contextPath}/pc/course/c/${item.id!}">${item.title!}</a>
-                        </li>
-                    </#list>
-                </ul>
-            </div>
-            <div class="card-footer">
-                <a href="#!">更多>></a>
-            </div>
-        </div>
+    <div class="pc-body row">
+        <#list courseList as item>
+            <a class="col-4" href="${ctx.contextPath}/pc/course/c/${item.id!}">
+                <div class="card mt-3">
+                    <div class="card-body">
+                        <img style="width: 100%;max-height: 200px" src="${ctx.contextPath}${item.cover!}" alt="图">
+                        <div class="course-title">${item.title!}</div>
+                    </div>
+                </div>
+            </a>
+        </#list>
     </div>
 </div>
 <#include "../commons/js.ftl"/>

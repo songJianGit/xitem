@@ -116,6 +116,7 @@
         }
 
         htm += '<a class="btn btn-sm btn-default m-r-5" href="${ctx.contextPath}/admin/course/edit?id=' + value + '" title="编辑">编辑</a>';
+        htm += '<a class="btn btn-sm btn-default m-r-5" href="${ctx.contextPath}/pc/course/c/' + value + '" title="播放">播放</a>';
         htm += '<button type="button" class="btn btn-sm btn-default" title="拖动排序" draggable="true" ondragstart="dragStart(event,\'' + value + '\')" ondrop="drop(event,\'' + value + '\')" ondragover="allowDrop(event)">';
         htm += '<span class="mdi mdi-cursor-move"></span>';
         htm += '</button>';

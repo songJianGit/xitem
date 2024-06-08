@@ -4,7 +4,6 @@ import com.xxsword.xitem.admin.constant.Device;
 import com.xxsword.xitem.admin.constant.TimerType;
 import com.xxsword.xitem.admin.domain.system.entity.UserInfo;
 import com.xxsword.xitem.admin.domain.timer.entity.Period;
-import com.xxsword.xitem.admin.domain.timer.entity.Trace;
 import com.xxsword.xitem.admin.model.RestResult;
 import com.xxsword.xitem.admin.service.timer.TimerService;
 import com.xxsword.xitem.admin.utils.Utils;

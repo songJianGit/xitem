@@ -67,7 +67,7 @@ public class ExamController {
     public String save(HttpServletRequest request, Exam exam) {
         UserInfo userInfo = Utils.getUserInfo(request);
         exam.setBaseInfo(userInfo);
-        if (exam.getReleaseStatus() == null) {
+        if (StringUtils.isBlank(exam.getId())) {
             exam.setReleaseStatus(0);
         }
         examService.saveOrUpdate(exam);
