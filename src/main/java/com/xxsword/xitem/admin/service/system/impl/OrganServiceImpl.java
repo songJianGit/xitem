@@ -201,7 +201,7 @@ public class OrganServiceImpl extends ServiceImpl<OrganMapper, Organ> implements
                     qUser.eq(UserInfo::getCreateUserId, userId);
                 }
                 if (userPermissionType.equals(1)) {
-                    qUser.in(UserInfo::getCreateOrganId, permissionIdsAll);
+                    qUser.in(UserInfo::getOrganId, permissionIdsAll);
                 }
                 break;
             case PermissionType.ORGAN:
@@ -218,9 +218,6 @@ public class OrganServiceImpl extends ServiceImpl<OrganMapper, Organ> implements
                 break;
         }
     }
-
-
-    // =============================数据权限相关================================
 
     @Override
     public String getPermissionDown(UserInfo userInfo) {

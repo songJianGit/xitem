@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.xxsword.xitem.admin.constant.Constant;
+import com.xxsword.xitem.admin.constant.PermissionType;
 import com.xxsword.xitem.admin.domain.system.dto.*;
 import com.xxsword.xitem.admin.domain.system.entity.*;
 import com.xxsword.xitem.admin.domain.system.vo.UserInfoRoleVO;
@@ -72,7 +73,10 @@ public class SystemController extends BaseController {
     @RequestMapping("userListData")
     @ResponseBody
     public RestPaging<UserInfo> userListData(HttpServletRequest request, Page<UserInfo> page, UserInfoDto userInfoDto) {
-        Page<UserInfo> userInfoPage = userInfoService.page(page, userInfoDto.toQuery());
+        UserInfo userInfo = Utils.getUserInfo(request);
+        LambdaQueryWrapper<UserInfo> query = userInfoDto.toQuery();
+        organService.permissionHandle(userInfo, PermissionType.USERINFO, query);
+        Page<UserInfo> userInfoPage = userInfoService.page(page, query);
         return new RestPaging<>(userInfoPage.getTotal(), userInfoPage.getRecords());
     }
 

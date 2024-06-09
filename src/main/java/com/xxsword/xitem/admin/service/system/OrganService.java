@@ -105,6 +105,13 @@ public interface OrganService extends IService<Organ> {
 
     //=======================================================================
 
+    /**
+     * 数据权限过滤
+     *
+     * @param userInfo
+     * @param permissionType com/xxsword/xitem/admin/constant/PermissionType中定义的类型
+     * @param query
+     */
     void permissionHandle(UserInfo userInfo, String permissionType, LambdaQueryWrapper query);
 
     /**
