@@ -66,7 +66,7 @@ public class UserInfoRoleServiceImpl extends ServiceImpl<UserInfoRoleMapper, Use
 
     @Override
     public Page<UserInfoRoleVO> queryUserListByRole(Page<UserInfoRole> page, UserInfoRoleDto dto) {
-        return baseMapper.pageUserBuRoleId(page, dto);
+        return baseMapper.pageUserByRoleId(page, dto);
     }
 
     @Override

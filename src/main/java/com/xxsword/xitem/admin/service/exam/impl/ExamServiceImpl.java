@@ -1,6 +1,8 @@
 package com.xxsword.xitem.admin.service.exam.impl;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.xxsword.xitem.admin.domain.exam.dto.ExamDto;
 import com.xxsword.xitem.admin.domain.exam.entity.Exam;
 import com.xxsword.xitem.admin.domain.system.entity.UserInfo;
 import com.xxsword.xitem.admin.mapper.exam.ExamMapper;
@@ -62,6 +64,18 @@ public class ExamServiceImpl extends ServiceImpl<ExamMapper, Exam> implements Ex
             examUp.setReleaseStatus(2);
         }
         updateById(examUp);
+    }
+
+    @Override
+    public Page<Exam> pageExamByUser(Page<Exam> page, String userId, ExamDto examDto) {
+        Integer exType = examDto.getExType();
+        if (exType.equals(1)) {
+            return page(page, examDto.toQuery());
+        }
+        if (exType.equals(0)) {
+            return baseMapper.pageExam0ByUser(page, userId, examDto);
+        }
+        return null;
     }
 
 }

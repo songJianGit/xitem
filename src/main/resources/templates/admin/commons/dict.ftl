@@ -22,7 +22,7 @@
         return value;
     }
 
-    function releaseStatus(value, row){
+    function releaseStatus(value, row) {
         if (value == 0) {
             return '未发布';
         }
@@ -36,6 +36,9 @@
     }
 
     function previewImg(value, row) {
+        if (isBlank(value)) {
+            value = "/static/admin/commons/img/defaultimg.webp";
+        }
         return '<img style="width:70px;" src="${ctx.contextPath}' + value + '"/>';
     }
 

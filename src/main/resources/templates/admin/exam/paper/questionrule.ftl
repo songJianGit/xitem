@@ -23,7 +23,7 @@
                         <div class="card">
                             <div class="card-body">
                                 <button type="button" class="btn btn-default"
-                                        onclick="javascript:history.back(-1);return false;">返 回
+                                        onclick="history.back(-1);return false;">返 回
                                 </button>
                             </div>
                         </div>

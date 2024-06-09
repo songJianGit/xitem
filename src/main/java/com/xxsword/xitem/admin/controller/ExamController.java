@@ -1,22 +1,26 @@
 package com.xxsword.xitem.admin.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.xxsword.xitem.admin.domain.exam.dto.ExamAuthDto;
 import com.xxsword.xitem.admin.domain.exam.dto.ExamDto;
 import com.xxsword.xitem.admin.domain.exam.dto.UserPaperDto;
 import com.xxsword.xitem.admin.domain.exam.entity.Exam;
+import com.xxsword.xitem.admin.domain.exam.entity.ExamAuth;
 import com.xxsword.xitem.admin.domain.exam.entity.Paper;
 import com.xxsword.xitem.admin.domain.exam.entity.UserPaper;
+import com.xxsword.xitem.admin.domain.exam.vo.ExamAuthVO;
 import com.xxsword.xitem.admin.domain.exam.vo.UserPaperVO;
 import com.xxsword.xitem.admin.domain.system.entity.UserInfo;
 import com.xxsword.xitem.admin.model.RestPaging;
 import com.xxsword.xitem.admin.model.RestResult;
+import com.xxsword.xitem.admin.service.exam.ExamAuthService;
 import com.xxsword.xitem.admin.service.exam.ExamService;
 import com.xxsword.xitem.admin.service.exam.PaperService;
 import com.xxsword.xitem.admin.service.exam.UserPaperService;
 import com.xxsword.xitem.admin.utils.Utils;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,6 +28,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Arrays;
 import java.util.List;
 
 @Slf4j
@@ -36,6 +41,8 @@ public class ExamController {
     private PaperService paperService;
     @Autowired
     private UserPaperService userPaperService;
+    @Autowired
+    private ExamAuthService examAuthService;
 
     @RequestMapping("list")
     public String index() {
@@ -131,5 +138,39 @@ public class ExamController {
         Page<UserPaper> data = userPaperService.page(page, userPaperDto.toQuery());
         List<UserPaperVO> list = userPaperService.listUserPaperVOByUserPaper(data.getRecords());
         return new RestPaging<>(data.getTotal(), list);
+    }
+
+    @RequestMapping("userExamAuth")
+    public String userExamAuth(HttpServletRequest request, String examId, Model model) {
+        model.addAttribute("examId", examId);
+        return "/admin/exam/userexamauth";
+    }
+
+    @RequestMapping("userExamAuthData")
+    @ResponseBody
+    public RestPaging<ExamAuthVO> userExamAuthData(HttpServletRequest request, Page<ExamAuth> page, ExamAuthDto examAuthDto) {
+        Page<ExamAuthVO> data = examAuthService.pageExamAuthByDto(page, examAuthDto);
+        return new RestPaging<>(data.getTotal(), data.getRecords());
+    }
+
+    @RequestMapping("addExamAuth")
+    @ResponseBody
+    public RestResult addExamAuth(HttpServletRequest request, String examId, String userIds, Model model) {
+        UserInfo userInfo = Utils.getUserInfo(request);
+        if (StringUtils.isBlank(examId) || StringUtils.isBlank(userIds)) {
+            return RestResult.Fail("参数异常");
+        }
+        examAuthService.upExamAuth(userInfo, examId, userIds);
+        return RestResult.OK();
+    }
+
+    @RequestMapping("delExamAuth")
+    @ResponseBody
+    public RestResult delExamAuth(HttpServletRequest request, String ids) {
+        if (StringUtils.isBlank(ids)) {
+            return RestResult.Fail("参数异常");
+        }
+        examAuthService.removeBatchByIds(Arrays.asList(ids.split(",")));
+        return RestResult.OK();
     }
 }

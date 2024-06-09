@@ -35,7 +35,7 @@
                                     <div class="form-group col-12">
                                         <label>课程封面</label>
                                         <input type="file" class="form-control-file" name="fileinfo"/>
-                                        <img style="width: 100px" src="${ctx.contextPath}${course.cover!}">
+                                        <img style="width: 100px" src="${ctx.contextPath}${course.cover!'/static/admin/commons/img/defaultimg.webp'}" alt="图">
                                     </div>
 
                                     <div class="form-group col-12">
@@ -50,7 +50,7 @@
 
                                     <div class="form-group col-6">
                                         <label for="courseFileName">课件</label>
-                                        <input id="courseFileName" class="form-control" value="${courseFileName!}" readonly/>
+                                        <input id="courseFileName" placeholder="点击选择课件" class="form-control" value="${courseFileName!}" readonly/>
                                         <input id="courseFileId" type="hidden" name="courseFileId" value="${course.courseFileId!}"/>
                                     </div>
 
@@ -58,7 +58,7 @@
                                         <button type="submit" class="btn btn-primary">保 存
                                         </button>
                                         <button type="button" class="btn btn-default"
-                                                onclick="javascript:history.back(-1);return false;">返 回
+                                                onclick="history.back(-1);return false;">返 回
                                         </button>
                                     </div>
                                 </form>

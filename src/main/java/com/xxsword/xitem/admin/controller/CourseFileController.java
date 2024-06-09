@@ -88,6 +88,9 @@ public class CourseFileController extends BaseController {
     @RequestMapping("preview")
     public String preview(String courseFileId, Model model) {
         CoursePlayVO coursePlayVO = courseFileService.courseFile(courseFileId);
+        if (coursePlayVO == null) {
+            return "/pc/course/playerror";
+        }
         model.addAttribute("courseFile", coursePlayVO.getCourseFile());
         model.addAttribute("courseFileItemIds", coursePlayVO.getCourseFileItemIds());
         return coursePlayVO.getUrl();

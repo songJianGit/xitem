@@ -66,7 +66,7 @@
                                     </div>
                                     <div class="form-group col-12">
                                         <button type="submit" class="btn btn-primary">确 定</button>
-                                        <button type="button" class="btn btn-default" onclick="javascript:history.back(-1);return false;">返 回</button>
+                                        <button type="button" class="btn btn-default" onclick="history.back(-1);return false;">返 回</button>
                                     </div>
                                 </form>
 

@@ -80,7 +80,7 @@
                                         </div>
                                         <div class="courseFileShow courseFileShow5">
                                             <#if courseFileItem0??>
-                                                <img src="${ctx.contextPath}${courseFileItem0.filePath!}" alt="图">
+                                                <img src="${ctx.contextPath}${courseFileItem0.filePath!'/static/admin/commons/img/defaultimg.webp'}" alt="图">
                                             </#if>
                                         </div>
                                     </div>
@@ -89,7 +89,7 @@
                                         <button type="submit" class="btn btn-primary">保 存
                                         </button>
                                         <button type="button" class="btn btn-default"
-                                                onclick="javascript:history.back(-1);return false;">返 回
+                                                onclick="history.back(-1);return false;">返 回
                                         </button>
                                     </div>
                                 </form>

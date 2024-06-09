@@ -1,5 +1,6 @@
 package com.xxsword.xitem.admin.service.course.impl;
 
+import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.xxsword.xitem.admin.domain.course.entity.CourseFile;
 import com.xxsword.xitem.admin.domain.course.entity.CourseFileItem;
@@ -39,9 +40,11 @@ public class CourseFileServiceImpl extends ServiceImpl<CourseFileMapper, CourseF
 
     @Override
     public CoursePlayVO courseFile(String courseFileId) {
+        if(StringUtils.isBlank(courseFileId)){
+            return null;
+        }
         CoursePlayVO coursePlayVO = new CoursePlayVO();
         CourseFile courseFile = getById(courseFileId);
-        String url = "";
         switch (courseFile.getCourseType()) {
             case 1:
                 log.info("scorm");

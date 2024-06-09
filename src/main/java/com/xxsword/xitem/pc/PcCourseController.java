@@ -53,6 +53,9 @@ public class PcCourseController extends BaseController {
     public String courseId(HttpServletRequest request, @PathVariable String cid, Model model) {
         Course course = courseService.getById(cid);
         CoursePlayVO coursePlayVO = courseFileService.courseFile(course.getCourseFileId());
+        if (coursePlayVO == null) {
+            return "/pc/course/playerror";
+        }
         model.addAttribute("courseFile", coursePlayVO.getCourseFile());
         model.addAttribute("courseFileItemIds", coursePlayVO.getCourseFileItemIds());
         model.addAttribute("timerType", TimerType.COURSE_PLAY);

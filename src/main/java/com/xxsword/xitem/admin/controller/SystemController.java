@@ -109,6 +109,20 @@ public class SystemController extends BaseController {
     }
 
     /**
+     * 用户选择弹框
+     *
+     * @param model
+     * @return
+     */
+    @RequestMapping("userShow")
+    public String userShow(String qrid, Model model) {
+        List<Dict> dictList = dictService.listDictByType(Constant.DICT_TYPE_QCATEGORY);
+        model.addAttribute("qcategoryList", dictList);
+        model.addAttribute("qrid", qrid);
+        return "/admin/system/usershow";
+    }
+
+    /**
      * 查询最大用户数
      *
      * @return
@@ -413,7 +427,7 @@ public class SystemController extends BaseController {
     @RequestMapping("userListByRole")
     public String queryUserListByRole(HttpServletRequest request, String roleId, Model model) {
         model.addAttribute("roleId", roleId);
-        return "/admin/system/userselectrole";
+        return "/admin/system/userrole";
     }
 
     /**

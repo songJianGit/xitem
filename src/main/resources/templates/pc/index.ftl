@@ -29,7 +29,7 @@
                 <div class="carousel-inner">
                     <#list bannerList as item>
                         <div class="carousel-item <#if item_index==0>active</#if> ">
-                            <img src="${ctx.contextPath}${item.url!}" alt="轮播图">
+                            <img src="${ctx.contextPath}${item.url!'/static/admin/commons/img/defaultimg.webp'}" alt="轮播图">
                         </div>
                     </#list>
                 </div>

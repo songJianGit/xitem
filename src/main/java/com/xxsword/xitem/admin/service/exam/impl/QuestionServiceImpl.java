@@ -181,7 +181,7 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
             question.setTitle(item.getTitle().trim());
             question.setQcategory(item.getQcategory());
             question.setQtype(qtypeInfo);
-            saveOrUpdate(question);// 题目保存
+            save(question);// 题目保存
             if (qtypeInfo == 0) {// 是非题
                 QuestionOption questionOptionA = new QuestionOption();
                 questionOptionA.setBaseInfo(userInfo);

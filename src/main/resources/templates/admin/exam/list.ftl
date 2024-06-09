@@ -97,7 +97,7 @@
                                             <th data-field="duration" data-formatter="duration">考试时长</th>
                                             <th data-field="releaseStatus" data-formatter="releaseStatus">发布状态
                                             </th>
-                                            <th data-field="id" data-formatter="caozuo" data-width="185px">操作</th>
+                                            <th data-field="id" data-formatter="caozuo">操作</th>
                                         </tr>
                                         </thead>
                                     </table>
@@ -129,10 +129,14 @@
         htm += '<a class="btn btn-sm btn-default m-r-5" href="${ctx.contextPath}/admin/exam/edit?id=' + value + '" title="编辑">编辑</a>';
 
         if (row.releaseStatus == 0 || row.releaseStatus == 2) {
-            htm += '<button type="button" class="btn btn-sm btn-default m-r-5" onclick="release(\''+value+'\')">发布</button>';
+            htm += '<button type="button" class="btn btn-sm btn-default m-r-5" onclick="release(\'' + value + '\')">发布</button>';
         }
         if (row.releaseStatus == 1) {
-            htm += '<button type="button" class="btn btn-sm btn-default m-r-5" onclick="release(\''+value+'\')">下架</button>';
+            htm += '<button type="button" class="btn btn-sm btn-default m-r-5" onclick="release(\'' + value + '\')">下架</button>';
+        }
+
+        if (row.exType == 0) {
+            htm += '<button type="button" class="btn btn-sm btn-default m-r-5" onclick="examAuth(\'' + value + '\')">授权</button>';
         }
 
         htm += '<a class="btn btn-sm btn-default" href="${ctx.contextPath}/admin/exam/examScore?examId=' + value + '" title="考试成绩">考试成绩</a>';
@@ -140,7 +144,11 @@
         return htm;
     }
 
-    function release(id){
+    function examAuth(id) {
+        layer_show("考试授权", "${ctx.contextPath}/admin/exam/userExamAuth?examId=" + id);
+    }
+
+    function release(id) {
         $.ajax({
             url: "${ctx.contextPath}/admin/exam/release?id=" + id,
             success: function (data) {

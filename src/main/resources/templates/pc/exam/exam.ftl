@@ -56,7 +56,7 @@
             <#if examStatus==1>
                 <a href="${ctx.contextPath}/pc/exam/examPageShow?eid=${exam.id!}" class="btn btn-primary">开始考试</a>
             </#if>
-            <button type="button" class="btn btn-secondary" onclick="javascript:history.back(-1);return false;">返回
+            <button type="button" class="btn btn-secondary" onclick="history.back(-1);return false;">返回
             </button>
         </div>
     </div>

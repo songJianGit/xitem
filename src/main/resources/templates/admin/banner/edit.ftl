@@ -29,13 +29,13 @@
                                     <div class="form-group col-6">
                                         <label>图片</label>
                                         <input type="file" class="form-control-file" name="fileinfo"/>
-                                        <img style="width: 100px" src="${ctx.contextPath}${banner.url!}">
+                                        <img style="width: 100px" src="${ctx.contextPath}${banner.url!'/static/admin/commons/img/defaultimg.webp'}" alt="图">
                                     </div>
                                     <div class="form-group col-12">
                                         <button type="submit" class="btn btn-primary">保 存
                                         </button>
                                         <button type="button" class="btn btn-default"
-                                                onclick="javascript:history.back(-1);return false;">返 回
+                                                onclick="history.back(-1);return false;">返 回
                                         </button>
                                     </div>
                                 </form>

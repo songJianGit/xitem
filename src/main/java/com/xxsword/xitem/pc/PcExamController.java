@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -40,6 +41,8 @@ public class PcExamController {
     private QuestionRuleService questionRuleService;
     @Autowired
     private PaperService paperService;
+    @Autowired
+    private ExamAuthService examAuthService;
 
     @RequestMapping("examType")
     public String examType(Integer exType, Model model) {
@@ -48,35 +51,41 @@ public class PcExamController {
     }
 
     @RequestMapping("index")
-    public String index(Model model) {
+    public String index(HttpServletRequest request, Model model) {
+        UserInfo userInfo = Utils.getUserInfo(request);
+
         ExamDto examDto0 = new ExamDto();
         examDto0.setReleaseStatus(1);
         examDto0.setExType(0);
-        List<Exam> examList0 = examService.list(new Page<>(1, 10), examDto0.toQuery());
+        Page<Exam> examPage0 = examService.pageExamByUser(new Page<>(1, 10), userInfo.getId(), examDto0);
 
         ExamDto examDto1 = new ExamDto();
         examDto1.setReleaseStatus(1);
         examDto1.setExType(1);
-        List<Exam> examList1 = examService.list(new Page<>(1, 10), examDto1.toQuery());
+        Page<Exam> examPage1 = examService.pageExamByUser(new Page<>(1, 10), userInfo.getId(), examDto1);
 
-        model.addAttribute("examList0", examList0);
-        model.addAttribute("examList1", examList1);
+        model.addAttribute("examList0", examPage0 == null ? (new ArrayList<>()) : examPage0.getRecords());
+        model.addAttribute("examList1", examPage1 == null ? (new ArrayList<>()) : examPage1.getRecords());
         return "/pc/exam/examindex";
     }
 
     @RequestMapping("examTypeData")
     @ResponseBody
-    public RestResult examTypeData(Integer exType, Integer pageNum, Integer pageSize) {
+    public RestResult examTypeData(HttpServletRequest request, Integer exType, Integer pageNum, Integer pageSize) {
         if (pageSize == null) {
             pageSize = 20;
         }
         if (pageSize > 100) {
             pageSize = 100;
         }
+        UserInfo userInfo = Utils.getUserInfo(request);
         ExamDto examDto = new ExamDto();
         examDto.setReleaseStatus(1);
         examDto.setExType(exType == null ? 1 : exType);
-        Page<Exam> examPage = examService.page(new Page<>(pageNum, pageSize), examDto.toQuery());
+        Page<Exam> examPage = examService.pageExamByUser(new Page<>(pageNum, pageSize), userInfo.getId(), examDto);
+        if (examPage == null) {
+            return RestResult.Fail();
+        }
         return RestResult.OK(examPage.getRecords());
     }
 
@@ -91,6 +100,10 @@ public class PcExamController {
     public String examId(HttpServletRequest request, @PathVariable String eid, Model model) {
         UserInfo userInfo = Utils.getUserInfo(request);
         Exam exam = examService.getById(eid);
+        if (!examAuthService.checkUserExamAuth(userInfo.getId(), exam)) {
+            model.addAttribute("exStatus", "未授权该考试");
+            return "/pc/exam/examerror";
+        }
         List<UserPaper> userPaperList = userPaperService.listUserPaper(userInfo.getId(), exam.getPaperId(), exam.getId(), 1);
         List<UserPaperVO> userPaperVOList = userPaperService.listUserPaperVOByUserPaper(userPaperList);
         model.addAttribute("exam", exam);
@@ -111,6 +124,10 @@ public class PcExamController {
     public String examPageShow(HttpServletRequest request, String eid, Model model) {
         UserInfo userInfo = Utils.getUserInfo(request);
         Exam exam = examService.getById(eid);
+        if (!examAuthService.checkUserExamAuth(userInfo.getId(), exam)) {
+            model.addAttribute("exStatus", "未授权该考试");
+            return "/pc/exam/examerror";
+        }
         if (!examExamStatusCheck(exam, model)) {
             return "/pc/exam/examerror";
         }

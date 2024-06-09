@@ -33,7 +33,7 @@
                                     <div class="form-group col-md-12">
                                         <button type="submit" class="btn btn-primary">保 存</button>
                                         <button type="button" class="btn btn-default"
-                                                onclick="javascript:history.back(-1);return false;">返 回
+                                                onclick="history.back(-1);return false;">返 回
                                         </button>
                                     </div>
                                 </form>

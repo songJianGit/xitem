@@ -22,7 +22,7 @@
             <a class="col-4" href="${ctx.contextPath}/pc/course/c/${item.id!}">
                 <div class="card mt-3">
                     <div class="card-body">
-                        <img style="width: 100%;max-height: 200px" src="${ctx.contextPath}${item.cover!}" alt="图">
+                        <img style="width: 100%;max-height: 200px" src="${ctx.contextPath}${item.cover!'/static/admin/commons/img/defaultimg.webp'}" alt="图">
                         <div class="course-title">${item.title!}</div>
                     </div>
                 </div>
