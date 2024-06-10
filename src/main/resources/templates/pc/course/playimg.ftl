@@ -7,7 +7,8 @@
 <body>
 <div class="pc-main">
     <div class="card">
-        <div class="card-header">
+        <div class="card-title mb-0" style="padding: 5px;">
+            <button type="button" class="btn btn-light mr-3" onclick="history.back(-1);return false;">返回</button>
             <#if course??>
                 ${course.title!}
             <#else>

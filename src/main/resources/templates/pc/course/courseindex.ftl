@@ -30,7 +30,7 @@
         </div>
         <div class="row">
             <#list courseList as item>
-                <a class="col-4" href="${ctx.contextPath}/pc/course/c/${item.id!}">
+                <a class="col-4" href="${ctx.contextPath}/pc/course/detail?cid=${item.id!}">
                     <div class="card mt-3">
                         <div class="card-body course-item">
                             <img style="width: 100%;max-height: 200px"

@@ -5,9 +5,12 @@ import com.xxsword.xitem.admin.constant.TimerType;
 import com.xxsword.xitem.admin.controller.BaseController;
 import com.xxsword.xitem.admin.domain.course.dto.CourseDto;
 import com.xxsword.xitem.admin.domain.course.entity.Course;
+import com.xxsword.xitem.admin.domain.course.entity.CourseUser;
 import com.xxsword.xitem.admin.domain.course.vo.CoursePlayVO;
+import com.xxsword.xitem.admin.domain.system.entity.UserInfo;
 import com.xxsword.xitem.admin.service.course.CourseFileService;
 import com.xxsword.xitem.admin.service.course.CourseService;
+import com.xxsword.xitem.admin.service.course.CourseUserService;
 import com.xxsword.xitem.admin.utils.Utils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +29,8 @@ public class PcCourseController extends BaseController {
     @Autowired
     private CourseService courseService;
     @Autowired
+    private CourseUserService courseUserService;
+    @Autowired
     private CourseFileService courseFileService;
 
     @RequestMapping("index")
@@ -41,7 +46,17 @@ public class PcCourseController extends BaseController {
         return "/pc/course/courseindex";
     }
 
-    @RequestMapping("/c/{cid}")
+    @RequestMapping("detail")
+    public String detail(HttpServletRequest request, String cid, Model model) {
+        UserInfo userInfo = Utils.getUserInfo(request);
+        Course course = courseService.getById(cid);
+        CourseUser courseUser = courseUserService.getCourseUser(userInfo.getId(), cid);
+        model.addAttribute("course", course);
+        model.addAttribute("courseUser", courseUser);
+        return "/pc/course/detail";
+    }
+
+    @RequestMapping("c/{cid}")
     public String courseId(HttpServletRequest request, @PathVariable String cid, Model model) {
         Course course = courseService.getById(cid);
         CoursePlayVO coursePlayVO = courseFileService.courseFile(course.getCourseFileId());
