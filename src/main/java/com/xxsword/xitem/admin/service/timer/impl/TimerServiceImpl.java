@@ -73,6 +73,15 @@ public class TimerServiceImpl extends ServiceImpl<TimerMapper, Timer> implements
         return traceService.remove(q);
     }
 
+    @Override
+    public List<Timer> getTimer(String obId, TimerType timerType, String userId) {
+        LambdaQueryWrapper<Timer> q = Wrappers.lambdaQuery();
+        q.eq(Timer::getObId, obId);
+        q.eq(Timer::getObType, timerType.getCode());
+        q.eq(Timer::getUserId, userId);
+        return list(q);
+    }
+
     /**
      * 计算进度
      */
@@ -129,11 +138,8 @@ public class TimerServiceImpl extends ServiceImpl<TimerMapper, Timer> implements
      * 更新进度信息
      */
     private void saveOrUpdateTimer(String userId, String obId, TimerType timerType, Period period) {
-        LambdaQueryWrapper<Timer> q = Wrappers.lambdaQuery();
-        q.eq(Timer::getObId, obId);
-        q.eq(Timer::getObType, timerType.getCode());
-        q.eq(Timer::getUserId, userId);
-        List<Timer> timerList = list(q);
+
+        List<Timer> timerList = getTimer(obId, timerType, userId);
         Timer timer;
         boolean saveFlag = false;
         if (timerList.size() == 1) {// 只有一个，皆大欢喜
@@ -153,10 +159,7 @@ public class TimerServiceImpl extends ServiceImpl<TimerMapper, Timer> implements
              * 2.删除多余信息
              */
             timer = timerList.get(0);
-            Integer total = 0;
-            for (Timer item : timerList) {
-                total += item.getTotalTime();
-            }
+            int total = timerList.stream().mapToInt(Timer::getTotalTime).sum();
             timer.setTotalTime(total);
             List<String> removeTimerIds = new ArrayList<>();
             for (int i = 1; i < timerList.size(); i++) {

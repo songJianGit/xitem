@@ -5,6 +5,7 @@ import com.xxsword.xitem.admin.constant.TimerType;
 import com.xxsword.xitem.admin.domain.system.entity.UserInfo;
 import com.xxsword.xitem.admin.domain.timer.entity.Period;
 import com.xxsword.xitem.admin.model.RestResult;
+import com.xxsword.xitem.admin.service.timer.BusinessService;
 import com.xxsword.xitem.admin.service.timer.TimerService;
 import com.xxsword.xitem.admin.utils.Utils;
 import lombok.extern.slf4j.Slf4j;
@@ -22,6 +23,8 @@ public class TimerController {
 
     @Autowired
     private TimerService timerService;
+    @Autowired
+    private BusinessService businessService;
 
     /**
      * pc计时
@@ -44,7 +47,7 @@ public class TimerController {
 
     private Period traceTime_(String userid, String periodId, Integer resourceType, String resourceId, Device device) {
         Period period = timerService.trace(userid, resourceId, TimerType.getTimerTypeByCode(resourceType), periodId, device);
-//        businessService.business(timing);
+        businessService.business(period);
         return period;
     }
 }

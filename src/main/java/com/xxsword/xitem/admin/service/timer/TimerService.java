@@ -8,6 +8,8 @@ import com.xxsword.xitem.admin.domain.timer.entity.Period;
 import com.xxsword.xitem.admin.domain.timer.entity.Timer;
 import com.xxsword.xitem.admin.domain.timer.entity.Trace;
 
+import java.util.List;
+
 public interface TimerService extends IService<Timer> {
     /**
      * @param userId
@@ -37,4 +39,16 @@ public interface TimerService extends IService<Timer> {
      * @return
      */
     boolean delTrace(String startDate, String endDate);
+
+    /**
+     * 获取 Timer
+     * <p>
+     * 因为没有唯一索引，所以可能有多个
+     *
+     * @param obId
+     * @param timerType
+     * @param userId
+     * @return
+     */
+    List<Timer> getTimer(String obId, TimerType timerType, String userId);
 }
