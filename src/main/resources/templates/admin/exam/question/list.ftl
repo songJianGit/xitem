@@ -21,90 +21,89 @@
 
                 <div class="row">
                     <div class="col-12">
-                        <div class="card">
-
-                            <div class="card-header">
-                                <form class="form-inline" method="post" action="#!" role="form" id="searchform">
-
-                                    <div class="input-group m-r-5">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text">题目描述</span>
-                                        </div>
-                                        <input type="text" class="form-control" name="title"
-                                               placeholder="题目描述">
-                                    </div>
-
-                                    <div class="input-group m-r-5">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text">题目分类</span>
-                                        </div>
-                                        <select class="form-control" name="qcategory">
-                                            <option value="">---请选择---</option>
-                                            <#list qcategoryList as item>
-                                                <option value="${item.id!}">${item.name!}</option>
-                                            </#list>
-                                        </select>
-                                    </div>
-
-                                    <div class="input-group m-r-5">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text">题型</span>
-                                        </div>
-                                        <select class="form-control" name="qtype">
-                                            <#-- 0-是非 1-单选 2-多选-->
-                                            <option value="">---请选择---</option>
-                                            <option value="0">是非</option>
-                                            <option value="1">单选</option>
-                                            <option value="2">多选</option>
-                                        </select>
-
-                                    </div>
-
-                                    <div class="input-group">
-                                        <div class="btn-group">
-                                            <button type="button" id="searchBtn" class="btn btn-primary m-r-5">搜索
-                                            </button>
-                                            <button type="reset" class="btn btn-default">重置</button>
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
-
-                            <div class="card-body">
-                                <div id="custom-toolbar">
-                                    <div class="toolbar-btn-action">
-                                        <button type="button" id="add" class="btn btn-primary">
-                                            新增
-                                        </button>
-                                        <button type="button" id="addQuestionExcel" class="btn btn-primary">
-                                            导入
-                                        </button>
-                                        <button type="button" id="del" class="btn btn-primary">
-                                            删除
-                                        </button>
+                        <div class="row">
+                            <div class="col-4">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <ul id="ztree" class="ztree"></ul>
                                     </div>
                                 </div>
-                                <div class="table-responsive">
-                                    <table id="table-pagination"
-                                           data-toolbar="#custom-toolbar"
-                                           data-toggle="table"
-                                           data-pagination="true"
-                                           data-page-list="[10, 20, 50, 100, 200]"
-                                           data-show-refresh="true"
-                                           data-url="${ctx.contextPath}/admin/question/data"
-                                           data-query-params="pageQueryParams"
-                                           data-side-pagination="server">
-                                        <thead>
-                                        <tr>
-                                            <th data-checkbox="true"></th>
-                                            <th data-field="title">题目标题</th>
-                                            <th data-field="qtype" data-formatter="qtype">题型</th>
-                                            <th data-field="qcategoryName">题目分类</th>
-                                            <th data-field="createDate" data-width="160px">创建时间</th>
-                                            <th data-field="id" data-formatter="caozuo" data-width="70px">操作</th>
-                                        </tr>
-                                        </thead>
-                                    </table>
+                            </div>
+                            <div class="col-8">
+                                <div class="card">
+
+                                    <div class="card-header">
+                                        <form class="form-inline" method="post" action="#!" role="form" id="searchform">
+
+                                            <div class="input-group m-r-5">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text">题目描述</span>
+                                                </div>
+                                                <input type="text" class="form-control" name="title"
+                                                       placeholder="题目描述">
+                                            </div>
+
+                                            <div class="input-group m-r-5">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text">题型</span>
+                                                </div>
+                                                <select class="form-control" name="qtype">
+                                                    <#-- 0-是非 1-单选 2-多选-->
+                                                    <option value="">---请选择---</option>
+                                                    <option value="0">是非</option>
+                                                    <option value="1">单选</option>
+                                                    <option value="2">多选</option>
+                                                </select>
+
+                                            </div>
+
+                                            <div class="input-group">
+                                                <div class="btn-group">
+                                                    <button type="button" id="searchBtn" class="btn btn-primary m-r-5">搜索
+                                                    </button>
+                                                    <button type="reset" class="btn btn-default">重置</button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+
+                                    <div class="card-body">
+                                        <div id="custom-toolbar">
+                                            <div class="toolbar-btn-action">
+                                                <button type="button" id="add" class="btn btn-primary">
+                                                    新增
+                                                </button>
+                                                <button type="button" id="addQuestionExcel" class="btn btn-primary">
+                                                    导入
+                                                </button>
+                                                <button type="button" id="del" class="btn btn-primary">
+                                                    删除
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <div class="table-responsive">
+                                            <table id="table-pagination"
+                                                   data-toolbar="#custom-toolbar"
+                                                   data-toggle="table"
+                                                   data-pagination="true"
+                                                   data-page-list="[10, 20, 50, 100, 200]"
+                                                   data-show-refresh="true"
+                                                   data-url="${ctx.contextPath}/admin/question/data"
+                                                   data-query-params="pageQueryParams"
+                                                   data-side-pagination="server">
+                                                <thead>
+                                                <tr>
+                                                    <th data-checkbox="true"></th>
+                                                    <th data-field="title">题目标题</th>
+                                                    <th data-field="qtype" data-formatter="qtype">题型</th>
+                                                    <th data-field="qcategoryName">题目目录</th>
+                                                    <th data-field="createDate" data-width="160px">创建时间</th>
+                                                    <th data-field="id" data-formatter="caozuo" data-width="70px">操作</th>
+                                                </tr>
+                                                </thead>
+                                            </table>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -177,6 +176,74 @@
 
     function reloadTable() {
         $("#table-pagination").bootstrapTable('refresh');
+    }
+</script>
+<script type="text/javascript">
+    function onClick(event, treeId, treeNode) {
+        let clickTreeId = treeNode.id;
+        searchData(clickTreeId);
+    }
+
+    let zTreeObj;
+    $(function () {
+        loadTree();
+    });
+
+    // 刷新页面上的树和表格
+    function reload() {
+        loadTree();
+        $("#table-pagination").bootstrapTable('refresh');
+    }
+
+    // 加载树
+    function loadTree() {
+        $.ajax({
+            url: "${ctx.contextPath}/admin/category/question/data",
+            cache: false,// 不缓存
+            success: function (d) {
+                let setting = {
+                    data: {
+                        simpleData: {
+                            enable: true// 简单数据
+                        }
+                    },
+                    view: {
+                        selectedMulti: false// 禁止多选
+                    },
+                    edit: {
+                        drag: {
+                            autoExpandTrigger: true,
+                            isCopy: false,//所有操作都是move
+                            isMove: false,
+                            prev: false,
+                            next: false,
+                            inner: false
+                        }
+                    },
+                    callback: {
+                        onClick: onClick
+                    }
+                };
+                zTreeObj = $.fn.zTree.init($("#ztree"), setting, d);
+                showOne();
+            }
+        });
+    }
+
+    // 搜索
+    function searchData(clickTreeId) {
+        if (isBlank(clickTreeId)) {
+            clickTreeId = '';
+        }
+        $("#table-pagination").bootstrapTable('refresh', {
+            url: "${ctx.contextPath}/admin/question/data?qcategory=" + clickTreeId + "&" + $("#searchform").serialize()
+        });
+    }
+
+    // 展开第一级
+    function showOne() {
+        let nodes = zTreeObj.getNodes();
+        zTreeObj.expandNode(nodes[0], true, false, false);
     }
 </script>
 </body>

@@ -23,9 +23,6 @@ public class Constant {
     // 顶级菜单的pid信息
     public static final String FUNCTIONS_TOP = "0";
 
-    // 题目分类的字典type
-    public static final String DICT_TYPE_QCATEGORY = "dictTypeQcategory";
-
     // 最大用户数
     public static final String DICT_ID_MAX_USER_COUNT = "dictidmaxusercount";
 

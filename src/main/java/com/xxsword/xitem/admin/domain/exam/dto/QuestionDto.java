@@ -15,7 +15,6 @@ public class QuestionDto {
     public LambdaQueryWrapper<Question> toQuery() {
         return new LambdaQueryWrapper<Question>().eq(Question::getStatus, 1)
                 .like(StringUtils.isNotBlank(title), Question::getTitle, title)
-                .eq(StringUtils.isNotBlank(qcategory), Question::getQcategory, qcategory)
                 .eq(qtype != null, Question::getQtype, qtype)
                 .orderByDesc(Question::getCreateDate, Question::getId);
     }

@@ -31,15 +31,11 @@
                                         <textarea maxlength="255" class="form-control" name="title">${question.title!}</textarea>
                                     </div>
                                     <div class="form-group col-6">
-                                        <label for="qcategory">题目分类</label>
-                                        <select class="form-control" name="qcategory" id="qcategory">
-                                            <option value="">---请选择---</option>
-                                            <#list qcategoryList as item>
-                                                <option value="${item.id!}"
-                                                        <#if question.qcategory??><#if question.qcategory==item.id>selected</#if></#if>>${item.name!}</option>
-                                            </#list>
-                                        </select>
+                                        <label for="qcategoryName">题目目录</label>
+                                        <input id="qcategoryName" placeholder="点击选择目录" class="form-control" value="${question.qcategoryName!}" readonly/>
+                                        <input id="qcategory" type="hidden" name="qcategory" value="${question.qcategory!}"/>
                                     </div>
+
                                     <div class="form-group col-6">
                                         <label for="qtype">题目类型</label>
                                         <select class="form-control" name="qtype" id="qtype">
@@ -112,7 +108,7 @@
         }
         let qcategory = $("#qcategory").val();
         if (isBlank(qcategory)) {
-            layer.msg("请选择题目分类");
+            layer.msg("请选择题目目录");
             return false;
         }
         optionJson();
@@ -244,6 +240,15 @@
             }
             num++;
         });
+    }
+
+    $("#qcategoryName").click(function (){
+        layer_show("课程目录", '${ctx.contextPath}/admin/category/question/categoryShow');
+    });
+
+    function categoryCallback(data){
+        $("#qcategory").val(data.id);
+        $("#qcategoryName").val(data.title);
     }
 </script>
 </body>

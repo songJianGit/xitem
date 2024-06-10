@@ -21,7 +21,7 @@
             <div class="container-fluid p-t-15">
                 <div class="row">
                     <div class="col-12">
-                        <div class="row mt-sm-4">
+                        <div class="row">
                             <div class="col-4">
                                 <div class="card">
                                     <div class="card-body">
@@ -208,7 +208,7 @@
 
     // 展开第一级
     function showOne() {
-        var nodes = zTreeObj.getNodes();
+        let nodes = zTreeObj.getNodes();
         zTreeObj.expandNode(nodes[0], true, false, false);
     }
 </script>

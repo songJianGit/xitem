@@ -1,13 +1,16 @@
 package com.xxsword.xitem.admin.controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.xxsword.xitem.admin.domain.category.entity.Category;
 import com.xxsword.xitem.admin.domain.course.dto.CourseDto;
 import com.xxsword.xitem.admin.domain.course.entity.Course;
 import com.xxsword.xitem.admin.domain.course.entity.CourseFile;
 import com.xxsword.xitem.admin.domain.system.entity.UserInfo;
 import com.xxsword.xitem.admin.model.RestPaging;
 import com.xxsword.xitem.admin.model.RestResult;
+import com.xxsword.xitem.admin.service.category.CategoryService;
 import com.xxsword.xitem.admin.service.course.CourseFileService;
 import com.xxsword.xitem.admin.service.course.CourseService;
 import com.xxsword.xitem.admin.utils.UpLoadUtil;
@@ -23,6 +26,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Controller
@@ -32,6 +37,8 @@ public class CourseController extends BaseController {
     private CourseService courseService;
     @Autowired
     private CourseFileService courseFileService;
+    @Autowired
+    private CategoryService categoryService;
 
     @RequestMapping("list")
     public String list() {
@@ -41,7 +48,14 @@ public class CourseController extends BaseController {
     @RequestMapping("listData")
     @ResponseBody
     public RestPaging<Course> listData(HttpServletRequest request, CourseDto courseDto, Page<Course> page) {
-        Page<Course> data = courseService.page(page, courseDto.toQuery());
+        LambdaQueryWrapper<Course> query = courseDto.toQuery();
+        if (StringUtils.isNotBlank(courseDto.getCourseCategory())) {
+            List<Category> categoryList = categoryService.categoryC(courseDto.getCourseCategory());
+            List<String> ids = categoryList.stream().map(Category::getId).collect(Collectors.toList());
+            ids.add(courseDto.getCourseCategory());
+            query.in(Course::getCourseCategory, ids);
+        }
+        Page<Course> data = courseService.page(page, query);
         return new RestPaging<>(data.getTotal(), data.getRecords());
     }
 
@@ -54,6 +68,9 @@ public class CourseController extends BaseController {
         if (StringUtils.isNotBlank(course.getCourseFileId())) {
             CourseFile courseFile = courseFileService.getById(course.getCourseFileId());
             model.addAttribute("courseFileName", courseFile.getTitle());
+        }
+        if (StringUtils.isNotBlank(course.getCourseCategory())) {
+            course.setCourseCategoryName(categoryService.getById(course.getCourseCategory()).getTitle());
         }
         model.addAttribute("course", course);
         return "/admin/course/edit";

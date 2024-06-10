@@ -1,5 +1,6 @@
 package com.xxsword.xitem.admin.domain.course.entity;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.gitee.sunchenbin.mybatis.actable.annotation.Column;
 import com.gitee.sunchenbin.mybatis.actable.annotation.ColumnComment;
@@ -21,6 +22,9 @@ public class Course extends BaseEntity implements Serializable {
     @Column(length = 50)
     @ColumnComment("课程分类")
     private String courseCategory;
+
+    @TableField(exist = false)
+    private String courseCategoryName;
 
     @Index
     @Column(length = 100)

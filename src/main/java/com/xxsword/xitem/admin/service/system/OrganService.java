@@ -75,7 +75,7 @@ public interface OrganService extends IService<Organ> {
     /**
      * 更新全部机构的pids
      */
-    void upOrganpids();
+    void upOrganPids();
 
     /**
      * 机构的逻辑删除

@@ -98,7 +98,7 @@ public class OrganServiceImpl extends ServiceImpl<OrganMapper, Organ> implements
     }
 
     @Override
-    public void upOrganpids() {
+    public void upOrganPids() {
         log.info("更新部门pids START");
         LambdaQueryWrapper<Organ> query = Wrappers.lambdaQuery();
         query.eq(Organ::getStatus, 1);

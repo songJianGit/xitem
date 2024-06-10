@@ -115,14 +115,10 @@ public class SystemController extends BaseController {
     /**
      * 用户选择弹框
      *
-     * @param model
      * @return
      */
     @RequestMapping("userShow")
-    public String userShow(String qrid, Model model) {
-        List<Dict> dictList = dictService.listDictByType(Constant.DICT_TYPE_QCATEGORY);
-        model.addAttribute("qcategoryList", dictList);
-        model.addAttribute("qrid", qrid);
+    public String userShow() {
         return "/admin/system/usershow";
     }
 

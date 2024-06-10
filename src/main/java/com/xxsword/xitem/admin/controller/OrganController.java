@@ -137,9 +137,7 @@ public class OrganController extends BaseController {
         organUp.setId(organ.getId());
         organUp.setPids(organService.organPIds(organ.getId()));
         organService.updateById(organUp);// 更新该机构pids
-        RestResult a = RestResult.OK();
-        a.setData(organ);
-        return a;
+        return RestResult.OK();
     }
 
     /**

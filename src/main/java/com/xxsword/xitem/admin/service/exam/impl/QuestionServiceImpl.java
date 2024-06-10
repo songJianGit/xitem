@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.xxsword.xitem.admin.constant.Constant;
+import com.xxsword.xitem.admin.domain.category.entity.Category;
 import com.xxsword.xitem.admin.domain.exam.convert.QuestionConvert;
 import com.xxsword.xitem.admin.domain.exam.convert.QuestionOptionConvert;
 import com.xxsword.xitem.admin.domain.exam.entity.Question;
@@ -17,6 +18,7 @@ import com.xxsword.xitem.admin.domain.system.entity.Dict;
 import com.xxsword.xitem.admin.domain.system.entity.UserInfo;
 import com.xxsword.xitem.admin.mapper.exam.QuestionMapper;
 import com.xxsword.xitem.admin.model.RestResult;
+import com.xxsword.xitem.admin.service.category.CategoryService;
 import com.xxsword.xitem.admin.service.exam.QuestionOptionService;
 import com.xxsword.xitem.admin.service.exam.QuestionService;
 import com.xxsword.xitem.admin.service.system.DictService;
@@ -41,12 +43,14 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
     private DictService dictService;
     @Autowired
     private QuestionOptionService questionOptionService;
+    @Autowired
+    private CategoryService categoryService;
 
     @Override
     public List<Question> setQuestionQCategory(List<Question> list) {
-        Map<String, Dict> mapDict = dictService.mapDictByType(Constant.DICT_TYPE_QCATEGORY);
         for (Question item : list) {
-            item.setQcategoryName(mapDict.get(item.getQcategory()).getName());
+            Category category = categoryService.getById(item.getQcategory());
+            item.setQcategoryName(category == null ? "" : category.getTitle());
         }
         return list;
     }
@@ -65,12 +69,12 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
                 continue;
             }
             String qcategory = ExcelUtils.getString(row.getCell(0));// 问题分类(字典)
-            Dict dict = dictService.getOne(new LambdaQueryWrapper<Dict>().eq(Dict::getType, Constant.DICT_TYPE_QCATEGORY).eq(Dict::getName, qcategory));
+            List<Category> categoryList = categoryService.list(new LambdaQueryWrapper<Category>().eq(Category::getTitle, qcategory).eq(Category::getStatus, 1));
             String qtype = ExcelUtils.getString(row.getCell(1));// 问题类型（0-是非 1-单选 2-多选）
             String qtitle = ExcelUtils.getString(row.getCell(2));// 问题描述
             String qoption = ExcelUtils.getString(row.getCell(3));// 问题选项
             String qanswer = ExcelUtils.getString(row.getCell(4));// 正确答案
-            if (dict == null) {
+            if (categoryList.isEmpty()) {
                 listError.add("第" + (rowNum + 1) + "行，题目分类异常");
             }
             if (StringUtils.isBlank(qcategory)) {
@@ -115,7 +119,7 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
                 }
                 QuestionExcelVO questionExcelVO = new QuestionExcelVO();
                 questionExcelVO.setTitle(qtitle);
-                questionExcelVO.setQcategory(dict.getId());
+                questionExcelVO.setQcategory(categoryList.get(0).getId());
                 questionExcelVO.setQtype(qtypeInfo);
                 questionExcelVO.setQoption(qoption);
                 questionExcelVO.setQanswer(qanswer);

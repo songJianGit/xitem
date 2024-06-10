@@ -32,6 +32,12 @@
                                         <input id="title" maxlength="100" class="form-control" name="title" value="${course.title!}" required/>
                                     </div>
 
+                                    <div class="form-group col-6">
+                                        <label for="courseCategoryName">课程目录</label>
+                                        <input id="courseCategoryName" placeholder="点击选择目录" class="form-control" value="${course.courseCategoryName!}" readonly/>
+                                        <input id="courseCategory" type="hidden" name="courseCategory" value="${course.courseCategory!}"/>
+                                    </div>
+
                                     <div class="form-group col-12">
                                         <label>课程封面</label>
                                         <input type="file" class="form-control-file" name="fileinfo"/>
@@ -85,6 +91,15 @@
     function courseFileCallback(data){
         $("#courseFileId").val(data.id);
         $("#courseFileName").val(data.title);
+    }
+
+    $("#courseCategoryName").click(function (){
+        layer_show("课程目录", '${ctx.contextPath}/admin/category/course/categoryShow');
+    });
+
+    function categoryCallback(data){
+        $("#courseCategory").val(data.id);
+        $("#courseCategoryName").val(data.title);
     }
 </script>
 </body>

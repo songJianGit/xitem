@@ -1,13 +1,14 @@
 package com.xxsword.xitem.admin.controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.xxsword.xitem.admin.constant.Constant;
+import com.xxsword.xitem.admin.domain.category.entity.Category;
 import com.xxsword.xitem.admin.domain.exam.dto.QuestionDto;
 import com.xxsword.xitem.admin.domain.exam.entity.Question;
-import com.xxsword.xitem.admin.domain.system.entity.Dict;
 import com.xxsword.xitem.admin.domain.system.entity.UserInfo;
 import com.xxsword.xitem.admin.model.RestPaging;
 import com.xxsword.xitem.admin.model.RestResult;
+import com.xxsword.xitem.admin.service.category.CategoryService;
 import com.xxsword.xitem.admin.service.exam.QuestionOptionService;
 import com.xxsword.xitem.admin.service.exam.QuestionService;
 import com.xxsword.xitem.admin.service.system.DictService;
@@ -26,6 +27,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 @Slf4j
@@ -37,18 +39,25 @@ public class QuestionController {
     private DictService dictService;
     @Autowired
     private QuestionOptionService questionOptionService;
+    @Autowired
+    private CategoryService categoryService;
 
     @RequestMapping("list")
     public String list(Model model) {
-        List<Dict> dictList = dictService.listDictByType(Constant.DICT_TYPE_QCATEGORY);
-        model.addAttribute("qcategoryList", dictList);
         return "/admin/exam/question/list";
     }
 
     @RequestMapping("data")
     @ResponseBody
     public RestPaging<Question> data(HttpServletRequest request, Page page, QuestionDto questionDto) {
-        Page<Question> data = questionService.page(page, questionDto.toQuery());
+        LambdaQueryWrapper<Question> query = questionDto.toQuery();
+        if (com.baomidou.mybatisplus.core.toolkit.StringUtils.isNotBlank(questionDto.getQcategory())) {
+            List<Category> categoryList = categoryService.categoryC(questionDto.getQcategory());
+            List<String> ids = categoryList.stream().map(Category::getId).collect(Collectors.toList());
+            ids.add(questionDto.getQcategory());
+            query.in(Question::getQcategory, ids);
+        }
+        Page<Question> data = questionService.page(page, query);
         questionService.setQuestionQCategory(data.getRecords());
         return new RestPaging<>(data.getTotal(), data.getRecords());
     }
@@ -61,8 +70,6 @@ public class QuestionController {
      */
     @RequestMapping("listQuestion")
     public String listQuestion(String qrid, Model model) {
-        List<Dict> dictList = dictService.listDictByType(Constant.DICT_TYPE_QCATEGORY);
-        model.addAttribute("qcategoryList", dictList);
         model.addAttribute("qrid", qrid);
         return "/admin/exam/question/listquestion";
     }
@@ -73,9 +80,10 @@ public class QuestionController {
         if (StringUtils.isNotBlank(id)) {
             question = questionService.getById(id);
         }
-        List<Dict> dictList = dictService.listDictByType(Constant.DICT_TYPE_QCATEGORY);
+        if(StringUtils.isNotBlank(question.getQcategory())){
+            question.setQcategoryName(categoryService.getById(question.getQcategory()).getTitle());
+        }
         model.addAttribute("question", question);
-        model.addAttribute("qcategoryList", dictList);
         model.addAttribute("questionOption", questionOptionService.questionOptionListByQid(question.getId()));
         return "/admin/exam/question/edit";
     }

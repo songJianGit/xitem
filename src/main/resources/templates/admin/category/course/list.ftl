@@ -1,24 +1,22 @@
 <!DOCTYPE html>
 <html lang="zh">
 <head>
-    <#include "../commons/head.ftl"/>
+    <#include "../../commons/head.ftl"/>
 </head>
 <body>
 <div class="lyear-layout-web">
     <div class="lyear-layout-container">
         <!--左侧导航-->
-        <#include "../commons/aside.ftl"/>
+        <#include "../../commons/aside.ftl"/>
         <!--End 左侧导航-->
 
         <!--头部信息-->
-        <#include "../commons/header.ftl"/>
+        <#include "../../commons/header.ftl"/>
         <!--End 头部信息-->
 
         <!--页面主要内容-->
         <main class="lyear-layout-content">
-
             <div class="container-fluid p-t-15">
-
                 <div class="row">
                     <div class="col-12">
                         <div class="row">
@@ -32,31 +30,19 @@
                             <div class="col-8">
                                 <div class="card">
                                     <div class="card-header">
-                                        <form class="form-inline" method="post" action="#!" role="form" id="searchform">
-
+                                        <form class="form-inline" method="post" id="searchform" action="#!" role="form">
                                             <div class="input-group m-r-5">
                                                 <div class="input-group-prepend">
-                                                    <span class="input-group-text">课程标题</span>
+                                                    <span class="input-group-text">分类名称</span>
                                                 </div>
                                                 <input type="text" class="form-control" name="title"
-                                                       placeholder="课程标题">
-                                            </div>
-
-                                            <div class="input-group m-r-5">
-                                                <div class="input-group-prepend">
-                                                    <span class="input-group-text">发布状态</span>
-                                                </div>
-                                                <select class="form-control" name="releaseStatus">
-                                                    <option value="">---发布状态---</option>
-                                                    <option value="0">未发布</option>
-                                                    <option value="1">已发布</option>
-                                                    <option value="2">已下架</option>
-                                                </select>
+                                                       placeholder="分类名称">
                                             </div>
 
                                             <div class="input-group">
                                                 <div class="btn-group">
-                                                    <button type="button" id="searchBtn" class="btn btn-primary m-r-5">搜索
+                                                    <button type="button" id="searchBtn" class="btn btn-primary m-r-5">
+                                                        搜索
                                                     </button>
                                                     <button type="reset" class="btn btn-default">重置</button>
                                                 </div>
@@ -64,14 +50,12 @@
                                         </form>
                                     </div>
                                     <div class="card-body">
+                                        <h4 class="card-title">分类列表</h4>
                                         <div id="custom-toolbar">
                                             <div class="toolbar-btn-action">
-                                                <a id="add" class="btn btn-primary">
-                                                    新增
-                                                </a>
-                                                <a id="del" class="btn btn-primary">
-                                                    删除
-                                                </a>
+                                                <button type="button" id="add" class="btn btn-primary">
+                                                    分类新增
+                                                </button>
                                             </div>
                                         </div>
                                         <div class="table-responsive">
@@ -81,18 +65,13 @@
                                                    data-pagination="true"
                                                    data-page-list="[10, 20, 50, 100, 200]"
                                                    data-show-refresh="true"
-                                                   data-url="${ctx.contextPath}/admin/course/listData"
+                                                   data-url="${ctx.contextPath}/admin/category/course/pageById"
                                                    data-query-params="pageQueryParams"
                                                    data-side-pagination="server">
                                                 <thead>
                                                 <tr>
-                                                    <th data-checkbox="true"></th>
-                                                    <th data-field="title">课程标题</th>
-                                                    <th data-field="learnTime" data-formatter="learnTime">课程时长</th>
-                                                    <th data-field="createDate" data-width="160px">创建时间</th>
-                                                    <th data-field="releaseStatus" data-formatter="releaseStatus">
-                                                        发布状态
-                                                    </th>
+                                                    <th data-field="title">标题</th>
+                                                    <th data-field="createDate">创建时间</th>
                                                     <th data-field="id" data-formatter="caozuo">操作</th>
                                                 </tr>
                                                 </thead>
@@ -106,28 +85,15 @@
                 </div>
             </div>
         </main>
-        <!--End 页面主要内容-->
     </div>
 </div>
-<#include "../commons/js.ftl"/>
+<#include "../../commons/js.ftl"/>
 <script type="text/javascript">
-    function learnTime(value, row) {
-        return value + '&nbsp;分钟'
-    }
-
     function caozuo(value, row) {
         let htm = '';
         htm += '<div class="btn-group">';
-
-        if (row.releaseStatus == 0 || row.releaseStatus == 2) {
-            htm += '<button type="button" class="btn btn-sm btn-default m-r-5" onclick="release(\'' + value + '\')">发布</button>';
-        }
-        if (row.releaseStatus == 1) {
-            htm += '<button type="button" class="btn btn-sm btn-default m-r-5" onclick="release(\'' + value + '\')">下架</button>';
-        }
-
-        htm += '<a class="btn btn-sm btn-default m-r-5" href="${ctx.contextPath}/admin/course/edit?id=' + value + '" title="编辑">编辑</a>';
-        htm += '<a class="btn btn-sm btn-default m-r-5" href="${ctx.contextPath}/pc/course/c/' + value + '" title="播放">播放</a>';
+        htm += '<button type="button" class="btn btn-sm btn-default m-r-5" onclick="edit(' + "\'" + row.id + "\'" + ')">编辑</button>';
+        htm += '<button type="button" class="btn btn-sm btn-default" onclick="del(' + "\'" + row.id + "\'" + ')">删除</button>';
         htm += '<button type="button" class="btn btn-sm btn-default" title="拖动排序" draggable="true" ondragstart="dragStart(event,\'' + value + '\')" ondrop="drop(event,\'' + value + '\')" ondragover="allowDrop(event)">';
         htm += '<span class="mdi mdi-cursor-move"></span>';
         htm += '</button>';
@@ -148,14 +114,14 @@
         let objId = event.dataTransfer.getData("objId");
         // console.log(objId + "放到了" + id)
         $.ajax({
-            url: "${ctx.contextPath}/admin/course/courseSeq",
+            url: "${ctx.contextPath}/admin/category/course/seq",
             data: {
                 id1: objId,
                 id2: id
             },
             success: function (data) {
                 if (data.result) {
-                    $("#table-pagination").bootstrapTable('refresh');
+                    reload();
                 } else {
                     alert(data.msg);
                 }
@@ -164,62 +130,49 @@
     }
 
     $('#add').click(function () {
-        window.location.href = '${ctx.contextPath}/admin/course/edit';
+        layer_show('新增', "${ctx.contextPath}/admin/category/course/categoryEdit");
     });
 
-    $('#del').click(function () {
-        if (getSelectionIds() != false) {
-            $.confirm({
-                title: '提示',
-                content: '是否删除？',
-                buttons: {
-                    confirm: {
-                        text: '确认',
-                        action: function () {
-                            $.ajax({
-                                url: "${ctx.contextPath}/admin/course/del",
-                                data: {
-                                    ids: getSelectionIds().join(',')
-                                },
-                                success: function (data) {
-                                    if (data.result) {
-                                        $("#table-pagination").bootstrapTable('refresh');
-                                    } else {
-                                        alert(data.msg);
-                                    }
+    $("#searchBtn").click(function () {
+        searchData();
+    });
+
+    function edit(id) {
+        layer_show('编辑', "${ctx.contextPath}/admin/category/course/categoryEdit?id=" + id);
+    }
+
+    function del(id) {
+        $.alert({
+            title: '请确认',
+            content: '确定删除本分类和其下级所有分类?',
+            buttons: {
+                confirm: {
+                    text: '确认',
+                    action: function () {
+                        $.ajax({
+                            url: "${ctx.contextPath}/admin/category/course/delCategory",
+                            data: {
+                                'categoryIds': id
+                            },
+                            cache: false,// 不缓存
+                            success: function (data) {
+                                if (data.result) {
+                                    reload();
+                                } else {
+                                    layer.msg(data.msg)
                                 }
-                            });
-                        }
-                    },
-                    cancel: {
-                        text: '取消',
-                        action: function () {
-                        }
+                            }
+                        });
                     }
-                }
-            });
-        }
-    });
-
-    function release(id) {
-        $.ajax({
-            url: "${ctx.contextPath}/admin/course/release?id=" + id,
-            success: function (data) {
-                if (data.result) {
-                    layer.msg(data.msg);
-                    $("#table-pagination").bootstrapTable('refresh');
-                } else {
-                    alert(data.msg);
+                },
+                cancel: {
+                    text: '取消',
+                    action: function () {
+                    }
                 }
             }
         });
     }
-
-    $('#searchBtn').click(function () {
-        $("#table-pagination").bootstrapTable('refresh', {
-            url: "${ctx.contextPath}/admin/course/listData?" + $("#searchform").serialize()
-        });
-    });
 </script>
 <script type="text/javascript">
     function onClick(event, treeId, treeNode) {
@@ -273,13 +226,13 @@
         });
     }
 
-    // 搜索
+    // 分类搜索
     function searchData(clickTreeId) {
         if (isBlank(clickTreeId)) {
             clickTreeId = '';
         }
         $("#table-pagination").bootstrapTable('refresh', {
-            url: "${ctx.contextPath}/admin/course/listData?courseCategory=" + clickTreeId + "&" + $("#searchform").serialize()
+            url: "${ctx.contextPath}/admin/category/course/pageById?pid=" + clickTreeId + "&" + $("#searchform").serialize()
         });
     }
 

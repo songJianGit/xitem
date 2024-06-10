@@ -110,7 +110,7 @@
     }
 
     $("#addQuestion").click(function () {
-        layer_show("题目", "${ctx.contextPath}/admin/question/listQuestion?qrid=${questionRule.id}");
+        layer_show("题目", "${ctx.contextPath}/admin/question/listQuestion?qrid=${questionRule.id}","95%");
     });
 
     let index_;

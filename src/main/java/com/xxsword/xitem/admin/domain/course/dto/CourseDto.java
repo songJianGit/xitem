@@ -9,6 +9,7 @@ import lombok.Data;
 public class CourseDto {
     private String title;
     private Integer releaseStatus;// 发布状态
+    private String courseCategory;
 
     public LambdaQueryWrapper<Course> toQuery() {
         return new LambdaQueryWrapper<Course>()
