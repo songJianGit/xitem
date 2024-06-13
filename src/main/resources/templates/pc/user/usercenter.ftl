@@ -12,6 +12,7 @@
             <li class="list-group-item">个人信息</li>
             <li class="list-group-item"><a href="${ctx.contextPath}/pc/user/userCourse">课程纪录</a></li>
             <li class="list-group-item"><a href="${ctx.contextPath}/pc/user/userExam">考试纪录</a></li>
+            <li class="list-group-item"><a href="${ctx.contextPath}/pc/user/userWorkOrder">问题反馈</a></li>
         </ul>
     </div>
 </div>

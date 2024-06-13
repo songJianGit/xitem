@@ -11,7 +11,7 @@
             </div>
             <div class="pc-header-login-item"><a href="${ctx.contextPath}/pc/outLogin">退出</a></div>
         <#else>
-            <div class="pc-header-login-item"><a href="${ctx.contextPath}/pclogin">登录</a></div>
+            <div class="pc-header-login-item"><a href="${ctx.contextPath}/login">登录</a></div>
         </#if>
     </div>
 </div>

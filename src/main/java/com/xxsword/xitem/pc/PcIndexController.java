@@ -17,7 +17,7 @@ public class PcIndexController extends BaseController {
     public String pclogin(HttpServletRequest request) {
         request.getSession().invalidate();// 销毁老的
         request.getSession();// 创建新的
-        return "redirect:/pclogin";
+        return "redirect:/login";
     }
 
 }

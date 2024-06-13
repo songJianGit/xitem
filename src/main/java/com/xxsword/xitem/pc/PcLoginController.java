@@ -1,7 +1,5 @@
 package com.xxsword.xitem.pc;
 
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.xxsword.xitem.admin.controller.BaseController;
 import com.xxsword.xitem.admin.domain.banner.dto.BannerDto;
 import com.xxsword.xitem.admin.domain.banner.entity.Banner;
@@ -22,8 +20,14 @@ public class PcLoginController extends BaseController {
     @Autowired
     private BannerService bannerService;
 
-    @GetMapping("pclogin")
+    @GetMapping("login")
     public String pclogin(HttpServletRequest request) {
+        request.getSession();
+        return "/pc/pclogin";
+    }
+
+    @GetMapping
+    public String login(HttpServletRequest request) {
         request.getSession();
         return "/pc/pclogin";
     }

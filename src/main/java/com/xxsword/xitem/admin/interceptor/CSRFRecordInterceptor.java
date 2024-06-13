@@ -12,7 +12,7 @@ import java.net.URL;
 @Component
 public class CSRFRecordInterceptor implements HandlerInterceptor {
     private static final String[] REFERER_DOMAIN = new String[]{"ssword.cn"};// 域名白名单
-    private static final String[] URL_SAFE = new String[]{"pclogin"};// 链接白名单
+    private static final String[] URL_SAFE = new String[]{"login"};// 链接白名单
     private static final Boolean CHECK = true;// 是否开启referer校验
 
     @Override

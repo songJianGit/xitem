@@ -22,7 +22,7 @@ public class PcLoginInterceptor implements HandlerInterceptor {
 
     private boolean back(HttpServletRequest request, HttpServletResponse response) {
         try {
-            response.sendRedirect(request.getContextPath() + "/pclogin");
+            response.sendRedirect(request.getContextPath() + "/login");
         } catch (IOException e) {
             e.printStackTrace();
         }

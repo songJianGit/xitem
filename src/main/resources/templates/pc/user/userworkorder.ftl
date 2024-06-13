@@ -1,13 +1,15 @@
 <!DOCTYPE html>
 <html lang="zh">
 <head>
-    <title>考试纪录</title>
+    <title>反馈纪录</title>
     <#include "../commons/head.ftl"/>
 </head>
 <body>
 <div class="pc-main">
     <#include "../commons/header.ftl"/>
-    <div class="pc-body data-list">
+    <div class="pc-body">
+        <a class="btn btn-outline-secondary mb-2" href="#!">新增反馈</a>
+        <div class="data-list"></div>
         <div id="nodata">暂无数据</div>
     </div>
     <div style="width: 100%;text-align: center">
@@ -29,7 +31,7 @@
 
     function loadData(pageNum) {
         $.ajax({
-            url: '${ctx.contextPath}/pc/user/userCourseData',
+            url: '${ctx.contextPath}/pc/user/userWorkOrderData',
             data: {
                 pageNum: pageNum,
                 pageSize: pageSize2024
@@ -69,7 +71,7 @@
         htm += '<div class="card-body">';
         htm += '<div>' + item.title + '</div>';
         htm += '</div>';
-        htm += '<div class="card-footer"><a href="${ctx.contextPath}/pc/course/detail?cid=' + item.id + '">查看</a></div>';
+        htm += '<div class="card-footer"><a href="${ctx.contextPath}/?cid=' + item.id + '">查看</a></div>';
         htm += '</div>';
         return htm;
     }

@@ -7,7 +7,7 @@
 <body>
 <div class="pc-main">
     <#include "../commons/header.ftl"/>
-    <div class="pc-body exam-list">
+    <div class="pc-body data-list">
         <div id="nodata">暂无数据</div>
     </div>
     <div style="width: 100%;text-align: center">
@@ -43,7 +43,7 @@
                         for (let i = 0; i < datas.length; i++) {
                             htm += getHtm(datas[i]);
                         }
-                        $(".exam-list").append(htm)
+                        $(".data-list").append(htm)
                         if (datas.length < pageSize2024) {
                             if (pageNum2024 > 1) {
                                 layer.msg("已全部加载")
