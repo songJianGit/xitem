@@ -71,7 +71,7 @@
         htm += '<div class="card-body">';
         htm += '<div>' + item.title + '</div>';
         htm += '</div>';
-        htm += '<div class="card-footer"><a href="${ctx.contextPath}/?cid=' + item.id + '">查看</a></div>';
+        htm += '<div class="card-footer"><a href="${ctx.contextPath}/pc/workorder/edit?id=' + item.id + '">查看</a></div>';
         htm += '</div>';
         return htm;
     }

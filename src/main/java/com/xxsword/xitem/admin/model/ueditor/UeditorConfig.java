@@ -1,5 +1,4 @@
 package com.xxsword.xitem.admin.model.ueditor;
-import org.springframework.boot.autoconfigure.domain.EntityScan;
 
 /**
  *

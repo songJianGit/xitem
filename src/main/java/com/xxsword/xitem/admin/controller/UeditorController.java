@@ -11,8 +11,8 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@Controller
 @Slf4j
+@Controller
 @RequestMapping("admin/ueditor")
 public class UeditorController extends BaseController {
 
@@ -24,16 +24,11 @@ public class UeditorController extends BaseController {
             case ActionMap.CONFIG:
                 return UeUtil.getUEditorConfig(response);
             case ActionMap.UPLOAD_IMAGE:
-            case ActionMap.UPLOAD_SCRAWL:
             case ActionMap.UPLOAD_VIDEO:
             case ActionMap.UPLOAD_FILE:
                 return UeUtil.uploadFile(upfile, request);
-            case ActionMap.CATCH_IMAGE:
-                log.info("捕获");// TODO 保存捕获的图
-                break;
-            case ActionMap.LIST_IMAGE:
-            case ActionMap.LIST_FILE:
-                log.info("多文件");// TODO 保存多文件
+            default:
+                log.info("未实现：{}", actionCode);
                 break;
         }
         return "请求失败";
