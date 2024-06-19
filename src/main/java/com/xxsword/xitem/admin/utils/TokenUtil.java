@@ -5,8 +5,8 @@ import org.joda.time.DateTime;
 
 /**
  * token工具类
- * pubToken：公token
- * privateToken：私token
+ * pubToken：公token（一般用作登录token，格式为：privateToken,userId）
+ * privateToken：私token（加密后的用户信息）
  */
 public class TokenUtil {
 

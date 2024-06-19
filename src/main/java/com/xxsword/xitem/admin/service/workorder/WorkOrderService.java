@@ -11,7 +11,7 @@ public interface WorkOrderService extends IService<WorkOrder> {
     /**
      * 刷新菜单最后更新人和最后更新时间
      */
-    void upLastInfo(UserInfo doUserInfo, String dictIds);
+    void upLastInfo(UserInfo doUserInfo, String ids);
 
 
 }

@@ -22,7 +22,6 @@
                 <input type="hidden" name="content" id="content"/>
             </div>
             <button type="submit" class="btn btn-primary">提交</button>
-            <button type="button" class="btn btn-primary" onclick="showTxt1()">获取</button>
         </form>
     </div>
 </div>

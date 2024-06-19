@@ -14,10 +14,10 @@ import java.util.List;
 public class WorkOrderServiceImpl extends ServiceImpl<WorkOrderMapper, WorkOrder> implements WorkOrderService {
 
     @Override
-    public void delByIds(String dictIds) {
-        String[] ids = dictIds.split(",");
+    public void delByIds(String ids) {
+        String[] idsa = ids.split(",");
         List<WorkOrder> workOrderUps = new ArrayList<>();
-        for (String id : ids) {
+        for (String id : idsa) {
             WorkOrder workOrderUp = new WorkOrder();
             workOrderUp.setId(id);
             workOrderUp.setStatus(0);
@@ -27,10 +27,10 @@ public class WorkOrderServiceImpl extends ServiceImpl<WorkOrderMapper, WorkOrder
     }
 
     @Override
-    public void upLastInfo(UserInfo doUserInfo, String dictIds) {
-        String[] ids = dictIds.split(",");
+    public void upLastInfo(UserInfo doUserInfo, String ids) {
+        String[] idsa = ids.split(",");
         List<WorkOrder> listUp = new ArrayList<>();
-        for (String id : ids) {
+        for (String id : idsa) {
             WorkOrder workOrderUp = new WorkOrder();
             workOrderUp.setId(id);
             workOrderUp.setBaseInfo(doUserInfo);
