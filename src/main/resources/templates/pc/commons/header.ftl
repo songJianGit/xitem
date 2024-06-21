@@ -6,10 +6,16 @@
     </div>
     <div class="pc-header-login">
         <#if Session.puser??>
-            <div class="pc-header-login-item">
-                <a class="pc-header-login-username" href="${ctx.contextPath}/pc/user/userCenter">${Session.puser.nickName!}</a>
+            <div class="btn-group dropleft" style="padding: 5px;background-color: #4d5259;margin-right: 7px">
+                <button class="btn btn-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false" style="background-color: #4d5259;border: 0;box-shadow:none">
+                    ${Session.puser.nickName!}
+                </button>
+                <div class="dropdown-menu">
+                    <a class="dropdown-item" href="${ctx.contextPath}/pc/user/userCenter">个人中心</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="${ctx.contextPath}/pc/outLogin">退出</a>
+                </div>
             </div>
-            <div class="pc-header-login-item"><a href="${ctx.contextPath}/pc/outLogin">退出</a></div>
         <#else>
             <div class="pc-header-login-item"><a href="${ctx.contextPath}/login">登录</a></div>
         </#if>

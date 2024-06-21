@@ -84,6 +84,7 @@ public class BusinessServiceImpl implements BusinessService {
             pre = 100d;
         }
         userCourse.setTotal(tr.getTotalTime());
+        userCourse.setLastUserId(period.getUserId());
         userCourse.setLastUpdate(DateUtil.now());
         if (userCourse.getPrecent() != 100 && (int) pre == 100) {
             userCourse.setCompleteTime(DateUtil.now());

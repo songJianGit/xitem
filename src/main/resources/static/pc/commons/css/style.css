@@ -51,14 +51,14 @@
     justify-content: space-around;
 }
 
-.pc-header-login-username {
-    display: block;
-    padding-right: 0;
-    max-width: 80px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
+/*.pc-header-login-username {*/
+/*    display: block;*/
+/*    padding-right: 0;*/
+/*    max-width: 90px;*/
+/*    white-space: nowrap;*/
+/*    overflow: hidden;*/
+/*    text-overflow: ellipsis;*/
+/*}*/
 
 .pc-header-login-item {
     padding: 13px;

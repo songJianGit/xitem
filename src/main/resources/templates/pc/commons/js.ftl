@@ -1,4 +1,5 @@
 <script type="text/javascript" src="${ctx.contextPath}/static/plugins/admin-template/js/jquery.min.js"></script>
+<script type="text/javascript" src="${ctx.contextPath}/static/plugins/popper/popper.min.js"></script>
 <script type="text/javascript" src="${ctx.contextPath}/static/plugins/admin-template/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="${ctx.contextPath}/static/plugins/layer-3.5.1/layer.js"></script>
 <script type="text/javascript" src="${ctx.contextPath}/static/plugins/bootstrap-paginator/js/bootstrap-paginator.js"></script>
