@@ -38,10 +38,9 @@
                                             <span class="input-group-text">状态</span>
                                         </div>
                                         <select class="form-control" name="workStatus">
-                                            <option value="">---状态---</option>
-                                            <option value="0">初始</option>
-                                            <option value="1">处理中</option>
-                                            <option value="2">完结</option>
+                                            <option value="">全部</option>
+                                            <option value="0">未关闭</option>
+                                            <option value="1">已关闭</option>
                                         </select>
                                     </div>
 
@@ -55,19 +54,8 @@
                                 </form>
                             </div>
                             <div class="card-body">
-                                <div id="custom-toolbar">
-                                    <div class="toolbar-btn-action">
-                                        <a id="add" class="btn btn-primary">
-                                            新增
-                                        </a>
-                                        <a id="del" class="btn btn-primary">
-                                            删除
-                                        </a>
-                                    </div>
-                                </div>
                                 <div class="table-responsive">
                                     <table id="table-pagination"
-                                           data-toolbar="#custom-toolbar"
                                            data-toggle="table"
                                            data-pagination="true"
                                            data-page-list="[10, 20, 50, 100, 200]"
@@ -101,48 +89,56 @@
     function caozuo(value, row) {
         let htm = '';
         htm += '<div class="btn-group">';
-        htm += '<a class="btn btn-sm btn-default m-r-5" href="${ctx.contextPath}/admin/workorder/edit?id=' + value + '" title="编辑">编辑</a>';
+        htm += '<a class="btn btn-sm btn-primary m-r-5" href="${ctx.contextPath}/admin/workorder/show?id=' + value + '" title="查看">查看</a>';
+        if (row.workStatus == 0) {
+            htm += '<button type="button" class="btn btn-sm btn-default m-r-5" onclick="closeWorkOrder(\'' + value + '\')">关闭</button>';
+        }
         htm += '</div>';
         return htm;
     }
 
-    $('#add').click(function () {
-        window.location.href = '${ctx.contextPath}/admin/workorder/edit';
-    });
+    function workStatus(value, row) {
+        if (value == 0) {
+            return '未关闭';
+        }
+        if (value == 1) {
+            return '已关闭';
+        }
+        return value;
+    }
 
-    $('#del').click(function () {
-        if (getSelectionIds() != false) {
-            $.confirm({
-                title: '提示',
-                content: '是否删除？',
-                buttons: {
-                    confirm: {
-                        text: '确认',
-                        action: function () {
-                            $.ajax({
-                                url: "${ctx.contextPath}/admin/workorder/del",
-                                data: {
-                                    ids: getSelectionIds().join(',')
-                                },
-                                success: function (data) {
-                                    if (data.result) {
-                                        $("#table-pagination").bootstrapTable('refresh');
-                                    } else {
-                                        alert(data.msg);
-                                    }
+    function closeWorkOrder(id) {
+        $.confirm({
+            title: '提示',
+            content: '是否关闭？',
+            buttons: {
+                confirm: {
+                    text: '确认',
+                    action: function () {
+                        $.ajax({
+                            url: "${ctx.contextPath}/admin/workorder/closeWorkOrder",
+                            data: {
+                                id: id
+                            },
+                            success: function (data) {
+                                if (data.result) {
+                                    layer.msg(data.msg);
+                                    $("#table-pagination").bootstrapTable('refresh');
+                                } else {
+                                    alert(data.msg);
                                 }
-                            });
-                        }
-                    },
-                    cancel: {
-                        text: '取消',
-                        action: function () {
-                        }
+                            }
+                        });
+                    }
+                },
+                cancel: {
+                    text: '取消',
+                    action: function () {
                     }
                 }
-            });
-        }
-    });
+            }
+        });
+    }
 
     $('#searchBtn').click(function () {
         $("#table-pagination").bootstrapTable('refresh', {

@@ -3,7 +3,6 @@ package com.xxsword.xitem.admin.domain.workorder.entity;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.gitee.sunchenbin.mybatis.actable.annotation.*;
 import com.gitee.sunchenbin.mybatis.actable.constants.MySqlEngineConstant;
-import com.gitee.sunchenbin.mybatis.actable.constants.MySqlTypeConstant;
 import com.xxsword.xitem.admin.domain.system.entity.BaseEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -19,15 +18,11 @@ public class WorkOrder extends BaseEntity implements Serializable {
 
     private static final long serialVersionUID = 700L;
 
-    @Column
+    @Column(length = 100)
     @ColumnComment("工单标题")
     private String title;
 
-    @Column(type = MySqlTypeConstant.TEXT)
-    @ColumnComment("工单内容")
-    private String content;
-
     @Column
-    @ColumnComment("工单状态(0-初始 1-处理中 2-完结)")
+    @ColumnComment("工单状态(0-未关闭 1-已关闭)")
     private Integer workStatus;
 }

@@ -8,7 +8,7 @@
 <div class="pc-main">
     <#include "../commons/header.ftl"/>
     <div class="pc-body">
-        <a class="btn btn-outline-secondary mb-2" href="#!">新增反馈</a>
+        <a class="btn btn-outline-secondary mb-2" href="${ctx.contextPath}/pc/workorder/edit">新的反馈</a>
         <div class="data-list"></div>
         <div id="nodata">暂无数据</div>
     </div>
@@ -71,7 +71,7 @@
         htm += '<div class="card-body">';
         htm += '<div>' + item.title + '</div>';
         htm += '</div>';
-        htm += '<div class="card-footer"><a href="${ctx.contextPath}/pc/workorder/edit?id=' + item.id + '">查看</a></div>';
+        htm += '<div class="card-footer"><a href="${ctx.contextPath}/pc/workorder/show?id=' + item.id + '">查看</a></div>';
         htm += '</div>';
         return htm;
     }

@@ -5,7 +5,7 @@
     <link href="${ctx.contextPath}/static/pc/commons/css/style.css" rel="stylesheet">
 </head>
 <body style="margin: 0">
-<script id="editor" type="text/plain" style="width:99.9%;height:300px;">${content!}</script>
+<script id="editor" type="text/plain" style="width:99.9%;height:379px;"></script>
 <#include "../commons/js.ftl"/>
 <script type="text/javascript">
     let ue = UE.getEditor('editor');

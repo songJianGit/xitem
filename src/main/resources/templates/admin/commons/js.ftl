@@ -13,6 +13,9 @@
 <script type="text/javascript"
         src="${ctx.contextPath}/static/plugins/admin-template/js/bootstrap-table/locale/bootstrap-table-zh-CN.min.js"></script>
 <script type="text/javascript" src="${ctx.contextPath}/static/plugins/ztree-v3/js/jquery.ztree.all.js"></script>
+<script type="text/javascript" src="${ctx.contextPath}/static/plugins/ueditor-1.4.3.3/ueditor.config.xitem.js"></script>
+<script type="text/javascript" src="${ctx.contextPath}/static/plugins/ueditor-1.4.3.3/ueditor.all.min.js"></script>
+<script type="text/javascript" charset="utf-8" src="${ctx.contextPath}/static/plugins/ueditor-1.4.3.3/lang/zh-cn/zh-cn.js"></script>
 <script type="text/javascript"> var contextPath = '${ctx.contextPath}';</script>
 <#include "./dict.ftl"/>
 <script type="text/javascript">

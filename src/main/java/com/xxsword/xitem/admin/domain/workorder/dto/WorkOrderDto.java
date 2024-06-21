@@ -9,11 +9,13 @@ import lombok.Data;
 public class WorkOrderDto {
     private String title;
     private String userId;// 创建人id
+    private Integer workStatus;
 
     public LambdaQueryWrapper<WorkOrder> toQuery() {
         return new LambdaQueryWrapper<WorkOrder>().eq(WorkOrder::getStatus, 1)
                 .like(StringUtils.isNotBlank(title), WorkOrder::getTitle, title)
                 .eq(StringUtils.isNotBlank(userId), WorkOrder::getCreateUserId, userId)
+                .eq(workStatus != null, WorkOrder::getWorkStatus, workStatus)
                 .orderByDesc(WorkOrder::getCreateDate, WorkOrder::getId);
     }
 }

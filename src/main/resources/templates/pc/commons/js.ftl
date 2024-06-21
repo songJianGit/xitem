@@ -2,9 +2,6 @@
 <script type="text/javascript" src="${ctx.contextPath}/static/plugins/admin-template/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="${ctx.contextPath}/static/plugins/layer-3.5.1/layer.js"></script>
 <script type="text/javascript" src="${ctx.contextPath}/static/plugins/bootstrap-paginator/js/bootstrap-paginator.js"></script>
-<script type="text/javascript" src="${ctx.contextPath}/static/plugins/ueditor-1.4.3.3/ueditor.config.xitem.js"></script>
-<script type="text/javascript" src="${ctx.contextPath}/static/plugins/ueditor-1.4.3.3/ueditor.all.min.js"></script>
-<script type="text/javascript" charset="utf-8" src="${ctx.contextPath}/static/plugins/ueditor-1.4.3.3/lang/zh-cn/zh-cn.js"></script>
 <script type="text/javascript">
     // js的空判断
     function isBlank(val) {
