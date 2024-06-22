@@ -40,7 +40,7 @@
 
                                     <div class="form-group col-12">
                                         <label>课程封面</label>
-                                        <input type="file" class="form-control-file" name="fileinfo"/>
+                                        <input type="file" class="form-control-file" name="fileinfo" accept="image/jpeg, image/png"/>
                                         <img style="width: 100px" src="${ctx.contextPath}${course.cover!'/static/admin/commons/img/defaultimg.webp'}" alt="图">
                                     </div>
 

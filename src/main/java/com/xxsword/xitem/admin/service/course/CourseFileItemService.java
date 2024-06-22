@@ -15,6 +15,13 @@ public interface CourseFileItemService extends IService<CourseFileItem> {
 
     void delByIds(UserInfo userInfo, String ids);
 
+    /**
+     * 异步处理课程文件
+     *
+     * @param userInfo
+     * @param courseFile
+     * @param fileInfos
+     */
     void saveOrUpdateCourseFile(UserInfo userInfo, CourseFile courseFile, String fileInfos);
 
 }

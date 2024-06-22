@@ -17,7 +17,7 @@ import java.io.Serializable;
 @TableComment("课程")
 @TableName("t_cus_course")
 public class Course extends BaseEntity implements Serializable {
-    private static final long serialVersionUID = 401L;
+    private static final long serialVersionUID = 400L;
 
     @Column(length = 50)
     @ColumnComment("课程分类")

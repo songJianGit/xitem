@@ -8,7 +8,7 @@
 <div class="pc-main">
     <div class="card">
         <div class="card-title mb-0" style="padding: 5px;">
-            <button type="button" class="btn btn-light mr-3" onclick="history.back(-1);return false;">返回</button>
+            <button type="button" class="btn btn-light mr-3" onclick="backBtn()">返回</button>
             <#if course??>
                 ${course.title!}
             <#else>
@@ -25,10 +25,18 @@
 <#include "../commons/js.ftl"/>
 <script src="${ctx.contextPath}/static/pc/timer/study.timeV3.js"></script>
 <script type="text/javascript">
+    let tracer;
     <#if course??>
-    let tracer = new TimerTracker('${ctx.contextPath}/pc/timer/trace', '${course.id}', '${timerType.code}', '${timerType.time}', '${timerType.timeMax}');
+    tracer = new TimerTracker('${ctx.contextPath}/pc/timer/trace', '${course.id}', '${timerType.code}', '${timerType.time}', '${timerType.timeMax}');
     tracer.start();
     </#if>
+
+    function backBtn() {
+        if (isNotBlank(tracer)) {
+            tracer.end();
+        }
+        history.back();
+    }
 </script>
 </body>
 </html>

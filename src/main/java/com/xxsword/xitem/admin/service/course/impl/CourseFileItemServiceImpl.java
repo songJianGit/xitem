@@ -11,6 +11,7 @@ import com.xxsword.xitem.admin.mapper.course.CourseFileItemMapper;
 import com.xxsword.xitem.admin.service.course.CourseFileItemService;
 import com.xxsword.xitem.admin.utils.Pdf2PngUtil;
 import com.xxsword.xitem.admin.utils.UpLoadUtil;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -58,6 +59,7 @@ public class CourseFileItemServiceImpl extends ServiceImpl<CourseFileItemMapper,
         updateBatchById(listUp);
     }
 
+    @Async
     @Override
     public void saveOrUpdateCourseFile(UserInfo userInfo, CourseFile courseFile, String fileInfos) {
         if (StringUtils.isBlank(fileInfos)) {

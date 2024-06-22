@@ -131,7 +131,7 @@
             $('#video-box').attr("src", '${ctx.contextPath}' + infos[0].url);
         }
         if (type == 5) {
-            $(".courseFileShow5").html('<img src="${ctx.contextPath}' + infos[0].url + '" alt="图">');
+            $(".courseFileShow5").html('<a href="${ctx.contextPath}' + infos[0].url + '" target="_blank">'+infos[0].url+'</a>');
         }
         $("#file-input").val(infos[0].url);
     }

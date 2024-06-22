@@ -78,7 +78,8 @@ public class BusinessServiceImpl implements BusinessService {
             userCourse.setPrecent(0);
             saveFlag = true;
         }
-        double pre = Utils.div(tr.getTotalTime(), course.getLearnTime(), 2, BigDecimal.ROUND_DOWN);
+        int learnTime = course.getLearnTime() * 60;
+        double pre = Utils.div(tr.getTotalTime(), learnTime, 2, BigDecimal.ROUND_DOWN);
         pre = Utils.mul(pre, 100);
         if (pre > 100) {
             pre = 100d;
