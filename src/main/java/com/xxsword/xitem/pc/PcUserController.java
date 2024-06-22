@@ -201,24 +201,6 @@ public class PcUserController extends BaseController {
             return RestResult.Fail();
         }
         UserInfo userInfo = Utils.getUserInfo(request);
-        userInfo = userInfoService.getById(userInfo.getId());// 获取最新数据
-        password1 = password1.trim();
-        password2 = password2.trim();
-        password3 = password3.trim();
-        if (!password1.equals(Utils.passwordDE(userInfo.getPassword()))) {
-            return RestResult.Fail("原密码错误");
-        }
-        if (!password2.equals(password3)) {
-            return RestResult.Fail("输入的新密码不一致");
-        }
-        if (!Utils.isValidPassword(password3)) {
-            return RestResult.Codes(Codes.PASSWORD_COMPLEXITY);
-        }
-        UserInfo userInfoUp = new UserInfo();
-        userInfoUp.setId(userInfo.getId());
-        userInfoUp.setBaseInfo(userInfo);
-        userInfoUp.setPassword(Utils.passwordEN(password3));
-        userInfoService.updateById(userInfoUp);
-        return RestResult.OK();
+        return userInfoService.changePwd(userInfo.getId(), password1, password2, password3);
     }
 }

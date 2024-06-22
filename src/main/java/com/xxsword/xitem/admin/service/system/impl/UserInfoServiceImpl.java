@@ -8,6 +8,7 @@ import com.xxsword.xitem.admin.domain.system.entity.Function;
 import com.xxsword.xitem.admin.domain.system.entity.Role;
 import com.xxsword.xitem.admin.domain.system.entity.UserInfo;
 import com.xxsword.xitem.admin.mapper.system.UserInfoMapper;
+import com.xxsword.xitem.admin.model.Codes;
 import com.xxsword.xitem.admin.model.RestResult;
 import com.xxsword.xitem.admin.service.system.RoleFunctionService;
 import com.xxsword.xitem.admin.service.system.UserInfoRoleService;
@@ -179,26 +180,30 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
     @Override
     public RestResult changePwd(String userId, String p, String p1, String p2) {
         UserInfo user = getById(userId);
-        if (p.equals(user.getPassword())) {
-            if (p1.equals(p2)) {
-                UserInfo userUp = new UserInfo();
-                userUp.setId(user.getId());
-                userUp.setPassword(p1);
-                updateById(userUp);
-                return RestResult.OK();
-            } else {
-                return RestResult.Fail("密码不一致");
-            }
-        } else {
+        p = p.trim();
+        p1 = p1.trim();
+        p2 = p2.trim();
+        if (!p.equals(Utils.passwordDE(user.getPassword()))) {
             return RestResult.Fail("原密码错误");
         }
+        if (!p1.equals(p2)) {
+            return RestResult.Fail("输入的新密码不一致");
+        }
+        if (!Utils.isValidPassword(p2)) {
+            return RestResult.Codes(Codes.PASSWORD_COMPLEXITY);
+        }
+        UserInfo userUp = new UserInfo();
+        userUp.setId(user.getId());
+        userUp.setPassword(Utils.passwordEN(p2));
+        updateById(userUp);
+        return RestResult.OK();
     }
 
     @Override
     public void resetPassword(String userId, String password) {
         UserInfo userUp = new UserInfo();
         userUp.setId(userId);
-        userUp.setPassword(password);
+        userUp.setPassword(Utils.passwordEN(password));
         updateById(userUp);
     }
 

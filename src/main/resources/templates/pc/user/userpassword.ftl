@@ -8,6 +8,9 @@
 <div class="pc-main">
     <#include "../commons/header.ftl"/>
     <div class="pc-body">
+        <div class="alert alert-secondary" role="alert">
+            注意：密码至少8位，需要包含大小写英文和数字。
+        </div>
         <div class="form-group">
             <label for="password1">原密码</label>
             <input type="password" class="form-control" id="password1" maxlength="100">
