@@ -18,6 +18,22 @@ import java.util.regex.Pattern;
 
 public class Utils {
 
+    // 密码加密
+    public static String passwordEN(String password) {
+        if (Constant.PASSWORD_EN) {
+            return AesEncryptUtil.encrypt(password);
+        }
+        return password;
+    }
+
+    // 密码解密
+    public static String passwordDE(String passwordEN) {
+        if (Constant.PASSWORD_EN) {
+            return AesEncryptUtil.decrypt(passwordEN);
+        }
+        return passwordEN;
+    }
+
     /**
      * 密码复杂度要求检查
      *

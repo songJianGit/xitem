@@ -13,6 +13,7 @@ import com.xxsword.xitem.admin.service.system.RoleFunctionService;
 import com.xxsword.xitem.admin.service.system.UserInfoRoleService;
 import com.xxsword.xitem.admin.service.system.UserInfoService;
 import com.xxsword.xitem.admin.utils.DateUtil;
+import com.xxsword.xitem.admin.utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -113,7 +114,7 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
         LambdaQueryWrapper<UserInfo> query = Wrappers.lambdaQuery();
         query.eq(UserInfo::getStatus, 1);
         query.eq(UserInfo::getLoginName, loginName);
-        query.eq(UserInfo::getPassword, passWord);
+        query.eq(UserInfo::getPassword, Utils.passwordEN(passWord));
         query.ge(UserInfo::getLifeDate, DateUtil.now());
         UserInfo userInfo = getOne(query);
         if (userInfo == null) {

@@ -8,6 +8,9 @@ public class Constant {
     // 用户登录的session键
     public static final String USER_INFO = "puser";
 
+    // 用户是否有角色的键(1-有角色 0-没有角色)
+    public static final String USER_INFO_ROLE = "puserrole";
+
     // 验证码的session键
     public static final String CAPTCHA = "captcha";
 
@@ -26,4 +29,6 @@ public class Constant {
     // 最大用户数
     public static final String DICT_ID_MAX_USER_COUNT = "dictidmaxusercount";
 
+    // 是否开启密码对称加密
+    public static final boolean PASSWORD_EN = true;
 }

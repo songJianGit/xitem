@@ -80,6 +80,14 @@ public class OrganServiceImpl extends ServiceImpl<OrganMapper, Organ> implements
         return organP(organId).stream().map(Organ::getId).collect(Collectors.joining(","));
     }
 
+    @Override
+    public String organPNames(String organId) {
+        List<Organ> organList = organP(organId);
+        Organ organ = getById(organId);
+        organList.add(organ);
+        return organList.stream().map(Organ::getName).collect(Collectors.joining("-"));
+    }
+
     // 递归向上寻找机构的所有上级信息
     private void diGuiUpOrgan(List<Organ> list, String organId) {
         Organ organ = getById(organId);

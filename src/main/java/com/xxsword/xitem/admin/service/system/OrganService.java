@@ -65,6 +65,11 @@ public interface OrganService extends IService<Organ> {
     String organPIds(String organId);
 
     /**
+     * 该机构的所有上级机构的名字拼接，最后拼接上自己的名字
+     */
+    String organPNames(String organId);
+
+    /**
      * 所有下级(不包括自己)
      *
      * @param organId

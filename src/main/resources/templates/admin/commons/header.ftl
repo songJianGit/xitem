@@ -14,9 +14,9 @@
                         <span>${Session.puser.userName!}</span>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-right">
-<#--                        <li>-->
-<#--                            <a class="dropdown-item" href="#!"><i class="mdi mdi-account"></i> 个人信息</a>-->
-<#--                        </li>-->
+                        <li>
+                            <a class="dropdown-item" href="${ctx.contextPath}/pcindex"><i class="mdi mdi-account"></i> 学员端</a>
+                        </li>
                         <li>
                             <a class="dropdown-item" href="#!" onclick="loginUserPassword()"><i class="mdi mdi-lock-outline"></i> 修改密码</a>
                         </li>

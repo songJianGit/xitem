@@ -2,6 +2,7 @@ package com.xxsword.xitem.admin.controller;
 
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.xxsword.xitem.admin.constant.Constant;
+import com.xxsword.xitem.admin.domain.system.entity.Role;
 import com.xxsword.xitem.admin.domain.system.entity.UserInfo;
 import com.xxsword.xitem.admin.model.Codes;
 import com.xxsword.xitem.admin.model.RestResult;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.util.List;
 
 @Controller
 @Slf4j
@@ -68,6 +70,12 @@ public class LoginController extends BaseController {
         }
         userInfoService.setUserInfoRoleAndFun(userInfo, true, true);
         httpSession.setAttribute(Constant.USER_INFO, userInfo);
+        List<Role> roleList = userInfo.getRoleList();
+        if (roleList == null || roleList.isEmpty()) {
+            httpSession.setAttribute(Constant.USER_INFO_ROLE, 0);
+        } else {
+            httpSession.setAttribute(Constant.USER_INFO_ROLE, 1);
+        }
         userInfoService.clearLockUser(userInfo.getId());
         return RestResult.Codes(Codes.LOGIN_OK);
     }
