@@ -91,7 +91,8 @@ public class CourseCategoryController extends BaseCategoryController {
     @ResponseBody
     public RestResult seq(HttpServletRequest request, String id1, String id2) {
         UserInfo userInfo = Utils.getUserInfo(request);
-        return super.categorySeq(userInfo, id1, id2);
+        super.categorySeq(userInfo, id1, id2);
+        return RestResult.OK();
     }
 
     /**

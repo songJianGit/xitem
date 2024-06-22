@@ -10,12 +10,10 @@ import com.xxsword.xitem.admin.model.RestPaging;
 import com.xxsword.xitem.admin.model.RestResult;
 import com.xxsword.xitem.admin.model.ZTree;
 import com.xxsword.xitem.admin.service.category.CategoryService;
-import com.xxsword.xitem.admin.utils.Utils;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -111,7 +109,7 @@ public class BaseCategoryController extends BaseController {
     /**
      * 分类的保存
      */
-    public RestResult saveCategory(UserInfo userInfo, Category category) {
+    public void saveCategory(UserInfo userInfo, Category category) {
         category.setBaseInfo(userInfo);
         if (StringUtils.isBlank(category.getId())) {
             category.setSeq(DateTime.now().getMillis());
@@ -122,21 +120,18 @@ public class BaseCategoryController extends BaseController {
         categoryUp.setId(category.getId());
         categoryUp.setPids(categoryService.categoryPIds(category.getId()));
         categoryService.updateById(categoryUp);// 更新该分类pids
-        return RestResult.OK();
     }
 
     /**
      * 分类的删除(连带删除其下所有分类)
      */
-    public RestResult delCategory(UserInfo userInfo, String categoryIds) {
+    public void delCategory(UserInfo userInfo, String categoryIds) {
         categoryService.delCategory(categoryIds);
         categoryService.upLastInfo(userInfo, categoryIds);
-        return RestResult.OK();
     }
 
-    public RestResult categorySeq(UserInfo userInfo, String id1, String id2) {
+    public void categorySeq(UserInfo userInfo, String id1, String id2) {
         categoryService.seq(userInfo, id1, id2);
-        return RestResult.OK();
     }
 
 }

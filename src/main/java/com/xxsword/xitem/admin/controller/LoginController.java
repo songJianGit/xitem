@@ -2,12 +2,14 @@ package com.xxsword.xitem.admin.controller;
 
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.xxsword.xitem.admin.constant.Constant;
+import com.xxsword.xitem.admin.domain.system.entity.Function;
 import com.xxsword.xitem.admin.domain.system.entity.Role;
 import com.xxsword.xitem.admin.domain.system.entity.UserInfo;
 import com.xxsword.xitem.admin.model.Codes;
 import com.xxsword.xitem.admin.model.RestResult;
 import com.xxsword.xitem.admin.service.system.UserInfoService;
 import com.xxsword.xitem.admin.utils.CaptchaUtils;
+import com.xxsword.xitem.admin.utils.MenuUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -17,6 +19,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Controller
 @Slf4j
@@ -69,13 +73,13 @@ public class LoginController extends BaseController {
             return RestResult.Codes(Codes.LOGIN_FAIL);
         }
         userInfoService.setUserInfoRoleAndFun(userInfo, true, true);
-        httpSession.setAttribute(Constant.USER_INFO, userInfo);
+
+        httpSession.setAttribute(Constant.USER_INFO, userInfo);// 将用户信息，存入session
+        httpSession.setAttribute(Constant.USER_INFO_TAG, MenuUtil.listFunctionByRoles(userInfo.getRoleList()).stream().map(Function::getTag).collect(Collectors.toSet()));
+
         List<Role> roleList = userInfo.getRoleList();
-        if (roleList == null || roleList.isEmpty()) {
-            httpSession.setAttribute(Constant.USER_INFO_ROLE, 0);
-        } else {
-            httpSession.setAttribute(Constant.USER_INFO_ROLE, 1);
-        }
+        httpSession.setAttribute(Constant.USER_INFO_ROLE, (roleList == null || roleList.isEmpty()) ? 0 : 1);
+
         userInfoService.clearLockUser(userInfo.getId());
         return RestResult.Codes(Codes.LOGIN_OK);
     }

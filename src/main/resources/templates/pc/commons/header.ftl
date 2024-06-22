@@ -18,6 +18,7 @@
                     <a class="dropdown-item" href="${ctx.contextPath}/pc/user/userCenter">个人中心</a>
                     <a class="dropdown-item" href="${ctx.contextPath}/pc/user/userPassword">修改密码</a>
                     <#if Session.puserrole==1>
+                        <div class="dropdown-divider"></div>
                         <a class="dropdown-item" href="${ctx.contextPath}/admin/system/index">管理端</a>
                     </#if>
                     <div class="dropdown-divider"></div>

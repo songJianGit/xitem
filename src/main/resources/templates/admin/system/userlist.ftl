@@ -64,15 +64,21 @@
                             <div class="card-body">
                                 <div id="custom-toolbar">
                                     <div class="toolbar-btn-action">
-                                        <button type="button" id="add" class="btn btn-primary">
-                                            新增
-                                        </button>
-                                        <button type="button" id="del" class="btn btn-primary">
-                                            删除
-                                        </button>
-                                        <button type="button" id="status" class="btn btn-primary">
-                                            启用/停用
-                                        </button>
+                                        <@funTag tag="sys:user:add">
+                                            <button type="button" id="add" class="btn btn-primary">
+                                                新增
+                                            </button>
+                                        </@funTag>
+                                        <@funTag tag="sys:user:del">
+                                            <button type="button" id="del" class="btn btn-primary">
+                                                删除
+                                            </button>
+                                        </@funTag>
+                                        <@funTag tag="sys:user:status">
+                                            <button type="button" id="status" class="btn btn-primary">
+                                                启用/停用
+                                            </button>
+                                        </@funTag>
                                     </div>
                                 </div>
                                 <div class="table-responsive">
@@ -115,8 +121,12 @@
     function caozuo(value, row) {
         let htm = '';
         htm += '<div class="btn-group">';
+        <@funTag tag="sys:user:edit">
         htm += '<button type="button" class="btn btn-sm btn-default m-r-5" onclick="edit(\'' + value + '\')" title="编辑">编辑</button>';
+        </@funTag>
+        <@funTag tag="sys:user:resetpwd">
         htm += '<button type="button" class="btn btn-sm btn-default" onclick="resetpassword(\'' + value + '\')" title="重置密码">重置密码</button>';
+        </@funTag>
         htm += '</div>';
         return htm;
     }
