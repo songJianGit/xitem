@@ -5,9 +5,6 @@
 </head>
 <body style="background-color: white">
 <div class="card" style="-webkit-box-shadow:none;box-shadow:none;">
-    <div class="card-header">
-    </div>
-
     <div class="card-body">
         <div class="table-responsive">
             <table id="table-pagination"

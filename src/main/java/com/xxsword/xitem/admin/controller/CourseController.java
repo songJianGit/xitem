@@ -5,14 +5,21 @@ import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.xxsword.xitem.admin.domain.category.entity.Category;
 import com.xxsword.xitem.admin.domain.course.dto.CourseDto;
+import com.xxsword.xitem.admin.domain.course.dto.CourseUserDto;
 import com.xxsword.xitem.admin.domain.course.entity.Course;
 import com.xxsword.xitem.admin.domain.course.entity.CourseFile;
+import com.xxsword.xitem.admin.domain.course.entity.CourseUser;
+import com.xxsword.xitem.admin.domain.course.vo.CourseUserVO;
+import com.xxsword.xitem.admin.domain.exam.dto.UserPaperDto;
+import com.xxsword.xitem.admin.domain.exam.entity.UserPaper;
+import com.xxsword.xitem.admin.domain.exam.vo.UserPaperVO;
 import com.xxsword.xitem.admin.domain.system.entity.UserInfo;
 import com.xxsword.xitem.admin.model.RestPaging;
 import com.xxsword.xitem.admin.model.RestResult;
 import com.xxsword.xitem.admin.service.category.CategoryService;
 import com.xxsword.xitem.admin.service.course.CourseFileService;
 import com.xxsword.xitem.admin.service.course.CourseService;
+import com.xxsword.xitem.admin.service.course.CourseUserService;
 import com.xxsword.xitem.admin.utils.UpLoadUtil;
 import com.xxsword.xitem.admin.utils.Utils;
 import lombok.extern.slf4j.Slf4j;
@@ -39,6 +46,8 @@ public class CourseController extends BaseController {
     private CourseFileService courseFileService;
     @Autowired
     private CategoryService categoryService;
+    @Autowired
+    private CourseUserService courseUserService;
 
     @RequestMapping("list")
     public String list() {
@@ -121,6 +130,24 @@ public class CourseController extends BaseController {
         UserInfo userInfo = Utils.getUserInfo(request);
         courseService.seq(userInfo, id1, id2);
         return RestResult.OK();
+    }
+
+    /**
+     * 学习记录查看弹框
+     *
+     * @return
+     */
+    @RequestMapping("courseUser")
+    public String courseUser(String courseId, Model model) {
+        model.addAttribute("courseId", courseId);
+        return "/admin/course/courseuser";
+    }
+
+    @RequestMapping("courseUserData")
+    @ResponseBody
+    public RestPaging<CourseUserVO> courseUserData(HttpServletRequest request, Page<CourseUser> page, CourseUserDto courseUserDto) {
+        Page<CourseUserVO> data = courseUserService.pageCourseUserVOByDto(page, courseUserDto);
+        return new RestPaging<>(data.getTotal(), data.getRecords());
     }
 
 }

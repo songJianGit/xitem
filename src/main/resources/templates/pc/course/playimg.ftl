@@ -24,7 +24,10 @@
 </div>
 <#include "../commons/js.ftl"/>
 <script src="${ctx.contextPath}/static/pc/timer/study.timeV3.js"></script>
+<script type="text/javascript" src="${ctx.contextPath}/static/pc/timer/onlyhtml.js"></script>
 <script type="text/javascript">
+    new OneHtm("coursePlay", "${course.id}", "只能同时学习一个课").init();
+
     let tracer;
     <#if course??>
     tracer = new TimerTracker('${ctx.contextPath}/pc/timer/trace', '${course.id}', '${timerType.code}', '${timerType.time}', '${timerType.timeMax}');

@@ -11,17 +11,14 @@ import com.xxsword.xitem.admin.domain.exam.entity.UserPaperQuestion;
 import com.xxsword.xitem.admin.domain.exam.vo.UserPaperVO;
 import com.xxsword.xitem.admin.domain.system.entity.UserInfo;
 import com.xxsword.xitem.admin.mapper.exam.UserPaperMapper;
-import com.xxsword.xitem.admin.service.exam.ExamService;
 import com.xxsword.xitem.admin.service.exam.UserPaperQuestionService;
 import com.xxsword.xitem.admin.service.exam.UserPaperService;
-import com.xxsword.xitem.admin.service.system.UserInfoService;
 import com.xxsword.xitem.admin.utils.DateUtil;
 import com.xxsword.xitem.admin.utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -29,8 +26,6 @@ import java.util.stream.Collectors;
 public class UserPaperServiceImpl extends ServiceImpl<UserPaperMapper, UserPaper> implements UserPaperService {
     @Autowired
     private UserPaperQuestionService userPaperQuestionService;
-    @Autowired
-    private UserInfoService userInfoService;
 
     @Override
     public void upLastInfo(UserInfo doUserInfo, String ids) {
@@ -119,17 +114,7 @@ public class UserPaperServiceImpl extends ServiceImpl<UserPaperMapper, UserPaper
 
     @Override
     public Page<UserPaperVO> pageExamScore(Page<UserPaper> page, UserPaperDto userPaperDto) {
-        Page<UserPaper> paperPage = baseMapper.pageExamScore(page, userPaperDto);
-        List<UserPaperVO> userPaperVOList = UserPaperConvert.INSTANCE.toPaperVO(paperPage.getRecords());
-        if (!userPaperVOList.isEmpty()) {
-            Map<String, UserInfo> user = userInfoService.mapsUser(userPaperVOList.stream().map(UserPaperVO::getUserId).collect(Collectors.toSet()));
-            for (UserPaperVO item : userPaperVOList) {
-                item.setUserName(user.get(item.getUserId()).getUserName());
-            }
-        }
-        Page<UserPaperVO> voPage = new Page<>(paperPage.getCurrent(), paperPage.getPages(), paperPage.getTotal());
-        voPage.setRecords(userPaperVOList);
-        return voPage;
+        return baseMapper.pageExamScore(page, userPaperDto);
     }
 
     /**

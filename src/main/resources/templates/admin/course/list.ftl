@@ -56,7 +56,8 @@
 
                                             <div class="input-group">
                                                 <div class="btn-group">
-                                                    <button type="button" id="searchBtn" class="btn btn-primary m-r-5">搜索
+                                                    <button type="button" id="searchBtn" class="btn btn-primary m-r-5">
+                                                        搜索
                                                     </button>
                                                     <button type="reset" class="btn btn-default">重置</button>
                                                 </div>
@@ -128,6 +129,7 @@
 
         htm += '<a class="btn btn-sm btn-default m-r-5" href="${ctx.contextPath}/admin/course/edit?id=' + value + '" title="编辑">编辑</a>';
         htm += '<a class="btn btn-sm btn-default m-r-5" href="${ctx.contextPath}/pc/course/c/' + value + '" title="播放">播放</a>';
+        htm += '<a class="btn btn-sm btn-default m-r-5" href="${ctx.contextPath}/admin/course/courseUser?courseId=' + value + '" title="学习情况">学习情况</a>';
         htm += '<button type="button" class="btn btn-sm btn-default" title="拖动排序" draggable="true" ondragstart="dragStart(event,\'' + value + '\')" ondrop="drop(event,\'' + value + '\')" ondragover="allowDrop(event)">';
         htm += '<span class="mdi mdi-cursor-move"></span>';
         htm += '</button>';
