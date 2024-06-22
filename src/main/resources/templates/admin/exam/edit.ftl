@@ -34,8 +34,12 @@
                                     <div class="form-group col-6">
                                         <label>考试类型</label>
                                         <select class="form-control" name="exType">
-                                            <option value="1" <#if exam.exType??><#if exam.exType==1>selected</#if></#if> >公开考试</option>
-                                            <option value="0" <#if exam.exType??><#if exam.exType==0>selected</#if></#if> >授权考试</option>
+                                            <option value="1"
+                                                    <#if exam.exType??><#if exam.exType==1>selected</#if></#if> >公开考试
+                                            </option>
+                                            <option value="0"
+                                                    <#if exam.exType??><#if exam.exType==0>selected</#if></#if> >授权考试
+                                            </option>
                                         </select>
                                     </div>
                                     <div class="form-group col-6">
@@ -62,19 +66,20 @@
                                     </div>
                                     <div class="form-group col-6">
                                         <label for="paperTitle">试卷</label>
-                                        <input type="text" class="form-control" id="paperTitle" value="${exam.paperTitle!}" placeholder="试卷" readonly/>
+                                        <input type="text" class="form-control" id="paperTitle"
+                                               value="${exam.paperTitle!}" placeholder="试卷" readonly/>
                                         <input type="hidden" value="${exam.paperId!}" name="paperId" id="paperId">
                                     </div>
-<#--                                    <div class="form-group col-12">-->
-<#--                                        <label>二维码</label>-->
-<#--                                        <#if exam.id??>-->
-<#--                                            <img src="${ctx.contextPath}/admin/qrcode/get?content=${ctx.contextPath}/pc/exam/${exam.id!}"-->
-<#--                                                 alt="二维码">-->
-<#--                                        <#else>-->
-<#--                                            <div>保存后，自动生成二维码。</div>-->
-<#--                                        </#if>-->
-<#--                                        <a target="_blank" href="${ctx.contextPath}/pc/exam/${exam.id!}">进入</a>-->
-<#--                                    </div>-->
+                                    <#--                                    <div class="form-group col-12">-->
+                                    <#--                                        <label>二维码</label>-->
+                                    <#--                                        <#if exam.id??>-->
+                                    <#--                                            <img src="${ctx.contextPath}/admin/qrcode/get?content=${ctx.contextPath}/pc/exam/${exam.id!}"-->
+                                    <#--                                                 alt="二维码">-->
+                                    <#--                                        <#else>-->
+                                    <#--                                            <div>保存后，自动生成二维码。</div>-->
+                                    <#--                                        </#if>-->
+                                    <#--                                        <a target="_blank" href="${ctx.contextPath}/pc/exam/${exam.id!}">进入</a>-->
+                                    <#--                                    </div>-->
                                     <div class="form-group col-12">
                                         <button type="submit" class="btn btn-primary">保 存
                                         </button>
@@ -98,10 +103,20 @@
 </div>
 <#include "../commons/js.ftl"/>
 <script type="text/javascript">
+    function check() {
+        let paperTitle = $("#paperTitle").val();
+        if (isBlank(paperTitle)) {
+            layer.msg("请选择试卷");
+            return false;
+        }
+        return true;
+    }
+
     $("#paperTitle").click(function () {
         layer_show("试卷", "${ctx.contextPath}/admin/paper/paperShow");
     });
-    function paperCallback(paper){
+
+    function paperCallback(paper) {
         $("#paperId").val(paper.id);
         $("#paperTitle").val(paper.title);
     }

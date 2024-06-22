@@ -23,8 +23,7 @@
                     <div class="col-12">
                         <div class="card">
                             <div class="card-body">
-                                <form action="${ctx.contextPath}/admin/paper/save" method="post" class="row"
-                                      onsubmit="return check();">
+                                <form action="${ctx.contextPath}/admin/paper/save" method="post" class="row">
                                     <input type="hidden" name="id" value="${paper.id!}"/>
                                     <div class="form-group col-12">
                                         <label for="title">试卷标题</label>
@@ -52,9 +51,6 @@
 </div>
 <#include "../../commons/js.ftl"/>
 <script type="text/javascript">
-    function check() {
-        return true;
-    }
 </script>
 </body>
 </html>

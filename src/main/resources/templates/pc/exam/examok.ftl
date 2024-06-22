@@ -17,7 +17,7 @@
         <div class="exam-item">姓名：${Session.puser.userName!}</div>
         <div class="exam-item">总分：${maxscore!}</div>
         <div class="exam-item">用时：${paperduration!}</div>
-        <div class="exam-item"><a href="${ctx.contextPath}/pcindex">返回首页</a></div>
+        <div class="exam-item"><a class="btn btn-secondary" href="${ctx.contextPath}/pcindex">返回首页</a></div>
     </div>
 </div>
 </body>

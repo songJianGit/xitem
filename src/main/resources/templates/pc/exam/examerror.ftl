@@ -21,6 +21,9 @@
             </div>
         </#if>
     </div>
+    <div class="card-body">
+        <a class="btn btn-secondary" href="${ctx.contextPath}/pcindex">返回首页</a>
+    </div>
 </div>
 <#include "../commons/js.ftl"/>
 <script type="text/javascript">

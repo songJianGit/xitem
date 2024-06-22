@@ -34,8 +34,7 @@
                         <div class="card">
                             <div class="card-body">
                                 <form action="${ctx.contextPath}/admin/coursefile/save" method="post" class="row"
-                                      enctype="multipart/form-data"
-                                      onsubmit="return check();">
+                                      enctype="multipart/form-data">
                                     <input type="hidden" name="id" value="${courseFile.id!}"/>
 
                                     <div class="form-group col-6">

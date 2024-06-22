@@ -23,8 +23,7 @@
                     <div class="col-12">
                         <div class="card">
                             <div class="card-body">
-                                <form action="${ctx.contextPath}/admin/system/dictSave" method="post" class="row"
-                                      onsubmit="return check();">
+                                <form action="${ctx.contextPath}/admin/system/dictSave" method="post" class="row">
                                     <input type="hidden" name="id" value="${dict.id!}"/>
                                     <div class="form-group col-6">
                                         <label for="name">描述</label>
@@ -69,9 +68,6 @@
 </div>
 <#include "../commons/js.ftl"/>
 <script type="text/javascript">
-    function check() {
-        return true;
-    }
 </script>
 </body>
 </html>

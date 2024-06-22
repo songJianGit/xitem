@@ -23,8 +23,7 @@
                     <div class="col-12">
                         <div class="card">
                             <div class="card-body">
-                                <form action="${ctx.contextPath}/admin/banner/save" method="post" class="row" enctype="multipart/form-data"
-                                      onsubmit="return check();">
+                                <form action="${ctx.contextPath}/admin/banner/save" method="post" class="row" enctype="multipart/form-data">
                                     <input type="hidden" name="id" value="${banner.id!}"/>
                                     <div class="form-group col-6">
                                         <label>图片</label>
