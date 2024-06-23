@@ -38,7 +38,8 @@
         if (isNotBlank(tracer)) {
             tracer.end();
         }
-        history.back();
+        // history.back();
+        self.location = document.referrer;// 返回到上一个页面并刷新页面
     }
 </script>
 </body>

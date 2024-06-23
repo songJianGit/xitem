@@ -11,8 +11,10 @@ import com.xxsword.xitem.admin.domain.system.vo.UserInfoRoleVO;
 import com.xxsword.xitem.admin.model.*;
 import com.xxsword.xitem.admin.service.system.*;
 import com.xxsword.xitem.admin.utils.MenuUtil;
+import com.xxsword.xitem.admin.utils.ServerInfoUtils;
 import com.xxsword.xitem.admin.utils.Utils;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,6 +24,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @Controller
@@ -50,14 +53,35 @@ public class SystemController extends BaseController {
      * @return
      */
     @RequestMapping("index")
-    public String index(HttpServletRequest request) {
+    public String index(HttpServletRequest request, Model model) {
         UserInfo userInfo = Utils.getUserInfo(request);
         HttpSession session = request.getSession();
         if (session.getAttribute("treeMenuList") == null) {
             List<TreeMenu> treeMenuList = MenuUtil.listTreeMenuByFunctions(MenuUtil.listFunctionByRoles(userInfo.getRoleList()), false);
             session.setAttribute("treeMenuList", treeMenuList);
         }
+        serverInfo(model);
         return "/admin/index";
+    }
+
+    private void serverInfo(Model model) {
+        Map<String, Object> system = ServerInfoUtils.system();
+        model.addAttribute("systemCpuLoad", system.get("systemCpuLoad"));
+        model.addAttribute("availableProcessors", system.get("availableProcessors"));
+        model.addAttribute("totalMemory", FileUtils.byteCountToDisplaySize(Long.parseLong(system.get("totalMemory").toString())));
+        model.addAttribute("freeMemory", FileUtils.byteCountToDisplaySize(Long.parseLong(system.get("freeMemory").toString())));
+        model.addAttribute("freeMemoryPercent", Utils.mul(Utils.div(Long.parseLong(system.get("freeMemory").toString()), Long.parseLong(system.get("totalMemory").toString()), 2), 100));
+        model.addAttribute("osName", system.get("osName"));
+
+        Map<String, Object> javaMemory = ServerInfoUtils.javaMemory();
+        for (String key : javaMemory.keySet()) {
+            model.addAttribute(key, FileUtils.byteCountToDisplaySize(Long.parseLong(javaMemory.get(key).toString())));
+        }
+
+        Map<String, Object> disk = ServerInfoUtils.disk();
+        model.addAttribute("totalSpace", FileUtils.byteCountToDisplaySize(Long.parseLong(disk.get("totalSpace").toString())));
+        model.addAttribute("usedSpace", FileUtils.byteCountToDisplaySize(Long.parseLong(disk.get("usedSpace").toString())));
+        model.addAttribute("usedSpacePercent", Utils.mul(Utils.div(Long.parseLong(disk.get("usedSpace").toString()), Long.parseLong(disk.get("totalSpace").toString()), 2), 100));
     }
 
     /**

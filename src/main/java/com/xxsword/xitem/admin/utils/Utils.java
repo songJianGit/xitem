@@ -153,6 +153,14 @@ public class Utils {
         return d;
     }
 
+    public static double round(double value, int scale) {
+        BigDecimal bd = new BigDecimal(String.valueOf(value));
+        bd = bd.setScale(scale, BigDecimal.ROUND_HALF_UP);// 四舍五入
+        double d = bd.doubleValue();
+        bd = null;
+        return d;
+    }
+
     /**
      * 32位 小写
      *
