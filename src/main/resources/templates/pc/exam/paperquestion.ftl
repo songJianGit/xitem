@@ -96,13 +96,32 @@
 <#include "../commons/js.ftl"/>
 <script type="text/javascript">
     let pageNum = 1;// 当前页
-    let userPaperQuestions = '${userPaperQuestionIds!}'.split(",");// 当前试卷题目集合
+    let userPaperQuestions;// 当前试卷题目集合
     let action_user_paper_question_id = '';// 当前题id
 
     $(function () {
-        getQuestion();// 第一个问题显示
+        getUserPaperQuestions();// 获取题目ids
         timeInfo();// 计时
     });
+
+    function getUserPaperQuestions() {
+        let indexLoad = layer.load(1, {// 遮罩层
+            shade: [0.5, '#fff']
+        });
+        $.ajax({
+            url: "${ctx.contextPath}/pc/exam/userPaperQuestionIds?userPaperId=${userPaperId!}",
+            cache: false,// 不缓存
+            success: function (data) {
+                layer.close(indexLoad);
+                if (data.result) {
+                    userPaperQuestions = data.data;
+                    getQuestion();// 第一个问题显示
+                } else {
+                    layer.msg(data.msg);
+                }
+            }
+        });
+    }
 
     $("#examSheet").click(function () {
         saveAnswer(4);

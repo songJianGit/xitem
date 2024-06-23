@@ -140,12 +140,23 @@ public class PcExamController {
         if (!examCheckUserPaper(exam, userPaper, model)) {
             return "/pc/exam/examerror";
         }
-        List<String> userPaperQuestionIds = userPaperQuestionService.getPaperQ(userPaper).stream().map(UserPaperQuestion::getId).collect(Collectors.toList());
         model.addAttribute("examTitle", exam.getTitle());
-        model.addAttribute("userPaperQuestionIds", String.join(",", userPaperQuestionIds));
         model.addAttribute("endTime", ExamUtil.examEndTime(exam, userPaper));
         model.addAttribute("userPaperId", userPaper.getId());
         return "pc/exam/paperquestion";
+    }
+
+    /**
+     * 获取试卷题目信息
+     *
+     * @param userPaperId
+     * @return
+     */
+    @RequestMapping("userPaperQuestionIds")
+    @ResponseBody
+    public RestResult userPaperQuestionIds(String userPaperId) {
+        List<String> userPaperQuestionIds = userPaperQuestionService.getPaperQ(userPaperId).stream().map(UserPaperQuestion::getId).collect(Collectors.toList());
+        return RestResult.OK(userPaperQuestionIds);
     }
 
     /**
@@ -271,8 +282,7 @@ public class PcExamController {
      */
     @RequestMapping("examSheet")
     public String examSheet(String userPaperId, Model model) {
-        UserPaper userPaper = userPaperService.getById(userPaperId);
-        List<UserPaperQuestion> userPaperQuestionList = userPaperQuestionService.getPaperQ(userPaper);
+        List<UserPaperQuestion> userPaperQuestionList = userPaperQuestionService.getPaperQ(userPaperId);
         model.addAttribute("userPaperQuestionList", userPaperQuestionList);
         return "/pc/exam/examsheet";
     }

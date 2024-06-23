@@ -83,8 +83,13 @@ public class UserPaperQuestionServiceImpl extends ServiceImpl<UserPaperQuestionM
 
     @Override
     public List<UserPaperQuestion> getPaperQ(UserPaper userPaper) {
+        return getPaperQ(userPaper.getId());
+    }
+
+    @Override
+    public List<UserPaperQuestion> getPaperQ(String userPaperId) {
         LambdaQueryWrapper<UserPaperQuestion> q = Wrappers.lambdaQuery();
-        q.eq(UserPaperQuestion::getUserPaperId, userPaper.getId());
+        q.eq(UserPaperQuestion::getUserPaperId, userPaperId);
         q.orderByAsc(UserPaperQuestion::getSeq, UserPaperQuestion::getId);
         return list(q);
     }

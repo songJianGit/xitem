@@ -24,6 +24,7 @@ public interface UserPaperQuestionService extends IService<UserPaperQuestion> {
      * @return
      */
     List<UserPaperQuestion> getPaperQ(UserPaper userPaper);
+    List<UserPaperQuestion> getPaperQ(String userPaperId);
 
     /**
      * 按照试卷，获取题目
