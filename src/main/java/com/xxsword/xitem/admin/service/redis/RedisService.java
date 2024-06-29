@@ -15,7 +15,7 @@ public class RedisService {
     /**
      * @param key
      * @param value
-     * @param timeout 单位分钟
+     * @param timeout 过期时间，单位:分钟
      */
     public void setKeyValue(String key, String value, Integer timeout) {
         redisTemplate.opsForValue().set(key, value, timeout, TimeUnit.MINUTES);
