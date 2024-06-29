@@ -44,11 +44,11 @@
                                             </div>
                                         </div>
                                         <div class="mb-3">
-                                            内存：${freeMemory}&nbsp;/&nbsp;${totalMemory}
+                                            内存：${usedMemory}&nbsp;/&nbsp;${totalMemory}
                                             <div class="progress" style="height: 20px;">
                                                 <div class="progress-bar" role="progressbar"
-                                                     style="width: ${freeMemoryPercent!}%;" aria-valuenow="25"
-                                                     aria-valuemin="0" aria-valuemax="100">${freeMemoryPercent!}%
+                                                     style="width: ${usedMemoryPercent!}%;" aria-valuenow="25"
+                                                     aria-valuemin="0" aria-valuemax="100">${usedMemoryPercent!}%
                                                 </div>
                                             </div>
                                         </div>

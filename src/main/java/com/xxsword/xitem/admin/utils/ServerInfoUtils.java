@@ -50,10 +50,12 @@ public class ServerInfoUtils {
 
         long totalMemory = osBean.getTotalPhysicalMemorySize();
         long freeMemory = osBean.getFreePhysicalMemorySize();
+        long usedMemory = totalMemory - freeMemory;// 已使用空间
 //        System.out.printf("Total Physical Memory: %d bytes%n", totalMemory);
 //        System.out.printf("Free Physical Memory: %d bytes%n", freeMemory);
         map.put("totalMemory", totalMemory);
         map.put("freeMemory", freeMemory);
+        map.put("usedMemory", usedMemory);
 
         String osName = osBean.getName();
         String version = osBean.getVersion();

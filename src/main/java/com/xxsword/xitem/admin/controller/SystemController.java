@@ -68,8 +68,8 @@ public class SystemController extends BaseController {
         model.addAttribute("systemCpuLoad", system.get("systemCpuLoad"));
         model.addAttribute("availableProcessors", system.get("availableProcessors"));
         model.addAttribute("totalMemory", Utils.byteCountToDisplaySizeDecimal(Long.parseLong(system.get("totalMemory").toString())));
-        model.addAttribute("freeMemory", Utils.byteCountToDisplaySizeDecimal(Long.parseLong(system.get("freeMemory").toString())));
-        model.addAttribute("freeMemoryPercent", Utils.mul(Utils.div(Long.parseLong(system.get("freeMemory").toString()), Long.parseLong(system.get("totalMemory").toString()), 2), 100));
+        model.addAttribute("usedMemory", Utils.byteCountToDisplaySizeDecimal(Long.parseLong(system.get("usedMemory").toString())));
+        model.addAttribute("usedMemoryPercent", Utils.mul(Utils.div(Long.parseLong(system.get("usedMemory").toString()), Long.parseLong(system.get("totalMemory").toString()), 2), 100));
         model.addAttribute("osName", system.get("osName"));
 
         Map<String, Object> javaMemory = ServerInfoUtils.javaMemory();
