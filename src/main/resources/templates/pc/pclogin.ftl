@@ -109,7 +109,7 @@
                 },
                 success: function (data) {
                     if (data.result) {
-                        window.location.href = '${ctx.contextPath}/pcindex';
+                        window.location.href = '${ctx.contextPath}/index';
                     } else {
                         $('#captchaInput').val("");
                         changeImage();
