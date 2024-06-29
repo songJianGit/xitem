@@ -32,7 +32,7 @@
                                     <div class="card-header">系统资源</div>
                                     <div class="card-body">
                                         <div class="mb-3">
-                                            操作系统：${osName!}&nbsp;&nbsp;配置：${availableProcessors!}
+                                            操作系统：${osName!}&nbsp;&nbsp;${availableProcessors!}
                                             核&nbsp;&nbsp;${totalMemory!}
                                         </div>
                                         <div class="mb-3">
