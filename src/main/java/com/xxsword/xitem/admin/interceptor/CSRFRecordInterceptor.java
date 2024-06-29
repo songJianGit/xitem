@@ -13,7 +13,7 @@ import java.net.URL;
 @Slf4j
 @Component
 public class CSRFRecordInterceptor implements HandlerInterceptor {
-    private static final String[] REFERER_DOMAIN = new String[]{"ssword.cn"};// 域名白名单
+    private static final String[] REFERER_DOMAIN = new String[]{"ssword.cn", "www.xxsowrd.com"};// 域名白名单
     private static final String[] URL_SAFE = new String[]{"/admin/ueditor/ueditorConfig"};// 链接白名单
     private static final Boolean CHECK = true;// 是否开启referer校验
 
@@ -50,7 +50,11 @@ public class CSRFRecordInterceptor implements HandlerInterceptor {
                 }
             }
             // 请求域名和referer域名是否相同
-            return request.getServerName().equals(url.getHost());
+            boolean b = request.getServerName().equals(url.getHost());
+            if (!b) {
+                log.warn("CSRF ServerName!=Host,:{},{}", request.getServerName(), url.getHost());
+            }
+            return b;
         }
         return true;
     }
