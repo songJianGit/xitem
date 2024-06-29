@@ -14,7 +14,6 @@ import com.xxsword.xitem.admin.utils.MenuUtil;
 import com.xxsword.xitem.admin.utils.ServerInfoUtils;
 import com.xxsword.xitem.admin.utils.Utils;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -68,19 +67,19 @@ public class SystemController extends BaseController {
         Map<String, Object> system = ServerInfoUtils.system();
         model.addAttribute("systemCpuLoad", system.get("systemCpuLoad"));
         model.addAttribute("availableProcessors", system.get("availableProcessors"));
-        model.addAttribute("totalMemory", FileUtils.byteCountToDisplaySize(Long.parseLong(system.get("totalMemory").toString())));
-        model.addAttribute("freeMemory", FileUtils.byteCountToDisplaySize(Long.parseLong(system.get("freeMemory").toString())));
+        model.addAttribute("totalMemory", Utils.byteCountToDisplaySizeDecimal(Long.parseLong(system.get("totalMemory").toString())));
+        model.addAttribute("freeMemory", Utils.byteCountToDisplaySizeDecimal(Long.parseLong(system.get("freeMemory").toString())));
         model.addAttribute("freeMemoryPercent", Utils.mul(Utils.div(Long.parseLong(system.get("freeMemory").toString()), Long.parseLong(system.get("totalMemory").toString()), 2), 100));
         model.addAttribute("osName", system.get("osName"));
 
         Map<String, Object> javaMemory = ServerInfoUtils.javaMemory();
         for (String key : javaMemory.keySet()) {
-            model.addAttribute(key, FileUtils.byteCountToDisplaySize(Long.parseLong(javaMemory.get(key).toString())));
+            model.addAttribute(key, Utils.byteCountToDisplaySizeDecimal(Long.parseLong(javaMemory.get(key).toString())));
         }
 
         Map<String, Object> disk = ServerInfoUtils.disk();
-        model.addAttribute("totalSpace", FileUtils.byteCountToDisplaySize(Long.parseLong(disk.get("totalSpace").toString())));
-        model.addAttribute("usedSpace", FileUtils.byteCountToDisplaySize(Long.parseLong(disk.get("usedSpace").toString())));
+        model.addAttribute("totalSpace", Utils.byteCountToDisplaySizeDecimal(Long.parseLong(disk.get("totalSpace").toString())));
+        model.addAttribute("usedSpace", Utils.byteCountToDisplaySizeDecimal(Long.parseLong(disk.get("usedSpace").toString())));
         model.addAttribute("usedSpacePercent", Utils.mul(Utils.div(Long.parseLong(disk.get("usedSpace").toString()), Long.parseLong(disk.get("totalSpace").toString()), 2), 100));
     }
 

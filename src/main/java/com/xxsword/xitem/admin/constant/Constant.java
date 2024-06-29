@@ -34,4 +34,7 @@ public class Constant {
 
     // 是否开启密码对称加密
     public static final boolean PASSWORD_EN = true;
+
+    // 数据大小单位信息
+    public static final String[] UNITS = new String[]{"B", "KB", "MB", "GB", "TB"};
 }
