@@ -9,6 +9,11 @@ import java.util.Base64;
 
 /**
  * AES 工具类
+ * 可能遇到的问题：
+ * 使用AES加密时，当密钥大于128时，代码会抛出java.security.InvalidKeyException: Illegal key size or default parameters
+ * Illegal key size or default parameters是指密钥长度是受限制的，java运行时环境读到的是受限的policy文件。文件位于${java_home}/jre/lib/security
+ * 这种限制是因为美国对软件出口的控制。
+ * 解决办法：1.缩短key的长度 2.百度解决方案 3.使用不受限制的jdk
  */
 public class AesEncryptUtil {
 
