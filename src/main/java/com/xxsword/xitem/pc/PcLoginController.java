@@ -32,7 +32,7 @@ public class PcLoginController extends BaseController {
         return "/pc/pclogin";
     }
 
-    @GetMapping("pcindex")
+    @GetMapping("index")
     public String index(Model model) {
         BannerDto bannerDto = new BannerDto();
         bannerDto.setReleaseStatus(1);
