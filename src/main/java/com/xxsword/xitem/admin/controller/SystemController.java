@@ -335,7 +335,11 @@ public class SystemController extends BaseController {
      */
     @RequestMapping("roleFunctionSave")
     public String roleFunctionsSave(HttpServletRequest request, String roleId, String funIds) {
-        roleFunctionService.roleFunctionSave(roleId, funIds);
+        if (roleId.equals("1")) {
+            log.warn("超级管理员角色的权限，不可调整");
+        } else {
+            roleFunctionService.roleFunctionSave(roleId, funIds);
+        }
         return "redirect:roleList";
     }
 

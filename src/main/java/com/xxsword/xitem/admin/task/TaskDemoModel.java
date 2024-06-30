@@ -2,6 +2,7 @@ package com.xxsword.xitem.admin.task;
 
 import com.alibaba.fastjson2.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.xxsword.xitem.admin.domain.system.entity.Dict;
 import com.xxsword.xitem.admin.service.system.DictService;
@@ -38,7 +39,7 @@ public class TaskDemoModel {
     /**
      * 演示模式下，清理数据
      */
-    @Scheduled(cron = "0 0 0/1 * * ?")
+    @Scheduled(cron = "0 0/30 * * * ?")
     public void demoModel() {
         log.info("demoModel-begin");
         LambdaQueryWrapper<Dict> query = Wrappers.lambdaQuery();
@@ -50,34 +51,31 @@ public class TaskDemoModel {
         for (Dict dict : dictList) {
             JSONObject model = JSONObject.parseObject(dict.getVal());
             Integer type = model.getInteger("type");
-            String sql = null;
+            String sql_del = null;
+            String sql_update = null;
             if (type == 1) {
                 String tab = model.getString("table_name");
                 String create_date = model.getString("create_date");
-                sql = "DELETE FROM " + tab + " WHERE create_date >= '" + create_date + "'";
+                sql_del = "DELETE FROM " + tab + " WHERE create_date >= '" + create_date + "'";
+                sql_update = "UPDATE " + tab + " SET `status`=1 WHERE create_date < '" + create_date + "'";
             }
             if (type == 2) {
                 String tab = model.getString("table_name");
                 String[] ids = model.getString("ids").split(",");
-                sql = "DELETE FROM " + tab + " WHERE id NOT IN ('" + String.join("','", ids) + "')";
+                sql_del = "DELETE FROM " + tab + " WHERE id NOT IN ('" + String.join("','", ids) + "')";
             }
             if (type == 3) {
                 String tab = model.getString("table_name");
-                String timestamp = model.getString("timestamp");
-                sql = "DELETE FROM " + tab + " WHERE start_stamp >= '" + timestamp + "'";
+                sql_del = "DELETE FROM " + tab + " WHERE 1=1";
             }
-            if (type == 4) {
-                String tab = model.getString("table_name");
-                String start_time = model.getString("start_time");
-                sql = "DELETE FROM " + tab + " WHERE start_time >= '" + start_time + "'";
+            if (StringUtils.isNotBlank(sql_del)) {
+                log.info("demoModel sqlDel:{}", sql_del);
+                jdbcTemplate.update(sql_del);
             }
-            if (type == 5) {
-                String tab = model.getString("table_name");
-                String timestamp = model.getString("timestamp");
-                sql = "DELETE FROM " + tab + " WHERE time_stamp >= '" + timestamp + "'";
+            if (StringUtils.isNotBlank(sql_update)) {
+                log.info("demoModel sqlUpdate:{}", sql_update);
+                jdbcTemplate.update(sql_update);
             }
-            log.info("demoModel sql:{}", sql);
-            jdbcTemplate.update(sql);
         }
 
         RuntimeMXBean runtimeMxBean = ManagementFactory.getRuntimeMXBean();

@@ -94,7 +94,7 @@ public class LoginController extends BaseController {
             response.setDateHeader("Expires", 0);
             response.setContentType("image/jpeg");
             String verifyCode = CaptchaUtils.generateCaptcha(0, 37, response.getOutputStream());
-            verifyCode = "1234";
+//            verifyCode = "1234";
             request.getSession().setAttribute(Constant.CAPTCHA, verifyCode.toLowerCase());
         } catch (Exception e) {
             log.error("获取验证码异常：{}", e.getMessage());
