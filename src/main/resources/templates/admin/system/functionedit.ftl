@@ -32,7 +32,7 @@
                                     </div>
                                     <div class="form-group col-6">
                                         <label for="url">链接</label>
-                                        <input type="text" class="form-control" id="url" name="url" value="${function.url!}" placeholder="链接"/>
+                                        <input type="text" class="form-control" id="url" name="url" value="${function.url!}" placeholder="链接" required/>
                                     </div>
                                     <div class="form-group col-6">
                                         <label for="seq">排序</label>
