@@ -1,5 +1,5 @@
 # xitem
-xitem一个开源的学习考试系统。
+一个开源的学习考试系统。
 
 演示地址：http://www.xxsowrd.com/xitem/index
 账号：admin/Admin9900
