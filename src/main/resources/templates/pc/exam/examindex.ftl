@@ -17,6 +17,9 @@
                             <a href="${ctx.contextPath}/pc/exam/e/${item.id!}">${item.title!}</a>
                         </li>
                     </#list>
+                    <#if (examList0?size=0)>
+                        暂无数据
+                    </#if>
                 </ul>
             </div>
             <div class="card-footer">
@@ -32,6 +35,9 @@
                             <a href="${ctx.contextPath}/pc/exam/e/${item.id!}">${item.title!}</a>
                         </li>
                     </#list>
+                    <#if (examList1?size=0)>
+                        暂无数据
+                    </#if>
                 </ul>
             </div>
             <div class="card-footer">

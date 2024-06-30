@@ -513,6 +513,12 @@ public class SystemController extends BaseController {
     @RequestMapping("userSplitRole")
     @ResponseBody
     public RestResult userSplitRole(String urIds) {
+        String[] ids = urIds.split(",");
+        for (String id : ids) {
+            if (id.equals("1")) {
+                return RestResult.Fail("请勿删除该授权");// 超管账户的超级管理员角色，不允许删除。
+            }
+        }
         userInfoRoleService.userSplitRole(urIds);
         return RestResult.OK();
     }
