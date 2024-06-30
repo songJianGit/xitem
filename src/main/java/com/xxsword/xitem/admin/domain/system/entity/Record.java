@@ -44,7 +44,7 @@ public class Record implements Serializable {
     @ColumnComment("请求内容")
     private String params;
 
-    @Column
+    @Column(length = 500)
     @ColumnComment("游览器信息")
     private String useragent;
 
