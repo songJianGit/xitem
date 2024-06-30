@@ -3,23 +3,16 @@ package com.xxsword.xitem.admin.utils;
 import com.xxsword.xitem.admin.constant.Constant;
 import com.xxsword.xitem.admin.domain.system.entity.UserInfo;
 import org.apache.commons.lang3.StringUtils;
-import org.joda.time.DateTime;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
-import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.attribute.BasicFileAttributes;
 import java.security.MessageDigest;
 import java.text.DecimalFormat;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Stream;
 
 public class Utils {
 
@@ -251,45 +244,6 @@ public class Utils {
             return "";
         }
         return str.trim().replaceAll("\u00A0", "").replaceAll("\u3000", "");
-    }
-
-    /**
-     * 删除指定日期后产生的文件夹（文件夹中的文件也会一起删除）
-     *
-     * @param folder
-     * @param date
-     */
-    public static void deleteDirectory(String folder, DateTime date) {
-        Path directory = Paths.get(folder);
-        try (Stream<Path> paths = Files.walk(directory)) {
-            paths.filter(Files::isDirectory)
-                    .sorted(Comparator.reverseOrder())
-                    .forEach(path -> {
-                        try {
-                            BasicFileAttributes attrs = Files.readAttributes(path, BasicFileAttributes.class);
-                            DateTime creationTime = new DateTime(attrs.creationTime().toMillis());
-                            if (creationTime.isAfter(date)) {
-                                deleteDirectory(path);
-                            }
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    });
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private static void deleteDirectory(Path directoryToBeDeleted) {
-        try {
-            try (Stream<Path> stream = Files.walk(directoryToBeDeleted)) {
-                stream.sorted(Comparator.reverseOrder())
-                        .map(Path::toFile)
-                        .forEach(File::delete);
-            }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
     }
 
     public static String byteCountToDisplaySizeDecimal(long size) {
