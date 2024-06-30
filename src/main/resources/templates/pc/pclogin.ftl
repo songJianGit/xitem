@@ -40,18 +40,18 @@
     <form action="#!" method="post" class="login-form">
         <div class="form-group has-feedback">
             <span class="mdi mdi-account" aria-hidden="true"></span>
-            <input type="text" class="form-control" id="loginName" placeholder="登录名">
+            <input type="text" class="form-control" id="loginName" placeholder="登录名" maxlength="50">
         </div>
 
         <div class="form-group has-feedback">
             <span class="mdi mdi-lock" aria-hidden="true"></span>
-            <input type="password" class="form-control" id="passWord" placeholder="密码">
+            <input type="password" class="form-control" id="passWord" placeholder="密码" maxlength="100">
         </div>
 
         <div class="form-group has-feedback row">
             <div class="col-6">
                 <span class="mdi mdi-check-all form-control-feedback" aria-hidden="true"></span>
-                <input type="text" id="captchaInput" class="form-control" placeholder="验证码">
+                <input type="text" id="captchaInput" class="form-control" placeholder="验证码" maxlength="10">
             </div>
             <div class="col-6 text-right">
                 <img src="${ctx.contextPath}/getCaptcha" class="pull-right" id="captchaImg" style="cursor: pointer;border: 1px solid #eeeeee;"

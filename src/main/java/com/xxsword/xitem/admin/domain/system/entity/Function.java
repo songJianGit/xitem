@@ -26,7 +26,7 @@ public class Function extends BaseEntity implements Serializable {
     private String url;
 
     @Column
-    @ColumnComment("菜单标示")
+    @ColumnComment("菜单标识")
     private String tag;
 
     @Column(length = 50)

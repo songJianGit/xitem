@@ -15,7 +15,7 @@
             </div>
             <div class="form-group">
                 <label for="content">内容</label>
-                <textarea rows="3" name="content" id="content" class="form-control"></textarea>
+                <textarea rows="3" name="content" id="content" class="form-control" maxlength="2000"></textarea>
             </div>
             <div class="form-group">
                 <label for="files">附件</label>
