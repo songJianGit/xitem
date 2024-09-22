@@ -1,12 +1,6 @@
 # xitem
 一个开源的学习考试系统。
 
-演示地址：http://www.xxsowrd.com/xitem/index
-
-演示账号：admin/Admin9900
-
-注意：演示系统，每过一个小时，会重置一次数据
-
 联系邮箱：2443904383@qq.com
 
 ### 系统特点
