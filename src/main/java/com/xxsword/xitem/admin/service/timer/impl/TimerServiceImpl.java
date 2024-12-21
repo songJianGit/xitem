@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.xxsword.xitem.admin.config.ThreadLocalContext;
 import com.xxsword.xitem.admin.constant.Device;
 import com.xxsword.xitem.admin.constant.TimerType;
 import com.xxsword.xitem.admin.domain.timer.entity.Period;
@@ -43,7 +44,7 @@ public class TimerServiceImpl extends ServiceImpl<TimerMapper, Timer> implements
             return null;
         } else {
             this.saveOrUpdateTimer(userId, obId, timerType, period);
-            this.saveTrace(period.getId(), device);
+            this.saveTrace(period.getId(), device, userId);
         }
         return period;
     }
@@ -61,16 +62,6 @@ public class TimerServiceImpl extends ServiceImpl<TimerMapper, Timer> implements
         period.setCost(cost.intValue());
         periodService.save(period);
         this.saveOrUpdateTimer(userId, obId, timerType, period);
-    }
-
-    @Override
-    public boolean delTrace(String startDate, String endDate) {
-        DateTime dateTime1 = DateTime.parse(startDate, DateUtil.sdfA1);
-        DateTime dateTime2 = DateTime.parse(endDate, DateUtil.sdfA1);
-        LambdaQueryWrapper<Trace> q = Wrappers.lambdaQuery();
-        q.ge(Trace::getTimeStamp, dateTime1.getMillis());
-        q.le(Trace::getTimeStamp, dateTime2.getMillis());
-        return traceService.remove(q);
     }
 
     @Override
@@ -123,14 +114,16 @@ public class TimerServiceImpl extends ServiceImpl<TimerMapper, Timer> implements
     /**
      * 流水记录
      *
-     * @param periodId
-     * @param device
+     * @param periodId 段落id
+     * @param device   设备信息
+     * @param userId   用户id
      */
-    private void saveTrace(String periodId, Device device) {
+    private void saveTrace(String periodId, Device device, String userId) {
         Trace trace = new Trace();// 学习跟踪记录
         trace.setTimeStamp(Instant.now().getMillis());
         trace.setPeriodId(periodId);
         trace.setDevice(device.getCode());
+        ThreadLocalContext.setBusinessId(userId);
         traceService.save(trace);
     }
 

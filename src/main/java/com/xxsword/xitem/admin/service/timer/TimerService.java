@@ -32,15 +32,6 @@ public interface TimerService extends IService<Timer> {
     void outLineTime(String userId, String obId, TimerType timerType, Integer time, Integer device);
 
     /**
-     * 删除时间段内,类型为trace的跟踪信息
-     *
-     * @param startDate
-     * @param endDate
-     * @return
-     */
-    boolean delTrace(String startDate, String endDate);
-
-    /**
      * 获取 Timer
      * <p>
      * 因为没有唯一索引，所以可能有多个

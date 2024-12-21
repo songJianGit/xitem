@@ -17,7 +17,7 @@ import java.util.Base64;
  */
 public class AesEncryptUtil {
 
-    private static final String K = "e21a7ef46557cb9de812a1f8t267cb29";
+    private static final String K = "e812a1f8t267cb29";
 
     private static final String AES_ECB_PKCS5PADDING = "AES/ECB/PKCS5Padding";// 相同的内容，加密出来的密文相同；速度稍微快一点
     private static final String AES_CBC_PKCS5PADDING = "AES/CBC/PKCS5Padding";// 相同的内容，加密出来的密文不同；安全性高一点；建议用CBC
