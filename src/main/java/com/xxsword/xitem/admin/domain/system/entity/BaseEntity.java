@@ -10,9 +10,11 @@ import com.gitee.sunchenbin.mybatis.actable.annotation.Index;
 import com.xxsword.xitem.admin.utils.DateUtil;
 import lombok.Data;
 
-@Data
-public abstract class BaseEntity {
+import java.io.Serializable;
 
+@Data
+public abstract class BaseEntity implements Serializable {
+    private static final long serialVersionUID = 1L;
     @TableId(value = "id", type = IdType.ASSIGN_ID)
     @ColumnComment("主键id")
     @Column(length = 50)
