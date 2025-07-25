@@ -101,7 +101,7 @@ public class OrganServiceImpl extends ServiceImpl<OrganMapper, Organ> implements
     public List<Organ> organC(String organId) {
         LambdaQueryWrapper<Organ> q = Wrappers.lambdaQuery();
         q.eq(Organ::getStatus, 1);
-        q.last(" AND find_in_set('" + organId + "', pids) ");
+        q.apply(" find_in_set('" + organId + "', pids) ");
         return list(q);
     }
 

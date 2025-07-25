@@ -55,7 +55,8 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> i
     public List<Category> categoryC(String categoryId) {
         LambdaQueryWrapper<Category> q = Wrappers.lambdaQuery();
         q.eq(Category::getStatus, 1);
-        q.last(" AND find_in_set('" + categoryId + "', pids) order by seq asc, id asc");
+        q.orderByDesc(Category::getSeq, Category::getId);
+        q.apply(" find_in_set('" + categoryId + "', pids) ");
         return list(q);
     }
 
