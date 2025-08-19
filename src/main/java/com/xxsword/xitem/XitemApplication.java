@@ -15,6 +15,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 public class XitemApplication {
 
     public static void main(String[] args) {
+        // 分支测试===
         SpringApplication.run(XitemApplication.class, args);
     }
 
