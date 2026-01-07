@@ -598,7 +598,7 @@ public class SystemController extends BaseController {
         UserInfo userInfo = Utils.getUserInfo(request);
         dictService.delByIds(dictIds);//111111
         dictService.upLastInfo(userInfo, dictIds);
-        return RestResult.OK();
+        return RestResult.OK();// 2222
     }
 
 }
