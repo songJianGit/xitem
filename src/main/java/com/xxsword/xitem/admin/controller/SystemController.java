@@ -596,7 +596,7 @@ public class SystemController extends BaseController {
     @ResponseBody
     public RestResult delDict(HttpServletRequest request, String dictIds) {
         UserInfo userInfo = Utils.getUserInfo(request);
-        dictService.delByIds(dictIds);//111111
+        dictService.delByIds(dictIds);//11111133333
         dictService.upLastInfo(userInfo, dictIds);
         return RestResult.OK();// 2222
     }
