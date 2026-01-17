@@ -56,7 +56,6 @@ public interface CategoryService extends IService<Category> {
 
     /**
      * 顺序调整
-     * @param userInfo
      * @param id1
      * @param id2
      */

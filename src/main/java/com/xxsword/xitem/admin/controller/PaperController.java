@@ -95,7 +95,6 @@ public class PaperController {
     /**
      * 新增一条抽题规则
      *
-     * @param request
      * @param paperId
      * @return
      */

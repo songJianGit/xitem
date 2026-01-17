@@ -452,14 +452,13 @@ public class SystemController extends BaseController {
     /**
      * 根据角色id获取用户列表页
      *
-     * @param request
      * @param dto
      * @param page
      * @return
      */
     @RequestMapping("userListByRoleData")
     @ResponseBody
-    public RestPaging<UserInfoRoleVO> userListByRoleData(HttpServletRequest request, Page<UserInfoRole> page, UserInfoRoleDto dto) {
+    public RestPaging<UserInfoRoleVO> userListByRoleData(Page<UserInfoRole> page, UserInfoRoleDto dto) {
         Page<UserInfoRoleVO> userInfoPage = userInfoRoleService.queryUserListByRole(page, dto);
         return new RestPaging<>(userInfoPage.getTotal(), userInfoPage.getRecords());
     }
@@ -473,7 +472,7 @@ public class SystemController extends BaseController {
      */
     @RequestMapping("resetPassword")
     @ResponseBody
-    public RestResult resetPassword(HttpServletRequest request, String userId, String password) {
+    public RestResult resetPassword(String userId, String password) {
         if (StringUtils.isNotBlank(password)) {
             password = password.trim();
             if (password.length() > 100) {
@@ -483,7 +482,6 @@ public class SystemController extends BaseController {
             return RestResult.Fail("请填写密码");
         }
         if (Utils.isValidPassword(password)) {
-            UserInfo userInfo = Utils.getUserInfo(request);
             userInfoService.resetPassword(userId, password);
             return RestResult.OK();
         } else {
