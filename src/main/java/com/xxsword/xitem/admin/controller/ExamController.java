@@ -12,7 +12,6 @@ import com.xxsword.xitem.admin.domain.exam.entity.Paper;
 import com.xxsword.xitem.admin.domain.exam.entity.UserPaper;
 import com.xxsword.xitem.admin.domain.exam.vo.ExamAuthVO;
 import com.xxsword.xitem.admin.domain.exam.vo.UserPaperVO;
-import com.xxsword.xitem.admin.domain.system.entity.UserInfo;
 import com.xxsword.xitem.admin.model.RestPaging;
 import com.xxsword.xitem.admin.model.RestResult;
 import com.xxsword.xitem.admin.service.exam.ExamAuthService;
@@ -72,7 +71,6 @@ public class ExamController {
 
     @RequestMapping("save")
     public String save(HttpServletRequest request, Exam exam) {
-        UserInfo userInfo = Utils.getUserInfo(request);
         if (StringUtils.isBlank(exam.getId())) {
             exam.setReleaseStatus(0);
         }
@@ -83,7 +81,6 @@ public class ExamController {
     @RequestMapping("del")
     @ResponseBody
     public RestResult del(HttpServletRequest request, String ids) {
-        UserInfo userInfo = Utils.getUserInfo(request);
         examService.delByIds(ids);
         return RestResult.OK();
     }
@@ -91,7 +88,6 @@ public class ExamController {
     @RequestMapping("release")
     @ResponseBody
     public RestResult release(HttpServletRequest request, String id) {
-        UserInfo userInfo = Utils.getUserInfo(request);
         examService.release(id);
         return RestResult.OK();
     }
@@ -155,11 +151,10 @@ public class ExamController {
     @RequestMapping("addExamAuth")
     @ResponseBody
     public RestResult addExamAuth(HttpServletRequest request, String examId, String userIds, Model model) {
-        UserInfo userInfo = Utils.getUserInfo(request);
         if (StringUtils.isBlank(examId) || StringUtils.isBlank(userIds)) {
             return RestResult.Fail("参数异常");
         }
-        examAuthService.upExamAuth(userInfo, examId, userIds);
+        examAuthService.upExamAuth(examId, userIds);
         return RestResult.OK();
     }
 

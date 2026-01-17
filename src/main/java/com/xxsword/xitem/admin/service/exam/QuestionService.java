@@ -4,7 +4,6 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.xxsword.xitem.admin.domain.exam.entity.Question;
 import com.xxsword.xitem.admin.domain.exam.entity.UserPaperQuestion;
 import com.xxsword.xitem.admin.domain.exam.vo.QuestionVO;
-import com.xxsword.xitem.admin.domain.system.entity.UserInfo;
 import com.xxsword.xitem.admin.model.RestResult;
 
 import java.util.List;
@@ -22,11 +21,9 @@ public interface QuestionService extends IService<Question> {
      * excel导入解析
      * 解析excel，保存题目
      */
-    RestResult excelQuestion(String path, UserInfo userInfo);
+    RestResult excelQuestion(String path);
 
-    void saveQuestionAndOption(UserInfo userInfo, Question question, String optionJson);
-
-    void upLastInfo(UserInfo doUserInfo, String ids);
+    void saveQuestionAndOption(Question question, String optionJson);
 
     void delByIds(String ids);
 

@@ -6,7 +6,6 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.xxsword.xitem.admin.domain.exam.entity.QRS;
 import com.xxsword.xitem.admin.domain.exam.entity.QuestionRule;
-import com.xxsword.xitem.admin.domain.system.entity.UserInfo;
 import com.xxsword.xitem.admin.mapper.exam.QuestionRuleMapper;
 import com.xxsword.xitem.admin.service.exam.QRSService;
 import com.xxsword.xitem.admin.service.exam.QuestionRuleService;
@@ -28,7 +27,7 @@ public class QuestionRuleServiceImpl extends ServiceImpl<QuestionRuleMapper, Que
     private QRSService qrsService;
 
     @Override
-    public QuestionRule addQuestionRule(UserInfo userInfo, String paperId) {
+    public QuestionRule addQuestionRule(String paperId) {
         QuestionRule questionRule = new QuestionRule();
         questionRule.setTitle("规则" + (countByPaperId(paperId) + 1));
         questionRule.setSeq(DateTime.now().getMillis());
@@ -54,17 +53,6 @@ public class QuestionRuleServiceImpl extends ServiceImpl<QuestionRuleMapper, Que
         updateBatchById(listUp);
     }
 
-    @Override
-    public void upLastInfo(UserInfo doUserInfo, String ids) {
-        String[] idsS = ids.split(",");
-        List<QuestionRule> listUp = new ArrayList<>();
-        for (String id : idsS) {
-            QuestionRule itemUp = new QuestionRule();
-            itemUp.setId(id);
-            listUp.add(itemUp);
-        }
-        updateBatchById(listUp);
-    }
 
     @Override
     public Long countByPaperId(String paperId) {

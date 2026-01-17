@@ -10,7 +10,6 @@ import com.xxsword.xitem.admin.domain.exam.dto.QRSDto;
 import com.xxsword.xitem.admin.domain.exam.dto.QuestionDto;
 import com.xxsword.xitem.admin.domain.exam.entity.QRS;
 import com.xxsword.xitem.admin.domain.exam.vo.QRSVO;
-import com.xxsword.xitem.admin.domain.system.entity.UserInfo;
 import com.xxsword.xitem.admin.mapper.exam.QRSMapper;
 import com.xxsword.xitem.admin.service.exam.QRSService;
 import org.springframework.stereotype.Service;
@@ -29,19 +28,7 @@ public class QRSServiceImpl extends ServiceImpl<QRSMapper, QRS> implements QRSSe
     }
 
     @Override
-    public void upLastInfo(UserInfo doUserInfo, String ids) {
-        String[] idsS = ids.split(",");
-        List<QRS> listUp = new ArrayList<>();
-        for (String id : idsS) {
-            QRS itemUp = new QRS();
-            itemUp.setId(id);
-            listUp.add(itemUp);
-        }
-        updateBatchById(listUp);
-    }
-
-    @Override
-    public void addQRS(UserInfo userInfo, String qrid, String qids, Double score) {
+    public void addQRS(String qrid, String qids, Double score) {
         String[] ids = qids.split(",");
         int seq = 0;
         List<QRS> qrsList = list(new Page<>(1, 1), new LambdaQueryWrapper<QRS>().eq(QRS::getStatus, 1).eq(QRS::getQrId, qrid).orderByDesc(QRS::getSeq));

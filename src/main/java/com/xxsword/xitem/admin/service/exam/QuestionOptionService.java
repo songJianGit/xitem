@@ -2,7 +2,6 @@ package com.xxsword.xitem.admin.service.exam;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.xxsword.xitem.admin.domain.exam.entity.QuestionOption;
-import com.xxsword.xitem.admin.domain.system.entity.UserInfo;
 
 import java.util.List;
 
@@ -14,7 +13,5 @@ public interface QuestionOptionService extends IService<QuestionOption> {
      * @return
      */
     List<QuestionOption> questionOptionListByQid(String questionId);
-
-    void upLastInfo(UserInfo doUserInfo, String ids);
 
 }

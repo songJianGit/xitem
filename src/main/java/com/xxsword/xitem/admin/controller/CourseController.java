@@ -10,7 +10,6 @@ import com.xxsword.xitem.admin.domain.course.entity.Course;
 import com.xxsword.xitem.admin.domain.course.entity.CourseFile;
 import com.xxsword.xitem.admin.domain.course.entity.CourseUser;
 import com.xxsword.xitem.admin.domain.course.vo.CourseUserVO;
-import com.xxsword.xitem.admin.domain.system.entity.UserInfo;
 import com.xxsword.xitem.admin.model.RestPaging;
 import com.xxsword.xitem.admin.model.RestResult;
 import com.xxsword.xitem.admin.service.category.CategoryService;
@@ -84,7 +83,6 @@ public class CourseController extends BaseController {
 
     @RequestMapping("save")
     public String save(HttpServletRequest request, Course course, @RequestParam(value = "fileinfo") MultipartFile multipartFile) {
-        UserInfo userInfo = Utils.getUserInfo(request);
         String path = UpLoadUtil.upload(multipartFile, "/coursecover");
         if (StringUtils.isNotBlank(path)) {
             course.setCover(path);
@@ -100,7 +98,6 @@ public class CourseController extends BaseController {
     @RequestMapping("del")
     @ResponseBody
     public RestResult del(HttpServletRequest request, String ids) {
-        UserInfo userInfo = Utils.getUserInfo(request);
         courseService.delByIds(ids);
         return RestResult.OK();
     }
@@ -108,7 +105,6 @@ public class CourseController extends BaseController {
     @RequestMapping("release")
     @ResponseBody
     public RestResult release(HttpServletRequest request, String id) {
-        UserInfo userInfo = Utils.getUserInfo(request);
         courseService.release(id);
         return RestResult.OK();
     }
@@ -123,7 +119,6 @@ public class CourseController extends BaseController {
     @RequestMapping("courseSeq")
     @ResponseBody
     public RestResult courseSeq(HttpServletRequest request, String id1, String id2) {
-        UserInfo userInfo = Utils.getUserInfo(request);
         courseService.seq(id1, id2);
         return RestResult.OK();
     }

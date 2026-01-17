@@ -6,7 +6,6 @@ import com.xxsword.xitem.admin.domain.exam.dto.ExamAuthDto;
 import com.xxsword.xitem.admin.domain.exam.entity.Exam;
 import com.xxsword.xitem.admin.domain.exam.entity.ExamAuth;
 import com.xxsword.xitem.admin.domain.exam.vo.ExamAuthVO;
-import com.xxsword.xitem.admin.domain.system.entity.UserInfo;
 
 public interface ExamAuthService extends IService<ExamAuth> {
 
@@ -16,7 +15,7 @@ public interface ExamAuthService extends IService<ExamAuth> {
      * @param examId
      * @param userIds
      */
-    void upExamAuth(UserInfo userInfo, String examId, String userIds);
+    void upExamAuth(String examId, String userIds);
 
     Page<ExamAuthVO> pageExamAuthByDto(Page<ExamAuth> page, ExamAuthDto dto);
 

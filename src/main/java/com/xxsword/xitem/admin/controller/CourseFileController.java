@@ -67,7 +67,6 @@ public class CourseFileController extends BaseController {
     @RequestMapping("del")
     @ResponseBody
     public RestResult del(HttpServletRequest request, String ids) {
-        UserInfo userInfo = Utils.getUserInfo(request);
         courseFileService.delByIds(ids);
         return RestResult.OK();
     }

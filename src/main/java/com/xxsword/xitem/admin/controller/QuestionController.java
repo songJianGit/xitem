@@ -89,9 +89,8 @@ public class QuestionController {
     }
 
     @RequestMapping("save")
-    public String save(HttpServletRequest request, Question question, String optionJson) {
-        UserInfo userInfo = Utils.getUserInfo(request);
-        questionService.saveQuestionAndOption(userInfo, question, optionJson);
+    public String save(Question question, String optionJson) {
+        questionService.saveQuestionAndOption(question, optionJson);
         return "redirect:list";
     }
 
@@ -100,7 +99,6 @@ public class QuestionController {
     public RestResult del(HttpServletRequest request, String ids) {
         UserInfo userInfo = Utils.getUserInfo(request);
         questionService.delByIds(ids);
-        questionService.upLastInfo(userInfo, ids);
         return RestResult.OK();
     }
 
@@ -117,12 +115,11 @@ public class QuestionController {
     @RequestMapping("questionImport")
     @ResponseBody
     public RestResult questionImport(HttpServletRequest request, @RequestParam(value = "fileinfo") MultipartFile multipartFile) {
-        UserInfo userInfo = Utils.getUserInfo(request);
         String path = UpLoadUtil.upload(multipartFile, "/questionexcel");
         String fileType = FilenameUtils.getExtension(path).toLowerCase();
         if (StringUtils.isNotBlank(path)) {
             if (fileType.equalsIgnoreCase("xls") || fileType.equalsIgnoreCase("xlsx")) {
-                return questionService.excelQuestion(UpLoadUtil.getProjectPath() + path, userInfo);
+                return questionService.excelQuestion(UpLoadUtil.getProjectPath() + path);
             } else {
                 return RestResult.Fail("只能上传excel文档");
             }

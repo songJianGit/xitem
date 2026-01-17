@@ -2,7 +2,6 @@ package com.xxsword.xitem.admin.service.exam;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.xxsword.xitem.admin.domain.exam.entity.QuestionRule;
-import com.xxsword.xitem.admin.domain.system.entity.UserInfo;
 
 import java.util.List;
 
@@ -15,14 +14,11 @@ public interface QuestionRuleService extends IService<QuestionRule> {
      * 抽提0
      * 总题0
      *
-     * @param userInfo
      * @return
      */
-    QuestionRule addQuestionRule(UserInfo userInfo, String paperId);
+    QuestionRule addQuestionRule(String paperId);
 
     void delByIds(String ids);
-
-    void upLastInfo(UserInfo doUserInfo, String ids);
 
     /**
      * 该试卷id下，有多少条规则

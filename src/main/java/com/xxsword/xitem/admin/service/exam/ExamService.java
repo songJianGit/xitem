@@ -4,14 +4,11 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.xxsword.xitem.admin.domain.exam.dto.ExamDto;
 import com.xxsword.xitem.admin.domain.exam.entity.Exam;
-import com.xxsword.xitem.admin.domain.system.entity.UserInfo;
 
 import java.util.List;
 
 public interface ExamService extends IService<Exam> {
     List<Exam> setExamexstatus(List<Exam> list);
-
-    void upLastInfo(UserInfo doUserInfo, String ids);
 
     void delByIds(String ids);
 

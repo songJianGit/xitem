@@ -11,8 +11,6 @@ import java.util.List;
 
 public interface UserPaperService extends IService<UserPaper> {
 
-    void upLastInfo(UserInfo doUserInfo, String ids);
-
     /**
      * 获取未提交的UserPaper，没有则新增一个
      *
@@ -39,7 +37,7 @@ public interface UserPaperService extends IService<UserPaper> {
     /**
      * 更新用户答题记录状态，计算用户总成绩
      */
-    UserPaper userPaperSub(UserInfo userInfo, String userPaperId);
+    UserPaper userPaperSub(String userPaperId);
 
     /**
      * 该用户的考试纪录

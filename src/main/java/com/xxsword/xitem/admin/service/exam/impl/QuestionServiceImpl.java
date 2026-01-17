@@ -14,13 +14,11 @@ import com.xxsword.xitem.admin.domain.exam.entity.QuestionOption;
 import com.xxsword.xitem.admin.domain.exam.entity.UserPaperQuestion;
 import com.xxsword.xitem.admin.domain.exam.vo.QuestionExcelVO;
 import com.xxsword.xitem.admin.domain.exam.vo.QuestionVO;
-import com.xxsword.xitem.admin.domain.system.entity.UserInfo;
 import com.xxsword.xitem.admin.mapper.exam.QuestionMapper;
 import com.xxsword.xitem.admin.model.RestResult;
 import com.xxsword.xitem.admin.service.category.CategoryService;
 import com.xxsword.xitem.admin.service.exam.QuestionOptionService;
 import com.xxsword.xitem.admin.service.exam.QuestionService;
-import com.xxsword.xitem.admin.service.system.DictService;
 import com.xxsword.xitem.admin.utils.ExamUtil;
 import com.xxsword.xitem.admin.utils.ExcelUtils;
 import com.xxsword.xitem.admin.utils.Utils;
@@ -39,8 +37,6 @@ import java.util.stream.Collectors;
 @Service
 public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> implements QuestionService {
     @Autowired
-    private DictService dictService;
-    @Autowired
     private QuestionOptionService questionOptionService;
     @Autowired
     private CategoryService categoryService;
@@ -56,7 +52,7 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
 
     @Override
     @Transactional
-    public RestResult excelQuestion(String path, UserInfo userInfo) {
+    public RestResult excelQuestion(String path) {
         Workbook wb = ExcelUtils.readExcle(new File(path));
         Sheet sheet = wb.getSheetAt(0);// 读取第一页
         List<String> listError = new ArrayList<>();
@@ -128,7 +124,7 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
         if (listError.size() != 0) {
             return RestResult.Fail(listError);// 只要有异常，则不做保存逻辑
         }
-        saveByQuestionVO(userInfo, questionExcelVOS);
+        saveByQuestionVO(questionExcelVOS);
         return RestResult.OK();
     }
 
@@ -175,7 +171,7 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
         return false;
     }
 
-    private void saveByQuestionVO(UserInfo userInfo, List<QuestionExcelVO> list) {
+    private void saveByQuestionVO(List<QuestionExcelVO> list) {
         for (QuestionExcelVO item : list) {
             int qtypeInfo = item.getQtype();
             List<QuestionOption> listQP = new ArrayList<>();// 题目选项
@@ -234,7 +230,7 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
 
     @Override
     @Transactional
-    public void saveQuestionAndOption(UserInfo userInfo, Question question, String optionJson) {
+    public void saveQuestionAndOption(Question question, String optionJson) {
         saveOrUpdate(question);
         List<QuestionOption> questionOptionList = new ArrayList<>();
         JSONArray jsonArray = JSONArray.parseArray(optionJson);
@@ -313,18 +309,6 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
         q.orderByDesc(Question::getCreateDate, Question::getId);
         long count = count(q);
         return count != 0;
-    }
-
-    @Override
-    public void upLastInfo(UserInfo doUserInfo, String ids) {
-        String[] idsS = ids.split(",");
-        List<Question> listUp = new ArrayList<>();
-        for (String id : idsS) {
-            Question itemUp = new Question();
-            itemUp.setId(id);
-            listUp.add(itemUp);
-        }
-        updateBatchById(listUp);
     }
 
     @Override

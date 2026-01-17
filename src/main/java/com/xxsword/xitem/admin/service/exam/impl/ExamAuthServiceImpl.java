@@ -8,7 +8,6 @@ import com.xxsword.xitem.admin.domain.exam.dto.ExamAuthDto;
 import com.xxsword.xitem.admin.domain.exam.entity.Exam;
 import com.xxsword.xitem.admin.domain.exam.entity.ExamAuth;
 import com.xxsword.xitem.admin.domain.exam.vo.ExamAuthVO;
-import com.xxsword.xitem.admin.domain.system.entity.UserInfo;
 import com.xxsword.xitem.admin.mapper.exam.ExamAuthMapper;
 import com.xxsword.xitem.admin.service.exam.ExamAuthService;
 import lombok.extern.slf4j.Slf4j;
@@ -22,7 +21,7 @@ import java.util.List;
 public class ExamAuthServiceImpl extends ServiceImpl<ExamAuthMapper, ExamAuth> implements ExamAuthService {
 
     @Override
-    public void upExamAuth(UserInfo userInfo, String examId, String userIds) {
+    public void upExamAuth(String examId, String userIds) {
         String[] ids = userIds.split(",");
         List<ExamAuth> examAuthListUp = new ArrayList<>();
         for (String id : ids) {

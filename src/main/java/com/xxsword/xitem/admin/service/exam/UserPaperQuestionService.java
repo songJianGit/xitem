@@ -10,8 +10,6 @@ import java.util.List;
 
 public interface UserPaperQuestionService extends IService<UserPaperQuestion> {
 
-    void upLastInfo(UserInfo doUserInfo, String ids);
-
     /**
      * 根据抽提规则，抽取题目
      */
@@ -50,5 +48,5 @@ public interface UserPaperQuestionService extends IService<UserPaperQuestion> {
      * @param answers
      * @return
      */
-    void upUserPaperQuestionAnswers(UserInfo userInfo, String userPaperQuestionId, String answers);
+    void upUserPaperQuestionAnswers(String userPaperQuestionId, String answers);
 }

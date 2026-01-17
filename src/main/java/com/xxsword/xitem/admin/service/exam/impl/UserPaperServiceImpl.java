@@ -28,18 +28,6 @@ public class UserPaperServiceImpl extends ServiceImpl<UserPaperMapper, UserPaper
     private UserPaperQuestionService userPaperQuestionService;
 
     @Override
-    public void upLastInfo(UserInfo doUserInfo, String ids) {
-        String[] idsS = ids.split(",");
-        List<UserPaper> listUp = new ArrayList<>();
-        for (String id : idsS) {
-            UserPaper itemUp = new UserPaper();
-            itemUp.setId(id);
-            listUp.add(itemUp);
-        }
-        updateBatchById(listUp);
-    }
-
-    @Override
     @Transactional
     public UserPaper getUserPaper(UserInfo userInfo, String paperId, String examId, Integer type) {
         if (type == null) {
@@ -75,7 +63,7 @@ public class UserPaperServiceImpl extends ServiceImpl<UserPaperMapper, UserPaper
 
     @Override
     @Transactional
-    public UserPaper userPaperSub(UserInfo userInfo, String userPaperId) {
+    public UserPaper userPaperSub(String userPaperId) {
         UserPaper userPaper = getById(userPaperId);
         if (userPaper.getSubStatus().equals(1)) {// 已提交则无需重复提交
             return userPaper;

@@ -13,7 +13,6 @@ import com.xxsword.xitem.admin.utils.ExamUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -30,17 +29,6 @@ public class UserPaperQuestionServiceImpl extends ServiceImpl<UserPaperQuestionM
     @Autowired
     private QuestionOptionService questionOptionService;
 
-    @Override
-    public void upLastInfo(UserInfo doUserInfo, String ids) {
-        String[] idsS = ids.split(",");
-        List<UserPaperQuestion> listUp = new ArrayList<>();
-        for (String id : idsS) {
-            UserPaperQuestion itemUp = new UserPaperQuestion();
-            itemUp.setId(id);
-            listUp.add(itemUp);
-        }
-        updateBatchById(listUp);
-    }
 
     /**
      * 根据规则生成新的试卷
@@ -115,7 +103,7 @@ public class UserPaperQuestionServiceImpl extends ServiceImpl<UserPaperQuestionM
     }
 
     @Override
-    public void upUserPaperQuestionAnswers(UserInfo userInfo, String userPaperQuestionId, String answers) {
+    public void upUserPaperQuestionAnswers(String userPaperQuestionId, String answers) {
         if (StringUtils.isBlank(answers)) {
             return;
         }

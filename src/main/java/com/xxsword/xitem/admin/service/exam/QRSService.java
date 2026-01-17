@@ -6,7 +6,6 @@ import com.xxsword.xitem.admin.domain.exam.dto.QRSDto;
 import com.xxsword.xitem.admin.domain.exam.dto.QuestionDto;
 import com.xxsword.xitem.admin.domain.exam.entity.QRS;
 import com.xxsword.xitem.admin.domain.exam.vo.QRSVO;
-import com.xxsword.xitem.admin.domain.system.entity.UserInfo;
 
 import java.util.List;
 
@@ -20,8 +19,6 @@ public interface QRSService extends IService<QRS> {
      */
     Long countQRSByQrid(String qrid);
 
-    void upLastInfo(UserInfo doUserInfo, String ids);
-
     /**
      * 关联
      *
@@ -29,7 +26,7 @@ public interface QRSService extends IService<QRS> {
      * @param qids  问题ids
      * @param score
      */
-    void addQRS(UserInfo userInfo, String qrid, String qids, Double score);
+    void addQRS(String qrid, String qids, Double score);
 
     /**
      * @param qrid 规则id

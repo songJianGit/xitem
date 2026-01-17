@@ -5,7 +5,6 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.xxsword.xitem.admin.domain.exam.entity.QuestionOption;
-import com.xxsword.xitem.admin.domain.system.entity.UserInfo;
 import com.xxsword.xitem.admin.mapper.exam.QuestionOptionMapper;
 import com.xxsword.xitem.admin.service.exam.QuestionOptionService;
 import com.xxsword.xitem.admin.service.redis.RedisService;
@@ -34,15 +33,4 @@ public class QuestionOptionServiceImpl extends ServiceImpl<QuestionOptionMapper,
         return list;
     }
 
-    @Override
-    public void upLastInfo(UserInfo doUserInfo, String ids) {
-        String[] idsS = ids.split(",");
-        List<QuestionOption> listUp = new ArrayList<>();
-        for (String id : idsS) {
-            QuestionOption itemUp = new QuestionOption();
-            itemUp.setId(id);
-            listUp.add(itemUp);
-        }
-        updateBatchById(listUp);
-    }
 }

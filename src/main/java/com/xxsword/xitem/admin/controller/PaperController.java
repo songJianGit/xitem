@@ -66,18 +66,15 @@ public class PaperController {
     }
 
     @RequestMapping("save")
-    public String save(HttpServletRequest request, Paper paper) {
-        UserInfo userInfo = Utils.getUserInfo(request);
+    public String save(Paper paper) {
         paperService.saveOrUpdate(paper);
         return "redirect:list";
     }
 
     @RequestMapping("del")
     @ResponseBody
-    public RestResult del(HttpServletRequest request, String ids) {
-        UserInfo userInfo = Utils.getUserInfo(request);
+    public RestResult del(String ids) {
         paperService.delByIds(ids);
-        paperService.upLastInfo(userInfo, ids);
         return RestResult.OK();
     }
 
@@ -104,19 +101,17 @@ public class PaperController {
      */
     @RequestMapping("addQuestionRule")
     @ResponseBody
-    public RestResult addQuestionRule(HttpServletRequest request, String paperId) {
+    public RestResult addQuestionRule(String paperId) {
         if (StringUtils.isBlank(paperId)) {
             return RestResult.Codes(Codes.PARAMETER_NULL);
         }
-        UserInfo userInfo = Utils.getUserInfo(request);
-        questionRuleService.addQuestionRule(userInfo, paperId);
+        questionRuleService.addQuestionRule(paperId);
         return RestResult.OK();
     }
 
     @RequestMapping("upQuestionRule")
     @ResponseBody
-    public RestResult upQuestionRule(HttpServletRequest request, QuestionRule questionRule) {
-        UserInfo userInfo = Utils.getUserInfo(request);
+    public RestResult upQuestionRule(QuestionRule questionRule) {
         int countQRS = qrsService.countQRSByQrid(questionRule.getId()).intValue();
         if (countQRS == 0) {
             return RestResult.Fail("请添加考题");
@@ -141,7 +136,6 @@ public class PaperController {
     public RestResult delQuestionRule(HttpServletRequest request, String questionRuleIds) {
         UserInfo userInfo = Utils.getUserInfo(request);
         questionRuleService.delByIds(questionRuleIds);
-        questionRuleService.upLastInfo(userInfo, questionRuleIds);
         return RestResult.OK();
     }
 
@@ -215,8 +209,7 @@ public class PaperController {
         if (StringUtils.isBlank(qIds)) {
             return RestResult.Fail();
         }
-        UserInfo userInfo = Utils.getUserInfo(request);
-        qrsService.addQRS(userInfo, qrId, qIds, score);
+        qrsService.addQRS(qrId, qIds, score);
         return RestResult.OK();
     }
 

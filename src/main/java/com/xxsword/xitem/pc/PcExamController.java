@@ -225,12 +225,11 @@ public class PcExamController {
 
     @PostMapping("saveAnswer")
     @ResponseBody
-    public RestResult saveAnswer(HttpServletRequest request, String qid, String answers) {
+    public RestResult saveAnswer(String qid, String answers) {
         if (StringUtils.isBlank(answers)) {
             return RestResult.OK("未作答");
         }
-        UserInfo userInfo = Utils.getUserInfo(request);
-        userPaperQuestionService.upUserPaperQuestionAnswers(userInfo, qid, answers);
+        userPaperQuestionService.upUserPaperQuestionAnswers(qid, answers);
         return RestResult.OK();
     }
 
@@ -242,9 +241,8 @@ public class PcExamController {
      */
     @RequestMapping("examPageSubmit")
     @ResponseBody
-    public RestResult examPageSubmit(HttpServletRequest request, String userPaperId) {
-        UserInfo userInfo = Utils.getUserInfo(request);
-        userPaperService.userPaperSub(userInfo, userPaperId);
+    public RestResult examPageSubmit(String userPaperId) {
+        userPaperService.userPaperSub(userPaperId);
         return RestResult.OK();
     }
 
