@@ -34,7 +34,6 @@ public class UserPaperServiceImpl extends ServiceImpl<UserPaperMapper, UserPaper
         for (String id : idsS) {
             UserPaper itemUp = new UserPaper();
             itemUp.setId(id);
-            itemUp.setBaseInfo(doUserInfo);
             listUp.add(itemUp);
         }
         updateBatchById(listUp);
@@ -83,7 +82,6 @@ public class UserPaperServiceImpl extends ServiceImpl<UserPaperMapper, UserPaper
         }
         UserPaper userPaperUp = new UserPaper();
         userPaperUp.setId(userPaperId);
-        userPaperUp.setBaseInfo(userInfo);
         userPaperUp.setSubStatus(1);
         userPaperUp.setSubDate(DateUtil.now());
         userPaperUp.setScore(this.sumScore(userPaper));
@@ -166,7 +164,6 @@ public class UserPaperServiceImpl extends ServiceImpl<UserPaperMapper, UserPaper
      */
     private UserPaper newUserPaper(UserInfo userInfo, String paperId, String examId) {
         UserPaper userPaper = new UserPaper();
-        userPaper.setBaseInfo(userInfo);
         userPaper.setSubStatus(0);
         userPaper.setExamId(examId);
         userPaper.setPaperId(paperId);

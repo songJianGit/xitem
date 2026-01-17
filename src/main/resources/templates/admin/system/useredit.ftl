@@ -54,9 +54,9 @@
                                                value="${user.phoneNo!}" placeholder="手机号码" required/>
                                     </div>
                                     <div class="form-group col-6">
-                                        <label for="organid">部门</label>
+                                        <label for="organname">部门</label>
                                         <input type="text" class="form-control" id="organname" name="organName"
-                                               value="${user.organName!}" placeholder="单位" required readonly
+                                               value="${user.organName!}" placeholder="部门" required readonly
                                                autocomplete="off"/>
                                         <input type="hidden" id="organid" name="organId"
                                                value="${user.organId!}"/>
@@ -96,8 +96,20 @@
         if(!checkphoneno()){
             return false;
         }
+        if(!checkOrganId()){
+            return false;
+        }
         return true;
     }
+    function checkOrganId() {
+        let organid = $("#organid").val();
+        if(isBlank(organid)){
+            layer.msg("请选择部门");
+            return false;
+        }
+        return true;
+    }
+
 
     function checkloginname() {
         let b = false;

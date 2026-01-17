@@ -33,7 +33,6 @@ public class PaperServiceImpl extends ServiceImpl<PaperMapper, Paper> implements
         for (String id : idsS) {
             Paper itemUp = new Paper();
             itemUp.setId(id);
-            itemUp.setBaseInfo(doUserInfo);
             listUp.add(itemUp);
         }
         updateBatchById(listUp);

@@ -35,7 +35,6 @@ public class QRSServiceImpl extends ServiceImpl<QRSMapper, QRS> implements QRSSe
         for (String id : idsS) {
             QRS itemUp = new QRS();
             itemUp.setId(id);
-            itemUp.setBaseInfo(doUserInfo);
             listUp.add(itemUp);
         }
         updateBatchById(listUp);
@@ -58,7 +57,6 @@ public class QRSServiceImpl extends ServiceImpl<QRSMapper, QRS> implements QRSSe
                 qrs.setScore(score);
                 qrs.setQrId(qrid);
                 qrs.setSeq(++seq);
-                qrs.setBaseInfo(userInfo);
                 qrsListSave.add(qrs);
             }
         }

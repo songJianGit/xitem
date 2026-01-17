@@ -59,7 +59,6 @@ public class CourseFileController extends BaseController {
     @RequestMapping("save")
     public String save(HttpServletRequest request, CourseFile courseFile, String fileInfos) {
         UserInfo userInfo = Utils.getUserInfo(request);
-        courseFile.setBaseInfo(userInfo);
         courseFileService.saveOrUpdate(courseFile);
         courseFileItemService.saveOrUpdateCourseFile(userInfo, courseFile, fileInfos);
         return "redirect:list";
@@ -69,7 +68,7 @@ public class CourseFileController extends BaseController {
     @ResponseBody
     public RestResult del(HttpServletRequest request, String ids) {
         UserInfo userInfo = Utils.getUserInfo(request);
-        courseFileService.delByIds(userInfo, ids);
+        courseFileService.delByIds(ids);
         return RestResult.OK();
     }
 

@@ -30,7 +30,6 @@ public class QuestionRuleServiceImpl extends ServiceImpl<QuestionRuleMapper, Que
     @Override
     public QuestionRule addQuestionRule(UserInfo userInfo, String paperId) {
         QuestionRule questionRule = new QuestionRule();
-        questionRule.setBaseInfo(userInfo);
         questionRule.setTitle("规则" + (countByPaperId(paperId) + 1));
         questionRule.setSeq(DateTime.now().getMillis());
         questionRule.setNum(0);
@@ -62,7 +61,6 @@ public class QuestionRuleServiceImpl extends ServiceImpl<QuestionRuleMapper, Que
         for (String id : idsS) {
             QuestionRule itemUp = new QuestionRule();
             itemUp.setId(id);
-            itemUp.setBaseInfo(doUserInfo);
             listUp.add(itemUp);
         }
         updateBatchById(listUp);
@@ -144,17 +142,15 @@ public class QuestionRuleServiceImpl extends ServiceImpl<QuestionRuleMapper, Que
     }
 
     @Override
-    public void seq(UserInfo userInfo, String id1, String id2) {
+    public void seq(String id1, String id2) {
         QuestionRule questionRule1 = getById(id1);
         QuestionRule questionRule2 = getById(id2);
         QuestionRule questionRule1Up = new QuestionRule();
         QuestionRule questionRule2Up = new QuestionRule();
         questionRule1Up.setId(id1);
         questionRule1Up.setSeq(questionRule2.getSeq());
-        questionRule1Up.setBaseInfo(userInfo);
         questionRule2Up.setId(id2);
         questionRule2Up.setSeq(questionRule1.getSeq());
-        questionRule2Up.setBaseInfo(userInfo);
         List<QuestionRule> listUp = new ArrayList<>();
         listUp.add(questionRule1Up);
         listUp.add(questionRule2Up);

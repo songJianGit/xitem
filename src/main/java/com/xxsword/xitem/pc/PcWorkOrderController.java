@@ -73,12 +73,10 @@ public class PcWorkOrderController extends BaseController {
     @RequestMapping("save")
     public String save(HttpServletRequest request, @RequestParam(value = "file") MultipartFile file, WorkOrder workOrder, String content) {
         UserInfo userInfo = Utils.getUserInfo(request);
-        workOrder.setBaseInfo(userInfo);
         workOrder.setWorkStatus(0);
         workOrderService.saveOrUpdate(workOrder);
 
         WorkOrderItem workOrderItem = new WorkOrderItem();
-        workOrderItem.setBaseInfo(userInfo);
         workOrderItem.setWorkOrderId(workOrder.getId());
         workOrderItem.setContent(content);
         String path = UpLoadUtil.upload(file, "workImg");
@@ -95,7 +93,6 @@ public class PcWorkOrderController extends BaseController {
     @RequestMapping("saveItem")
     public String saveItem(HttpServletRequest request, @RequestParam(value = "file") MultipartFile file, WorkOrderItem workOrderItem, RedirectAttributes redirectAttributes) {
         UserInfo userInfo = Utils.getUserInfo(request);
-        workOrderItem.setBaseInfo(userInfo);
         String path = UpLoadUtil.upload(file, "workImg");
         if (StringUtils.isNotBlank(path)) {
             workOrderItem.setFileImg(path);

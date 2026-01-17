@@ -1,8 +1,6 @@
 package com.xxsword.xitem.admin.controller;
 
-import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.xxsword.xitem.admin.domain.system.entity.UserInfo;
 import com.xxsword.xitem.admin.domain.workorder.convert.WorkOrderConvert;
 import com.xxsword.xitem.admin.domain.workorder.dto.WorkOrderDto;
 import com.xxsword.xitem.admin.domain.workorder.dto.WorkOrderItemDto;
@@ -77,8 +75,6 @@ public class WorkOrderController extends BaseController {
      */
     @RequestMapping("saveItem")
     public String saveItem(HttpServletRequest request, WorkOrderItem workOrderItem, RedirectAttributes redirectAttributes) {
-        UserInfo userInfo = Utils.getUserInfo(request);
-        workOrderItem.setBaseInfo(userInfo);
         workOrderItemService.saveOrUpdate(workOrderItem);
         redirectAttributes.addAttribute("id", workOrderItem.getWorkOrderId());
         return "redirect:show";

@@ -7,7 +7,6 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.xxsword.xitem.admin.domain.system.dto.RoleDto;
 import com.xxsword.xitem.admin.domain.system.entity.Function;
 import com.xxsword.xitem.admin.domain.system.entity.Role;
-import com.xxsword.xitem.admin.domain.system.entity.UserInfo;
 import com.xxsword.xitem.admin.mapper.system.RoleMapper;
 import com.xxsword.xitem.admin.service.system.RoleFunctionService;
 import com.xxsword.xitem.admin.service.system.RoleService;
@@ -72,19 +71,6 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
         }
         updateById(roleUp);
         return role;
-    }
-
-    @Override
-    public void upLastInfo(UserInfo doUserInfo, String roleIds) {
-        String[] ids = roleIds.split(",");
-        List<Role> listUp = new ArrayList<>();
-        for (String id : ids) {
-            Role roleUp = new Role();
-            roleUp.setId(id);
-            roleUp.setBaseInfo(doUserInfo);
-            listUp.add(roleUp);
-        }
-        updateBatchById(listUp);
     }
 
 }

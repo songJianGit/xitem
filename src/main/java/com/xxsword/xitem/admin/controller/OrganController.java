@@ -130,7 +130,6 @@ public class OrganController extends BaseController {
             Organ pOrganMax = organService.maxSeq(pId);
             organ.setSeq(pOrganMax.getSeq() + 10);
         }
-        organ.setBaseInfo(userInfo);
         organService.saveOrUpdate(organ);
 
         Organ organUp = new Organ();
@@ -148,7 +147,6 @@ public class OrganController extends BaseController {
     public RestResult delOrgan(HttpServletRequest request, String organIds) {
         UserInfo userInfo = Utils.getUserInfo(request);
         organService.delOrgan(organIds);
-        organService.upLastInfo(userInfo, organIds);
         return RestResult.OK();
     }
 

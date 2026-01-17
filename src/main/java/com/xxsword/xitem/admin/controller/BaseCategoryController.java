@@ -5,9 +5,7 @@ import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.xxsword.xitem.admin.domain.category.dto.CategoryDto;
 import com.xxsword.xitem.admin.domain.category.entity.Category;
-import com.xxsword.xitem.admin.domain.system.entity.UserInfo;
 import com.xxsword.xitem.admin.model.RestPaging;
-import com.xxsword.xitem.admin.model.RestResult;
 import com.xxsword.xitem.admin.model.ZTree;
 import com.xxsword.xitem.admin.service.category.CategoryService;
 import org.joda.time.DateTime;
@@ -29,8 +27,8 @@ public class BaseCategoryController extends BaseController {
      * @param open
      * @return
      */
-    public List<ZTree> data(Integer open, String checkedids, CategoryDto categoryDto) {
-        return dataI(open, checkedids, null, categoryDto);
+    public List<ZTree> dataBase(Integer open, String checkedids, CategoryDto categoryDto) {
+        return dataIBase(open, checkedids, null, categoryDto);
     }
 
     /**
@@ -39,7 +37,7 @@ public class BaseCategoryController extends BaseController {
      * @param discheckid 不可选的ids
      * @return
      */
-    private List<ZTree> dataI(Integer open, String checkedids, String discheckid, CategoryDto categoryDto) {
+    private List<ZTree> dataIBase(Integer open, String checkedids, String discheckid, CategoryDto categoryDto) {
         if (open == null) {
             open = 0;
         }
@@ -83,7 +81,7 @@ public class BaseCategoryController extends BaseController {
      *
      * @return
      */
-    public RestPaging pageById(Page<Category> page, CategoryDto categoryDto) {
+    public RestPaging pageByIdBase(Page<Category> page, CategoryDto categoryDto) {
         List<Category> categoryList = categoryService.categoryC(categoryDto.getCategoryId());
         List<String> ids = categoryList.stream().map(Category::getId).collect(Collectors.toList());
         ids.add(categoryDto.getCategoryId());
@@ -94,7 +92,7 @@ public class BaseCategoryController extends BaseController {
         return new RestPaging(p.getTotal(), p.getRecords());
     }
 
-    public Category categoryEdit(String id) {
+    public Category categoryEditBase(String id) {
         Category category = new Category();
         if (StringUtils.isNotBlank(id)) {
             category = categoryService.getById(id);
@@ -109,8 +107,7 @@ public class BaseCategoryController extends BaseController {
     /**
      * 分类的保存
      */
-    public void saveCategory(UserInfo userInfo, Category category) {
-        category.setBaseInfo(userInfo);
+    public void saveCategoryBase(Category category) {
         if (StringUtils.isBlank(category.getId())) {
             category.setSeq(DateTime.now().getMillis());
         }
@@ -125,13 +122,12 @@ public class BaseCategoryController extends BaseController {
     /**
      * 分类的删除(连带删除其下所有分类)
      */
-    public void delCategory(UserInfo userInfo, String categoryIds) {
+    public void delCategoryBase(String categoryIds) {
         categoryService.delCategory(categoryIds);
-        categoryService.upLastInfo(userInfo, categoryIds);
     }
 
-    public void categorySeq(UserInfo userInfo, String id1, String id2) {
-        categoryService.seq(userInfo, id1, id2);
+    public void categorySeqBase(String id1, String id2) {
+        categoryService.seq(id1, id2);
     }
 
 }

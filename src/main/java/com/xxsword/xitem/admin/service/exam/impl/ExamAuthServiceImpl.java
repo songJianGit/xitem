@@ -29,7 +29,6 @@ public class ExamAuthServiceImpl extends ServiceImpl<ExamAuthMapper, ExamAuth> i
             ExamAuth examAuth = getExamAuth(examId, id);
             if (examAuth == null) {
                 examAuth = new ExamAuth();
-                examAuth.setBaseInfo(userInfo);
                 examAuth.setExamId(examId);
                 examAuth.setUserId(id);
                 examAuthListUp.add(examAuth);

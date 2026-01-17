@@ -73,7 +73,6 @@ public class ExamController {
     @RequestMapping("save")
     public String save(HttpServletRequest request, Exam exam) {
         UserInfo userInfo = Utils.getUserInfo(request);
-        exam.setBaseInfo(userInfo);
         if (StringUtils.isBlank(exam.getId())) {
             exam.setReleaseStatus(0);
         }
@@ -85,7 +84,7 @@ public class ExamController {
     @ResponseBody
     public RestResult del(HttpServletRequest request, String ids) {
         UserInfo userInfo = Utils.getUserInfo(request);
-        examService.delByIds(userInfo, ids);
+        examService.delByIds(ids);
         return RestResult.OK();
     }
 
@@ -93,7 +92,7 @@ public class ExamController {
     @ResponseBody
     public RestResult release(HttpServletRequest request, String id) {
         UserInfo userInfo = Utils.getUserInfo(request);
-        examService.release(userInfo, id);
+        examService.release(id);
         return RestResult.OK();
     }
 

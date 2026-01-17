@@ -2,18 +2,17 @@ package com.xxsword.xitem.admin.service.banner;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.xxsword.xitem.admin.domain.banner.entity.Banner;
-import com.xxsword.xitem.admin.domain.system.entity.UserInfo;
 
 public interface BannerService extends IService<Banner> {
 
-    void delByIds(UserInfo userInfo, String ids);
+    void delByIds(String ids);
 
     /**
      * 发布和下架
      *
      * @param id
      */
-    void release(UserInfo userInfo, String id);
+    void release(String id);
 
-    void seq(UserInfo userInfo, String id1, String id2);
+    void seq(String id1, String id2);
 }

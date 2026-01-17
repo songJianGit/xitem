@@ -2,7 +2,6 @@ package com.xxsword.xitem.admin.service.category;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.xxsword.xitem.admin.domain.category.entity.Category;
-import com.xxsword.xitem.admin.domain.system.entity.UserInfo;
 
 import java.util.List;
 
@@ -56,16 +55,11 @@ public interface CategoryService extends IService<Category> {
     List<String> listCategoryIdByCategoryId(List<String> categoryIds);
 
     /**
-     * 刷新最后更新人和最后更新时间
-     */
-    void upLastInfo(UserInfo doUserInfo, String categoryIds);
-
-    /**
      * 顺序调整
      * @param userInfo
      * @param id1
      * @param id2
      */
-    void seq(UserInfo userInfo, String id1, String id2);
+    void seq(String id1, String id2);
 
 }

@@ -7,7 +7,6 @@ import com.xxsword.xitem.admin.domain.course.entity.Course;
 import com.xxsword.xitem.admin.domain.course.entity.CourseUser;
 import com.xxsword.xitem.admin.domain.exam.entity.Exam;
 import com.xxsword.xitem.admin.domain.exam.entity.UserPaper;
-import com.xxsword.xitem.admin.domain.system.entity.Organ;
 import com.xxsword.xitem.admin.domain.system.entity.UserInfo;
 import com.xxsword.xitem.admin.domain.workorder.entity.WorkOrder;
 import com.xxsword.xitem.admin.domain.workorder.dto.WorkOrderDto;
@@ -173,7 +172,6 @@ public class PcUserController extends BaseController {
         UserInfo userInfo = Utils.getUserInfo(request);
         UserInfo userInfoUp = new UserInfo();
         userInfoUp.setId(userInfo.getId());
-        userInfoUp.setBaseInfo(userInfo);
         userInfoUp.setNickName(nickName);
         userInfoUp.setEmail(email);
         userInfoService.updateById(userInfoUp);

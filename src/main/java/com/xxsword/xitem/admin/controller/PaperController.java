@@ -13,7 +13,6 @@ import com.xxsword.xitem.admin.model.Codes;
 import com.xxsword.xitem.admin.model.RestPaging;
 import com.xxsword.xitem.admin.model.RestResult;
 import com.xxsword.xitem.admin.service.exam.*;
-import com.xxsword.xitem.admin.service.system.UserInfoService;
 import com.xxsword.xitem.admin.utils.Utils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -69,7 +68,6 @@ public class PaperController {
     @RequestMapping("save")
     public String save(HttpServletRequest request, Paper paper) {
         UserInfo userInfo = Utils.getUserInfo(request);
-        paper.setBaseInfo(userInfo);
         paperService.saveOrUpdate(paper);
         return "redirect:list";
     }
@@ -126,7 +124,6 @@ public class PaperController {
         if (countQRS < questionRule.getNum()) {
             return RestResult.Fail("抽提数应小于总提数");
         } else {
-            questionRule.setBaseInfo(userInfo);
             questionRuleService.updateById(questionRule);
             return RestResult.OK();
         }
@@ -159,7 +156,7 @@ public class PaperController {
     @ResponseBody
     public RestResult questionRuleSeq(HttpServletRequest request, String id1, String id2) {
         UserInfo userInfo = Utils.getUserInfo(request);
-        questionRuleService.seq(userInfo, id1, id2);
+        questionRuleService.seq(id1, id2);
         return RestResult.OK();
     }
 

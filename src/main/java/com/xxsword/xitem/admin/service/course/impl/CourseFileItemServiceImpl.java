@@ -46,13 +46,12 @@ public class CourseFileItemServiceImpl extends ServiceImpl<CourseFileItemMapper,
     }
 
     @Override
-    public void delByIds(UserInfo userInfo, String ids) {
+    public void delByIds(String ids) {
         String[] idsS = ids.split(",");
         List<CourseFileItem> listUp = new ArrayList<>();
         for (String id : idsS) {
             CourseFileItem courseFileItemUp = new CourseFileItem();
             courseFileItemUp.setId(id);
-            courseFileItemUp.setBaseInfo(userInfo);
             courseFileItemUp.setStatus(0);
             listUp.add(courseFileItemUp);
         }

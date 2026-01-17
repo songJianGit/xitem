@@ -72,7 +72,6 @@ public class BusinessServiceImpl implements BusinessService {
             queryUser.select(UserInfo::getId, UserInfo::getOrganId);// 只获取id和机构
             queryUser.eq(UserInfo::getId, period.getUserId());
             UserInfo userInfo = userInfoService.getOne(queryUser);
-            userCourse.setBaseInfo(userInfo);
             userCourse.setCourseId(period.getObId());
             userCourse.setStatus(1);
             userCourse.setPrecent(0);

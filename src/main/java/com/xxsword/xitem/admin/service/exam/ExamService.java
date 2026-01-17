@@ -13,14 +13,14 @@ public interface ExamService extends IService<Exam> {
 
     void upLastInfo(UserInfo doUserInfo, String ids);
 
-    void delByIds(UserInfo userInfo, String ids);
+    void delByIds(String ids);
 
     /**
      * 考试的发布和下架
      *
      * @param id
      */
-    void release(UserInfo userInfo, String id);
+    void release(String id);
 
 
     /**

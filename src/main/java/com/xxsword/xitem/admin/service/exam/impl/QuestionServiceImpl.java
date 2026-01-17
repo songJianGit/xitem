@@ -14,7 +14,6 @@ import com.xxsword.xitem.admin.domain.exam.entity.QuestionOption;
 import com.xxsword.xitem.admin.domain.exam.entity.UserPaperQuestion;
 import com.xxsword.xitem.admin.domain.exam.vo.QuestionExcelVO;
 import com.xxsword.xitem.admin.domain.exam.vo.QuestionVO;
-import com.xxsword.xitem.admin.domain.system.entity.Dict;
 import com.xxsword.xitem.admin.domain.system.entity.UserInfo;
 import com.xxsword.xitem.admin.mapper.exam.QuestionMapper;
 import com.xxsword.xitem.admin.model.RestResult;
@@ -181,20 +180,17 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
             int qtypeInfo = item.getQtype();
             List<QuestionOption> listQP = new ArrayList<>();// 题目选项
             Question question = new Question();// 题目
-            question.setBaseInfo(userInfo);
             question.setTitle(item.getTitle().trim());
             question.setQcategory(item.getQcategory());
             question.setQtype(qtypeInfo);
             save(question);// 题目保存
             if (qtypeInfo == 0) {// 是非题
                 QuestionOption questionOptionA = new QuestionOption();
-                questionOptionA.setBaseInfo(userInfo);
                 questionOptionA.setTitle("正确");
                 questionOptionA.setOptionRight(0);
                 questionOptionA.setQid(question.getId());
 
                 QuestionOption questionOptionB = new QuestionOption();
-                questionOptionB.setBaseInfo(userInfo);
                 questionOptionB.setTitle("错误");
                 questionOptionB.setOptionRight(0);
                 questionOptionB.setQid(question.getId());
@@ -216,7 +212,6 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
                     for (String option : qoptions) {
                         option = Utils.getString(option);
                         QuestionOption questionOption = new QuestionOption();
-                        questionOption.setBaseInfo(userInfo);
                         questionOption.setTitle(option.trim());
                         questionOption.setOptionRight(0);
                         questionOption.setQid(question.getId());
@@ -240,7 +235,6 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
     @Override
     @Transactional
     public void saveQuestionAndOption(UserInfo userInfo, Question question, String optionJson) {
-        question.setBaseInfo(userInfo);
         saveOrUpdate(question);
         List<QuestionOption> questionOptionList = new ArrayList<>();
         JSONArray jsonArray = JSONArray.parseArray(optionJson);
@@ -257,7 +251,6 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
             if (StringUtils.isNotBlank(optionId)) {
                 questionOption = questionOptionService.getById(optionId);
             }
-            questionOption.setBaseInfo(userInfo);
             questionOption.setQid(question.getId());
             questionOption.setTitle(optionTitle);
             questionOption.setOptionRight(optionRight);
@@ -329,7 +322,6 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
         for (String id : idsS) {
             Question itemUp = new Question();
             itemUp.setId(id);
-            itemUp.setBaseInfo(doUserInfo);
             listUp.add(itemUp);
         }
         updateBatchById(listUp);

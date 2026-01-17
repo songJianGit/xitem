@@ -127,7 +127,6 @@ public class SystemController extends BaseController {
         long num = userInfoService.count(new LambdaQueryWrapper<UserInfo>().eq(UserInfo::getStatus, 1));
         if (num <= maxUserNum()) {
             UserInfo user = Utils.getUserInfo(request);
-            userInfo.setBaseInfo(user);
             userInfoService.saveOrUpdate(userInfo);
         } else {
             log.warn("已达到最大用户数限制 UserNum:{}", num);
@@ -190,7 +189,6 @@ public class SystemController extends BaseController {
         }
         UserInfo userInfo = Utils.getUserInfo(request);
         userInfoService.delByIds(userIds);
-        userInfoService.upLastInfo(userInfo, userIds);
         return RestResult.OK();
     }
 
@@ -205,7 +203,6 @@ public class SystemController extends BaseController {
         }
         UserInfo userInfo = Utils.getUserInfo(request);
         userInfoService.upUserInfoStatus(userIds);
-        userInfoService.upLastInfo(userInfo, userIds);
         return RestResult.OK();
     }
 
@@ -246,7 +243,6 @@ public class SystemController extends BaseController {
     @RequestMapping("roleSave")
     public String roleSave(HttpServletRequest request, Role role) {
         UserInfo user = Utils.getUserInfo(request);
-        role.setBaseInfo(user);
         roleService.saveOrUpdate(role);
         return "redirect:roleList";
     }
@@ -268,7 +264,6 @@ public class SystemController extends BaseController {
         }
         UserInfo userInfo = Utils.getUserInfo(request);
         roleService.delByIds(roleIds);
-        roleService.upLastInfo(userInfo, roleIds);
         return RestResult.OK();
     }
 
@@ -305,7 +300,6 @@ public class SystemController extends BaseController {
         }
         UserInfo userInfo = Utils.getUserInfo(request);
         Role role = roleService.upRoleStatus(roleid);
-        roleService.upLastInfo(userInfo, roleid);
         int status = role.getStatus();
         if (status == 1) {
             return RestResult.Codes(Codes.STATUS_1);
@@ -404,7 +398,6 @@ public class SystemController extends BaseController {
     @RequestMapping("functionSave")
     public String functionSave(HttpServletRequest request, Function functions) {
         UserInfo user = Utils.getUserInfo(request);
-        functions.setBaseInfo(user);
         functionService.saveOrUpdate(functions);
         return "redirect:functionList";
     }
@@ -420,7 +413,6 @@ public class SystemController extends BaseController {
         }
         UserInfo userInfo = Utils.getUserInfo(request);
         functionService.delFunctionById(functionId);
-        functionService.upLastInfo(userInfo, functionId);
         return RestResult.OK();
     }
 
@@ -493,7 +485,6 @@ public class SystemController extends BaseController {
         if (Utils.isValidPassword(password)) {
             UserInfo userInfo = Utils.getUserInfo(request);
             userInfoService.resetPassword(userId, password);
-            userInfoService.upLastInfo(userInfo, userId);
             return RestResult.OK();
         } else {
             return RestResult.Codes(Codes.PASSWORD_COMPLEXITY);
@@ -579,8 +570,6 @@ public class SystemController extends BaseController {
      */
     @RequestMapping("dictSave")
     public String dictSave(HttpServletRequest request, Dict dict) {
-        UserInfo user = Utils.getUserInfo(request);
-        dict.setBaseInfo(user);
         dictService.saveOrUpdate(dict);
         return "redirect:dictList";
     }
@@ -597,7 +586,6 @@ public class SystemController extends BaseController {
     public RestResult delDict(HttpServletRequest request, String dictIds) {
         UserInfo userInfo = Utils.getUserInfo(request);
         dictService.delByIds(dictIds);
-        dictService.upLastInfo(userInfo, dictIds);
         return RestResult.OK();// 11
     }
 

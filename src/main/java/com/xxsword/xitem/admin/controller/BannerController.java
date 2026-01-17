@@ -3,13 +3,10 @@ package com.xxsword.xitem.admin.controller;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.xxsword.xitem.admin.domain.banner.dto.BannerDto;
 import com.xxsword.xitem.admin.domain.banner.entity.Banner;
-import com.xxsword.xitem.admin.domain.system.entity.UserInfo;
 import com.xxsword.xitem.admin.model.RestPaging;
 import com.xxsword.xitem.admin.model.RestResult;
 import com.xxsword.xitem.admin.service.banner.BannerService;
-import com.xxsword.xitem.admin.utils.DateUtil;
 import com.xxsword.xitem.admin.utils.UpLoadUtil;
-import com.xxsword.xitem.admin.utils.Utils;
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,12 +49,10 @@ public class BannerController extends BaseController {
 
     @RequestMapping("save")
     public String save(HttpServletRequest request, Banner banner, @RequestParam(value = "fileinfo") MultipartFile multipartFile) {
-        UserInfo userInfo = Utils.getUserInfo(request);
         String path = UpLoadUtil.upload(multipartFile, "/bannerimg");
         if (StringUtils.isNotBlank(path)) {
             banner.setUrl(path);
         }
-        banner.setBaseInfo(userInfo);
         if (StringUtils.isBlank(banner.getId())) {
             banner.setSeq(DateTime.now().getMillis());
             banner.setReleaseStatus(0);
@@ -69,16 +64,14 @@ public class BannerController extends BaseController {
     @RequestMapping("del")
     @ResponseBody
     public RestResult del(HttpServletRequest request, String ids) {
-        UserInfo userInfo = Utils.getUserInfo(request);
-        bannerService.delByIds(userInfo, ids);
+        bannerService.delByIds(ids);
         return RestResult.OK();
     }
 
     @RequestMapping("release")
     @ResponseBody
     public RestResult release(HttpServletRequest request, String id) {
-        UserInfo userInfo = Utils.getUserInfo(request);
-        bannerService.release(userInfo, id);
+        bannerService.release(id);
         return RestResult.OK();
     }
 
@@ -92,8 +85,7 @@ public class BannerController extends BaseController {
     @RequestMapping("bannerSeq")
     @ResponseBody
     public RestResult bannerSeq(HttpServletRequest request, String id1, String id2) {
-        UserInfo userInfo = Utils.getUserInfo(request);
-        bannerService.seq(userInfo, id1, id2);
+        bannerService.seq(id1, id2);
         return RestResult.OK();
     }
 }

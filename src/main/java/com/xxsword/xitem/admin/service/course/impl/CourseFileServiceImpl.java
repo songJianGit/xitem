@@ -5,7 +5,6 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.xxsword.xitem.admin.domain.course.entity.CourseFile;
 import com.xxsword.xitem.admin.domain.course.entity.CourseFileItem;
 import com.xxsword.xitem.admin.domain.course.vo.CoursePlayVO;
-import com.xxsword.xitem.admin.domain.system.entity.UserInfo;
 import com.xxsword.xitem.admin.mapper.course.CourseFileMapper;
 import com.xxsword.xitem.admin.service.course.CourseFileItemService;
 import com.xxsword.xitem.admin.service.course.CourseFileService;
@@ -25,13 +24,12 @@ public class CourseFileServiceImpl extends ServiceImpl<CourseFileMapper, CourseF
     private CourseFileItemService courseFileItemService;
 
     @Override
-    public void delByIds(UserInfo userInfo, String ids) {
+    public void delByIds(String ids) {
         String[] idsS = ids.split(",");
         List<CourseFile> listUp = new ArrayList<>();
         for (String id : idsS) {
             CourseFile courseFileUp = new CourseFile();
             courseFileUp.setId(id);
-            courseFileUp.setBaseInfo(userInfo);
             courseFileUp.setStatus(0);
             listUp.add(courseFileUp);
         }

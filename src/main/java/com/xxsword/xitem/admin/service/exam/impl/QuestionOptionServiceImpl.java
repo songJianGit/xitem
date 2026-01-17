@@ -41,7 +41,6 @@ public class QuestionOptionServiceImpl extends ServiceImpl<QuestionOptionMapper,
         for (String id : idsS) {
             QuestionOption itemUp = new QuestionOption();
             itemUp.setId(id);
-            itemUp.setBaseInfo(doUserInfo);
             listUp.add(itemUp);
         }
         updateBatchById(listUp);

@@ -213,19 +213,6 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
     }
 
     @Override
-    public void upLastInfo(UserInfo doUserInfo, String userIds) {
-        String[] ids = userIds.split(",");
-        List<UserInfo> listUp = new ArrayList<>();
-        for (String id : ids) {
-            UserInfo userInfoUp = new UserInfo();
-            userInfoUp.setId(id);
-            userInfoUp.setBaseInfo(doUserInfo);
-            listUp.add(userInfoUp);
-        }
-        updateBatchById(listUp);
-    }
-
-    @Override
     public Map<String, UserInfo> mapsUser(Set<String> userIds) {
         return listByIds(userIds).stream().collect(Collectors.toMap(UserInfo::getId, java.util.function.Function.identity()));
     }

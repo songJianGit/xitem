@@ -10,9 +10,6 @@ import com.xxsword.xitem.admin.domain.course.entity.Course;
 import com.xxsword.xitem.admin.domain.course.entity.CourseFile;
 import com.xxsword.xitem.admin.domain.course.entity.CourseUser;
 import com.xxsword.xitem.admin.domain.course.vo.CourseUserVO;
-import com.xxsword.xitem.admin.domain.exam.dto.UserPaperDto;
-import com.xxsword.xitem.admin.domain.exam.entity.UserPaper;
-import com.xxsword.xitem.admin.domain.exam.vo.UserPaperVO;
 import com.xxsword.xitem.admin.domain.system.entity.UserInfo;
 import com.xxsword.xitem.admin.model.RestPaging;
 import com.xxsword.xitem.admin.model.RestResult;
@@ -96,7 +93,6 @@ public class CourseController extends BaseController {
             course.setSeq(DateTime.now().getMillis());
             course.setReleaseStatus(0);
         }
-        course.setBaseInfo(userInfo);
         courseService.saveOrUpdate(course);
         return "redirect:list";
     }
@@ -105,7 +101,7 @@ public class CourseController extends BaseController {
     @ResponseBody
     public RestResult del(HttpServletRequest request, String ids) {
         UserInfo userInfo = Utils.getUserInfo(request);
-        courseService.delByIds(userInfo, ids);
+        courseService.delByIds(ids);
         return RestResult.OK();
     }
 
@@ -113,7 +109,7 @@ public class CourseController extends BaseController {
     @ResponseBody
     public RestResult release(HttpServletRequest request, String id) {
         UserInfo userInfo = Utils.getUserInfo(request);
-        courseService.release(userInfo, id);
+        courseService.release(id);
         return RestResult.OK();
     }
 
@@ -128,7 +124,7 @@ public class CourseController extends BaseController {
     @ResponseBody
     public RestResult courseSeq(HttpServletRequest request, String id1, String id2) {
         UserInfo userInfo = Utils.getUserInfo(request);
-        courseService.seq(userInfo, id1, id2);
+        courseService.seq(id1, id2);
         return RestResult.OK();
     }
 

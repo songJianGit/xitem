@@ -1,7 +1,6 @@
 package com.xxsword.xitem.admin.service.workorder.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.xxsword.xitem.admin.domain.system.entity.UserInfo;
 import com.xxsword.xitem.admin.domain.workorder.entity.WorkOrder;
 import com.xxsword.xitem.admin.mapper.workorder.WorkOrderMapper;
 import com.xxsword.xitem.admin.service.workorder.WorkOrderService;
@@ -24,19 +23,6 @@ public class WorkOrderServiceImpl extends ServiceImpl<WorkOrderMapper, WorkOrder
             workOrderUps.add(workOrderUp);
         }
         updateBatchById(workOrderUps);
-    }
-
-    @Override
-    public void upLastInfo(UserInfo doUserInfo, String ids) {
-        String[] idsa = ids.split(",");
-        List<WorkOrder> listUp = new ArrayList<>();
-        for (String id : idsa) {
-            WorkOrder workOrderUp = new WorkOrder();
-            workOrderUp.setId(id);
-            workOrderUp.setBaseInfo(doUserInfo);
-            listUp.add(workOrderUp);
-        }
-        updateBatchById(listUp);
     }
 
 }

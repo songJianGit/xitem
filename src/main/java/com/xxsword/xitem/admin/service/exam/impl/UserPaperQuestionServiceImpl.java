@@ -37,7 +37,6 @@ public class UserPaperQuestionServiceImpl extends ServiceImpl<UserPaperQuestionM
         for (String id : idsS) {
             UserPaperQuestion itemUp = new UserPaperQuestion();
             itemUp.setId(id);
-            itemUp.setBaseInfo(doUserInfo);
             listUp.add(itemUp);
         }
         updateBatchById(listUp);
@@ -57,7 +56,6 @@ public class UserPaperQuestionServiceImpl extends ServiceImpl<UserPaperQuestionM
             List<QRS> qIds = this.listQuestionByQR(item);
             for (QRS ite : qIds) {
                 UserPaperQuestion userPaperQuestion = new UserPaperQuestion();
-                userPaperQuestion.setBaseInfo(userInfo);
                 userPaperQuestion.setQid(ite.getQid());
                 userPaperQuestion.setUserPaperId(userPaper.getId());
                 userPaperQuestion.setCreateDate(DateUtil.now());
@@ -127,7 +125,6 @@ public class UserPaperQuestionServiceImpl extends ServiceImpl<UserPaperQuestionM
         }
         UserPaperQuestion userPaperQuestionUp = new UserPaperQuestion();
         userPaperQuestionUp.setId(userPaperQuestionId);
-        userPaperQuestionUp.setBaseInfo(userInfo);
         userPaperQuestionUp.setAnswer(answers);
         // 得分情况
         boolean b = checkAnswer(userPaperQuestion.getQid(), answers);
