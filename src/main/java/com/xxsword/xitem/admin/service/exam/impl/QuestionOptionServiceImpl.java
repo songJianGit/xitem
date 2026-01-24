@@ -22,6 +22,9 @@ public class QuestionOptionServiceImpl extends ServiceImpl<QuestionOptionMapper,
 
     @Override
     public List<QuestionOption> questionOptionListByQid(String questionId) {
+        if(StringUtils.isBlank(questionId)){
+            return new ArrayList<>();
+        }
         String data = redisService.getValueByKey(questionId);
         List<QuestionOption> list;
         if (StringUtils.isBlank(data)) {
