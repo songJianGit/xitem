@@ -291,7 +291,6 @@
             htm += '<div class="q-item-op">';
             htm += '<input id="op-id-' + val + '" class="q-item-op-' + val + '" name="val-input" value="' + val + '" type="' + type + '"/>';
             htm += '<label class="q-item-op-put-label-style" for="op-id-' + val + '">' + lable + '</label>';
-            console.log("==",fileImg);
             if(isNotBlank(fileImg)){
                 htm += '<img class="q-item-op-put-label-img-style" src="${ctx.contextPath}' + fileImg + '"/>';
             }
