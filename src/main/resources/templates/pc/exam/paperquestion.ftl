@@ -32,6 +32,10 @@
             margin-bottom: 0;
         }
 
+        .q-item-op-put-label-img-style {
+            width: 50%;
+        }
+
         .top-info {
             z-index: 1;
             display: flex;
@@ -289,7 +293,7 @@
             htm += '<label class="q-item-op-put-label-style" for="op-id-' + val + '">' + lable + '</label>';
             console.log("==",fileImg);
             if(isNotBlank(fileImg)){
-                htm += '<img class="q-item-op-put-label-img-style" src="${ctx.contextPath}'+fileImg+'"/>';
+                htm += '<img class="q-item-op-put-label-img-style" src="${ctx.contextPath}' + fileImg + '"/>';
             }
             htm += '</div>';
         }
