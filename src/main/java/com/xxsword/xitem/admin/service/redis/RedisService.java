@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 @Component
@@ -23,5 +24,13 @@ public class RedisService {
 
     public String getValueByKey(String key) {
         return redisTemplate.opsForValue().get(key);
+    }
+
+    public Boolean delByKey(String key) {
+        return redisTemplate.delete(key);
+    }
+
+    public Long delByKeys(List<String> keys) {
+        return redisTemplate.delete(keys);
     }
 }

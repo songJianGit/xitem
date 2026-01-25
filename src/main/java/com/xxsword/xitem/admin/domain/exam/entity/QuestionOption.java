@@ -30,4 +30,8 @@ public class QuestionOption extends BaseEntity implements Serializable {
     @ColumnComment("是否正确答案(0-否 1-是)")
     private Integer optionRight;
 
+    @Column(length = 300)
+    @ColumnComment("选项图片")
+    private String fileImg;
+
 }
