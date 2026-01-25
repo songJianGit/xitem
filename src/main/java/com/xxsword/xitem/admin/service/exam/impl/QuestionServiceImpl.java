@@ -19,6 +19,7 @@ import com.xxsword.xitem.admin.model.RestResult;
 import com.xxsword.xitem.admin.service.category.CategoryService;
 import com.xxsword.xitem.admin.service.exam.QuestionOptionService;
 import com.xxsword.xitem.admin.service.exam.QuestionService;
+import com.xxsword.xitem.admin.service.redis.RedisService;
 import com.xxsword.xitem.admin.utils.ExamUtil;
 import com.xxsword.xitem.admin.utils.ExcelUtils;
 import com.xxsword.xitem.admin.utils.Utils;
@@ -40,6 +41,8 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
     private QuestionOptionService questionOptionService;
     @Autowired
     private CategoryService categoryService;
+    @Autowired
+    private RedisService redisService;
 
     @Override
     public List<Question> setQuestionQCategory(List<Question> list) {
@@ -255,6 +258,7 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
         questionOptionService.saveOrUpdateBatch(questionOptionList);
         Set<String> ids = questionOptionList.stream().map(QuestionOption::getId).collect(Collectors.toSet());
         clearOption(ids, question.getId());
+        redisService.delByKey(question.getId());// 清理缓存
     }
 
     /**
