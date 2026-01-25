@@ -245,6 +245,7 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
             JSONObject option = jsonArray.getJSONObject(i);
             String optionId = option.getString("optionId");
             String optionTitle = option.getString("optionTitle");
+            String optionFileUrl = option.getString("optionFileUrl");
             Integer optionRight = option.getInteger("optionRight");
             QuestionOption questionOption = new QuestionOption();
             if (StringUtils.isNotBlank(optionId)) {
@@ -252,6 +253,7 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
             }
             questionOption.setQid(question.getId());
             questionOption.setTitle(optionTitle);
+            questionOption.setFileImg(optionFileUrl);
             questionOption.setOptionRight(optionRight);
             questionOptionList.add(questionOption);
         }

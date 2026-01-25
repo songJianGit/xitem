@@ -7,5 +7,6 @@ public class QuestionOptionVO {
     private String id;// 主键id
     private String qid;// 题目id
     private String title;// 选项标题
+    private String fileImg;// 选项标题
 
 }

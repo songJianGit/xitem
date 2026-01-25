@@ -50,7 +50,7 @@
                                             </option>
                                         </select>
                                     </div>
-                                    <div class="form-group col-6">
+                                    <div class="form-group col-12">
                                         <label>选项</label>
                                         <div id="optionBox"></div>
                                         <button type="button" class="btn btn-sm btn-label btn-default" id="addOption">
@@ -121,10 +121,12 @@
         $(".optionRow").each(function () {
             let optionId = $(this).data('optionid');
             let optionTitle = $(this).find('input[name="optionTitle"]').val();
+            let optionFileUrl = $(this).find('input[name="optionFileUrl"]').val();
             let optionRight = $(this).find('select[name="optionRight"]').val();
             let opt = {
                 optionId: optionId,
                 optionTitle: optionTitle,
+                optionFileUrl: optionFileUrl,
                 optionRight: optionRight
             };
             optionRows.push(opt);
@@ -141,7 +143,7 @@
         if (num >= 12) {
             layer.msg("最多12个选项");
         } else {
-            $('#optionBox').append(getHtm('', qtype, '', 0, num));
+            $('#optionBox').append(getHtm('', qtype, '', '', 0, num));
         }
     });
 
@@ -159,15 +161,15 @@
         let qtype = $("#qtype").val();
         if (isBlank(qid)) {
             if (qtype == 0) {// 是非
-                $('#optionBox').append(getHtm('', qtype, '正确', 0, 0));
-                $('#optionBox').append(getHtm('', qtype, '错误', 0, 1));
+                $('#optionBox').append(getHtm('', qtype, '正确', '', 0, 0));
+                $('#optionBox').append(getHtm('', qtype, '错误', '', 0, 1));
             } else {// 单选和多选
-                $('#optionBox').append(getHtm('', qtype, '', 0, 0));
-                $('#optionBox').append(getHtm('', qtype, '', 0, 1));
+                $('#optionBox').append(getHtm('', qtype, '', '', 0, 0));
+                $('#optionBox').append(getHtm('', qtype, '', '', 0, 1));
             }
         } else {
             <#list questionOption as option>
-            $('#optionBox').append(getHtm('${option.id}', qtype, '${option.title}', `${option.optionRight}`, `${option_index}`));
+            $('#optionBox').append(getHtm('${option.id}', qtype, '${option.title}', '${option.fileImg!}', `${option.optionRight}`, `${option_index}`));
             </#list>
             if (qtype == 0) {
                 qtypeInitTitle0();
@@ -187,7 +189,7 @@
      * @param domNum 选项序号（从0开始，大于1的会显示删除按钮）
      * @returns {string}
      */
-    function getHtm(optionid, qtype, title, optionright, domNum) {
+    function getHtm(optionid, qtype, title, optionFileUrl, optionright, domNum) {
         let htm = '';
         let r1 = '';
         let r0 = '';
@@ -202,7 +204,7 @@
             readonly = 'readonly';
         }
         htm += '<div class="form-row m-b-5 optionRow" data-optionid="' + optionid + '">';
-        htm += '<div class="col-7">';
+        htm += '<div class="col-4">';
         htm += '<input ' + readonly + ' type="text" class="form-control" value="' + title + '" name="optionTitle" maxlength="255">';
         htm += '</div>';
         htm += '<div class="col-2">';
@@ -210,6 +212,9 @@
         htm += '<option value="1" ' + r1 + ' >正确答案</option>';
         htm += '<option value="0" ' + r0 + ' >错误答案</option>';
         htm += '</select>';
+        htm += '</div>';
+        htm += '<div class="col-6">';
+        htm += '<input placeholder="图片地址" type="text" class="form-control" value="' + optionFileUrl + '" name="optionFileUrl" maxlength="300">';
         htm += '</div>';
 
         if (domNum > 1) {
