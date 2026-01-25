@@ -37,4 +37,7 @@ public class Constant {
 
     // 数据大小单位信息
     public static final String[] UNITS = new String[]{"B", "KB", "MB", "GB", "TB"};
+
+    // 用户上传文件时，额外添加的一层目录
+    public static final String USERFILES = "/userfiles";
 }

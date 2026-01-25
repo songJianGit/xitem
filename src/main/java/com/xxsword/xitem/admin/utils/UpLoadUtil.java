@@ -1,7 +1,10 @@
 package com.xxsword.xitem.admin.utils;
 
+import com.baomidou.mybatisplus.core.toolkit.StringUtils;
+import com.beust.jcommander.internal.Lists;
 import com.xxsword.xitem.admin.config.SystemConfig;
 import com.xxsword.xitem.admin.constant.Constant;
+import com.xxsword.xitem.admin.domain.system.vo.FileVO;
 import com.xxsword.xitem.admin.domain.system.vo.UpFileVO;
 import com.xxsword.xitem.admin.model.UpState;
 import lombok.extern.slf4j.Slf4j;
@@ -13,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.io.*;
 import java.nio.file.Files;
 import java.util.*;
@@ -310,12 +314,69 @@ public class UpLoadUtil {
     }
 
     /**
+     * 该路径下的文件信息（文件和文件夹）
+     *
+     * @param upath
+     * @return
+     */
+    public static List<FileVO> fileData(String upath) {
+        if (StringUtils.isBlank(upath)) {
+            return Lists.newArrayList();
+        }
+        List<FileVO> listFile = new ArrayList<>();
+        File[] fileList = new File(upath).listFiles();
+        if (fileList != null) {
+            for (File f : fileList) {
+                FileVO fileVO = new FileVO();
+                fileVO.setName(f.getName());
+                if (f.isDirectory()) {
+                    fileVO.setSize("-1");
+                    fileVO.setType(2);
+                    listFile.add(fileVO);
+                }
+                if (f.isFile()) {
+                    fileVO.setSize(Utils.byteCountToDisplaySizeDecimal(f.length()));
+                    fileVO.setType(1);
+                    listFile.add(fileVO);
+                }
+            }
+        }
+        return listFile;
+    }
+
+    /**
+     * 获取该用户的文件目录（相对路径）
+     *
+     * @param userId
+     * @return
+     */
+    public static String getUserPath(String userId) {
+        return Constant.USERFILES + "/" + userId;
+    }
+
+    /**
+     * 用户绝对路径信息的保存和获取
+     *
+     * @param session
+     * @param upath_absolute 有值则为设置，无值则为获取
+     * @return
+     */
+    public static String doUpathAbsolute(HttpSession session, String upath_absolute) {
+        if (StringUtils.isBlank(upath_absolute)) {
+            return session.getAttribute("upath_absolute").toString();
+        } else {
+            session.setAttribute("upath_absolute", upath_absolute);
+            return upath_absolute;
+        }
+    }
+
+    /**
      * 将所有反斜杠换成正斜杠
      *
      * @param path
      * @return
      */
-    private static String replaceSeparator(String path) {
+    public static String replaceSeparator(String path) {
         return path.replaceAll("\\\\", "/");
     }
 

@@ -1,6 +1,7 @@
 package com.xxsword.xitem.admin.domain.system.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.gitee.sunchenbin.mybatis.actable.annotation.Column;
@@ -41,5 +42,8 @@ public class UploadLog implements Serializable {
     @Column(length = 20)
     @ColumnComment("文件大小(单位：字节)")
     private Long size;
+
+    @TableField(exist = false)
+    private String sizeStr;
 
 }
