@@ -17,9 +17,7 @@ import com.xxsword.xitem.admin.service.course.CourseFileService;
 import com.xxsword.xitem.admin.service.course.CourseService;
 import com.xxsword.xitem.admin.service.course.CourseUserService;
 import com.xxsword.xitem.admin.utils.UpLoadUtil;
-import com.xxsword.xitem.admin.utils.Utils;
 import lombok.extern.slf4j.Slf4j;
-import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -88,7 +86,7 @@ public class CourseController extends BaseController {
             course.setCover(path);
         }
         if (StringUtils.isBlank(course.getId())) {
-            course.setSeq(DateTime.now().getMillis());
+            course.setSeq(System.currentTimeMillis());
             course.setReleaseStatus(0);
         }
         courseService.saveOrUpdate(course);

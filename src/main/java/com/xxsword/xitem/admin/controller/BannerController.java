@@ -8,7 +8,6 @@ import com.xxsword.xitem.admin.model.RestResult;
 import com.xxsword.xitem.admin.service.banner.BannerService;
 import com.xxsword.xitem.admin.utils.UpLoadUtil;
 import org.apache.commons.lang3.StringUtils;
-import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -54,7 +53,7 @@ public class BannerController extends BaseController {
             banner.setUrl(path);
         }
         if (StringUtils.isBlank(banner.getId())) {
-            banner.setSeq(DateTime.now().getMillis());
+            banner.setSeq(System.currentTimeMillis());
             banner.setReleaseStatus(0);
         }
         bannerService.saveOrUpdate(banner);

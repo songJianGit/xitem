@@ -3,8 +3,9 @@ package com.xxsword.xitem.admin.utils;
 import com.xxsword.xitem.admin.domain.exam.entity.Exam;
 import com.xxsword.xitem.admin.domain.exam.entity.UserPaper;
 import org.apache.commons.lang3.StringUtils;
-import org.joda.time.DateTime;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -13,25 +14,31 @@ public class ExamUtil {
 
     /**
      * 根据考试时间，获取考试状态
-     * 0-未开始 1-进行中 2-已结束
+     * 0 - 未开始
+     * 1 - 进行中
+     * 2 - 已结束
      */
     public static int getExamStatus(Exam exam) {
-        if (StringUtils.isBlank(exam.getStime()) || StringUtils.isBlank(exam.getEtime())) {
+        if (exam == null ||
+                StringUtils.isBlank(exam.getStime()) ||
+                StringUtils.isBlank(exam.getEtime())) {
             return 0;
         }
-        DateTime now = DateTime.now();
-        DateTime s = DateTime.parse(exam.getStime(), DateUtil.sdfA1);
-        int s_n = s.compareTo(now);
-        if (s_n == 1) {// 开始时间大于当前时间
-            return 0;
-        } else {
-            DateTime e = DateTime.parse(exam.getEtime(), DateUtil.sdfA1);
-            int e_n = e.compareTo(now);
-            if (e_n == 1) {// 结束时间大于当前时间
-                return 1;
+        try {
+            DateTimeFormatter formatter = DateUtil.sdfA1;
+            LocalDateTime now = LocalDateTime.now();
+            LocalDateTime startTime = LocalDateTime.parse(exam.getStime(), formatter);
+            LocalDateTime endTime = LocalDateTime.parse(exam.getEtime(), formatter);
+            if (now.isBefore(startTime)) {
+                return 0; // 未开始
+            } else if (now.isBefore(endTime) || now.equals(endTime)) {
+                return 1; // 进行中（包含“刚好在结束时刻”）
             } else {
-                return 2;
+                return 2; // 已结束
             }
+        } catch (Exception e) {
+            // 解析失败（如格式错误），保守返回“未开始”或记录日志
+            return 0;
         }
     }
 
@@ -56,14 +63,23 @@ public class ExamUtil {
         if (exam.getDuration() < 0) {
             return exam.getEtime();
         }
-        DateTime tt = DateUtil.getMinute(DateTime.parse(userPaper.getCreateDate(), DateUtil.sdfA1), exam.getDuration());
-        return tt.toString(DateUtil.sdfA1);
+        try {
+            DateTimeFormatter formatter = DateUtil.sdfA1; // 确保是 java.time.format.DateTimeFormatter
+            // 解析用户开考时间
+            LocalDateTime startTime = LocalDateTime.parse(userPaper.getCreateDate(), formatter);
+            // 开考时间 + 考试时长（分钟） = 实际结束时间
+            LocalDateTime endTime = startTime.plusMinutes(exam.getDuration());
+            return endTime.format(formatter);
+        } catch (Exception e) {
+            // 解析失败时，降级返回默认结束时间（或记录日志）
+            return exam.getEtime();
+        }
     }
 
     /**
      * 用户考试时长状态检查
      * <p>
-     * 当考试的duration字段不为空时，需要计算UserPaper表的创建时间与当前时间的差值是否小于duration
+     * 当考试的duration字段不为空时，需要计算UserPaper表的 考试结束时间（创建时间与+考试时间）是否在当前时间之后
      *
      * @param userPaper
      * @return true-可以考 false-不能考了，考试时长已超
@@ -81,9 +97,12 @@ public class ExamUtil {
         if (exam.getDuration() < 0) {
             return true;// 不限制
         }
-        Long l = DateUtil.differSecond(DateTime.parse(userPaper.getCreateDate(), DateUtil.sdfA1), DateTime.now());
-        int duration = exam.getDuration() * 60;
-        return duration >= l;
+        DateTimeFormatter formatter = DateUtil.sdfA1; // 确保是 java.time.format.DateTimeFormatter
+        // 解析用户开考时间
+        LocalDateTime startTime = LocalDateTime.parse(userPaper.getCreateDate(), formatter);
+        // 开考时间 + 考试时长（分钟） = 实际结束时间
+        LocalDateTime endTime = startTime.plusMinutes(exam.getDuration());
+        return LocalDateTime.now().isBefore(endTime);
     }
 
     /**

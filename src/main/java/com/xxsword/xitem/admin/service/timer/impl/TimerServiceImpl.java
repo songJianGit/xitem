@@ -16,12 +16,12 @@ import com.xxsword.xitem.admin.service.timer.TimerService;
 import com.xxsword.xitem.admin.service.timer.TraceService;
 import com.xxsword.xitem.admin.utils.DateUtil;
 import lombok.extern.slf4j.Slf4j;
-import org.joda.time.DateTime;
-import org.joda.time.Instant;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Duration;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -51,15 +51,17 @@ public class TimerServiceImpl extends ServiceImpl<TimerMapper, Timer> implements
 
     @Override
     public void outLineTime(String userId, String obId, TimerType timerType, Integer time, Integer device) {
-        Instant instant = Instant.now();
+        Instant now = Instant.now();
+        Instant endInstant = now.minusSeconds(time);
+
         Period period = new Period();
         period.setObId(obId);
         period.setObType(timerType.getCode());
         period.setUserId(userId);
-        period.setStartStamp(instant.getMillis());
-        period.setEndStamp(instant.minus(time * 1000).getMillis());
-        Long cost = DateUtil.differSecond(new DateTime(period.getStartStamp()), new DateTime(period.getEndStamp()));
-        period.setCost(cost.intValue());
+        period.setStartStamp(now.toEpochMilli());
+        period.setEndStamp(endInstant.toEpochMilli());
+        long costSeconds = Duration.between(endInstant, now).getSeconds();
+        period.setCost((int) costSeconds);
         periodService.save(period);
         this.saveOrUpdateTimer(userId, obId, timerType, period);
     }
@@ -77,7 +79,7 @@ public class TimerServiceImpl extends ServiceImpl<TimerMapper, Timer> implements
      * 计算进度
      */
     private Period upPeriod(String userId, String obId, TimerType timerType, String periodId) {
-        long now = Instant.now().getMillis();
+        long now = Instant.now().toEpochMilli();
         Period period;
         if (StringUtils.isBlank(periodId)) {
             period = new Period();
@@ -95,12 +97,16 @@ public class TimerServiceImpl extends ServiceImpl<TimerMapper, Timer> implements
                 log.warn("trace warn periodId:{}", periodId);
                 return null;
             }
-            Long cost = DateUtil.differSecond(new DateTime(period.getStartStamp()), new DateTime(now));
+//            Long cost = DateUtil.differSecond(new DateTime(period.getStartStamp()), new DateTime(now));
+            long cost = Duration.between(
+                    Instant.ofEpochMilli(period.getStartStamp()),
+                    Instant.ofEpochMilli(now)
+            ).getSeconds();
             long costItem = cost - period.getCost();
             Period periodUp = new Period();
             periodUp.setId(period.getId());
             periodUp.setEndStamp(now);
-            periodUp.setCost(cost.intValue());
+            periodUp.setCost((int) cost);
             periodUp.setCostItem((int) costItem);
             periodService.updateById(periodUp);
 
@@ -120,7 +126,7 @@ public class TimerServiceImpl extends ServiceImpl<TimerMapper, Timer> implements
      */
     private void saveTrace(String periodId, Device device, String userId) {
         Trace trace = new Trace();// 学习跟踪记录
-        trace.setTimeStamp(Instant.now().getMillis());
+        trace.setTimeStamp(Instant.now().toEpochMilli());
         trace.setPeriodId(periodId);
         trace.setDevice(device.getCode());
         ThreadLocalContext.setBusinessId(userId);

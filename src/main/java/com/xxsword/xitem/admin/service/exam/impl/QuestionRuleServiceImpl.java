@@ -10,11 +10,9 @@ import com.xxsword.xitem.admin.mapper.exam.QuestionRuleMapper;
 import com.xxsword.xitem.admin.service.exam.QRSService;
 import com.xxsword.xitem.admin.service.exam.QuestionRuleService;
 import com.xxsword.xitem.admin.utils.Utils;
-import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -30,7 +28,7 @@ public class QuestionRuleServiceImpl extends ServiceImpl<QuestionRuleMapper, Que
     public QuestionRule addQuestionRule(String paperId) {
         QuestionRule questionRule = new QuestionRule();
         questionRule.setTitle("规则" + (countByPaperId(paperId) + 1));
-        questionRule.setSeq(DateTime.now().getMillis());
+        questionRule.setSeq(System.currentTimeMillis());
         questionRule.setNum(0);
         questionRule.setPaperId(paperId);
         save(questionRule);

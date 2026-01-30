@@ -8,7 +8,6 @@ import com.xxsword.xitem.admin.domain.category.entity.Category;
 import com.xxsword.xitem.admin.model.RestPaging;
 import com.xxsword.xitem.admin.model.ZTree;
 import com.xxsword.xitem.admin.service.category.CategoryService;
-import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
@@ -109,7 +108,7 @@ public class BaseCategoryController extends BaseController {
      */
     public void saveCategoryBase(Category category) {
         if (StringUtils.isBlank(category.getId())) {
-            category.setSeq(DateTime.now().getMillis());
+            category.setSeq(System.currentTimeMillis());
         }
         categoryService.saveOrUpdate(category);
 

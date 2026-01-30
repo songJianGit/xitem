@@ -6,11 +6,11 @@ import com.xxsword.xitem.admin.domain.timer.entity.Trace;
 import com.xxsword.xitem.admin.mapper.timer.TraceMapper;
 import com.xxsword.xitem.admin.service.timer.TraceService;
 import com.xxsword.xitem.admin.utils.DateUtil;
-import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
 import java.util.List;
 
 @Service
@@ -20,10 +20,12 @@ public class TraceServiceImpl extends ServiceImpl<TraceMapper, Trace> implements
 
     @Override
     public void delTrace() {
-        long date90 = DateUtil.getDay(DateTime.now(), -90).getMillis();
+        Instant now = Instant.now();
+        Instant ninetyDaysAgo = now.minusSeconds(90L * 24 * 60 * 60); // 90天 = 90*86400秒
+        long timestamp = ninetyDaysAgo.toEpochMilli();
         List<String> tables = BigDataTableNameHandler.listTableNames("t_time_trace");
         for (String tabName : tables) {
-            jdbcTemplate.update("DELETE FROM " + tabName + " WHERE (time_stamp <= " + date90 + ")");
+            jdbcTemplate.update("DELETE FROM " + tabName + " WHERE (time_stamp <= " + timestamp + ")");
         }
     }
 }

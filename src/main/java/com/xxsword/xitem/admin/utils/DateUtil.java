@@ -1,35 +1,36 @@
 package com.xxsword.xitem.admin.utils;
 
-import org.joda.time.*;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
-
-import java.util.concurrent.TimeUnit;
+import java.time.Duration;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
+import java.time.temporal.TemporalAdjusters;
 
 public class DateUtil {
-    public static final DateTimeFormatter sdfA1 = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss");
-    public static final DateTimeFormatter sdfA2 = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm");
-    public static final DateTimeFormatter sdfA3 = DateTimeFormat.forPattern("yyyy-MM-dd");
-    public static final DateTimeFormatter sdfA4 = DateTimeFormat.forPattern("yyyy/MM/dd");
-    public static final DateTimeFormatter sdfA5 = DateTimeFormat.forPattern("yyyy年MM月dd日HH时");
-    public static final DateTimeFormatter sdfA6 = DateTimeFormat.forPattern("yyyy年MM月dd日");
-    public static final DateTimeFormatter sdfB1 = DateTimeFormat.forPattern("yyyyMMddHHmmss");
-    public static final DateTimeFormatter sdfB2 = DateTimeFormat.forPattern("yyyyMMddHHmmssSSS");
-    public static final DateTimeFormatter sdfB3 = DateTimeFormat.forPattern("yyyyMMdd");
-    public static final DateTimeFormatter sdfC1 = DateTimeFormat.forPattern("yyyy");
-    public static final DateTimeFormatter sdfC2 = DateTimeFormat.forPattern("yyyyMM");
-    public static final DateTimeFormatter sdfD3 = DateTimeFormat.forPattern("MM-dd");
+    public static final DateTimeFormatter sdfA1 = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+    public static final DateTimeFormatter sdfA2 = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+    public static final DateTimeFormatter sdfA3 = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+    public static final DateTimeFormatter sdfA4 = DateTimeFormatter.ofPattern("yyyy/MM/dd");
+    public static final DateTimeFormatter sdfA5 = DateTimeFormatter.ofPattern("yyyy年MM月dd日HH时");
+    public static final DateTimeFormatter sdfA6 = DateTimeFormatter.ofPattern("yyyy年MM月dd日");
+    public static final DateTimeFormatter sdfB1 = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
+    public static final DateTimeFormatter sdfB2 = DateTimeFormatter.ofPattern("yyyyMMddHHmmssSSS");
+    public static final DateTimeFormatter sdfB3 = DateTimeFormatter.ofPattern("yyyyMMdd");
+    public static final DateTimeFormatter sdfC1 = DateTimeFormatter.ofPattern("yyyy");
+    public static final DateTimeFormatter sdfC2 = DateTimeFormatter.ofPattern("yyyyMM");
+    public static final DateTimeFormatter sdfD3 = DateTimeFormatter.ofPattern("MM-dd");
 
     public static String now() {
-        return new DateTime().toString(sdfA1);
+        return LocalDateTime.now().format(sdfA1);
     }
 
     public static String day() {
-        return new DateTime().toString(sdfA3);
+        return LocalDateTime.now().format(sdfA3);
     }
 
     public static String now(DateTimeFormatter sdf) {
-        return new DateTime().toString(sdf);
+        return LocalDateTime.now().format(sdf);
     }
 
     /**
@@ -39,7 +40,7 @@ public class DateUtil {
      * @param num  1表示一分钟后 -1表示一分钟前
      * @return
      */
-    public static DateTime getMinute(DateTime date, Integer num) {
+    public static LocalDateTime getMinute(LocalDateTime date, Integer num) {
         if (num > 0) {
             return date.plusMinutes(num);
         } else {
@@ -54,7 +55,7 @@ public class DateUtil {
      * @param num  1表示一天后-1表示一天前
      * @return
      */
-    public static DateTime getDay(DateTime date, Integer num) {
+    public static LocalDateTime getDay(LocalDateTime date, Integer num) {
         if (num > 0) {
             return date.plusDays(num);
         } else {
@@ -69,7 +70,7 @@ public class DateUtil {
      * @param num
      * @return
      */
-    public static DateTime getBeforeMonth(DateTime date, int num) {
+    public static LocalDateTime getBeforeMonth(LocalDateTime date, int num) {
         if (num > 0) {
             return date.plusMonths(num);
         } else {
@@ -84,7 +85,7 @@ public class DateUtil {
      * @param num
      * @return
      */
-    public static DateTime getSeconds(DateTime date, Integer num) {
+    public static LocalDateTime getSeconds(LocalDateTime date, Integer num) {
         if (num > 0) {
             return date.plusSeconds(num);
         } else {
@@ -99,90 +100,51 @@ public class DateUtil {
      * @param endDate
      * @return
      */
-    public static Long differSecond(DateTime startDate, DateTime endDate) {
-        Duration duration = new Duration(startDate, endDate);
-        return duration.getStandardSeconds();
+    public static Long differSecond(LocalDateTime startDate, LocalDateTime endDate) {
+        Duration duration = Duration.between(startDate, endDate);
+        return duration.getSeconds(); // 注意：返回 long，不是 Long
     }
 
     public static Long differSecond(String startDate, String endDate, DateTimeFormatter sdf) {
-        Duration duration = new Duration(DateTime.parse(startDate, sdf), DateTime.parse(endDate, sdf));
-        return duration.getStandardSeconds();
+        Duration duration = Duration.between(LocalDateTime.parse(startDate, sdf), LocalDateTime.parse(endDate, sdf));
+        return duration.getSeconds();
     }
 
-    //本月第一天
-    public static String firstDayOfCurrentMouth(DateTimeFormatter dateTimeFormatter) {
-        LocalDate firstDayOfCurrentMouth = LocalDate.now().dayOfMonth().withMinimumValue();
-        return firstDayOfCurrentMouth.toString(dateTimeFormatter);
+    public static long differDay(String startDate, String endDate, DateTimeFormatter formatter) {
+        LocalDate start = LocalDate.parse(startDate, formatter);
+        LocalDate end = LocalDate.parse(endDate, formatter);
+        return ChronoUnit.DAYS.between(start, end); // 返回 end - start 的天数
     }
 
-    //本月最后天一天
-    public static String lastDayOfCurrentMouth(DateTimeFormatter dateTimeFormatter) {
-        LocalDate lastDayOfCurrentMouth = LocalDate.now().dayOfMonth().withMaximumValue();
-        return lastDayOfCurrentMouth.toString(dateTimeFormatter);
+    public static String firstDayOfCurrentMonth(DateTimeFormatter dateTimeFormatter) {
+        LocalDate firstDay = LocalDate.now().with(TemporalAdjusters.firstDayOfMonth());
+        return firstDay.format(dateTimeFormatter); // 注意：用 .format()，不是 .toString()
     }
 
-    public static String calculateTimeDifference(String startDateTime, String endDateTime) {
-        return calculateTimeDifference(startDateTime, endDateTime, "yyyy-MM-dd HH:mm:ss");
-    }
-
-    /**
-     * * Joda-Time 计算两个时间差（年，月，星期，日，小时，分钟，秒，毫秒）   注： 开始时间 和 结束时间 格式须相同
-     *
-     * @param startDateTime 开始时间
-     * @param endDateTime   结束时间
-     * @param dateTimeType  时间格式（2018年01月20日 21:02:37（yyyy年MM月dd日 HH:mm:ss））
-     * @return 中文描述的时间信息
-     */
-    public static String calculateTimeDifference(String startDateTime, String endDateTime, String dateTimeType) {
-        DateTimeFormatter format = DateTimeFormat.forPattern(dateTimeType);
-        DateTime dateTimeStart = format.parseDateTime(startDateTime);
-        DateTime dateTimeEnd = format.parseDateTime(endDateTime);
-        if (dateTimeStart.isAfter(dateTimeEnd)) {
-            DateTime temp = dateTimeStart;
-            dateTimeStart = dateTimeEnd;
-            dateTimeEnd = temp;
-        }
-        Interval interval = new Interval(dateTimeStart.getMillis(), dateTimeEnd.getMillis());
-        Period p = interval.toPeriod();
-        String str = "";
-        if (p.getYears() != 0) {
-            str += p.getYears() + "年";
-        }
-        if (p.getMonths() != 0) {
-            str += p.getMonths() + "个月";
-        }
-        if (p.getWeeks() != 0) {
-            str += p.getWeeks() + "星期";
-        }
-        if (p.getDays() != 0) {
-            str += p.getDays() + "天";
-        }
-        if (p.getHours() != 0) {
-            str += p.getHours() + "小时";
-        }
-        if (p.getMinutes() != 0) {
-            str += p.getMinutes() + "分钟";
-        }
-        if (p.getSeconds() != 0) {
-            str += p.getSeconds() + "秒";
-        }
-        if (p.getMillis() != 0) {
-            str += p.getMillis() + "毫秒";
-        }
-        return str;
+    public static String lastDayOfCurrentMonth(DateTimeFormatter dateTimeFormatter) {
+        LocalDate lastDay = LocalDate.now().with(TemporalAdjusters.lastDayOfMonth());
+        return lastDay.format(dateTimeFormatter);
     }
 
     /**
-     * 将秒转化为 00:00:00的格式
+     * 将秒数转换为 HH:mm:ss 格式（支持负数、大数）
      *
-     * @return
+     * @param seconds 秒数，null 视为 0
+     * @return 格式化字符串，如 "01:01:01"
      */
     public static String sToHHmmss(Long seconds) {
         if (seconds == null) {
             return "00:00:00";
         }
-        long hours = TimeUnit.SECONDS.toHours(seconds);
-        long remainingMinutes = TimeUnit.SECONDS.toMinutes(seconds) - TimeUnit.HOURS.toMinutes(hours);
-        return String.format("%02d:%02d:%02d", hours, remainingMinutes, seconds % 60);
+
+        long totalSeconds = Math.abs(seconds);
+        long hours = totalSeconds / 3600;
+        long minutes = (totalSeconds % 3600) / 60;
+        long secs = totalSeconds % 60;
+
+        String formatted = String.format("%02d:%02d:%02d", hours, minutes, secs);
+
+        // 如果原输入为负数，加负号（可选，根据业务需求）
+        return seconds < 0 ? "-" + formatted : formatted;
     }
 }
