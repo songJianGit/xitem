@@ -18,6 +18,7 @@ import java.util.Base64;
 public class AesEncryptUtil {
 
     private static final String K = "e812a1f8t267cb29";
+    private static final int IV_LENGTH = 16; // AES block size
 
     private static final String AES_ECB_PKCS5PADDING = "AES/ECB/PKCS5Padding";// 相同的内容，加密出来的密文相同；速度稍微快一点
     private static final String AES_CBC_PKCS5PADDING = "AES/CBC/PKCS5Padding";// 相同的内容，加密出来的密文不同；安全性高一点；建议用CBC
@@ -101,8 +102,8 @@ public class AesEncryptUtil {
             return Base64.getEncoder().encodeToString(encryptedBytes);
         } catch (Exception e) {
             e.printStackTrace();
+            throw new RuntimeException("AES-ECB encryption failed", e);
         }
-        return null;
     }
 
     private static String decryptECB(String encryptedText, String key) {
@@ -118,52 +119,79 @@ public class AesEncryptUtil {
             return new String(decryptedBytes, StandardCharsets.UTF_8);
         } catch (Exception e) {
             e.printStackTrace();
+            throw new RuntimeException("AES-ECB decryption failed", e);
         }
-        return null;
     }
 
-    private static String encryptCBC(String plainText, String key) {
+    /**
+     * 加密（CBC 模式）
+     * @param plainText 明文
+     * @param key       必须是 16/24/32 字节的原始密钥（作为字符串传入）
+     * @return Base64 编码的 (IV + ciphertext)
+     */
+    public static String encryptCBC(String plainText, String key) {
         try {
             byte[] keyBytes = key.getBytes(StandardCharsets.UTF_8);
-            SecretKeySpec secretKey = new SecretKeySpec(keyBytes, "AES");
+            validateKeyLength(keyBytes);
 
-            // 初始化向量，对于CBC模式是必需的，通常也是16字节
-            SecureRandom random = new SecureRandom();
-            byte[] ivBytes = new byte[16];
-            random.nextBytes(ivBytes);
-            IvParameterSpec ivSpec = new IvParameterSpec(ivBytes);
+            // 生成随机 IV
+            byte[] iv = new byte[IV_LENGTH];
+            new SecureRandom().nextBytes(iv);
 
+            // 执行加密
             Cipher cipher = Cipher.getInstance(AES_CBC_PKCS5PADDING);
-            cipher.init(Cipher.ENCRYPT_MODE, secretKey, ivSpec);
+            cipher.init(Cipher.ENCRYPT_MODE, new SecretKeySpec(keyBytes, "AES"), new IvParameterSpec(iv));
+            byte[] ciphertext = cipher.doFinal(plainText.getBytes(StandardCharsets.UTF_8));
 
-            byte[] encryptedBytes = cipher.doFinal(plainText.getBytes(StandardCharsets.UTF_8));
-            return Base64.getEncoder().encodeToString((Base64.getEncoder().encodeToString(encryptedBytes) + ":" + Base64.getEncoder().encodeToString(ivBytes)).getBytes());
+            // 拼接 IV + ciphertext 并 Base64
+            byte[] combined = new byte[iv.length + ciphertext.length];
+            System.arraycopy(iv, 0, combined, 0, iv.length);
+            System.arraycopy(ciphertext, 0, combined, iv.length, ciphertext.length);
+
+            return Base64.getEncoder().encodeToString(combined);
         } catch (Exception e) {
-            e.printStackTrace();
+            throw new RuntimeException("AES-CBC encryption failed", e);
         }
-        return null;
     }
 
-    private static String decryptCBC(String encryptedText, String key) {
-        encryptedText = new String(Base64.getDecoder().decode(encryptedText), StandardCharsets.UTF_8);
-        String[] parts = encryptedText.split(":");
+    /**
+     * 解密（CBC 模式）
+     * @param encryptedText Base64 编码的 (IV + ciphertext)
+     * @param key           必须与加密时相同的密钥
+     * @return 明文
+     */
+    public static String decryptCBC(String encryptedText, String key) {
         try {
-            byte[] encryptedBytes = Base64.getDecoder().decode(parts[0]);
-            byte[] ivBytes = Base64.getDecoder().decode(parts[1]);
-
             byte[] keyBytes = key.getBytes(StandardCharsets.UTF_8);
-            SecretKeySpec secretKey = new SecretKeySpec(keyBytes, "AES");
-            IvParameterSpec ivSpec = new IvParameterSpec(ivBytes);
+            validateKeyLength(keyBytes);
 
+            byte[] combined = Base64.getDecoder().decode(encryptedText);
+            if (combined.length < IV_LENGTH) {
+                throw new IllegalArgumentException("Invalid encrypted data: too short");
+            }
+
+            // 分离 IV 和 ciphertext
+            byte[] iv = new byte[IV_LENGTH];
+            byte[] ciphertext = new byte[combined.length - IV_LENGTH];
+            System.arraycopy(combined, 0, iv, 0, iv.length);
+            System.arraycopy(combined, IV_LENGTH, ciphertext, 0, ciphertext.length);
+
+            // 执行解密
             Cipher cipher = Cipher.getInstance(AES_CBC_PKCS5PADDING);
-            cipher.init(Cipher.DECRYPT_MODE, secretKey, ivSpec);
+            cipher.init(Cipher.DECRYPT_MODE, new SecretKeySpec(keyBytes, "AES"), new IvParameterSpec(iv));
+            byte[] plaintext = cipher.doFinal(ciphertext);
 
-            byte[] decryptedBytes = cipher.doFinal(encryptedBytes);
-            return new String(decryptedBytes, StandardCharsets.UTF_8);
+            return new String(plaintext, StandardCharsets.UTF_8);
         } catch (Exception e) {
-            e.printStackTrace();
+            throw new RuntimeException("AES-CBC decryption failed", e);
         }
-        return null;
+    }
+
+    private static void validateKeyLength(byte[] keyBytes) {
+        if (keyBytes.length != 16 && keyBytes.length != 24 && keyBytes.length != 32) {
+            throw new IllegalArgumentException(
+                    "Invalid AES key length: " + keyBytes.length + " bytes. Must be 16, 24, or 32 bytes.");
+        }
     }
 
 }
