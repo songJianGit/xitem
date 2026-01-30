@@ -118,7 +118,6 @@ public class AesEncryptUtil {
             byte[] decryptedBytes = cipher.doFinal(encryptedBytes);
             return new String(decryptedBytes, StandardCharsets.UTF_8);
         } catch (Exception e) {
-            e.printStackTrace();
             throw new RuntimeException("AES-ECB decryption failed", e);
         }
     }
