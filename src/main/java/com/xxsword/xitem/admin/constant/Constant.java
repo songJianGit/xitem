@@ -41,11 +41,4 @@ public class Constant {
     // 用户上传文件时，额外添加的一层目录
     public static final String USERFILES = "/userfiles";
 
-    // 微信小程序的头部验证key
-    public static final String USER_INFO_WX = "Authorization";
-    // 微信小程序的appid，字典id
-    public static final String WX_APPID = "wxappid2025";
-    // 微信小程序的secret，字典id
-    public static final String WX_SECRET = "wxsecret2025";
-
 }

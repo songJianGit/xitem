@@ -1,7 +1,6 @@
 package com.xxsword.xitem.admin.utils;
 
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
-import com.beust.jcommander.internal.Lists;
 import com.xxsword.xitem.admin.config.SystemConfig;
 import com.xxsword.xitem.admin.constant.Constant;
 import com.xxsword.xitem.admin.domain.system.vo.FileVO;
@@ -321,7 +320,7 @@ public class UpLoadUtil {
      */
     public static List<FileVO> fileData(String upath) {
         if (StringUtils.isBlank(upath)) {
-            return Lists.newArrayList();
+            return new ArrayList<>();
         }
         List<FileVO> listFile = new ArrayList<>();
         File[] fileList = new File(upath).listFiles();

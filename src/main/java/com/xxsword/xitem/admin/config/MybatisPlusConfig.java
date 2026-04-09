@@ -25,11 +25,6 @@ public class MybatisPlusConfig {
         // 开启 count 的 join 优化,只针对部分 left join
         pageInterceptor.setOptimizeJoin(true);
         interceptor.addInnerInterceptor(pageInterceptor);
-        // 分表配置---begin---
-        DynamicTableNameInnerInterceptor dynamicTableNameInterceptor = new DynamicTableNameInnerInterceptor();
-        dynamicTableNameInterceptor.setTableNameHandler(new BigDataTableNameHandler()); // 注册自定义的 TableNameHandler
-        interceptor.addInnerInterceptor(dynamicTableNameInterceptor);
-        // 分表配置---end---
         return interceptor;
     }
 }
