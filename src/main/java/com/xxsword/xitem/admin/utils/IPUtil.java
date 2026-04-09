@@ -1,6 +1,7 @@
 package com.xxsword.xitem.admin.utils;
 
 import jakarta.servlet.http.HttpServletRequest;
+
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.util.Enumeration;
@@ -25,6 +26,7 @@ public class IPUtil {
         }
         return ip;
     }
+
     // 获取本机ip-复杂环境下更能获取正确的ip
     public static String getLocalHostIPAddress() {
         return getLocalHostLANAddress().getHostAddress().toString();
@@ -55,8 +57,7 @@ public class IPUtil {
                 return candidateAddress;
             }
             // 如果没有发现 non-loopback地址.只能用最次选的方案
-            InetAddress jdkSuppliedAddress = InetAddress.getLocalHost();
-            return jdkSuppliedAddress;
+            return InetAddress.getLocalHost();
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -12,7 +12,7 @@
             <ul class="nav-drawer">
                 <li class="nav-item" id="1">
                     <a href="${ctx.contextPath}/admin/system/index?mclick=1"><i
-                                class="mdi mdi-home"></i><span>后台首页</span></a>
+                                class="mdi mdi-home"></i><span>首页</span></a>
                 </li>
                 <#if treeMenuList??>
                     <#list Session.treeMenuList as menu>

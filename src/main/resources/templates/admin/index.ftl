@@ -20,72 +20,51 @@
                 <div class="row">
                     <div class="col-12">
                         <div class="card">
-                            <div class="card-body">
-                                <h4>${Session.puser.nickName!}，欢迎回来。</h4>
+                            <div class="card-header">
+                                <form class="form-inline" method="post" action="#!" role="form" id="searchform">
+                                    <div class="input-group m-r-5">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">项目名称</span>
+                                        </div>
+                                        <input type="text" class="form-control" value="" name="name"
+                                               placeholder="项目名称">
+                                    </div>
+                                    <div class="input-group">
+                                        <div class="btn-group">
+                                            <button type="button" id="searchBtn" class="btn btn-primary m-r-5">搜索
+                                            </button>
+                                            <button type="reset" class="btn btn-default">重置</button>
+                                        </div>
+                                    </div>
+                                </form>
                             </div>
-                        </div>
-                    </div>
-                    <div class="col-12">
-                        <div class="row">
-                            <div class="col-6">
-                                <div class="card">
-                                    <div class="card-header">系统资源</div>
-                                    <div class="card-body">
-                                        <div class="mb-3">
-                                            操作系统：${osName!}&nbsp;&nbsp;${availableProcessors!}
-                                            核&nbsp;&nbsp;${totalMemory!}
-                                        </div>
-                                        <div class="mb-3">
-                                            CPU：${systemCpuLoad!}%
-                                            <div class="progress" style="height: 20px;">
-                                                <div class="progress-bar" role="progressbar"
-                                                     style="width: ${systemCpuLoad!}%;" aria-valuenow="25"
-                                                     aria-valuemin="0" aria-valuemax="100"></div>
-                                            </div>
-                                        </div>
-                                        <div class="mb-3">
-                                            内存：${usedMemory}&nbsp;/&nbsp;${totalMemory}
-                                            <div class="progress" style="height: 20px;">
-                                                <div class="progress-bar" role="progressbar"
-                                                     style="width: ${usedMemoryPercent!}%;" aria-valuenow="25"
-                                                     aria-valuemin="0" aria-valuemax="100">${usedMemoryPercent!}%
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="mb-3">
-                                            磁盘：${usedSpace}&nbsp;/&nbsp;${totalSpace}
-                                            <div class="progress" style="height: 20px;">
-                                                <div class="progress-bar" role="progressbar"
-                                                     style="width: ${usedSpacePercent!}%;" aria-valuenow="25"
-                                                     aria-valuemin="0" aria-valuemax="100">${usedSpacePercent!}%
-                                                </div>
-                                            </div>
-                                        </div>
+                            <div class="card-body">
+                                <div id="custom-toolbar">
+                                    <div class="toolbar-btn-action">
+                                        <button type="button" id="add" class="btn btn-primary">
+                                            开始新项目
+                                        </button>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="col-6">
-                                <div class="card">
-                                    <div class="card-header">JVM内存</div>
-                                    <div class="card-body">
-                                        <div class="mb-3">
-                                            堆内：
-                                            <div>
-                                                初始：${heapMemoryUsageInit!}&nbsp;&nbsp;当前使用：${heapMemoryUsageUsed!}
-                                                &nbsp;&nbsp;
-                                                已提交：${heapMemoryUsageCommitted!}&nbsp;&nbsp;最大：${heapMemoryUsageMax!}
-                                            </div>
-                                        </div>
-                                        <div class="mb-3">
-                                            非堆内：
-                                            <div>
-                                                初始：${nonHeapMemoryUsageInit!}
-                                                &nbsp;&nbsp;当前使用：${nonHeapMemoryUsageUsed!}&nbsp;&nbsp;
-                                                已提交：${nonHeapMemoryUsageCommitted!}
-                                                &nbsp;&nbsp;最大：${nonHeapMemoryUsageMax!}
-                                            </div>
-                                        </div>
-                                    </div>
+                                <div class="table-responsive">
+                                    <table id="table-pagination"
+                                           data-toolbar="#custom-toolbar"
+                                           data-toggle="table"
+                                           data-pagination="true"
+                                           data-page-list="[10, 20, 50, 100, 200]"
+                                           data-show-refresh="true"
+                                           data-url="${ctx.contextPath}/admin/project/data"
+                                           data-query-params="pageQueryParams"
+                                           data-side-pagination="server">
+                                        <thead>
+                                        <tr>
+                                            <th data-field="title" data-formatter="title">项目名称</th>
+                                            <th data-field="pstatus">项目成员</th>
+                                            <th data-field="createDate" data-formatter="createDate">创建时间</th>
+                                            <th data-field="pstatus">项目状态</th>
+                                        </tr>
+                                        </thead>
+                                    </table>
                                 </div>
                             </div>
                         </div>
@@ -97,5 +76,19 @@
     </div>
 </div>
 <#include "commons/js.ftl"/>
+<script type="text/javascript">
+    function createDate(value, row) {
+        if (value == '') {
+            return '';
+        }
+        return value.substring(0, 10);
+    }
+    function title(value, row) {
+        return '<a href="javascript:;" title="' + value + '" class="ellipsis" onclick="show(\'' + row.id + '\')">' + value + '</a>';
+    }
+    function show(id) {
+        window.location.href = '${ctx.contextPath}/admin/project/show?id=' + id;
+    }
+</script>
 </body>
 </html>

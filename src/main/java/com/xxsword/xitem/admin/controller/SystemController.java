@@ -11,7 +11,6 @@ import com.xxsword.xitem.admin.domain.system.vo.UserInfoRoleVO;
 import com.xxsword.xitem.admin.model.*;
 import com.xxsword.xitem.admin.service.system.*;
 import com.xxsword.xitem.admin.utils.MenuUtil;
-import com.xxsword.xitem.admin.utils.ServerInfoUtils;
 import com.xxsword.xitem.admin.utils.Utils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +22,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import java.util.List;
-import java.util.Map;
 
 @Slf4j
 @Controller
@@ -59,28 +57,7 @@ public class SystemController extends BaseController {
             List<TreeMenu> treeMenuList = MenuUtil.listTreeMenuByFunctions(MenuUtil.listFunctionByRoles(userInfo.getRoleList()), false);
             session.setAttribute("treeMenuList", treeMenuList);
         }
-        serverInfo(model);
         return "/admin/index";
-    }
-
-    private void serverInfo(Model model) {
-        Map<String, Object> system = ServerInfoUtils.system();
-        model.addAttribute("systemCpuLoad", system.get("systemCpuLoad"));
-        model.addAttribute("availableProcessors", system.get("availableProcessors"));
-        model.addAttribute("totalMemory", Utils.byteCountToDisplaySizeDecimal(Long.parseLong(system.get("totalMemory").toString())));
-        model.addAttribute("usedMemory", Utils.byteCountToDisplaySizeDecimal(Long.parseLong(system.get("usedMemory").toString())));
-        model.addAttribute("usedMemoryPercent", Utils.mul(Utils.div(Long.parseLong(system.get("usedMemory").toString()), Long.parseLong(system.get("totalMemory").toString()), 2), 100));
-        model.addAttribute("osName", system.get("osName"));
-
-        Map<String, Object> javaMemory = ServerInfoUtils.javaMemory();
-        for (String key : javaMemory.keySet()) {
-            model.addAttribute(key, Utils.byteCountToDisplaySizeDecimal(Long.parseLong(javaMemory.get(key).toString())));
-        }
-
-        Map<String, Object> disk = ServerInfoUtils.disk();
-        model.addAttribute("totalSpace", Utils.byteCountToDisplaySizeDecimal(Long.parseLong(disk.get("totalSpace").toString())));
-        model.addAttribute("usedSpace", Utils.byteCountToDisplaySizeDecimal(Long.parseLong(disk.get("usedSpace").toString())));
-        model.addAttribute("usedSpacePercent", Utils.mul(Utils.div(Long.parseLong(disk.get("usedSpace").toString()), Long.parseLong(disk.get("totalSpace").toString()), 2), 100));
     }
 
     /**
@@ -327,7 +304,7 @@ public class SystemController extends BaseController {
         model.addAttribute("roleFunction", role.getFunctionList());
         model.addAttribute("listFunction", listFunctionsSeq);
         model.addAttribute("role", role);
-        return httpRedirect(request, "/admin/system/rolefunction");
+        return "/admin/system/rolefunction";
     }
 
     /**

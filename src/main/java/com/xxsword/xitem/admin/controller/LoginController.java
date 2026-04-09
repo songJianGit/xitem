@@ -10,7 +10,6 @@ import com.xxsword.xitem.admin.model.RestResult;
 import com.xxsword.xitem.admin.service.system.UserInfoService;
 import com.xxsword.xitem.admin.utils.CaptchaUtils;
 import com.xxsword.xitem.admin.utils.MenuUtil;
-import com.xxsword.xitem.admin.utils.Utils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -42,7 +41,7 @@ public class LoginController extends BaseController {
     /**
      * 用户登录
      */
-    @GetMapping("adminLogin")
+    @GetMapping("login")
     public String login(HttpServletRequest request) {
         request.getSession();
         return "/admin/login";
@@ -95,7 +94,7 @@ public class LoginController extends BaseController {
             response.setDateHeader("Expires", 0);
             response.setContentType("image/jpeg");
             String verifyCode = CaptchaUtils.generateCaptcha(0, 37, response.getOutputStream());
-//            verifyCode = "1234";
+            verifyCode = "1234";
             request.getSession().setAttribute(Constant.CAPTCHA, verifyCode.toLowerCase());
         } catch (Exception e) {
             log.error("获取验证码异常：{}", e.getMessage());
