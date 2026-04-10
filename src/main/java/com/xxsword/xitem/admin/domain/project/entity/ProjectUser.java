@@ -1,10 +1,8 @@
 package com.xxsword.xitem.admin.domain.project.entity;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.gitee.sunchenbin.mybatis.actable.annotation.Column;
-import com.gitee.sunchenbin.mybatis.actable.annotation.ColumnComment;
-import com.gitee.sunchenbin.mybatis.actable.annotation.TableComment;
-import com.gitee.sunchenbin.mybatis.actable.annotation.TableEngine;
+import com.gitee.sunchenbin.mybatis.actable.annotation.*;
 import com.gitee.sunchenbin.mybatis.actable.constants.MySqlEngineConstant;
 import com.xxsword.xitem.admin.domain.system.entity.BaseEntity;
 import lombok.Data;
@@ -17,12 +15,18 @@ import lombok.EqualsAndHashCode;
 @TableEngine(MySqlEngineConstant.InnoDB)
 public class ProjectUser extends BaseEntity {
     private static final long serialVersionUID = 1L;
+
+    @Unique(columns = {"pid", "user_id"})
     @Column
     @ColumnComment("项目Id")
     private String pid;
-    @Column
+
+    @Column(length = 50)
     @ColumnComment("用户Id")
     private String userId;
+
+    @TableField(exist = false)
+    private String userName;
 }
 
 

@@ -9,9 +9,12 @@
         src="${ctx.contextPath}/static/plugins/admin-template/js/jquery-confirm/jquery-confirm.min.js"></script>
 <script type="text/javascript" src="${ctx.contextPath}/static/plugins/layer-3.5.1/layer.js"></script>
 <script type="text/javascript" src="${ctx.contextPath}/static/plugins/My97DatePicker/WdatePicker.js"></script>
-<script type="text/javascript" src="${ctx.contextPath}/static/plugins/admin-template/js/bootstrap-table/bootstrap-table.js"></script>
+<script type="text/javascript"
+        src="${ctx.contextPath}/static/plugins/admin-template/js/bootstrap-table/bootstrap-table.js"></script>
 <script type="text/javascript"
         src="${ctx.contextPath}/static/plugins/admin-template/js/bootstrap-table/locale/bootstrap-table-zh-CN.min.js"></script>
+<script type="text/javascript"
+        src="${ctx.contextPath}/static/plugins/admin-template/js/bootstrap-select/bootstrap-select.min.js"></script>
 <script type="text/javascript" src="${ctx.contextPath}/static/plugins/ztree-v3/js/jquery.ztree.all.js"></script>
 <script src="${ctx.contextPath}/static/plugins/tinymce7.9.1/tinymce.min.js" referrerpolicy="origin"></script>
 <script type="text/javascript"> var contextPath = '${ctx.contextPath}';</script>
@@ -19,7 +22,6 @@
 <script type="text/javascript">
     // ---菜单回显---begin
     window.onload = function () {
-        <#if treeMenuList??>
         <#if Session.mclick??>
         let menuClickInfo = '${Session.mclick}';
         if (isNotBlank(menuClickInfo) && menuClickInfo != 'x') {
@@ -27,14 +29,11 @@
             $('#' + menuClickInfo).addClass('active');
         }
         </#if>
-        <#else>
-        window.location.href = "${ctx.contextPath}/admin/system/index?mclick=1";
-        </#if>
     };
     // ---菜单回显---end
 
     // 禁用jQuery的回车处理事件
-    $(document).on('keydown', function(event) {
+    $(document).on('keydown', function (event) {
         if (event.keyCode === 13) {
             // 阻止默认行为
             event.preventDefault();
@@ -149,6 +148,30 @@
                 }
             });
             layer.close(index);
+        });
+    }
+
+    // 头部的项目选择
+    let projectTopSelect = $("#project-top-select");
+    if (projectTopSelect) {
+        $.ajax({
+            url: '${ctx.contextPath}/admin/project/list',
+            type: "get",
+            data: {},
+            success: function (data) {
+                // project-top-select
+                if (data.result) {
+                    let dd = data.data;
+                    let htm = '';
+                    for (let i = 0; i < dd.length; i++) {
+                        htm += '<option value="' + dd[i].id + '">' + dd[i].title + '</option>';
+                    }
+                    $('#project-top-select').html(htm);
+                    $('#project-top-select').selectpicker();
+                } else {
+                    layer.msg(data.msg)
+                }
+            }
         });
     }
 </script>

@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+
 import java.util.List;
 
 @Slf4j
@@ -44,21 +45,33 @@ public class SystemController extends BaseController {
     private DictService dictService;
 
     /**
-     * 后台主页
+     * 进入后，默认跳转的主页
      *
      * @param request
      * @return
      */
     @RequestMapping("index")
-    public String index(HttpServletRequest request, Model model) {
+    public String index(HttpServletRequest request, String funId) {
         UserInfo userInfo = Utils.getUserInfo(request);
         HttpSession session = request.getSession();
-        if (session.getAttribute("treeMenuList") == null) {
+        if (session.getAttribute(Constant.TREE_MENU_LIST_TOP) == null) {
             List<TreeMenu> treeMenuList = MenuUtil.listTreeMenuByFunctions(MenuUtil.listFunctionByRoles(userInfo.getRoleList()), false);
-            session.setAttribute("treeMenuList", treeMenuList);
+            for (TreeMenu item : treeMenuList) {
+                session.setAttribute(Constant.TREE_MENU_LIST_LEFT + item.getId(), item.getNodes());// 缓存头部菜单
+                item.setNodes(null);// 清理头部菜单多余数据
+            }
+            session.setAttribute(Constant.TREE_MENU_LIST_TOP, treeMenuList);// 头部菜单
         }
-        return "/admin/index";
+
+        if (StringUtils.isNotBlank(funId)) {
+            session.setAttribute(Constant.TREE_MENU_LIST_LEFT, session.getAttribute(Constant.TREE_MENU_LIST_LEFT + funId));// 左侧菜单
+        } else {
+            session.setAttribute(Constant.TREE_MENU_LIST_LEFT, session.getAttribute(Constant.TREE_MENU_LIST_LEFT + Constant.TREE_MENU_LIST_TOP_FLAG_DEF));// 左侧菜单
+        }
+
+        return "/admin/mytask";
     }
+
 
     /**
      * 用户列表页
@@ -103,8 +116,6 @@ public class SystemController extends BaseController {
     public String userSave(HttpServletRequest request, UserInfo userInfo) {
         long num = userInfoService.count(new LambdaQueryWrapper<UserInfo>().eq(UserInfo::getStatus, 1));
         if (num <= maxUserNum()) {
-            UserInfo user = Utils.getUserInfo(request);
-            userInfo.setBaseInfo(user);
             userInfoService.saveOrUpdate(userInfo);
         } else {
             log.warn("已达到最大用户数限制 UserNum:{}", num);
@@ -165,9 +176,7 @@ public class SystemController extends BaseController {
         if (StringUtils.isBlank(userIds)) {
             return RestResult.Fail("参数缺失");
         }
-        UserInfo userInfo = Utils.getUserInfo(request);
         userInfoService.delByIds(userIds);
-        userInfoService.upLastInfo(userInfo, userIds);
         return RestResult.OK();
     }
 
@@ -180,9 +189,7 @@ public class SystemController extends BaseController {
         if (StringUtils.isBlank(userIds)) {
             return RestResult.Fail("参数缺失");
         }
-        UserInfo userInfo = Utils.getUserInfo(request);
         userInfoService.upUserInfoStatus(userIds);
-        userInfoService.upLastInfo(userInfo, userIds);
         return RestResult.OK();
     }
 
@@ -222,8 +229,6 @@ public class SystemController extends BaseController {
      */
     @RequestMapping("roleSave")
     public String roleSave(HttpServletRequest request, Role role) {
-        UserInfo user = Utils.getUserInfo(request);
-        role.setBaseInfo(user);
         roleService.saveOrUpdate(role);
         return httpRedirect(request, "/admin/system/roleList");
     }
@@ -243,9 +248,7 @@ public class SystemController extends BaseController {
         if (checkRoleByids(roleIds)) {
             return RestResult.Fail("本角色被引用，请勿删除");
         }
-        UserInfo userInfo = Utils.getUserInfo(request);
         roleService.delByIds(roleIds);
-        roleService.upLastInfo(userInfo, roleIds);
         return RestResult.OK();
     }
 
@@ -280,9 +283,7 @@ public class SystemController extends BaseController {
         if (StringUtils.isBlank(roleid)) {
             return RestResult.Fail("参数缺失");
         }
-        UserInfo userInfo = Utils.getUserInfo(request);
         Role role = roleService.upRoleStatus(roleid);
-        roleService.upLastInfo(userInfo, roleid);
         int status = role.getStatus();
         if (status == 1) {
             return RestResult.Codes(Codes.STATUS_1);
@@ -380,8 +381,6 @@ public class SystemController extends BaseController {
      */
     @RequestMapping("functionSave")
     public String functionSave(HttpServletRequest request, Function functions) {
-        UserInfo user = Utils.getUserInfo(request);
-        functions.setBaseInfo(user);
         functionService.saveOrUpdate(functions);
         return httpRedirect(request, "/admin/system/functionList");
     }
@@ -395,9 +394,7 @@ public class SystemController extends BaseController {
         if (StringUtils.isBlank(functionId)) {
             return RestResult.Fail("参数缺失");
         }
-        UserInfo userInfo = Utils.getUserInfo(request);
         functionService.delFunctionById(functionId);
-        functionService.upLastInfo(userInfo, functionId);
         return RestResult.OK();
     }
 
@@ -468,9 +465,7 @@ public class SystemController extends BaseController {
             return RestResult.Fail("请填写密码");
         }
         if (Utils.isValidPassword(password)) {
-            UserInfo userInfo = Utils.getUserInfo(request);
             userInfoService.resetPassword(userId, password);
-            userInfoService.upLastInfo(userInfo, userId);
             return RestResult.OK();
         } else {
             return RestResult.Codes(Codes.PASSWORD_COMPLEXITY);
@@ -556,8 +551,6 @@ public class SystemController extends BaseController {
      */
     @RequestMapping("dictSave")
     public String dictSave(HttpServletRequest request, Dict dict) {
-        UserInfo user = Utils.getUserInfo(request);
-        dict.setBaseInfo(user);
         dictService.saveOrUpdate(dict);
         return httpRedirect(request, "/admin/system/dictList");
     }
@@ -572,9 +565,7 @@ public class SystemController extends BaseController {
     @RequestMapping("dictDelete")
     @ResponseBody
     public RestResult delDict(HttpServletRequest request, String dictIds) {
-        UserInfo userInfo = Utils.getUserInfo(request);
         dictService.delByIds(dictIds);
-        dictService.upLastInfo(userInfo, dictIds);
         return RestResult.OK();
     }
 

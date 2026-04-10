@@ -4,7 +4,6 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.xxsword.xitem.admin.domain.system.entity.Function;
-import com.xxsword.xitem.admin.domain.system.entity.UserInfo;
 import com.xxsword.xitem.admin.mapper.system.FunctionMapper;
 import com.xxsword.xitem.admin.service.system.FunctionService;
 import org.springframework.stereotype.Service;
@@ -68,19 +67,6 @@ public class FunctionServiceImpl extends ServiceImpl<FunctionMapper, Function> i
             functionListUp.add(functionUp);
         }
         updateBatchById(functionListUp);
-    }
-
-    @Override
-    public void upLastInfo(UserInfo doUserInfo, String functionIds) {
-        String[] ids = functionIds.split(",");
-        List<Function> listUp = new ArrayList<>();
-        for (String id : ids) {
-            Function functionUp = new Function();
-            functionUp.setId(id);
-            functionUp.setBaseInfo(doUserInfo);
-            listUp.add(functionUp);
-        }
-        updateBatchById(listUp);
     }
 
 }

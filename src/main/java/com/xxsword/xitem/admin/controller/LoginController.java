@@ -46,6 +46,10 @@ public class LoginController extends BaseController {
         request.getSession();
         return "/admin/login";
     }
+    @GetMapping
+    public String toLogin(HttpServletRequest request) {
+        return login(request);
+    }
 
     @PostMapping("checkLogin")
     @ResponseBody

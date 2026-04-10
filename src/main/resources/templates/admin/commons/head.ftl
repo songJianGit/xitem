@@ -15,3 +15,4 @@
 <link href="${ctx.contextPath}/static/plugins/admin-template/js/jquery-confirm/jquery-confirm.min.css" rel="stylesheet">
 <link rel="stylesheet" href="${ctx.contextPath}/static/plugins/ztree-v3/css/zTreeStyle/zTreeStyle.css"
       type="text/css">
+<link rel="stylesheet" type="text/css" href="${ctx.contextPath}/static/plugins/admin-template/js/bootstrap-select/bootstrap-select.min.css">

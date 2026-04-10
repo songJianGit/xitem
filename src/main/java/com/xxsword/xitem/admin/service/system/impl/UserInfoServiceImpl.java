@@ -1,5 +1,6 @@
 package com.xxsword.xitem.admin.service.system.impl;
 
+import cn.hutool.core.util.IdUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
@@ -213,21 +214,35 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
     }
 
     @Override
-    public void upLastInfo(UserInfo doUserInfo, String userIds) {
-        String[] ids = userIds.split(",");
-        List<UserInfo> listUp = new ArrayList<>();
-        for (String id : ids) {
-            UserInfo userInfoUp = new UserInfo();
-            userInfoUp.setId(id);
-            userInfoUp.setBaseInfo(doUserInfo);
-            listUp.add(userInfoUp);
-        }
-        updateBatchById(listUp);
+    public Map<String, UserInfo> mapsUser(Set<String> userIds) {
+        return listByIds(userIds).stream().collect(Collectors.toMap(UserInfo::getId, java.util.function.Function.identity()));
     }
 
     @Override
-    public Map<String, UserInfo> mapsUser(Set<String> userIds) {
-        return listByIds(userIds).stream().collect(Collectors.toMap(UserInfo::getId, java.util.function.Function.identity()));
+    public UserInfo createTmpUserInfo() {
+        UserInfo userInfo = new UserInfo();
+        userInfo.setLoginName(IdUtil.fastSimpleUUID());
+        userInfo.setCreateUserId("1");
+        userInfo.setCreateOrganId("1");
+        userInfo.setUserName("临时用户");
+        userInfo.setOrganId("2021140387999719426");
+        userInfo.setLifeDate("2099-01-01 10:00:00");
+        save(userInfo);
+        return userInfo;
+    }
+
+    @Override
+    public UserInfo createTmpUserInfo(String nickName, String avatar) {
+        UserInfo userInfo = new UserInfo();
+        userInfo.setLoginName(IdUtil.fastSimpleUUID());
+        userInfo.setCreateUserId("1");
+        userInfo.setCreateOrganId("1");
+        userInfo.setUserName(nickName);
+        userInfo.setOrganId("2021140387999719426");
+        userInfo.setLifeDate("2099-01-01 10:00:00");
+        userInfo.setAvatar(avatar);
+        save(userInfo);
+        return userInfo;
     }
 
 }

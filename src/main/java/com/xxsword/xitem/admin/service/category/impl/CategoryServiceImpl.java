@@ -6,14 +6,17 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.xxsword.xitem.admin.domain.category.entity.Category;
-import com.xxsword.xitem.admin.domain.system.entity.UserInfo;
 import com.xxsword.xitem.admin.mapper.category.CategoryMapper;
 import com.xxsword.xitem.admin.service.category.CategoryService;
 import com.xxsword.xitem.admin.utils.Utils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
+import java.util.HashSet;
 import java.util.stream.Collectors;
 
 @Service
@@ -51,8 +54,8 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> i
     public List<Category> categoryC(String categoryId) {
         LambdaQueryWrapper<Category> q = Wrappers.lambdaQuery();
         q.eq(Category::getStatus, 1);
+        q.orderByDesc(Category::getSeq, Category::getId);
         q.apply(" find_in_set('" + categoryId + "', pids) ");
-        q.orderByAsc(Category::getSeq, Category::getId);
         return list(q);
     }
 
@@ -126,30 +129,15 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> i
     }
 
     @Override
-    public void upLastInfo(UserInfo doUserInfo, String categoryIds) {
-        String[] ids = categoryIds.split(",");
-        List<Category> listUp = new ArrayList<>();
-        for (String id : ids) {
-            Category categoryUp = new Category();
-            categoryUp.setId(id);
-            categoryUp.setBaseInfo(doUserInfo);
-            listUp.add(categoryUp);
-        }
-        updateBatchById(listUp);
-    }
-
-    @Override
-    public void seq(UserInfo userInfo, String id1, String id2) {
+    public void seq(String id1, String id2) {
         Category category1 = getById(id1);
         Category category2 = getById(id2);
         Category category1Up = new Category();
         Category category2Up = new Category();
         category1Up.setId(id1);
         category1Up.setSeq(category2.getSeq());
-        category1Up.setBaseInfo(userInfo);
         category2Up.setId(id2);
         category2Up.setSeq(category1.getSeq());
-        category2Up.setBaseInfo(userInfo);
         List<Category> listUp = new ArrayList<>();
         listUp.add(category1Up);
         listUp.add(category2Up);

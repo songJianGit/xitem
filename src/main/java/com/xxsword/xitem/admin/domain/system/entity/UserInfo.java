@@ -19,9 +19,9 @@ import java.util.List;
 public class UserInfo extends BaseEntity implements Serializable {
 
     private static final long serialVersionUID = 107L;
-    @Column(length = 50)
-    @ColumnComment("用户昵称")
-    private String nickName;
+    @Column
+    @ColumnComment("用户头像")
+    private String avatar;
 
     @Column(length = 100)
     @ColumnComment("用户姓名")
@@ -73,5 +73,9 @@ public class UserInfo extends BaseEntity implements Serializable {
 
     @TableField(exist = false)
     private List<Role> roleList;
+
+    @Column(length = 50)
+    @ColumnComment("用户职位")
+    private String jobTitle;
 
 }

@@ -3781,7 +3781,7 @@ button.list-group-item:hover {
 .nav-drawer ul li ul {
     padding-left: 15px;
 }
-.nav-item-has-subnav > a:after {
+.nav-item-has-subnav > a:not(.clear-after):after {
     position: absolute;
     top: 12px;
     right: 24px;

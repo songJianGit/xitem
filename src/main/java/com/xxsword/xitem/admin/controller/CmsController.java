@@ -2,15 +2,23 @@ package com.xxsword.xitem.admin.controller;
 
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.xxsword.xitem.admin.constant.Constant;
 import com.xxsword.xitem.admin.domain.category.entity.Category;
 import com.xxsword.xitem.admin.domain.cms.dto.ArticleDto;
 import com.xxsword.xitem.admin.domain.cms.entity.Article;
 import com.xxsword.xitem.admin.domain.cms.entity.ArticleData;
+import com.xxsword.xitem.admin.domain.cms.entity.ArticleUser;
+import com.xxsword.xitem.admin.domain.project.dto.ProjectUserDto;
+import com.xxsword.xitem.admin.domain.project.entity.ProjectUser;
 import com.xxsword.xitem.admin.domain.system.entity.UserInfo;
 import com.xxsword.xitem.admin.model.RestPaging;
+import com.xxsword.xitem.admin.model.RestResult;
 import com.xxsword.xitem.admin.service.category.CategoryService;
 import com.xxsword.xitem.admin.service.cms.ArticleDataService;
 import com.xxsword.xitem.admin.service.cms.ArticleService;
+import com.xxsword.xitem.admin.service.cms.ArticleUserService;
+import com.xxsword.xitem.admin.service.project.ProjectService;
+import com.xxsword.xitem.admin.service.project.ProjectUserService;
 import com.xxsword.xitem.admin.utils.DateUtil;
 import com.xxsword.xitem.admin.utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +28,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import jakarta.servlet.http.HttpServletRequest;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,6 +41,12 @@ public class CmsController extends BaseController {
     private ArticleDataService articleDataService;
     @Autowired
     private CategoryService categoryService;
+    @Autowired
+    private ProjectUserService projectUserService;
+    @Autowired
+    private ArticleUserService articleUserService;
+    @Autowired
+    private ProjectService projectService;
 
     @RequestMapping("articleList")
     public String recordList() {
@@ -74,24 +89,39 @@ public class CmsController extends BaseController {
         return "/admin/cms/articleedit";
     }
 
-//    @RequestMapping("editiframe")
-//    public String editiframe(HttpServletRequest request, String id, Model model) {
-//        ArticleData articleData = new ArticleData();
-//        if (StringUtils.isNotBlank(id)) {
-//            articleData = articleDataService.getById(id);
-//        }
-//        model.addAttribute("articleData", articleData);
-//        return "/admin/cms/editiframe";// 独立上传图片
-//        return "/admin/cms/editiframev2";// 从页面中选择
-//    }
+    @RequestMapping("articleEdit2")
+    public String articleEdit2(HttpServletRequest request, String id, Model model) {
+        Article article = articleService.getById(id);
+        if (article == null) {
+            article = new Article();
+        } else {
+            Category category = categoryService.getById(article.getCategoryId());
+            article.setCategoryName(category == null ? "" : category.getTitle());
+            ArticleData articleData = articleDataService.getById(id);
+            if (articleData != null) {
+                article.setArticleData(articleData);
+            }
+        }
 
-    /**
-     * 保存
-     */
+        List<Category> categoryList = categoryService.categoryC(Constant.TASK_STATUS);
+        List<Category> categoryListLevel = categoryService.categoryC(Constant.TASK_STATUS_LEVEL);
+        // 成员
+        String projectId = (String) request.getSession().getAttribute(Constant.PROJECT_SELECT_KEY);
+        List<ProjectUser> projectUserList = projectUserService.list(new ProjectUserDto(projectId, null).toQuery());
+        List<ArticleUser> articleUsers = articleUserService.listArticleUserBy(id);
+
+        model.addAttribute("article", article);
+        model.addAttribute("categoryList", categoryList);// 任务状态
+        model.addAttribute("categoryListLevel", categoryListLevel);// 优先级
+        model.addAttribute("projectUserList", projectUserList);// 项目内成员
+        model.addAttribute("articleUsers", articleUsers);// 任务内成员
+        return "/admin/cms/articleedit2";
+    }
+
     @RequestMapping("articleSave")
-    public String articleSave(HttpServletRequest request, Article article, ArticleData articleData) {
+    @ResponseBody
+    public RestResult articleSave(HttpServletRequest request, Article article, ArticleData articleData) {
         UserInfo userInfo = Utils.getUserInfo(request);
-        article.setBaseInfo(userInfo);
         if (StringUtils.isBlank(article.getId())) {
             article.setHits(0);
             // 新建时，直接赋值这几个字段
@@ -101,6 +131,6 @@ public class CmsController extends BaseController {
         articleService.saveOrUpdate(article);
         articleData.setId(article.getId());
         articleDataService.saveOrUpdate(articleData);
-        return httpRedirect(request, "/admin/cms/articleList");
+        return RestResult.OK();
     }
 }

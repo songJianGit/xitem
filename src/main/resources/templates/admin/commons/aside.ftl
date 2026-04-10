@@ -2,7 +2,7 @@
 
     <!-- logo -->
     <div id="logo" class="sidebar-header">
-        <div style="font-size: 23px;max-width: 240px;color: #fff;text-align: center;min-height: 68px;line-height: 68px">
+        <div style="font-size: 23px;max-width: 240px;color: #808080;text-align: center;min-height: 68px;line-height: 68px">
             xitem
         </div>
     </div>
@@ -10,12 +10,8 @@
         <#--菜单是根据其url是否为空来判断其是否有下一级-->
         <nav class="sidebar-main">
             <ul class="nav-drawer">
-                <li class="nav-item" id="1">
-                    <a href="${ctx.contextPath}/admin/system/index?mclick=1"><i
-                                class="mdi mdi-home"></i><span>首页</span></a>
-                </li>
-                <#if treeMenuList??>
-                    <#list Session.treeMenuList as menu>
+                <#if treeMenuListLeft??>
+                    <#list Session.treeMenuListLeft as menu>
                         <li class="nav-item nav-item-has-subnav" id="${menu.id}">
                             <#if (menu.nodes?size>0)>
                                 <a href="#!">
@@ -48,11 +44,11 @@
                                     </#list>
                                 </ul>
                             <#else>
-                                <a <#if menu.target??>target="${menu.target!}"</#if>
+                                <a class="clear-after" <#if menu.target??>target="${menu.target!}"</#if>
                                    href="<#if menu.url?starts_with("/")>${ctx.contextPath+menu.url!}<#else>${menu.url!}</#if><#if menu.url!?contains("?")>&<#else>?</#if>mclick=${menu.id}">
                                     <#if menu.icon??>
                                         <i class="${menu.icon!}"></i>
-                                    <#else><i class="mdi mdi-format-align-justify"></i></#if>${menu.name}
+                                    <#else><i class="mdi mdi-format-align-justify"></i></#if><span>${menu.name}</span>
                                 </a>
                             </#if>
                         </li>
@@ -61,9 +57,9 @@
             </ul>
         </nav>
 
-        <div class="sidebar-footer">
-            <p class="copyright">Copyright © 2024 <a href="#!">xitem</a>. All rights reserved.</p>
-        </div>
+<#--        <div class="sidebar-footer">-->
+<#--            <p class="copyright">Copyright © 2024 <a href="#!">xitem</a>. All rights reserved.</p>-->
+<#--        </div>-->
     </div>
 
 </aside>

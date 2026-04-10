@@ -122,15 +122,13 @@ public class OrganController extends BaseController {
      */
     @RequestMapping("saveOrgan")
     @ResponseBody
-    public RestResult saveOrgan(HttpServletRequest request, Organ organ) {
-        UserInfo userInfo = Utils.getUserInfo(request);
+    public RestResult saveOrgan(Organ organ) {
         String pId = organ.getPid();
         Integer seq = organ.getSeq();
         if (seq == null) {
             Organ pOrganMax = organService.maxSeq(pId);
             organ.setSeq(pOrganMax.getSeq() + 10);
         }
-        organ.setBaseInfo(userInfo);
         organService.saveOrUpdate(organ);
 
         Organ organUp = new Organ();
@@ -145,10 +143,8 @@ public class OrganController extends BaseController {
      */
     @RequestMapping("delOrgan")
     @ResponseBody
-    public RestResult delOrgan(HttpServletRequest request, String organIds) {
-        UserInfo userInfo = Utils.getUserInfo(request);
+    public RestResult delOrgan(String organIds) {
         organService.delOrgan(organIds);
-        organService.upLastInfo(userInfo, organIds);
         return RestResult.OK();
     }
 

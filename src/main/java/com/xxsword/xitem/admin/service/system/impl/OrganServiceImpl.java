@@ -101,7 +101,6 @@ public class OrganServiceImpl extends ServiceImpl<OrganMapper, Organ> implements
     public List<Organ> organC(String organId) {
         LambdaQueryWrapper<Organ> q = Wrappers.lambdaQuery();
         q.eq(Organ::getStatus, 1);
-//        q.last(" AND find_in_set('" + organId + "', pids) ");
         q.apply(" find_in_set('" + organId + "', pids) ");
         return list(q);
     }
@@ -176,20 +175,7 @@ public class OrganServiceImpl extends ServiceImpl<OrganMapper, Organ> implements
     }
 
     @Override
-    public void upLastInfo(UserInfo doUserInfo, String organIds) {
-        String[] ids = organIds.split(",");
-        List<Organ> listUp = new ArrayList<>();
-        for (String id : ids) {
-            Organ organUp = new Organ();
-            organUp.setId(id);
-            organUp.setBaseInfo(doUserInfo);
-            listUp.add(organUp);
-        }
-        updateBatchById(listUp);
-    }
-
-    @Override
-    public void permissionHandle(UserInfo userInfo, String permissionType, LambdaQueryWrapper query) {
+    public void permissionHandle(UserInfo userInfo, PermissionType permissionType, LambdaQueryWrapper query) {
         Integer userPermissionType = userInfo.getPermissionType();
         String userId = userInfo.getId();
         if (userPermissionType == null) {
@@ -204,7 +190,7 @@ public class OrganServiceImpl extends ServiceImpl<OrganMapper, Organ> implements
             permissionIdsAll = listOrganIdByOrganId(permissionIds);
         }
         switch (permissionType) {
-            case PermissionType.USERINFO:
+            case USERINFO:
                 LambdaQueryWrapper<UserInfo> qUser = query;
                 if (userPermissionType.equals(0)) {
                     qUser.eq(UserInfo::getCreateUserId, userId);
@@ -213,7 +199,7 @@ public class OrganServiceImpl extends ServiceImpl<OrganMapper, Organ> implements
                     qUser.in(UserInfo::getOrganId, permissionIdsAll);
                 }
                 break;
-            case PermissionType.ORGAN:
+            case ORGAN:
                 LambdaQueryWrapper<Organ> qOrgan = query;
                 if (userPermissionType.equals(0)) {
                     qOrgan.eq(Organ::getCreateUserId, userId);

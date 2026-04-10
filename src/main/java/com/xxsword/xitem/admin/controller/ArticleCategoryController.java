@@ -2,6 +2,7 @@ package com.xxsword.xitem.admin.controller;
 
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.xxsword.xitem.admin.constant.Constant;
 import com.xxsword.xitem.admin.domain.category.dto.CategoryDto;
 import com.xxsword.xitem.admin.domain.category.entity.Category;
 import com.xxsword.xitem.admin.domain.system.entity.UserInfo;
@@ -21,8 +22,6 @@ import java.util.List;
 @RequestMapping("admin/category/article")
 public class ArticleCategoryController extends BaseCategoryController {
 
-    private static final String ARTICLE_CATEGORY_ID = "1";
-
     /**
      * 分类树数据
      *
@@ -33,8 +32,8 @@ public class ArticleCategoryController extends BaseCategoryController {
     @RequestMapping("data")
     @ResponseBody
     public List<ZTree> data(HttpServletRequest request, Integer open, String checkedids, CategoryDto categoryDto) {
-        categoryDto.setCategoryId(ARTICLE_CATEGORY_ID);
-        return super.data(open, checkedids, categoryDto);
+        categoryDto.setCategoryId(Constant.TASK_STATUS);
+        return super.dataBase(open, checkedids, categoryDto);
     }
 
     @RequestMapping("categoryList")
@@ -52,13 +51,13 @@ public class ArticleCategoryController extends BaseCategoryController {
     @RequestMapping("pageById")
     @ResponseBody
     public RestPaging pageById(HttpServletRequest request, Page<Category> page, CategoryDto categoryDto) {
-        categoryDto.setCategoryId(ARTICLE_CATEGORY_ID);
-        return super.pageById(page, categoryDto);
+        categoryDto.setCategoryId(Constant.TASK_STATUS);
+        return super.pageByIdBase(page, categoryDto);
     }
 
     @RequestMapping("categoryEdit")
     public String categoryEdit(String id, Model model) {
-        model.addAttribute("category", super.categoryEdit(id));
+        model.addAttribute("category", super.categoryEditBase(id));
         return "/admin/category/article/edit";
     }
 
@@ -68,11 +67,10 @@ public class ArticleCategoryController extends BaseCategoryController {
     @RequestMapping("saveCategory")
     @ResponseBody
     public RestResult saveCategory(HttpServletRequest request, Category category) {
-        UserInfo userInfo = Utils.getUserInfo(request);
         if (StringUtils.isBlank(category.getPid())) {
-            category.setPid(ARTICLE_CATEGORY_ID);
+            category.setPid(Constant.TASK_STATUS);
         }
-        super.saveCategory(userInfo, category);
+        super.saveCategoryBase(category);
         return RestResult.OK();
     }
 
@@ -83,15 +81,14 @@ public class ArticleCategoryController extends BaseCategoryController {
     @ResponseBody
     public RestResult delCategory(HttpServletRequest request, String categoryIds) {
         UserInfo userInfo = Utils.getUserInfo(request);
-        super.delCategory(userInfo, categoryIds);
+        super.delCategoryBase(categoryIds);
         return RestResult.OK();
     }
 
     @RequestMapping("seq")
     @ResponseBody
     public RestResult seq(HttpServletRequest request, String id1, String id2) {
-        UserInfo userInfo = Utils.getUserInfo(request);
-        super.categorySeq(userInfo, id1, id2);
+        super.categorySeqBase(id1, id2);
         return RestResult.OK();
     }
 

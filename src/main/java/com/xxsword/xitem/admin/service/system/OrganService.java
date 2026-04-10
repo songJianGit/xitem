@@ -3,6 +3,7 @@ package com.xxsword.xitem.admin.service.system;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.xxsword.xitem.admin.constant.PermissionType;
 import com.xxsword.xitem.admin.domain.system.dto.OrganDto;
 import com.xxsword.xitem.admin.domain.system.entity.Organ;
 import com.xxsword.xitem.admin.domain.system.entity.UserInfo;
@@ -103,11 +104,6 @@ public interface OrganService extends IService<Organ> {
      */
     List<String> listOrganIdByOrganId(List<String> organIds);
 
-    /**
-     * 刷新机构最后更新人和最后更新时间
-     */
-    void upLastInfo(UserInfo doUserInfo, String organIds);
-
     //=======================================================================
 
     /**
@@ -117,7 +113,7 @@ public interface OrganService extends IService<Organ> {
      * @param permissionType com/xxsword/xitem/admin/constant/PermissionType中定义的类型
      * @param query
      */
-    void permissionHandle(UserInfo userInfo, String permissionType, LambdaQueryWrapper query);
+    void permissionHandle(UserInfo userInfo, PermissionType permissionType, LambdaQueryWrapper query);
 
     /**
      * 本机构和本机构以下数据(用于sql)

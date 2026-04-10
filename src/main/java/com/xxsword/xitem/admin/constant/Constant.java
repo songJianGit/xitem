@@ -29,6 +29,15 @@ public class Constant {
     // 顶级菜单的pid信息
     public static final String FUNCTIONS_TOP = "0";
 
+    // 头部侧菜单的session键
+    public static final String TREE_MENU_LIST_TOP = "treeMenuListTop";
+    // 左侧菜单的session键
+    public static final String TREE_MENU_LIST_LEFT = "treeMenuListLeft";
+    // 进入后默认选中一级的id
+    public static final String TREE_MENU_LIST_TOP_FLAG_DEF = "2";
+    // 记录当前选择的项目 session键
+    public static final String PROJECT_SELECT_KEY = "projectSelectKey";
+
     // 最大用户数
     public static final String DICT_ID_MAX_USER_COUNT = "dictidmaxusercount";
 
@@ -40,5 +49,10 @@ public class Constant {
 
     // 用户上传文件时，额外添加的一层目录
     public static final String USERFILES = "/userfiles";
+
+    // 任务状态的类型上级id
+    public static final String TASK_STATUS = "1";
+    // 任务优先级的类型上级id
+    public static final String TASK_STATUS_LEVEL = "21";
 
 }

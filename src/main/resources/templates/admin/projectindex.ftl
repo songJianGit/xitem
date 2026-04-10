@@ -26,7 +26,7 @@
                                         <div class="input-group-prepend">
                                             <span class="input-group-text">项目名称</span>
                                         </div>
-                                        <input type="text" class="form-control" value="" name="name"
+                                        <input type="text" class="form-control" value="" name="title"
                                                placeholder="项目名称">
                                     </div>
                                     <div class="input-group">
@@ -61,7 +61,7 @@
                                             <th data-field="title" data-formatter="title">项目名称</th>
                                             <th data-field="pstatus">项目成员</th>
                                             <th data-field="createDate" data-formatter="createDate">创建时间</th>
-                                            <th data-field="pstatus">项目状态</th>
+                                            <th data-field="pstatus" data-formatter="pstatus">项目状态</th>
                                         </tr>
                                         </thead>
                                     </table>
@@ -77,6 +77,18 @@
 </div>
 <#include "commons/js.ftl"/>
 <script type="text/javascript">
+    function pstatus(value, row){
+        if (value == '') {
+            return '';
+        }
+        if (value == 1) {
+            return '正常';
+        }
+        if (value == 0) {
+            return '关闭';
+        }
+        return value;
+    }
     function createDate(value, row) {
         if (value == '') {
             return '';
@@ -84,10 +96,24 @@
         return value.substring(0, 10);
     }
     function title(value, row) {
-        return '<a href="javascript:;" title="' + value + '" class="ellipsis" onclick="show(\'' + row.id + '\')">' + value + '</a>';
+        return '<a href="javascript:;" title="' + value + '" class="ellipsis" onclick="edit(\'' + row.id + '\')">' + value + '</a>';
     }
     function show(id) {
         window.location.href = '${ctx.contextPath}/admin/project/show?id=' + id;
+    }
+
+    $("#add").click(function () {
+        layer_show('新增', "${ctx.contextPath}/admin/project/edit2", "90%");
+    });
+
+    function edit(id) {
+        layer_show('编辑', "${ctx.contextPath}/admin/project/edit2?id=" + id, "90%");
+    }
+
+    function reload(){
+        $("#table-pagination").bootstrapTable('refresh', {
+            url: "${ctx.contextPath}/admin/project/data?" + $("#searchform").serialize()
+        });
     }
 </script>
 </body>

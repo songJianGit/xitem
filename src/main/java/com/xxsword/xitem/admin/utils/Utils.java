@@ -1,8 +1,8 @@
 package com.xxsword.xitem.admin.utils;
 
+import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.xxsword.xitem.admin.constant.Constant;
 import com.xxsword.xitem.admin.domain.system.entity.UserInfo;
-import org.apache.commons.lang3.StringUtils;
 
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -40,7 +40,8 @@ public class Utils {
      * @return
      */
     public static boolean isValidPassword(String password) {
-        Pattern pattern = Pattern.compile("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).{8,}$");
+//        Pattern pattern = Pattern.compile("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).{8,}$");
+        Pattern pattern = Pattern.compile("^. {8,}$");
         Matcher matcher = pattern.matcher(password);
         return matcher.matches();
     }

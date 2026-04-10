@@ -14,7 +14,7 @@ import lombok.EqualsAndHashCode;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
-@TableComment("文章表")
+@TableComment("文章表（任务表）")
 @TableName("t_cms_article")
 @TableEngine(MySqlEngineConstant.InnoDB)
 public class Article extends BaseEntity {
@@ -23,7 +23,7 @@ public class Article extends BaseEntity {
 
     private static final long serialVersionUID = 200L;
     @Column(length = 64)
-    @ColumnComment("分类编号")
+    @ColumnComment("任务状态")
     private String categoryId;
     @TableField(exist = false)
     private String categoryName;
@@ -48,6 +48,17 @@ public class Article extends BaseEntity {
     @Column
     @ColumnComment("发布状态(1-发布 0-未发布)")
     private Integer pubFlag;
+
+    @Column(length = 64)
+    @ColumnComment("优先级")
+    private String levelId;
+    @TableField(exist = false)
+    private String levelName;
+
+    @Column
+    @ColumnComment("项目Id")
+    private String pid;
+
     @TableField(exist = false)
     private ArticleData articleData;    //文章副表
 }

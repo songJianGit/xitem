@@ -96,15 +96,17 @@ public interface UserInfoService extends IService<UserInfo> {
     int countUserBuRoleId(String roleId);
 
     /**
-     * 刷新用户最后更新人和最后更新时间
-     */
-    void upLastInfo(UserInfo doUserInfo, String userIds);
-
-    /**
      * 获取用户
      *
      * @param userIds
      * @return
      */
     Map<String, UserInfo> mapsUser(Set<String> userIds);
+
+    /**
+     * 创建一个临时用户
+     */
+    UserInfo createTmpUserInfo();
+
+    UserInfo createTmpUserInfo(String nickName, String avatar);
 }

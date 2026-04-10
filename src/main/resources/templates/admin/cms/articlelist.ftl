@@ -31,14 +31,7 @@
             <div class="container-fluid p-t-15">
 
                 <div class="row">
-                    <div class="col-2">
-                        <div class="card">
-                            <div class="card-body">
-                                <ul id="ztree" class="ztree"></ul>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-10">
+                    <div class="col-12">
                         <div class="card">
 
                             <div class="card-header">
@@ -67,11 +60,11 @@
 
 
                             <div class="card-body">
-                                <h4 class="card-title">文章列表</h4>
+<#--                                <h4 class="card-title">文章列表</h4>-->
                                 <div id="custom-toolbar">
                                     <div class="toolbar-btn-action">
                                         <button type="button" id="add" class="btn btn-primary">
-                                            文章新增
+                                            新增任务
                                         </button>
                                     </div>
                                 </div>
@@ -87,7 +80,7 @@
                                            data-side-pagination="server">
                                         <thead>
                                         <tr>
-                                            <th data-field="categoryName">栏目</th>
+                                            <th data-field="categoryName">任务状态</th>
                                             <th data-field="title" data-formatter="title">标题</th>
                                             <th data-field="pubFlag" data-formatter="pubFlag">发布状态</th>
                                             <th data-field="hits">点击数</th>
@@ -108,7 +101,6 @@
     </div>
 </div>
 <#include "../commons/js.ftl"/>
-<script type="text/javascript" src="${ctx.contextPath}/static/plugins/ztree-v3/js/jquery.ztree.all.js"></script>
 <script type="text/javascript">
     function pubFlag(value, row) {
         if (value == '1') {
@@ -152,71 +144,14 @@
     });
 
     function edit(id) {
-        window.location.href = '${ctx.contextPath}/admin/cms/articleEdit?id=' + id;
+        layer_show('编辑', "${ctx.contextPath}/admin/cms/articleEdit2?id=" + id,"90%");
     }
 
     $('#searchBtn').click(function () {
-        $("#table-pagination").bootstrapTable('refresh', {
-            url: "${ctx.contextPath}/admin/cms/articleListData?" + $("#searchform").serialize()
-        });
-    });
-    let zTreeObj;
-    $(function () {
-        loadTree();
+        reload();
     });
 
-    // 加载树
-    function loadTree() {
-        $.ajax({
-            url: "${ctx.contextPath}/admin/category/article/data",
-            cache: false,// 不缓存
-            success: function (d) {
-                let setting = {
-                    data: {
-                        simpleData: {
-                            enable: true// 简单数据
-                        }
-                    },
-                    view: {
-                        selectedMulti: false// 禁止多选
-                    },
-                    edit: {
-                        drag: {
-                            autoExpandTrigger: true,
-                            isCopy: false,//所有操作都是move
-                            isMove: false,
-                            prev: false,
-                            next: false,
-                            inner: false
-                        }
-                    },
-                    callback: {
-                        onClick: onClick
-                    }
-                };
-                zTreeObj = $.fn.zTree.init($("#ztree"), setting, d);
-                showOne();
-            }
-        });
-    }
-
-    // 展开第一级
-    function showOne() {
-        let nodes = zTreeObj.getNodes();
-        zTreeObj.expandNode(nodes[0], true, false, false);
-    }
-
-    function onClick(event, treeId, treeNode) {
-        let clickTreeId = treeNode.id;
-        searchData(clickTreeId);
-    }
-
-    // 搜索
-    function searchData(clickTreeId) {
-        if (isBlank(clickTreeId)) {
-            clickTreeId = '';
-        }
-        $("#categoryIds").val(clickTreeId);
+    function reload(){
         $("#table-pagination").bootstrapTable('refresh', {
             url: "${ctx.contextPath}/admin/cms/articleListData?" + $("#searchform").serialize()
         });

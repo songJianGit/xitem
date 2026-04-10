@@ -19,65 +19,54 @@
             <div class="container-fluid p-t-15">
                 <div class="row">
                     <div class="col-12">
-                        <div class="row">
-                            <div class="col-4">
-                                <div class="card">
-                                    <div class="card-body">
-                                        <ul id="ztree" class="ztree"></ul>
+                        <div class="card">
+                            <div class="card-header">
+                                <form class="form-inline" method="post" id="searchform" action="#!" role="form">
+                                    <div class="input-group m-r-5">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">分类名称</span>
+                                        </div>
+                                        <input type="text" class="form-control" name="title"
+                                               placeholder="分类名称">
+                                    </div>
+
+                                    <div class="input-group">
+                                        <div class="btn-group">
+                                            <button type="button" id="searchBtn" class="btn btn-primary m-r-5">
+                                                搜索
+                                            </button>
+                                            <button type="reset" class="btn btn-default">重置</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="card-body">
+                                <h4 class="card-title">分类列表</h4>
+                                <div id="custom-toolbar">
+                                    <div class="toolbar-btn-action">
+                                        <button type="button" id="add" class="btn btn-primary">
+                                            分类新增
+                                        </button>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="col-8">
-                                <div class="card">
-                                    <div class="card-header">
-                                        <form class="form-inline" method="post" id="searchform" action="#!" role="form">
-                                            <div class="input-group m-r-5">
-                                                <div class="input-group-prepend">
-                                                    <span class="input-group-text">分类名称</span>
-                                                </div>
-                                                <input type="text" class="form-control" name="title"
-                                                       placeholder="分类名称">
-                                            </div>
-
-                                            <div class="input-group">
-                                                <div class="btn-group">
-                                                    <button type="button" id="searchBtn" class="btn btn-primary m-r-5">
-                                                        搜索
-                                                    </button>
-                                                    <button type="reset" class="btn btn-default">重置</button>
-                                                </div>
-                                            </div>
-                                        </form>
-                                    </div>
-                                    <div class="card-body">
-                                        <h4 class="card-title">分类列表</h4>
-                                        <div id="custom-toolbar">
-                                            <div class="toolbar-btn-action">
-                                                <button type="button" id="add" class="btn btn-primary">
-                                                    分类新增
-                                                </button>
-                                            </div>
-                                        </div>
-                                        <div class="table-responsive">
-                                            <table id="table-pagination"
-                                                   data-toolbar="#custom-toolbar"
-                                                   data-toggle="table"
-                                                   data-pagination="true"
-                                                   data-page-list="[10, 20, 50, 100, 200]"
-                                                   data-show-refresh="true"
-                                                   data-url="${ctx.contextPath}/admin/category/article/pageById"
-                                                   data-query-params="pageQueryParams"
-                                                   data-side-pagination="server">
-                                                <thead>
-                                                <tr>
-                                                    <th data-field="title">标题</th>
-                                                    <th data-field="createDate">创建时间</th>
-                                                    <th data-field="id" data-formatter="caozuo">操作</th>
-                                                </tr>
-                                                </thead>
-                                            </table>
-                                        </div>
-                                    </div>
+                                <div class="table-responsive">
+                                    <table id="table-pagination"
+                                           data-toolbar="#custom-toolbar"
+                                           data-toggle="table"
+                                           data-pagination="true"
+                                           data-page-list="[10, 20, 50, 100, 200]"
+                                           data-show-refresh="true"
+                                           data-url="${ctx.contextPath}/admin/category/article/pageById"
+                                           data-query-params="pageQueryParams"
+                                           data-side-pagination="server">
+                                        <thead>
+                                        <tr>
+                                            <th data-field="title">标题</th>
+                                            <th data-field="createDate">创建时间</th>
+                                            <th data-field="id" data-formatter="caozuo">操作</th>
+                                        </tr>
+                                        </thead>
+                                    </table>
                                 </div>
                             </div>
                         </div>
@@ -172,74 +161,6 @@
                 }
             }
         });
-    }
-</script>
-<script type="text/javascript">
-    function onClick(event, treeId, treeNode) {
-        let clickTreeId = treeNode.id;
-        searchData(clickTreeId);
-    }
-
-    let zTreeObj;
-    $(function () {
-        loadTree();
-    });
-
-    // 刷新页面上的树和表格
-    function reload() {
-        loadTree();
-        $("#table-pagination").bootstrapTable('refresh');
-    }
-
-    // 加载树
-    function loadTree() {
-        $.ajax({
-            url: "${ctx.contextPath}/admin/category/article/data",
-            cache: false,// 不缓存
-            success: function (d) {
-                let setting = {
-                    data: {
-                        simpleData: {
-                            enable: true// 简单数据
-                        }
-                    },
-                    view: {
-                        selectedMulti: false// 禁止多选
-                    },
-                    edit: {
-                        drag: {
-                            autoExpandTrigger: true,
-                            isCopy: false,//所有操作都是move
-                            isMove: false,
-                            prev: false,
-                            next: false,
-                            inner: false
-                        }
-                    },
-                    callback: {
-                        onClick: onClick
-                    }
-                };
-                zTreeObj = $.fn.zTree.init($("#ztree"), setting, d);
-                showOne();
-            }
-        });
-    }
-
-    // 分类搜索
-    function searchData(clickTreeId) {
-        if (isBlank(clickTreeId)) {
-            clickTreeId = '';
-        }
-        $("#table-pagination").bootstrapTable('refresh', {
-            url: "${ctx.contextPath}/admin/category/article/pageById?pid=" + clickTreeId + "&" + $("#searchform").serialize()
-        });
-    }
-
-    // 展开第一级
-    function showOne() {
-        let nodes = zTreeObj.getNodes();
-        zTreeObj.expandNode(nodes[0], true, false, false);
     }
 </script>
 </body>
