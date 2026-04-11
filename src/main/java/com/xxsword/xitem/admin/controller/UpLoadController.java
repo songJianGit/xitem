@@ -109,6 +109,7 @@ public class UpLoadController {
         if (StringUtils.isBlank(infos)) {
             return null;
         }
+        UserInfo userInfo = Utils.getUserInfo(request);
         JSONArray ja = JSONArray.parseArray(infos);
         List<Map<String, String>> urls = new ArrayList<>();
         for (int i = 0; i < ja.size(); i++) {
@@ -117,7 +118,7 @@ public class UpLoadController {
             String name = item.getString("name");
             String size = item.getString("size");
             String url = item.getString("urlTemp");
-            map.put("url", UpLoadUtil.tempToFileInfoPath(UpLoadUtil.getProjectPath() + UpLoadUtil.PATH_INFO + url));
+            map.put("url", UpLoadUtil.tempToFileInfoPath(UpLoadUtil.getProjectPath() + UpLoadUtil.PATH_INFO + url, userInfo.getId()));
             map.put("name", name);
             map.put("size", size);
             urls.add(map);

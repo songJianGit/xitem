@@ -157,17 +157,26 @@
         $.ajax({
             url: '${ctx.contextPath}/admin/project/list',
             type: "get",
-            data: {},
             success: function (data) {
-                // project-top-select
                 if (data.result) {
                     let dd = data.data;
                     let htm = '';
+                    let selectFlag = '${Session.projectSelectKey!}';
                     for (let i = 0; i < dd.length; i++) {
-                        htm += '<option value="' + dd[i].id + '">' + dd[i].title + '</option>';
+                        if (selectFlag == dd[i].id) {
+                            htm += '<option selected value="' + dd[i].id + '">' + dd[i].title + '</option>';
+                        } else {
+                            htm += '<option value="' + dd[i].id + '">' + dd[i].title + '</option>';
+                        }
                     }
                     $('#project-top-select').html(htm);
                     $('#project-top-select').selectpicker();
+                    $('#project-top-select').on('changed.bs.select', function (e, clickedIndex, isSelected, previousValue) {
+                        // 获取当前选中的值 (单选是字符串，多选是数组)
+                        let selectedVal = $(this).val();
+                        console.log('projectId:', selectedVal);
+                        window.location.href = "${ctx.contextPath}/admin/system/index?mclick=1880490902526779393&funId=5&projectId=" + selectedVal;
+                    });
                 } else {
                     layer.msg(data.msg)
                 }

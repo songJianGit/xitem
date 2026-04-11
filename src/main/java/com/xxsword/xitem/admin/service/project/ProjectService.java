@@ -1,5 +1,6 @@
 package com.xxsword.xitem.admin.service.project;
 
+import com.alibaba.fastjson2.JSONArray;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.xxsword.xitem.admin.domain.project.dto.ProjectDto;
@@ -13,5 +14,5 @@ public interface ProjectService extends IService<Project> {
 
     Page<Project> pageProjectBy(ProjectDto projectDto, UserInfo userInfo);
 
-    void addProject(Project project, String userId);
+    void saveProject(Project project,   JSONArray users);
 }

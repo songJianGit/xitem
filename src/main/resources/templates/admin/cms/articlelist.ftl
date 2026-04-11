@@ -43,16 +43,6 @@
                                         </div>
                                         <input type="text" class="form-control" name="title" placeholder="标题">
                                     </div>
-                                    <div class="input-group m-r-5">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text">发布状态</span>
-                                        </div>
-                                        <select type="text" class="form-control" name="pubFlag">
-                                            <option value="">--状态--</option>
-                                            <option value="1">发布</option>
-                                            <option value="0">未发布</option>
-                                        </select>
-                                    </div>
                                     <button type="button" id="searchBtn" class="btn btn-primary m-r-5">搜索</button>
                                     <button type="reset" class="btn btn-default">重置</button>
                                 </form>
@@ -80,12 +70,10 @@
                                            data-side-pagination="server">
                                         <thead>
                                         <tr>
-                                            <th data-field="categoryName">任务状态</th>
                                             <th data-field="title" data-formatter="title">标题</th>
-                                            <th data-field="pubFlag" data-formatter="pubFlag">发布状态</th>
-                                            <th data-field="hits">点击数</th>
+                                            <th data-field="categoryName">任务状态</th>
                                             <th data-field="createDate" data-formatter="createDate">创建时间</th>
-                                            <th data-field="lastUpdate" data-formatter="lastUpdate">更新时间</th>
+                                            <th data-field="stime" data-formatter="plantime">计划时间</th>
                                             <th data-field="id" data-formatter="caozuo">操作</th>
                                         </tr>
                                         </thead>
@@ -111,9 +99,19 @@
         }
         return '';
     }
+    function plantime(value, row) {
+        let htm='';
+        if (value != '' && value != null) {
+            htm+=value;
+        }
+        if (row.etime != '' && row.etime != null) {
+            htm+='~'+row.etime;
+        }
+        return htm;
+    }
 
     function title(value, row) {
-        return '<a href="javascript:;" title="' + value + '" class="ellipsis" onclick="edit(\'' + row.id + '\')">' + value + '</a>';
+        return '<a href="javascript:;" title="' + value + '" class="ellipsis" onclick="show(\'' + row.id + '\')">' + value + '</a>';
     }
 
     function createDate(value, row) {
@@ -133,18 +131,23 @@
     function caozuo(value, row) {
         let htm = '';
         htm += '<div class="btn-group">';
-        // htm += '<button type="button" class="btn btn-sm btn-default m-r-5" onclick="edit(\'' + value + '\')" title="编辑">编辑</button>';
-        htm += '<a target="_blank" class="btn btn-sm btn-default" href="${ctx.contextPath}/article/detail?id=' + value + '" title="预览">预览</a>';
+        htm += '<button type="button" class="btn btn-sm btn-default m-r-5" onclick="show(\'' + value + '\')" title="查看">查看</button>';
+        htm += '<button type="button" class="btn btn-sm btn-default m-r-5" onclick="edit(\'' + value + '\')" title="编辑">编辑</button>';
+        <#--htm += '<a target="_blank" class="btn btn-sm btn-default" href="${ctx.contextPath}/article/detail?id=' + value + '" title="预览">预览</a>';-->
         htm += '</div>';
         return htm;
     }
 
     $("#add").click(function () {
-        window.location.href = '${ctx.contextPath}/admin/cms/articleEdit';
+        layer_show('新增', "${ctx.contextPath}/admin/cms/articleEdit2","90%");
     });
 
+    function show(id) {
+        layer_show('查看', "${ctx.contextPath}/admin/cms/articleEdit2?showFlag=1&id=" + id, "90%");
+    }
+
     function edit(id) {
-        layer_show('编辑', "${ctx.contextPath}/admin/cms/articleEdit2?id=" + id,"90%");
+        layer_show('编辑', "${ctx.contextPath}/admin/cms/articleEdit2?id=" + id, "90%");
     }
 
     $('#searchBtn').click(function () {

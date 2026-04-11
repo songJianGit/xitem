@@ -3,8 +3,7 @@ package com.xxsword.xitem.admin.constant;
 public enum RoleSetting {
 
     ROLE_ADMIN("1", "管理员"),
-    ROLE_USER("2042216182987739139", "普通用户"),
-    ROLE_READ_ONLY("2042216213799096321", "只读用户");;
+    ROLE_USER("2042216182987739139", "普通用户");
 
     /**
      * 角色id

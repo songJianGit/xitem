@@ -1,17 +1,17 @@
 <!DOCTYPE html>
 <html lang="zh">
 <head>
-    <#include "commons/head.ftl"/>
+    <#include "../commons/head.ftl"/>
 </head>
 <body>
 <div class="lyear-layout-web">
     <div class="lyear-layout-container">
         <!--左侧导航-->
-        <#include "commons/aside.ftl"/>
+        <#include "../commons/aside.ftl"/>
         <!--End 左侧导航-->
 
         <!--头部信息-->
-        <#include "commons/header.ftl"/>
+        <#include "../commons/header.ftl"/>
         <!--End 头部信息-->
 
         <!--页面主要内容-->
@@ -59,9 +59,9 @@
                                         <thead>
                                         <tr>
                                             <th data-field="title" data-formatter="title">项目名称</th>
-                                            <th data-field="pstatus">项目成员</th>
+                                            <th data-field="users" data-formatter="users">项目成员</th>
                                             <th data-field="createDate" data-formatter="createDate">创建时间</th>
-                                            <th data-field="pstatus" data-formatter="pstatus">项目状态</th>
+                                            <th data-field="id" data-formatter="caozuo">操作</th>
                                         </tr>
                                         </thead>
                                     </table>
@@ -75,9 +75,9 @@
         <!--End 页面主要内容-->
     </div>
 </div>
-<#include "commons/js.ftl"/>
+<#include "../commons/js.ftl"/>
 <script type="text/javascript">
-    function pstatus(value, row){
+    function pstatus(value, row) {
         if (value == '') {
             return '';
         }
@@ -89,17 +89,37 @@
         }
         return value;
     }
+
+    function users(value, row) {
+        if (value == '' || value == null) {
+            return '';
+        }
+        let names = [];
+        for (let i = 0; i < value.length; i++) {
+            names.push(value[i].userName);
+        }
+        return names.join("，");
+    }
+
     function createDate(value, row) {
         if (value == '') {
             return '';
         }
         return value.substring(0, 10);
     }
-    function title(value, row) {
-        return '<a href="javascript:;" title="' + value + '" class="ellipsis" onclick="edit(\'' + row.id + '\')">' + value + '</a>';
+
+    function caozuo(value, row) {
+        let htm = '';
+        htm += '<div class="btn-group">';
+        htm += '<button type="button" class="btn btn-sm btn-default m-r-5" onclick="show(\'' + value + '\')" title="查看">查看</button>';
+        htm += '<button type="button" class="btn btn-sm btn-default m-r-5" onclick="edit(\'' + value + '\')" title="编辑">编辑</button>';
+        <#--htm += '<a target="_blank" class="btn btn-sm btn-default" href="${ctx.contextPath}/article/detail?id=' + value + '" title="预览">预览</a>';-->
+        htm += '</div>';
+        return htm;
     }
-    function show(id) {
-        window.location.href = '${ctx.contextPath}/admin/project/show?id=' + id;
+
+    function title(value, row) {
+        return '<a href="javascript:;" title="' + value + '" class="ellipsis" onclick="show(\'' + row.id + '\')">' + value + '</a>';
     }
 
     $("#add").click(function () {
@@ -110,7 +130,15 @@
         layer_show('编辑', "${ctx.contextPath}/admin/project/edit2?id=" + id, "90%");
     }
 
-    function reload(){
+    function show(id) {
+        layer_show('查看', "${ctx.contextPath}/admin/project/edit2?showFlag=1&id=" + id, "90%");
+    }
+
+    $('#searchBtn').click(function () {
+        reload();
+    });
+
+    function reload() {
         $("#table-pagination").bootstrapTable('refresh', {
             url: "${ctx.contextPath}/admin/project/data?" + $("#searchform").serialize()
         });

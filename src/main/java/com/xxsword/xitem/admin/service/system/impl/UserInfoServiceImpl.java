@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.xxsword.xitem.admin.domain.system.dto.UserInfoDto;
 import com.xxsword.xitem.admin.domain.system.entity.Function;
 import com.xxsword.xitem.admin.domain.system.entity.Role;
 import com.xxsword.xitem.admin.domain.system.entity.UserInfo;
@@ -243,6 +244,14 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
         userInfo.setAvatar(avatar);
         save(userInfo);
         return userInfo;
+    }
+
+    @Override
+    public List<UserInfo> listUserInfo() {
+        LambdaQueryWrapper<UserInfo> q = Wrappers.lambdaQuery();
+        q.eq(UserInfo::getStatus, 1);
+        q.orderByAsc(UserInfo::getId);
+        return list(q);
     }
 
 }

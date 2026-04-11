@@ -1,5 +1,6 @@
 package com.xxsword.xitem.admin.controller;
 
+import com.alibaba.fastjson2.JSONArray;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.xxsword.xitem.admin.constant.Constant;
@@ -10,6 +11,8 @@ import com.xxsword.xitem.admin.domain.cms.entity.ArticleData;
 import com.xxsword.xitem.admin.domain.cms.entity.ArticleUser;
 import com.xxsword.xitem.admin.domain.project.dto.ProjectUserDto;
 import com.xxsword.xitem.admin.domain.project.entity.ProjectUser;
+import com.xxsword.xitem.admin.domain.project.vo.AUVO;
+import com.xxsword.xitem.admin.domain.project.vo.PUVO;
 import com.xxsword.xitem.admin.domain.system.entity.UserInfo;
 import com.xxsword.xitem.admin.model.RestPaging;
 import com.xxsword.xitem.admin.model.RestResult;
@@ -21,6 +24,7 @@ import com.xxsword.xitem.admin.service.project.ProjectService;
 import com.xxsword.xitem.admin.service.project.ProjectUserService;
 import com.xxsword.xitem.admin.utils.DateUtil;
 import com.xxsword.xitem.admin.utils.Utils;
+import org.apache.commons.text.StringEscapeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -31,6 +35,8 @@ import jakarta.servlet.http.HttpServletRequest;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("admin/cms")
@@ -64,6 +70,8 @@ public class CmsController extends BaseController {
             }
             articleDto.setCategoryAllIds(categoryIds);
         }
+        String projectId = (String) request.getSession().getAttribute(Constant.PROJECT_SELECT_ID_KEY);
+        articleDto.setProjectId(projectId);
         Page<Article> data = articleService.page(page, articleDto.toQuery());
         articleService.setCategoryName(data.getRecords());
         return new RestPaging<>(data.getTotal(), data.getRecords());
@@ -90,7 +98,7 @@ public class CmsController extends BaseController {
     }
 
     @RequestMapping("articleEdit2")
-    public String articleEdit2(HttpServletRequest request, String id, Model model) {
+    public String articleEdit2(HttpServletRequest request, String id, Integer showFlag, Model model) {
         Article article = articleService.getById(id);
         if (article == null) {
             article = new Article();
@@ -106,31 +114,37 @@ public class CmsController extends BaseController {
         List<Category> categoryList = categoryService.categoryC(Constant.TASK_STATUS);
         List<Category> categoryListLevel = categoryService.categoryC(Constant.TASK_STATUS_LEVEL);
         // 成员
-        String projectId = (String) request.getSession().getAttribute(Constant.PROJECT_SELECT_KEY);
+        String projectId = (String) request.getSession().getAttribute(Constant.PROJECT_SELECT_ID_KEY);
         List<ProjectUser> projectUserList = projectUserService.list(new ProjectUserDto(projectId, null).toQuery());
+        projectUserService.setProjectUserUserName(projectUserList);
         List<ArticleUser> articleUsers = articleUserService.listArticleUserBy(id);
+        Set<String> articleUsersUserIds = articleUsers.stream().map(ArticleUser::getUserId).collect(Collectors.toSet());
+
+        List<AUVO> voList = new ArrayList<>();
+        for (ProjectUser item : projectUserList) {
+            AUVO auvo = new AUVO();
+            auvo.setId(item.getUserId());
+            auvo.setUserId(item.getUserId());
+            auvo.setUserNameFast(item.getUserName().substring(0, 1));
+            auvo.setUserName(item.getUserName());
+            auvo.setAid(id);
+            auvo.setJobTitle(item.getJobTitle());
+            auvo.setJoinFlag(articleUsersUserIds.contains(item.getUserId()));
+            voList.add(auvo);
+        }
 
         model.addAttribute("article", article);
         model.addAttribute("categoryList", categoryList);// 任务状态
         model.addAttribute("categoryListLevel", categoryListLevel);// 优先级
-        model.addAttribute("projectUserList", projectUserList);// 项目内成员
-        model.addAttribute("articleUsers", articleUsers);// 任务内成员
+        model.addAttribute("voList", voList);// 项目成员
+        model.addAttribute("showFlag", showFlag);
         return "/admin/cms/articleedit2";
     }
 
     @RequestMapping("articleSave")
     @ResponseBody
-    public RestResult articleSave(HttpServletRequest request, Article article, ArticleData articleData) {
-        UserInfo userInfo = Utils.getUserInfo(request);
-        if (StringUtils.isBlank(article.getId())) {
-            article.setHits(0);
-            // 新建时，直接赋值这几个字段
-            article.setLastUpdate(DateUtil.now());
-            article.setLastUserId(userInfo.getId());
-        }
-        articleService.saveOrUpdate(article);
-        articleData.setId(article.getId());
-        articleDataService.saveOrUpdate(articleData);
+    public RestResult articleSave(HttpServletRequest request, Article article, ArticleData articleData, String userlists) {
+        articleService.saveArticle(article, articleData, userlists);
         return RestResult.OK();
     }
 }

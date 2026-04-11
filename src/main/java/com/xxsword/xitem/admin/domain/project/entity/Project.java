@@ -24,9 +24,6 @@ public class Project extends BaseEntity {
     @Column(type = MySqlTypeConstant.TEXT)
     @ColumnComment("描述")
     private String content;
-    @Column
-    @ColumnComment("项目状态(1-正常 0-关闭)")
-    private Integer pstatus;
 }
 
 

@@ -1,11 +1,13 @@
 package com.xxsword.xitem.admin.controller;
 
+import cn.hutool.core.io.FileUtil;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.xxsword.xitem.admin.domain.system.entity.UserInfo;
 import com.xxsword.xitem.admin.model.FileTableDto;
 import com.xxsword.xitem.admin.model.RestResult;
 import com.xxsword.xitem.admin.utils.UpLoadUtil;
 import com.xxsword.xitem.admin.utils.Utils;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,6 +15,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import jakarta.servlet.http.HttpServletRequest;
 
+import java.io.File;
+
+@Slf4j
 @Controller
 @RequestMapping("admin/file")
 public class FileController {
@@ -87,7 +92,24 @@ public class FileController {
     @RequestMapping(value = "createFolder")
     @ResponseBody
     public RestResult createFolder(HttpServletRequest request, String folderName) {
+        if (folderName != null && folderName.contains("..")) {
+            return RestResult.OK();
+        }
         Utils.hasFolder(UpLoadUtil.doUpathAbsolute(request.getSession(), null) + "/" + folderName);
+        return RestResult.OK();
+    }
+
+    @RequestMapping(value = "delFile")
+    @ResponseBody
+    public RestResult delFile(HttpServletRequest request, String fileName) {
+        if (fileName != null && fileName.contains("..")) {
+            return RestResult.OK();
+        }
+        String path = UpLoadUtil.doUpathAbsolute(request.getSession(), null) + "/" + fileName;
+        if(path.startsWith(UpLoadUtil.getProjectPath())){
+            boolean b = FileUtil.del(path);
+            log.warn("delFile:{},status:{}", path, b);
+        }
         return RestResult.OK();
     }
 

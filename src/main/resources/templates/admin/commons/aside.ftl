@@ -2,7 +2,7 @@
 
     <!-- logo -->
     <div id="logo" class="sidebar-header">
-        <div style="font-size: 23px;max-width: 240px;color: #808080;text-align: center;min-height: 68px;line-height: 68px">
+        <div style="font-size: 23px;max-width: 240px;color: #fff;text-align: center;min-height: 68px;line-height: 68px;">
             xitem
         </div>
     </div>

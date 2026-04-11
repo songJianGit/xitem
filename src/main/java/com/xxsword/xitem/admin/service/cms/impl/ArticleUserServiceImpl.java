@@ -20,4 +20,13 @@ public class ArticleUserServiceImpl extends ServiceImpl<ArticleUserMapper, Artic
         q.eq(ArticleUser::getAid, aid);
         return list(q);
     }
+
+    @Override
+    public ArticleUser getArticleUser(String aid, String userId) {
+        LambdaQueryWrapper<ArticleUser> q = Wrappers.lambdaQuery();
+        q.eq(ArticleUser::getStatus, 1);
+        q.eq(ArticleUser::getAid, aid);
+        q.eq(ArticleUser::getUserId, userId);
+        return getOne(q);
+    }
 }

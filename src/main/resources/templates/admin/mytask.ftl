@@ -71,38 +71,16 @@
                     <div class="col-12">
                         <div class="card">
                             <div class="card-header">
-                                <form class="form-inline" method="post" action="#!" role="form" id="searchform">
-                                    <div class="input-group m-r-5">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text">项目名称</span>
-                                        </div>
-                                        <input type="text" class="form-control" value="" name="name"
-                                               placeholder="项目名称">
-                                    </div>
-                                    <div class="input-group">
-                                        <div class="btn-group">
-                                            <button type="button" id="searchBtn" class="btn btn-primary m-r-5">搜索
-                                            </button>
-                                            <button type="reset" class="btn btn-default">重置</button>
-                                        </div>
-                                    </div>
-                                </form>
+                                <div class="card-title">待办任务</div>
                             </div>
                             <div class="card-body">
-                                <div id="custom-toolbar">
-                                    <div class="toolbar-btn-action">
-                                        <button type="button" id="add" class="btn btn-primary">
-                                            开始新项目
-                                        </button>
-                                    </div>
-                                </div>
                                 <div class="table-responsive">
                                     <table id="table-pagination"
                                            data-toolbar="#custom-toolbar"
                                            data-toggle="table"
                                            data-pagination="true"
                                            data-page-list="[10, 20, 50, 100, 200]"
-                                           data-show-refresh="true"
+<#--                                           data-show-refresh="true"-->
                                            data-url="${ctx.contextPath}/admin/project/data"
                                            data-query-params="pageQueryParams"
                                            data-side-pagination="server">

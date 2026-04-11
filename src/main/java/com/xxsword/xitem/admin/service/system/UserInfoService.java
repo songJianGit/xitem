@@ -1,9 +1,11 @@
 package com.xxsword.xitem.admin.service.system;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.xxsword.xitem.admin.domain.system.dto.UserInfoDto;
 import com.xxsword.xitem.admin.domain.system.entity.UserInfo;
 import com.xxsword.xitem.admin.model.RestResult;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -109,4 +111,10 @@ public interface UserInfoService extends IService<UserInfo> {
     UserInfo createTmpUserInfo();
 
     UserInfo createTmpUserInfo(String nickName, String avatar);
+
+    /**
+     * 有效账号
+     * @return
+     */
+    List<UserInfo> listUserInfo();
 }

@@ -1,0 +1,103 @@
+.lyear-layout-header .navbar > .topbar-left {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    row-gap: 8px;
+    column-gap: 14px;
+    min-height: 40px;
+}
+
+.lyear-layout-header .navbar > .topbar-left .lyear-aside-toggler {
+    flex-shrink: 0;
+}
+
+.lyear-layout-header .navbar > .topbar-left .topbar-left-project {
+    display: flex;
+    align-items: center;
+    margin-left: 0;
+}
+
+.lyear-layout-header .navbar > .topbar-left .topbar-left-task {
+    display: flex;
+    align-items: center;
+}
+
+/* 项目选择与后方快捷链接之间轻分隔 */
+.lyear-layout-header .navbar > .topbar-left .topbar-left-project + .topbar-left-task {
+    padding-left: 14px;
+    margin-left: 2px;
+    border-left: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+[data-theme='dark'] .lyear-layout-header .navbar > .topbar-left .topbar-left-project + .topbar-left-task {
+    border-left-color: rgba(255, 255, 255, 0.12);
+}
+
+.lyear-layout-header .navbar > .topbar-left .topbar-left-task .btn-link {
+    color: #33cabb;
+    font-weight: 500;
+    padding: 0.35rem 0.65rem;
+    margin-left: 0 !important;
+    border-radius: 6px;
+    white-space: nowrap;
+    transition: color .15s ease, background .15s ease;
+}
+
+.lyear-layout-header .navbar > .topbar-left .topbar-left-task .btn-link:hover,
+.lyear-layout-header .navbar > .topbar-left .topbar-left-task .btn-link:focus {
+    color: #26a69a;
+    background: rgba(51, 202, 187, 0.1);
+    text-decoration: none;
+}
+
+/* 顶部「当前项目」bootstrap-select：边框 + 字色（背景沿用主题）；无过渡、无阴影、悬停/展开与常态一致 */
+.project-top-select-wrap .bootstrap-select.form-control {
+    margin-bottom: 0;
+}
+
+.project-top-select-wrap .bootstrap-select > .dropdown-toggle,
+.project-top-select-wrap .bootstrap-select > .dropdown-toggle:hover,
+.project-top-select-wrap .bootstrap-select > .dropdown-toggle:focus,
+.project-top-select-wrap .bootstrap-select > .dropdown-toggle:active,
+.project-top-select-wrap .bootstrap-select.show > .dropdown-toggle {
+    min-height: 40px;
+    font-weight: 600;
+    border: 2px solid #33cabb !important;
+    border-radius: 6px !important;
+    color: #000 !important;
+    padding-left: 14px;
+    padding-right: 2rem;
+    box-shadow: none !important;
+    transition: none !important;
+}
+
+.project-top-select-wrap .bootstrap-select > .dropdown-toggle.bs-placeholder,
+.project-top-select-wrap .bootstrap-select > .dropdown-toggle.bs-placeholder:hover,
+.project-top-select-wrap .bootstrap-select > .dropdown-toggle.bs-placeholder:focus {
+    color: #000 !important;
+}
+
+.project-top-select-wrap .bootstrap-select .dropdown-toggle::after {
+    border-top-color: #33cabb;
+}
+
+/* 提高优先级，压过 style.min 中 [data-theme='dark'] .bootstrap-select .btn.dropdown-toggle.btn-default */
+[data-theme='dark'] .topbar-left-project .project-top-select-wrap .bootstrap-select > .dropdown-toggle.btn-default,
+[data-theme='dark'] .topbar-left-project .project-top-select-wrap .bootstrap-select > .dropdown-toggle,
+[data-theme='dark'] .topbar-left-project .project-top-select-wrap .bootstrap-select > .dropdown-toggle:hover,
+[data-theme='dark'] .topbar-left-project .project-top-select-wrap .bootstrap-select > .dropdown-toggle:focus,
+[data-theme='dark'] .topbar-left-project .project-top-select-wrap .bootstrap-select > .dropdown-toggle:active,
+[data-theme='dark'] .topbar-left-project .project-top-select-wrap .bootstrap-select.show > .dropdown-toggle.btn-default,
+[data-theme='dark'] .topbar-left-project .project-top-select-wrap .bootstrap-select.show > .dropdown-toggle {
+    border-color: #33cabb !important;
+    color: #9cf0e4 !important;
+    box-shadow: none !important;
+    transition: none !important;
+}
+
+[data-theme='dark'] .topbar-left-project .project-top-select-wrap .bootstrap-select > .dropdown-toggle.bs-placeholder.btn-default,
+[data-theme='dark'] .topbar-left-project .project-top-select-wrap .bootstrap-select > .dropdown-toggle.bs-placeholder,
+[data-theme='dark'] .topbar-left-project .project-top-select-wrap .bootstrap-select > .dropdown-toggle.bs-placeholder:hover,
+[data-theme='dark'] .topbar-left-project .project-top-select-wrap .bootstrap-select > .dropdown-toggle.bs-placeholder:focus {
+    color: rgba(156, 240, 228, 0.75) !important;
+}

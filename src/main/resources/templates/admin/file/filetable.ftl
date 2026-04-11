@@ -50,7 +50,7 @@
                             <#if item.type==1>文件</#if>
                             <#if item.type==2>文件夹</#if>
                         </td>
-                        <td></td>
+                        <td>${item.lastDate}</td>
                         <td>
                             <div class="btn-group">
                                 <#if fileTableDto.selectFlag??&&fileTableDto.selectFlag==1&&item.type==1>
@@ -58,7 +58,7 @@
                                     </button>
                                 </#if>
                                 <#if fileTableDto.delFlag??&&fileTableDto.delFlag==1>
-                                    <button type="button" class="btn btn-sm btn-default" onclick=" " title="删除">删除
+                                    <button type="button" class="btn btn-sm btn-default" onclick="delFileBtn('${item.name}')" title="删除">删除
                                     </button>
                                 </#if>
                             </div>
@@ -112,6 +112,24 @@
         let currentUrl = new URL(window.location.href);
         currentUrl.searchParams.set('type', 1);
         window.location.href = currentUrl.href;
+    }
+
+    function delFileBtn(filename) {
+        layer.confirm('确定删除【'+filename+'】？', {
+            btn: ['确定', '取消'] //按钮
+        }, function () {
+            $.ajax({
+                url: "${ctx.contextPath}/admin/file/delFile",
+                cache: false,// 不缓存
+                data: {
+                    fileName: filename
+                },
+                success: function (d) {
+                    reloadTable();
+                }
+            });
+        }, function () {
+        });
     }
 
     window.parent.postMessage({// 向父级页面发送高度信息

@@ -51,7 +51,7 @@ public class SystemController extends BaseController {
      * @return
      */
     @RequestMapping("index")
-    public String index(HttpServletRequest request, String funId) {
+    public String index(HttpServletRequest request, String funId, String projectId) {
         UserInfo userInfo = Utils.getUserInfo(request);
         HttpSession session = request.getSession();
         if (session.getAttribute(Constant.TREE_MENU_LIST_TOP) == null) {
@@ -63,8 +63,24 @@ public class SystemController extends BaseController {
             session.setAttribute(Constant.TREE_MENU_LIST_TOP, treeMenuList);// 头部菜单
         }
 
+        if (StringUtils.isNotBlank(projectId)) {
+            session.setAttribute(Constant.PROJECT_SELECT_ID_KEY, projectId);
+        }else {
+            session.setAttribute(Constant.PROJECT_SELECT_ID_KEY, "");
+        }
+
+        String page = "";
         if (StringUtils.isNotBlank(funId)) {
             session.setAttribute(Constant.TREE_MENU_LIST_LEFT, session.getAttribute(Constant.TREE_MENU_LIST_LEFT + funId));// 左侧菜单
+
+            switch (funId) {
+                case "2" -> page = "/admin/mytask";
+                case "4" -> page = "/admin/system/userlist";
+                case "5" -> page = "/admin/cms/articlelist";
+            }
+
+            return page;
+
         } else {
             session.setAttribute(Constant.TREE_MENU_LIST_LEFT, session.getAttribute(Constant.TREE_MENU_LIST_LEFT + Constant.TREE_MENU_LIST_TOP_FLAG_DEF));// 左侧菜单
         }

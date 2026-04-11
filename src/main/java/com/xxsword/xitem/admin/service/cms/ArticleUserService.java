@@ -7,4 +7,6 @@ import java.util.List;
 
 public interface ArticleUserService extends IService<ArticleUser> {
     List<ArticleUser> listArticleUserBy(String aid);
+
+    ArticleUser getArticleUser(String aid, String userId);
 }

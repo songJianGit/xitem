@@ -1,5 +1,7 @@
 package com.xxsword.xitem.admin.service.project.impl;
 
+import com.alibaba.fastjson2.JSONArray;
+import com.alibaba.fastjson2.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
@@ -20,6 +22,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -50,23 +53,40 @@ public class ProjectServiceImpl extends ServiceImpl<ProjectMapper, Project> impl
 
     @Override
     @Transactional
-    public void addProject(Project project, String userId) {
-        if (StringUtils.isBlank(project.getId())) {
-            project.setPstatus(1);
-        }
+    public void saveProject(Project project, JSONArray users) {
         saveOrUpdate(project);
-        ProjectUser p = projectUserService.getProjectUser(project.getId(), userId);
-        if (p == null) {
-            p = new ProjectUser();
-            p.setUserId(userId);
-            p.setPid(project.getId());
-            projectUserService.save(p);
+        Set<String> hasUserIds = new HashSet<>();
+        List<ProjectUser> ps = new ArrayList<>();
+        for (int i = 0; i < users.size(); i++) {
+            JSONObject jsonObject = users.getJSONObject(i);
+            String userIdItem = jsonObject.getString("userId");
+            hasUserIds.add(userIdItem);
+            Integer readFlagItem = jsonObject.getInteger("readFlag");
+            ProjectUser pu = projectUserService.getProjectUser(project.getId(), userIdItem);
+            if (pu == null) {
+                pu = new ProjectUser();
+            }
+            pu.setUserId(userIdItem);
+            pu.setPid(project.getId());
+            pu.setReadFlag(readFlagItem);
+            ps.add(pu);
         }
+        if (!ps.isEmpty()) {
+            projectUserService.saveOrUpdateBatch(ps);
+        }
+
+        // 删除未出现的用户
+        LambdaQueryWrapper<ProjectUser> del = Wrappers.lambdaQuery();
+        del.eq(ProjectUser::getPid, project.getId());
+        if (!hasUserIds.isEmpty()) {
+            del.notIn(ProjectUser::getUserId, hasUserIds);
+        }
+        projectUserService.remove(del);
     }
 
     private LambdaQueryWrapper<Project> getQ(ProjectDto projectDto, UserInfo userInfo) {
         Set<String> roleIds = userInfo.getRoleList().stream().map(Role::getId).collect(Collectors.toSet());
-        if (roleIds.contains(RoleSetting.ROLE_USER.getCode()) || roleIds.contains(RoleSetting.ROLE_READ_ONLY.getCode())) {
+        if (roleIds.contains(RoleSetting.ROLE_USER.getCode())) {
             LambdaQueryWrapper<ProjectUser> q = Wrappers.lambdaQuery();
             q.eq(ProjectUser::getUserId, userInfo.getId());
             q.eq(ProjectUser::getStatus, 1);

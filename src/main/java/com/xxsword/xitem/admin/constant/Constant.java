@@ -36,7 +36,7 @@ public class Constant {
     // 进入后默认选中一级的id
     public static final String TREE_MENU_LIST_TOP_FLAG_DEF = "2";
     // 记录当前选择的项目 session键
-    public static final String PROJECT_SELECT_KEY = "projectSelectKey";
+    public static final String PROJECT_SELECT_ID_KEY = "projectSelectKey";
 
     // 最大用户数
     public static final String DICT_ID_MAX_USER_COUNT = "dictidmaxusercount";

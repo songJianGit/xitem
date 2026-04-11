@@ -27,6 +27,12 @@ public class ProjectUser extends BaseEntity {
 
     @TableField(exist = false)
     private String userName;
+    @TableField(exist = false)
+    private String jobTitle;
+
+    @Column(defaultValue = "1")
+    @ColumnComment("用户权限（ 1-正常 0-只读）")
+    private Integer readFlag;
 }
 
 

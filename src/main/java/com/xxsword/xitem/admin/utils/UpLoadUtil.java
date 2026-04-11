@@ -16,6 +16,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+
 import java.io.*;
 import java.nio.file.Files;
 import java.util.*;
@@ -86,10 +87,10 @@ public class UpLoadUtil {
     /**
      * 将文件从临时文件夹里面移动出来（本方法专门用作临时文件夹的文件移动，不要用做其它）
      */
-    public static String tempToFileInfoPath(String url) {
+    public static String tempToFileInfoPath(String url, String userId) {
         String[] p0 = FilenameUtils.getFullPathNoEndSeparator(url).split(PATH_TEMP);
         String newFileName = Utils.getuuid() + "." + FilenameUtils.getExtension(url);
-        String newPath = PATH_DEF + getTIMEPath() + "/";
+        String newPath = getUserPath(userId) + PATH_DEF + getTIMEPath() + "/";
         try {
             FileUtils.moveFile(new File(url), new File(p0[0] + newPath + newFileName));
         } catch (IOException e) {
@@ -325,9 +326,12 @@ public class UpLoadUtil {
         List<FileVO> listFile = new ArrayList<>();
         File[] fileList = new File(upath).listFiles();
         if (fileList != null) {
+            // 最新的（最近修改的）文件和文件夹在最上面显示
+            Arrays.sort(fileList, (f1, f2) -> Long.compare(f2.lastModified(), f1.lastModified()));
             for (File f : fileList) {
                 FileVO fileVO = new FileVO();
                 fileVO.setName(f.getName());
+                fileVO.setLastDate(cn.hutool.core.date.DateUtil.format(new Date(f.lastModified()), "yyyy-MM-dd HH:mm:ss"));
                 if (f.isDirectory()) {
                     fileVO.setSize("-1");
                     fileVO.setType(2);
