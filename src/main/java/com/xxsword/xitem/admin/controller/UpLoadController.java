@@ -69,11 +69,11 @@ public class UpLoadController {
      * @param type     允许的上传类型，逗号分隔
      * @param multiple 是否允许多选  1-允许 0-不允许
      * @param maxnum   最大上传个数
-     * @param mburl    是否移出temp并保存到文件表 1-是 0-否
+     * @param ppp      标识，判断是否指定为当前目录（在文件管理页面进行上传时，需要传到指定目录）; 0-取默认值 1-需要传到用户所处目录
      * @return
      */
     @RequestMapping(value = "fileUploadMain")
-    public String fileUploadMain(Model model, String type, Integer multiple, Integer maxnum, String mburl) {
+    public String fileUploadMain(Model model, String type, Integer multiple, Integer maxnum, Integer ppp) {
         if (StringUtils.isBlank(type)) {
             type = Constant.COMPRESS_EX;
         }
@@ -93,7 +93,7 @@ public class UpLoadController {
         model.addAttribute("maxnum", maxnum);
         model.addAttribute("allMaxSize", 1024);// 文件总大小限制（单位Mb）
         model.addAttribute("itemMaxSize", 512);// 单个文件大小限制（单位Mb）
-        model.addAttribute("mburl", mburl == null ? "" : mburl);
+        model.addAttribute("ppp", ppp == null ? 0 : ppp);
         return "/admin/upload/fileuploadmain";
     }
 
@@ -105,20 +105,25 @@ public class UpLoadController {
      */
     @RequestMapping("saveFile")
     @ResponseBody
-    public RestResult saveFile(HttpServletRequest request, String infos) {
+    public RestResult saveFile(HttpServletRequest request, String infos, Integer ppp) {
         if (StringUtils.isBlank(infos)) {
             return null;
         }
         UserInfo userInfo = Utils.getUserInfo(request);
         JSONArray ja = JSONArray.parseArray(infos);
         List<Map<String, String>> urls = new ArrayList<>();
+        String pppPath = null;
+        if (ppp == 1) {
+            pppPath = UpLoadUtil.doUpathAbsolute(request.getSession(), null);
+            pppPath = pppPath.replaceAll(UpLoadUtil.getProjectPath() + UpLoadUtil.PATH_INFO, "");
+        }
         for (int i = 0; i < ja.size(); i++) {
             JSONObject item = ja.getJSONObject(i);
             Map<String, String> map = new HashMap<>();
             String name = item.getString("name");
             String size = item.getString("size");
             String url = item.getString("urlTemp");
-            map.put("url", UpLoadUtil.tempToFileInfoPath(UpLoadUtil.getProjectPath() + UpLoadUtil.PATH_INFO + url, userInfo.getId()));
+            map.put("url", UpLoadUtil.tempToFileInfoPath(UpLoadUtil.getProjectPath() + UpLoadUtil.PATH_INFO + url, userInfo.getId(), pppPath, name));
             map.put("name", name);
             map.put("size", size);
             urls.add(map);

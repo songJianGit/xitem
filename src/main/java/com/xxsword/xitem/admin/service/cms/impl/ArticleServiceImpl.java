@@ -11,20 +11,22 @@ import com.xxsword.xitem.admin.domain.cms.dto.ArticleDto;
 import com.xxsword.xitem.admin.domain.cms.entity.Article;
 import com.xxsword.xitem.admin.domain.cms.entity.ArticleData;
 import com.xxsword.xitem.admin.domain.cms.entity.ArticleUser;
+import com.xxsword.xitem.admin.domain.cms.vo.ArticleVO;
+import com.xxsword.xitem.admin.domain.project.entity.Project;
 import com.xxsword.xitem.admin.domain.project.entity.ProjectUser;
 import com.xxsword.xitem.admin.mapper.cms.ArticleMapper;
 import com.xxsword.xitem.admin.service.category.CategoryService;
 import com.xxsword.xitem.admin.service.cms.ArticleDataService;
 import com.xxsword.xitem.admin.service.cms.ArticleService;
 import com.xxsword.xitem.admin.service.cms.ArticleUserService;
+import com.xxsword.xitem.admin.service.project.ProjectService;
 import org.apache.commons.text.StringEscapeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Service
 public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> implements ArticleService {
@@ -35,12 +37,62 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
     private ArticleDataService articleDataService;
     @Autowired
     private ArticleUserService articleUserService;
+    @Autowired
+    private ProjectService projectService;
 
     @Override
     public void setCategoryName(List<Article> list) {
+        List<String> categoryIds = list.stream().map(Article::getCategoryId).collect(Collectors.toList());
+        List<Category> categoryList = categoryService.listByIds(categoryIds);
+        Map<String, Category> categoryMap = categoryList.stream().collect(Collectors.toMap(Category::getId, Function.identity()));
         for (Article article : list) {
-            Category category = categoryService.getById(article.getCategoryId());
-            article.setCategoryName(category == null ? "" : category.getTitle());
+            if (StringUtils.isBlank(article.getCategoryId()) || !categoryMap.containsKey(article.getCategoryId())) {
+                continue;
+            }
+            article.setCategoryName(categoryMap.get(article.getCategoryId()).getTitle());
+        }
+
+        List<String> levelIds = list.stream().map(Article::getLevelId).collect(Collectors.toList());
+        List<Category> levelList = categoryService.listByIds(levelIds);
+        Map<String, Category> levelMap = levelList.stream().collect(Collectors.toMap(Category::getId, Function.identity()));
+        for (Article article : list) {
+            if (StringUtils.isBlank(article.getLevelId()) || !levelMap.containsKey(article.getLevelId())) {
+                continue;
+            }
+            article.setLevelName(levelMap.get(article.getLevelId()).getTitle());
+        }
+    }
+
+    @Override
+    public void setArticleVOName(List<ArticleVO> list) {
+        List<String> categoryIds = list.stream().map(ArticleVO::getCategoryId).collect(Collectors.toList());
+        List<Category> categoryList = categoryService.listByIds(categoryIds);
+        Map<String, Category> categoryMap = categoryList.stream().collect(Collectors.toMap(Category::getId, Function.identity()));
+        for (ArticleVO article : list) {
+            if (StringUtils.isBlank(article.getCategoryId()) || !categoryMap.containsKey(article.getCategoryId())) {
+                continue;
+            }
+            article.setCategoryName(categoryMap.get(article.getCategoryId()).getTitle());
+        }
+
+        List<String> levelIds = list.stream().map(ArticleVO::getLevelId).collect(Collectors.toList());
+        List<Category> levelList = categoryService.listByIds(levelIds);
+        Map<String, Category> levelMap = levelList.stream().collect(Collectors.toMap(Category::getId, Function.identity()));
+        for (ArticleVO article : list) {
+            if (StringUtils.isBlank(article.getLevelId()) || !levelMap.containsKey(article.getLevelId())) {
+                continue;
+            }
+            article.setLevelName(levelMap.get(article.getLevelId()).getTitle());
+        }
+
+        List<String> projectIds = list.stream().map(ArticleVO::getPid).collect(Collectors.toList());
+        List<Project> projectList = projectService.listByIds(projectIds);
+        Map<String, Project> projectMap = projectList.stream().collect(Collectors.toMap(Project::getId, Function.identity()));
+        for (ArticleVO article : list) {
+            if (StringUtils.isBlank(article.getPid()) || !projectMap.containsKey(article.getPid())) {
+                continue;
+            }
+            article.setProjectName(projectMap.get(article.getPid()).getTitle());
         }
     }
 

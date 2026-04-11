@@ -1,18 +1,18 @@
 package com.xxsword.xitem.admin.controller;
 
-import com.alibaba.fastjson2.JSONArray;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.xxsword.xitem.admin.constant.Constant;
 import com.xxsword.xitem.admin.domain.category.entity.Category;
+import com.xxsword.xitem.admin.domain.cms.convert.CmsConvert;
 import com.xxsword.xitem.admin.domain.cms.dto.ArticleDto;
 import com.xxsword.xitem.admin.domain.cms.entity.Article;
 import com.xxsword.xitem.admin.domain.cms.entity.ArticleData;
 import com.xxsword.xitem.admin.domain.cms.entity.ArticleUser;
+import com.xxsword.xitem.admin.domain.cms.vo.ArticleVO;
 import com.xxsword.xitem.admin.domain.project.dto.ProjectUserDto;
 import com.xxsword.xitem.admin.domain.project.entity.ProjectUser;
 import com.xxsword.xitem.admin.domain.project.vo.AUVO;
-import com.xxsword.xitem.admin.domain.project.vo.PUVO;
 import com.xxsword.xitem.admin.domain.system.entity.UserInfo;
 import com.xxsword.xitem.admin.model.RestPaging;
 import com.xxsword.xitem.admin.model.RestResult;
@@ -20,11 +20,9 @@ import com.xxsword.xitem.admin.service.category.CategoryService;
 import com.xxsword.xitem.admin.service.cms.ArticleDataService;
 import com.xxsword.xitem.admin.service.cms.ArticleService;
 import com.xxsword.xitem.admin.service.cms.ArticleUserService;
-import com.xxsword.xitem.admin.service.project.ProjectService;
 import com.xxsword.xitem.admin.service.project.ProjectUserService;
-import com.xxsword.xitem.admin.utils.DateUtil;
 import com.xxsword.xitem.admin.utils.Utils;
-import org.apache.commons.text.StringEscapeUtils;
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -36,6 +34,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Controller
@@ -51,17 +50,27 @@ public class CmsController extends BaseController {
     private ProjectUserService projectUserService;
     @Autowired
     private ArticleUserService articleUserService;
-    @Autowired
-    private ProjectService projectService;
 
     @RequestMapping("articleList")
     public String recordList() {
         return "admin/cms/articlelist";
     }
 
-    @RequestMapping("articleListData")
+    @RequestMapping("userListData1")
     @ResponseBody
-    public RestPaging<Article> recordListData(HttpServletRequest request, ArticleDto articleDto, Page<Article> page) {
+    @Operation(summary = "项目任务", description = "项目任务")
+    public RestPaging<ArticleVO> recordListData(HttpServletRequest request, ArticleDto articleDto, Page<Article> page) {
+        return pageArticleVO(request, articleDto, 1);
+    }
+
+    @RequestMapping("userListData2")
+    @ResponseBody
+    @Operation(summary = "待办任务", description = "待办任务")
+    public RestPaging<ArticleVO> userListData(HttpServletRequest request, ArticleDto articleDto) {
+        return pageArticleVO(request, articleDto, 2);
+    }
+
+    private RestPaging<ArticleVO> pageArticleVO(HttpServletRequest request, ArticleDto articleDto, Integer type) {
         List<String> categoryIds = new ArrayList<>();
         if (StringUtils.isNotBlank(articleDto.getCategoryIds())) {
             String[] ids = articleDto.getCategoryIds().split(",");
@@ -70,11 +79,30 @@ public class CmsController extends BaseController {
             }
             articleDto.setCategoryAllIds(categoryIds);
         }
-        String projectId = (String) request.getSession().getAttribute(Constant.PROJECT_SELECT_ID_KEY);
-        articleDto.setProjectId(projectId);
-        Page<Article> data = articleService.page(page, articleDto.toQuery());
-        articleService.setCategoryName(data.getRecords());
-        return new RestPaging<>(data.getTotal(), data.getRecords());
+        UserInfo userInfo = Utils.getUserInfo(request);
+        List<ProjectUser> userList = new ArrayList<>();
+        if (type == 1) {
+            userList = projectUserService.listProjectUser(new ProjectUserDto((String) request.getSession().getAttribute(Constant.PROJECT_SELECT_ID_KEY), null));
+        }
+        if (type == 2) {
+            userList = projectUserService.listProjectUser(new ProjectUserDto(null, userInfo.getId()));
+        }
+        articleDto.setProjectIds(userList.stream().map(ProjectUser::getPid).toList());
+        Page<Article> data = articleService.page(articleDto.toPage(), articleDto.toQuery());
+        List<ArticleVO> voList = CmsConvert.INSTANCE.toArticleVO(data.getRecords());
+        articleService.setArticleVOName(voList);
+
+        Map<String, List<ArticleUser>> articleUserMap = articleUserService.mapArticleUser(voList.stream().map(ArticleVO::getId).toList());
+
+        for (ArticleVO item : voList) {
+            if (articleUserMap.containsKey(item.getId())) {
+                List<ArticleUser> articleUserList = articleUserMap.get(item.getId());
+                articleUserService.setArticleUserName(articleUserList);
+                item.setUsers(articleUserList);
+            }
+        }
+
+        return new RestPaging<>(data.getTotal(), voList);
     }
 
     /**
@@ -115,6 +143,9 @@ public class CmsController extends BaseController {
         List<Category> categoryListLevel = categoryService.categoryC(Constant.TASK_STATUS_LEVEL);
         // 成员
         String projectId = (String) request.getSession().getAttribute(Constant.PROJECT_SELECT_ID_KEY);
+        if (StringUtils.isBlank(projectId)) {
+            projectId = article.getPid();
+        }
         List<ProjectUser> projectUserList = projectUserService.list(new ProjectUserDto(projectId, null).toQuery());
         projectUserService.setProjectUserUserName(projectUserList);
         List<ArticleUser> articleUsers = articleUserService.listArticleUserBy(id);
@@ -144,6 +175,11 @@ public class CmsController extends BaseController {
     @RequestMapping("articleSave")
     @ResponseBody
     public RestResult articleSave(HttpServletRequest request, Article article, ArticleData articleData, String userlists) {
+        String projectId = (String) request.getSession().getAttribute(Constant.PROJECT_SELECT_ID_KEY);
+        if (StringUtils.isBlank(projectId)) {
+            return RestResult.Fail("操作失败");
+        }
+        article.setPid(projectId);
         articleService.saveArticle(article, articleData, userlists);
         return RestResult.OK();
     }

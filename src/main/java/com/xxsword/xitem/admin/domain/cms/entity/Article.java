@@ -27,9 +27,6 @@ public class Article extends BaseEntity {
     @Column
     @ColumnComment("标题")
     private String title;
-    @Column
-    @ColumnComment("描述、摘要")
-    private String description;
     @Column(length = 64)
     @ColumnComment("优先级")
     private String levelId;

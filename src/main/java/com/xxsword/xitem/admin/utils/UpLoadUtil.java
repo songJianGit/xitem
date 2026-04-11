@@ -87,16 +87,21 @@ public class UpLoadUtil {
     /**
      * 将文件从临时文件夹里面移动出来（本方法专门用作临时文件夹的文件移动，不要用做其它）
      */
-    public static String tempToFileInfoPath(String url, String userId) {
+    public static String tempToFileInfoPath(String url, String userId, String pppPath, String realName) {
         String[] p0 = FilenameUtils.getFullPathNoEndSeparator(url).split(PATH_TEMP);
-        String newFileName = Utils.getuuid() + "." + FilenameUtils.getExtension(url);
-        String newPath = getUserPath(userId) + PATH_DEF + getTIMEPath() + "/";
+//        String newFileName = Utils.getuuid() + "." + FilenameUtils.getExtension(url);
+        String newPath;
+        if (StringUtils.isNotBlank(pppPath)) {
+            newPath = pppPath + "/";
+        } else {
+            newPath = getUserPath(userId) + PATH_DEF + getTIMEPath() + "/";
+        }
         try {
-            FileUtils.moveFile(new File(url), new File(p0[0] + newPath + newFileName));
+            FileUtils.moveFile(new File(url), new File(p0[0] + newPath + realName));
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return PATH_INFO + newPath + newFileName;
+        return PATH_INFO + newPath + realName;
     }
 
     /**
@@ -366,9 +371,9 @@ public class UpLoadUtil {
      */
     public static String doUpathAbsolute(HttpSession session, String upath_absolute) {
         if (StringUtils.isBlank(upath_absolute)) {
-            return session.getAttribute("upath_absolute").toString();
+            return session.getAttribute(Constant.UPATH_ABSOLUTE).toString();
         } else {
-            session.setAttribute("upath_absolute", upath_absolute);
+            session.setAttribute(Constant.UPATH_ABSOLUTE, upath_absolute);
             return upath_absolute;
         }
     }

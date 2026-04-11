@@ -48,7 +48,7 @@ public class ProjectServiceImpl extends ServiceImpl<ProjectMapper, Project> impl
         if (qProject == null) {
             return new Page<>();
         }
-        return page(projectDto.page(), qProject);
+        return page(projectDto.toPage(), qProject);
     }
 
     @Override

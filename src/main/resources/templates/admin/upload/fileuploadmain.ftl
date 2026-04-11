@@ -258,7 +258,8 @@
             cache: false,
             type: "post",
             data: {
-                "infos": $("#outjson").val()
+                "infos": $("#outjson").val(),
+                "ppp": `${ppp!0}`
             },
             success: function (data) {
                 layer.close(index_);

@@ -38,6 +38,9 @@ public class Constant {
     // 记录当前选择的项目 session键
     public static final String PROJECT_SELECT_ID_KEY = "projectSelectKey";
 
+    // 用户进行文件目录操作时，session的键
+    public static final String UPATH_ABSOLUTE = "upathAbsolute";
+
     // 最大用户数
     public static final String DICT_ID_MAX_USER_COUNT = "dictidmaxusercount";
 

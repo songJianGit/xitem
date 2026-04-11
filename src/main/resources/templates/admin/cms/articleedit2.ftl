@@ -86,7 +86,7 @@
             <div class="project-members-wrap">
                 <div>
                     <div class="pm-title">任务成员</div>
-                    <div class="pm-sub">列出任务内全部用户；勾选表示已加入<strong>当前任务</strong>。</div>
+                    <div class="pm-sub">列出项目内全部用户；勾选表示已加入<strong>当前任务</strong>。</div>
                 </div>
 
                 <div class="pm-search-wrap">

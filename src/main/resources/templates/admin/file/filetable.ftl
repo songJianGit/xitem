@@ -81,7 +81,7 @@
     }
 
     $('#upload').click(function () {
-        layer_show("上传", '${ctx.contextPath}/admin/upload/fileUploadMain?multiple=1&maxnum=3&type=png,mp4', '', '', false, 0);
+        layer_show("上传", '${ctx.contextPath}/admin/upload/fileUploadMain?multiple=1&maxnum=3&type=png,mp4&ppp=1', '', '', false, 0);
     });
 
     $('#createFolder').click(function () {

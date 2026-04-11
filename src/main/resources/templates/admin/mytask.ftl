@@ -81,16 +81,19 @@
                                            data-pagination="true"
                                            data-page-list="[10, 20, 50, 100, 200]"
 <#--                                           data-show-refresh="true"-->
-                                           data-url="${ctx.contextPath}/admin/project/data"
+                                           data-url="${ctx.contextPath}/admin/cms/userListData2"
                                            data-query-params="pageQueryParams"
                                            data-side-pagination="server">
                                         <thead>
                                         <tr>
-                                            <th data-field="title">项目名称</th>
-                                            <th data-field="pstatus">任务标题</th>
+                                            <th data-field="projectName" data-formatter="projectName">项目标题</th>
+                                            <th data-field="title" data-formatter="title">任务标题</th>
+                                            <th data-field="users" data-formatter="users">项目成员</th>
+                                            <th data-field="categoryName">任务状态</th>
+                                            <th data-field="levelName">优先级</th>
+                                            <th data-field="stime" data-formatter="plantime">计划时间</th>
                                             <th data-field="createDate" data-formatter="createDate">创建时间</th>
-                                            <th data-field="createDate">计划时间</th>
-                                            <th data-field="pstatus">任务状态</th>
+                                            <th data-field="id" data-formatter="caozuo">操作</th>
                                         </tr>
                                         </thead>
                                     </table>
@@ -112,11 +115,51 @@
         }
         return value.substring(0, 10);
     }
+
+    function users(value, row) {
+        if (value == '' || value == null) {
+            return '';
+        }
+        let names = [];
+        for (let i = 0; i < value.length; i++) {
+            names.push(value[i].userName);
+        }
+        return names.join("，");
+    }
+
+    function plantime(value, row) {
+        let htm='';
+        if (value != '' && value != null) {
+            htm+=value;
+        }
+        if (row.etime != '' && row.etime != null) {
+            htm+='~'+row.etime;
+        }
+        return htm;
+    }
+
+    function projectName(value, row) {
+        return '<a href="javascript:;" title="' + value + '" class="ellipsis" onclick="showProjectName(\'' + row.id + '\')">' + value + '</a>';
+    }
+
+    function showProjectName(id) {
+        layer_show('查看', "${ctx.contextPath}/admin/project/edit2?showFlag=1&id=" + id, "90%");
+    }
+
     function title(value, row) {
         return '<a href="javascript:;" title="' + value + '" class="ellipsis" onclick="show(\'' + row.id + '\')">' + value + '</a>';
     }
     function show(id) {
-        window.location.href = '${ctx.contextPath}/admin/project/show?id=' + id;
+        layer_show('查看', "${ctx.contextPath}/admin/cms/articleEdit2?showFlag=1&id=" + id, "90%");
+    }
+    function caozuo(value, row) {
+        let htm = '';
+        htm += '<div class="btn-group">';
+        htm += '<button type="button" class="btn btn-sm btn-default m-r-5" onclick="show(\'' + value + '\')" title="查看">查看</button>';
+        // htm += '<button type="button" class="btn btn-sm btn-default m-r-5" onclick="edit(\'' + value + '\')" title="编辑">编辑</button>';
+        <#--htm += '<a target="_blank" class="btn btn-sm btn-default" href="${ctx.contextPath}/article/detail?id=' + value + '" title="预览">预览</a>';-->
+        htm += '</div>';
+        return htm;
     }
 </script>
 </body>

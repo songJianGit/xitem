@@ -65,15 +65,17 @@
                                            data-pagination="true"
                                            data-page-list="[10, 20, 50, 100, 200]"
                                            data-show-refresh="true"
-                                           data-url="${ctx.contextPath}/admin/cms/articleListData"
+                                           data-url="${ctx.contextPath}/admin/cms/userListData1"
                                            data-query-params="pageQueryParams"
                                            data-side-pagination="server">
                                         <thead>
                                         <tr>
-                                            <th data-field="title" data-formatter="title">标题</th>
+                                            <th data-field="title" data-formatter="title">任务标题</th>
+                                            <th data-field="users" data-formatter="users">任务成员</th>
                                             <th data-field="categoryName">任务状态</th>
-                                            <th data-field="createDate" data-formatter="createDate">创建时间</th>
+                                            <th data-field="levelName">优先级</th>
                                             <th data-field="stime" data-formatter="plantime">计划时间</th>
+                                            <th data-field="createDate" data-formatter="createDate">创建时间</th>
                                             <th data-field="id" data-formatter="caozuo">操作</th>
                                         </tr>
                                         </thead>
@@ -99,6 +101,18 @@
         }
         return '';
     }
+
+    function users(value, row) {
+        if (value == '' || value == null) {
+            return '';
+        }
+        let names = [];
+        for (let i = 0; i < value.length; i++) {
+            names.push(value[i].userName);
+        }
+        return names.join("，");
+    }
+
     function plantime(value, row) {
         let htm='';
         if (value != '' && value != null) {
@@ -156,7 +170,7 @@
 
     function reload(){
         $("#table-pagination").bootstrapTable('refresh', {
-            url: "${ctx.contextPath}/admin/cms/articleListData?" + $("#searchform").serialize()
+            url: "${ctx.contextPath}/admin/cms/userListData1?" + $("#searchform").serialize()
         });
     }
 </script>

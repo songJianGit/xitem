@@ -1,0 +1,40 @@
+package com.xxsword.xitem.admin.domain.cms.vo;
+
+import com.xxsword.xitem.admin.domain.cms.entity.ArticleUser;
+import com.xxsword.xitem.admin.domain.project.entity.ProjectUser;
+import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Data;
+
+import java.util.List;
+
+@Data
+public class ArticleVO {
+    private String id;
+    private String createDate;
+    @Schema(title = "项目名称", description = "项目名称")
+    private String projectName;
+    @Schema(title = "任务状态", description = "任务状态")
+    private String categoryId;
+    @Schema(title = "任务状态", description = "任务状态")
+    private String categoryName;
+    @Schema(title = "标题", description = "标题")
+    private String title;
+    @Schema(title = "描述、摘要", description = "描述、摘要")
+    private String description;
+    @Schema(title = "优先级", description = "优先级")
+    private String levelId;
+    @Schema(title = "优先级名称", description = "优先级名称")
+    private String levelName;
+    @Schema(title = "项目Id", description = "项目Id")
+    private String pid;
+    @Schema(title = "计划开始时间", description = "计划开始时间")
+    private String stime;
+    @Schema(title = "计划结束时间", description = "计划结束时间")
+    private String etime;
+
+    @Schema(title = "任务成员", description = "任务成员")
+    List<ArticleUser> users;
+
+}
+
+
