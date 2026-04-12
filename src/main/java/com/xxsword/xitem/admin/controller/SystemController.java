@@ -75,7 +75,7 @@ public class SystemController extends BaseController {
 
             switch (funId) {
                 case "2" -> page = "/admin/mytask";
-                case "4" -> page = "/admin/system/userlist";
+                case "4" -> page = httpRedirect(request, "/admin/system/userEditByUser");
                 case "5" -> page = "/admin/cms/articlelist";
             }
 
@@ -122,6 +122,7 @@ public class SystemController extends BaseController {
             userInfo.setOrganName(organ == null ? "" : organ.getName());
         }
         model.addAttribute("user", userInfo);
+        model.addAttribute("backBtn", true);
         return "/admin/system/useredit";
     }
 

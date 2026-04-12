@@ -33,8 +33,8 @@
             <li class="dropdown dropdown-profile">
                 <a href="javascript:void(0)" data-toggle="dropdown" class="dropdown-toggle">
                     <img class="img-avatar img-avatar-48 m-r-10"
-                         src="${ctx.contextPath}/static/admin/commons/img/defaultimg.webp" alt="笔下光年"/>
-                    <span>笔下光年</span>
+                         src="${ctx.contextPath}/static/admin/commons/img/defaultimg.webp" alt="头像"/>
+                    <span>${Session.puser.userName!}</span>
                 </a>
                 <ul class="dropdown-menu dropdown-menu-right">
                     <li>

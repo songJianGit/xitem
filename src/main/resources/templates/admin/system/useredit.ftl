@@ -50,15 +50,18 @@
                                     </div>
                                     <div class="form-group col-6">
                                         <label for="lifedate">账号有效期</label>
-                                        <input type="text" class="form-control" id="lifedate" name="lifeDate" autocomplete="off"
+                                        <input type="text" class="form-control" id="lifedate" name="lifeDate"
+                                               autocomplete="off"
                                                onClick="WdatePicker({el:this,dateFmt:'yyyy-MM-dd HH:mm:ss'})"
                                                value="${user.lifeDate!}" placeholder="账号有效期" required/>
                                     </div>
                                     <div class="form-group col-12">
                                         <button type="submit" class="btn btn-primary">确 定</button>
-                                        <button type="button" class="btn btn-default"
-                                                onclick="history.back(-1);return false;">返 回
-                                        </button>
+                                        <#if backBtn??>
+                                            <button type="button" class="btn btn-default"
+                                                    onclick="history.back(-1);return false;">返 回
+                                            </button>
+                                        </#if>
                                     </div>
                                 </form>
 
@@ -76,10 +79,10 @@
 <#include "../commons/js.ftl"/>
 <script type="text/javascript">
     function check() {
-        if(!checkloginname()){
+        if (!checkloginname()) {
             return false;
         }
-        if(!checkphoneno()){
+        if (!checkphoneno()) {
             return false;
         }
         return true;
@@ -108,6 +111,7 @@
         });
         return b;
     };
+
     function checkphoneno() {
         let b = false;
         let userphoneno = $("#phoneno").val();
