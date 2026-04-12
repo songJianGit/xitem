@@ -2,8 +2,6 @@
 <html lang="zh">
 <head>
     <#include "../../commons/head.ftl"/>
-    <link rel="stylesheet" href="${ctx.contextPath}/static/plugins/ztree-v3/css/zTreeStyle/zTreeStyle.css"
-          type="text/css">
 </head>
 <body style="background-color: #fff">
 <div class="card" style="-webkit-box-shadow:none;box-shadow:none">

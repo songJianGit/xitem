@@ -14,7 +14,7 @@ public interface ArticleService extends IService<Article> {
 
     void setArticleVOName(List<ArticleVO> list);
 
-    Page<Article> pageArticle(Page<Article> page, ArticleDto articleDto);
+    List<Article> listArticle(ArticleDto articleDto);
 
     void saveArticle(Article article, ArticleData articleData, String userlists);
 }

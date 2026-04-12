@@ -4979,6 +4979,7 @@ body[data-theme='translucent'] {
 [data-sidebarbg*='color_'] .nav-drawer .nav-subnav > li.active > a,
 [data-sidebarbg*='color_'] .nav-drawer .nav-subnav > li > a:hover {
     color: #fff;
+    font-weight: bold;
 }
 [data-headerbg*='color_'] .lyear-aside-toggler .lyear-toggler-bar {
     background-color: #fff;

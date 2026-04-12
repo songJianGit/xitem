@@ -65,7 +65,7 @@ public class SystemController extends BaseController {
 
         if (StringUtils.isNotBlank(projectId)) {
             session.setAttribute(Constant.PROJECT_SELECT_ID_KEY, projectId);
-        }else {
+        } else {
             session.setAttribute(Constant.PROJECT_SELECT_ID_KEY, "");
         }
 
@@ -121,6 +121,19 @@ public class SystemController extends BaseController {
             Organ organ = organService.getById(userInfo.getOrganId());
             userInfo.setOrganName(organ == null ? "" : organ.getName());
         }
+        model.addAttribute("user", userInfo);
+        return "/admin/system/useredit";
+    }
+
+    /**
+     * 个人设置
+     */
+    @RequestMapping("userEditByUser")
+    public String userEditByUser(HttpServletRequest request, Model model) {
+        UserInfo u = Utils.getUserInfo(request);
+        UserInfo userInfo = userInfoService.getById(u.getId());
+        Organ organ = organService.getById(userInfo.getOrganId());
+        userInfo.setOrganName(organ == null ? "" : organ.getName());
         model.addAttribute("user", userInfo);
         return "/admin/system/useredit";
     }

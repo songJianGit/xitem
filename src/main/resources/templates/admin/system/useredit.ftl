@@ -49,15 +49,6 @@
                                                value="${user.phoneNo!}" placeholder="手机号码" required/>
                                     </div>
                                     <div class="form-group col-6">
-                                        <label for="organid">部门</label>
-                                        <input type="text" class="form-control" id="organname" name="organName"
-                                               value="${user.organName!}" placeholder="单位" required readonly
-                                               autocomplete="off"/>
-                                        <input type="hidden" id="organid" name="organId"
-                                               value="${user.organId!}"/>
-
-                                    </div>
-                                    <div class="form-group col-6">
                                         <label for="lifedate">账号有效期</label>
                                         <input type="text" class="form-control" id="lifedate" name="lifeDate" autocomplete="off"
                                                onClick="WdatePicker({el:this,dateFmt:'yyyy-MM-dd HH:mm:ss'})"

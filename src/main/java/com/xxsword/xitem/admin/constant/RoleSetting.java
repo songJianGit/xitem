@@ -1,5 +1,8 @@
 package com.xxsword.xitem.admin.constant;
 
+/**
+ * 角色配置定义
+ */
 public enum RoleSetting {
 
     ROLE_ADMIN("1", "管理员"),

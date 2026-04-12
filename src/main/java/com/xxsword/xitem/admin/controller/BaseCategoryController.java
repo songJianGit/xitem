@@ -83,8 +83,9 @@ public class BaseCategoryController extends BaseController {
     public RestPaging pageByIdBase(Page<Category> page, CategoryDto categoryDto) {
         List<Category> categoryList = categoryService.categoryC(categoryDto.getCategoryId());
         List<String> ids = categoryList.stream().map(Category::getId).collect(Collectors.toList());
-        ids.add(categoryDto.getCategoryId());
-
+        if (categoryDto.getFlag() == null || categoryDto.getFlag()) {
+            ids.add(categoryDto.getCategoryId());
+        }
         LambdaQueryWrapper<Category> query = categoryDto.toQuery();
         query.in(Category::getId, ids);
         Page<Category> p = categoryService.page(page, query);

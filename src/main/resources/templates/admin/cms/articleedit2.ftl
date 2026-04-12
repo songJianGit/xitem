@@ -8,6 +8,7 @@
 <div class="card-body">
     <form action="#!" method="post" id="articleform" class="row">
         <input type="hidden" name="id" value="${article.id!}"/>
+        <input type="hidden" name="atype" value="1"/>
         <input type="hidden" id="userlists" name="userlists" value=""/>
         <div class="col-8">
             <div class="row">
@@ -27,7 +28,7 @@
                         <div class="input-group-prepend">
                             <span class="input-group-text">任务状态</span>
                         </div>
-                        <select id="articleCategoryName" name="categoryId" class="form-control">
+                        <select name="categoryId" class="form-control">
                             <#if categoryList??>
                                 <#list categoryList as item>
                                     <option value="${item.id!}"
@@ -45,7 +46,7 @@
                         <div class="input-group-prepend">
                             <span class="input-group-text">优先级</span>
                         </div>
-                        <select id="articleCategoryName" name="levelId" class="form-control">
+                        <select name="levelId" class="form-control">
                             <#list categoryListLevel as item>
                                 <option value="${item.id!}"
                                         <#if article.levelId??><#if article.levelId==item.id>selected</#if></#if>>
@@ -55,7 +56,6 @@
                         </select>
                     </div>
                 </div>
-
                 <div class="form-group col-6">
                     <div class="input-group">
                         <div class="input-group-prepend">
@@ -67,6 +67,21 @@
                         <input autocomplete="off" type="text" class="form-control"
                                onClick="WdatePicker({el:this,dateFmt:'yyyy-MM-dd'})"
                                name="etime" value="${article.etime!}" placeholder="结束时间" required/>
+                    </div>
+                </div>
+                <div class="form-group col-6">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">绑定里程碑</span>
+                        </div>
+                        <select name="roadmapId" class="form-control selectpicker" data-title="未绑定里程碑">
+                            <#list roadMapList as item>
+                                <option value="${item.id!}"
+                                        <#if article.roadmapId??><#if article.roadmapId==item.id>selected</#if></#if>>
+                                    ${item.title}
+                                </option>
+                            </#list>
+                        </select>
                     </div>
                 </div>
             </div>
@@ -249,7 +264,6 @@
             });
         }
     });
-
     $('.selectpicker').selectpicker();
 </script>
 </body>

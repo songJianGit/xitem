@@ -1,7 +1,6 @@
 package com.xxsword.xitem.admin.domain.cms.vo;
 
 import com.xxsword.xitem.admin.domain.cms.entity.ArticleUser;
-import com.xxsword.xitem.admin.domain.project.entity.ProjectUser;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 

@@ -10,6 +10,7 @@ public class CategoryDto {
     private String title;
     private String categoryId;// 指定业务id
     private String pid;// 指定业务id
+    private Boolean flag;// 是否包含自己(null和true都表示包含)
 
     public LambdaQueryWrapper<Category> toQuery() {
         return new LambdaQueryWrapper<Category>().eq(Category::getStatus, 1)

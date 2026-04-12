@@ -64,7 +64,14 @@ public class Utils {
             return (UserInfo) o;
         }
     }
-
+    public static String getProjectId(HttpServletRequest request) {
+        Object o = request.getSession().getAttribute(Constant.PROJECT_SELECT_ID_KEY);
+        if (o == null) {
+            return null;
+        } else {
+            return (String) o;
+        }
+    }
     /**
      * double 除法
      *

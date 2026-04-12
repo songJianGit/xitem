@@ -21,7 +21,7 @@
                     <div class="col-12">
                         <div class="card">
                             <div class="card-body">
-                                <h4 class="card-title">任务状态列表</h4>
+                                <h4 class="card-title">任务优先级列表</h4>
                                 <div id="custom-toolbar">
                                     <div class="toolbar-btn-action">
                                         <button type="button" id="add" class="btn btn-primary">
@@ -36,7 +36,7 @@
                                            data-pagination="true"
                                            data-page-list="[10, 20, 50, 100, 200]"
                                            data-show-refresh="true"
-                                           data-url="${ctx.contextPath}/admin/category/article/pageById"
+                                           data-url="${ctx.contextPath}/admin/category/article/pageByIdLevel"
                                            data-query-params="pageQueryParams"
                                            data-side-pagination="server">
                                         <thead>

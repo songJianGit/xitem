@@ -1,0 +1,39 @@
+.ellipsis-100 {
+    display: block;
+    white-space: nowrap; /* 确保文本在一行内显示 */
+    overflow: hidden; /* 超出容器部分的文本隐藏 */
+    text-overflow: ellipsis; /* 使用打点表示被截断的文本 */
+    width: 100px;
+}
+
+.ellipsis-200 {
+    display: block;
+    white-space: nowrap; /* 确保文本在一行内显示 */
+    overflow: hidden; /* 超出容器部分的文本隐藏 */
+    text-overflow: ellipsis; /* 使用打点表示被截断的文本 */
+    width: 200px;
+}
+
+.ellipsis-300 {
+    display: block;
+    white-space: nowrap; /* 确保文本在一行内显示 */
+    overflow: hidden; /* 超出容器部分的文本隐藏 */
+    text-overflow: ellipsis; /* 使用打点表示被截断的文本 */
+    width: 300px;
+}
+
+.ellipsis-390 {
+    display: block;
+    white-space: nowrap; /* 确保文本在一行内显示 */
+    overflow: hidden; /* 超出容器部分的文本隐藏 */
+    text-overflow: ellipsis; /* 使用打点表示被截断的文本 */
+    width: 390px;
+}
+
+.ellipsis-400 {
+    display: block;
+    white-space: nowrap; /* 确保文本在一行内显示 */
+    overflow: hidden; /* 超出容器部分的文本隐藏 */
+    text-overflow: ellipsis; /* 使用打点表示被截断的文本 */
+    width: 400px;
+}

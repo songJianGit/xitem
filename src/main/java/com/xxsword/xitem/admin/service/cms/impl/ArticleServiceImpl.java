@@ -23,6 +23,7 @@ import com.xxsword.xitem.admin.service.project.ProjectService;
 import org.apache.commons.text.StringEscapeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 import java.util.function.Function;
@@ -97,43 +98,45 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
     }
 
     @Override
-    public Page<Article> pageArticle(Page<Article> page, ArticleDto articleDto) {
-        return super.page(page, articleDto.toQuery());
+    public List<Article> listArticle(ArticleDto articleDto) {
+        return list(articleDto.toQuery());
     }
 
     @Override
+    @Transactional
     public void saveArticle(Article article, ArticleData articleData, String userlists) {
         saveOrUpdate(article);
         articleData.setId(article.getId());
         articleDataService.saveOrUpdate(articleData);
 
-        JSONArray users = JSONArray.parseArray(StringEscapeUtils.unescapeHtml4(userlists));
+        if (StringUtils.isNotBlank(userlists)) {
+            JSONArray users = JSONArray.parseArray(StringEscapeUtils.unescapeHtml4(userlists));
 
-        Set<String> hasUserIds = new HashSet<>();
-        List<ArticleUser> userList = new ArrayList<>();
-        for (int i = 0; i < users.size(); i++) {
-            String userId = users.getString(i);
-            hasUserIds.add(userId);
-            ArticleUser articleUser = articleUserService.getArticleUser(article.getId(), userId);
-            if (articleUser == null) {
-                articleUser = new ArticleUser();
+            Set<String> hasUserIds = new HashSet<>();
+            List<ArticleUser> userList = new ArrayList<>();
+            for (int i = 0; i < users.size(); i++) {
+                String userId = users.getString(i);
+                hasUserIds.add(userId);
+                ArticleUser articleUser = articleUserService.getArticleUser(article.getId(), userId);
+                if (articleUser == null) {
+                    articleUser = new ArticleUser();
+                }
+                articleUser.setUserId(userId);
+                articleUser.setAid(article.getId());
+                userList.add(articleUser);
             }
-            articleUser.setUserId(userId);
-            articleUser.setAid(article.getId());
-            userList.add(articleUser);
-        }
 
-        if (!userlists.isEmpty()) {
-            articleUserService.saveOrUpdateBatch(userList);
-        }
+            if (!userlists.isEmpty()) {
+                articleUserService.saveOrUpdateBatch(userList);
+            }
 
-        // 删除未出现的用户
-        LambdaQueryWrapper<ArticleUser> del = Wrappers.lambdaQuery();
-        del.eq(ArticleUser::getAid, article.getId());
-        if (!hasUserIds.isEmpty()) {
-            del.notIn(ArticleUser::getUserId, hasUserIds);
+            // 删除未出现的用户
+            LambdaQueryWrapper<ArticleUser> del = Wrappers.lambdaQuery();
+            del.eq(ArticleUser::getAid, article.getId());
+            if (!hasUserIds.isEmpty()) {
+                del.notIn(ArticleUser::getUserId, hasUserIds);
+            }
+            articleUserService.remove(del);
         }
-        articleUserService.remove(del);
-
     }
 }

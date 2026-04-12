@@ -16,33 +16,34 @@
 
         <!--页面主要内容-->
         <main class="lyear-layout-content">
+
             <div class="container-fluid p-t-15">
+
                 <div class="row">
                     <div class="col-12">
                         <div class="card">
+
                             <div class="card-header">
-                                <form class="form-inline" method="post" action="#!" role="form" id="searchform">
+                                <form class="form-inline" method="post" id="searchform" action="#!" role="form">
+                                    <input type="hidden" id="categoryIds" name="categoryIds">
                                     <div class="input-group m-r-5">
                                         <div class="input-group-prepend">
-                                            <span class="input-group-text">项目名称</span>
+                                            <span class="input-group-text">标题</span>
                                         </div>
-                                        <input type="text" class="form-control" value="" name="title"
-                                               placeholder="项目名称">
+                                        <input type="text" class="form-control" name="title" placeholder="标题">
                                     </div>
-                                    <div class="input-group">
-                                        <div class="btn-group">
-                                            <button type="button" id="searchBtn" class="btn btn-primary m-r-5">搜索
-                                            </button>
-                                            <button type="reset" class="btn btn-default">重置</button>
-                                        </div>
-                                    </div>
+                                    <button type="button" id="searchBtn" class="btn btn-primary m-r-5">搜索</button>
+                                    <button type="reset" class="btn btn-default">重置</button>
                                 </form>
                             </div>
+
+
                             <div class="card-body">
+                                <#--                                <h4 class="card-title">文章列表</h4>-->
                                 <div id="custom-toolbar">
                                     <div class="toolbar-btn-action">
                                         <button type="button" id="add" class="btn btn-primary">
-                                            开始新项目
+                                            新增里程碑
                                         </button>
                                     </div>
                                 </div>
@@ -53,15 +54,15 @@
                                            data-pagination="true"
                                            data-page-list="[10, 20, 50, 100, 200]"
                                            data-show-refresh="true"
-                                           data-url="${ctx.contextPath}/admin/project/data"
+                                           data-url="${ctx.contextPath}/admin/roadmap/data"
                                            data-query-params="pageQueryParams"
                                            data-side-pagination="server">
                                         <thead>
                                         <tr>
                                             <th data-field="title" data-formatter="title">标题</th>
-                                            <th data-field="users" data-formatter="users">项目成员</th>
+                                            <th data-field="percentage" data-formatter="roadMapPercentage">进度</th>
+                                            <th data-field="stime" data-formatter="plantime">计划时间</th>
                                             <th data-field="createDate" data-formatter="createDate">创建时间</th>
-                                            <th data-field="id" data-formatter="caozuo">操作</th>
                                         </tr>
                                         </thead>
                                     </table>
@@ -77,44 +78,15 @@
 </div>
 <#include "../commons/js.ftl"/>
 <script type="text/javascript">
-    function pstatus(value, row) {
-        if (value == '') {
-            return '';
-        }
-        if (value == 1) {
-            return '正常';
-        }
-        if (value == 0) {
-            return '关闭';
-        }
-        return value;
-    }
 
-    function users(value, row) {
-        if (value == '' || value == null) {
-            return '';
-        }
-        let names = [];
-        for (let i = 0; i < value.length; i++) {
-            names.push(value[i].userName);
-        }
-        return names.join("，");
-    }
-
-    function createDate(value, row) {
-        if (value == '') {
-            return '';
-        }
-        return value.substring(0, 10);
-    }
-
-    function caozuo(value, row) {
+    function plantime(value, row) {
         let htm = '';
-        htm += '<div class="btn-group">';
-        htm += '<button type="button" class="btn btn-sm btn-default m-r-5" onclick="show(\'' + value + '\')" title="查看">查看</button>';
-        htm += '<button type="button" class="btn btn-sm btn-default m-r-5" onclick="edit(\'' + value + '\')" title="编辑">编辑</button>';
-        <#--htm += '<a target="_blank" class="btn btn-sm btn-default" href="${ctx.contextPath}/article/detail?id=' + value + '" title="预览">预览</a>';-->
-        htm += '</div>';
+        if (value != '' && value != null) {
+            htm += value;
+        }
+        if (row.etime != '' && row.etime != null) {
+            htm += '~' + row.etime;
+        }
         return htm;
     }
 
@@ -122,16 +94,31 @@
         return '<a href="javascript:;" title="' + value + '" class="ellipsis-390" onclick="show(\'' + row.id + '\')">' + value + '</a>';
     }
 
-    $("#add").click(function () {
-        layer_show('新增', "${ctx.contextPath}/admin/project/edit2", "90%");
-    });
-
-    function edit(id) {
-        layer_show('编辑', "${ctx.contextPath}/admin/project/edit2?id=" + id, "90%");
+    function roadMapPercentage(value, row) {
+        return '<a href="javascript:;" title="' + value + '" onclick="showRoadMap(\'' + row.id + '\')">' + value + '</a>';
     }
 
+    function createDate(value, row) {
+        if (value == '') {
+            return '';
+        }
+        return value.substring(0, 16);
+    }
+
+    $("#add").click(function () {
+        layer_show('新增', "${ctx.contextPath}/admin/roadmap/edit", "50%");
+    });
+
     function show(id) {
-        layer_show('查看', "${ctx.contextPath}/admin/project/edit2?showFlag=1&id=" + id, "90%");
+        layer_show('查看', "${ctx.contextPath}/admin/roadmap/edit?showFlag=1&id=" + id, "50%");
+    }
+
+    function edit(id) {
+        layer_show('编辑', "${ctx.contextPath}/admin/roadmap/edit?id=" + id, "50%");
+    }
+
+    function showRoadMap(id) {
+        layer_show('查看', "${ctx.contextPath}/admin/cms/articleListRoadMap?roadMapId=" + id, "90%");
     }
 
     $('#searchBtn').click(function () {
@@ -140,7 +127,7 @@
 
     function reload() {
         $("#table-pagination").bootstrapTable('refresh', {
-            url: "${ctx.contextPath}/admin/project/data?" + $("#searchform").serialize()
+            url: "${ctx.contextPath}/admin/roadmap/data?" + $("#searchform").serialize()
         });
     }
 </script>

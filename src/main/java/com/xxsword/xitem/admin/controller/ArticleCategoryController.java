@@ -41,6 +41,11 @@ public class ArticleCategoryController extends BaseCategoryController {
         return "/admin/category/article/list";
     }
 
+    @RequestMapping("categoryListLevel")
+    public String categoryListLevel() {
+        return "/admin/category/article/listlevel";
+    }
+
     /**
      * 右侧分类表
      * 根据分类id，获取该分类下一级的所有分类信息
@@ -52,6 +57,15 @@ public class ArticleCategoryController extends BaseCategoryController {
     @ResponseBody
     public RestPaging pageById(HttpServletRequest request, Page<Category> page, CategoryDto categoryDto) {
         categoryDto.setCategoryId(Constant.TASK_STATUS);
+        categoryDto.setFlag(false);
+        return super.pageByIdBase(page, categoryDto);
+    }
+
+    @RequestMapping("pageByIdLevel")
+    @ResponseBody
+    public RestPaging pageByIdLevel(HttpServletRequest request, Page<Category> page, CategoryDto categoryDto) {
+        categoryDto.setCategoryId(Constant.TASK_STATUS_LEVEL);
+        categoryDto.setFlag(false);
         return super.pageByIdBase(page, categoryDto);
     }
 

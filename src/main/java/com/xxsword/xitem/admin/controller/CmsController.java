@@ -12,6 +12,7 @@ import com.xxsword.xitem.admin.domain.cms.entity.ArticleUser;
 import com.xxsword.xitem.admin.domain.cms.vo.ArticleVO;
 import com.xxsword.xitem.admin.domain.project.dto.ProjectUserDto;
 import com.xxsword.xitem.admin.domain.project.entity.ProjectUser;
+import com.xxsword.xitem.admin.domain.project.entity.RoadMap;
 import com.xxsword.xitem.admin.domain.project.vo.AUVO;
 import com.xxsword.xitem.admin.domain.system.entity.UserInfo;
 import com.xxsword.xitem.admin.model.RestPaging;
@@ -21,8 +22,10 @@ import com.xxsword.xitem.admin.service.cms.ArticleDataService;
 import com.xxsword.xitem.admin.service.cms.ArticleService;
 import com.xxsword.xitem.admin.service.cms.ArticleUserService;
 import com.xxsword.xitem.admin.service.project.ProjectUserService;
+import com.xxsword.xitem.admin.service.project.RoadMapService;
 import com.xxsword.xitem.admin.utils.Utils;
 import io.swagger.v3.oas.annotations.Operation;
+import org.apache.commons.text.StringEscapeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -50,26 +53,79 @@ public class CmsController extends BaseController {
     private ProjectUserService projectUserService;
     @Autowired
     private ArticleUserService articleUserService;
+    @Autowired
+    private RoadMapService roadMapService;
 
     @RequestMapping("articleList")
-    public String recordList() {
+    public String articleList() {
         return "admin/cms/articlelist";
+    }
+
+    @RequestMapping("articlelistwiki")
+    public String articlelistwiki(HttpServletRequest request, Model model) {
+        ArticleDto articleDto = new ArticleDto();
+        articleDto.setAtype(2);
+        articleDto.setCurrent(1);
+        articleDto.setSize(500);// 只拿500篇文章
+        Page<Article> data = articleService.page(articleDto.toPage(), articleDto.toQuery());
+        List<Article> articleList = data.getRecords();
+        model.addAttribute("alist", articleList);
+
+        if (!articleList.isEmpty()) {
+            Article article = articleList.get(0);
+            model.addAttribute("articleId", article.getId());
+        }
+        return "admin/cms/articlelistwiki";
+    }
+
+    @RequestMapping("articleListRoadMap")
+    public String articleListRoadMap(String roadMapId, Model model) {
+        model.addAttribute("roadMapId", roadMapId);
+        return "admin/cms/articlelistroadmap";
+    }
+
+    @RequestMapping("articlelistwikishow")
+    public String articlelistwikishow(HttpServletRequest request, String id, Model model) {
+        if (StringUtils.isBlank(id)) {
+            return "admin/cms/articlelistwikishow";
+        }
+        Article article = articleService.getById(id);
+        ArticleData articleData = articleDataService.getById(article.getId());
+        model.addAttribute("article", article);
+        model.addAttribute("articleDataContent", StringEscapeUtils.unescapeHtml4(articleData.getContent()));
+        return "admin/cms/articlelistwikishow";
     }
 
     @RequestMapping("userListData1")
     @ResponseBody
     @Operation(summary = "项目任务", description = "项目任务")
-    public RestPaging<ArticleVO> recordListData(HttpServletRequest request, ArticleDto articleDto, Page<Article> page) {
+    public RestPaging<ArticleVO> userListData1(HttpServletRequest request, ArticleDto articleDto) {
         return pageArticleVO(request, articleDto, 1);
     }
 
     @RequestMapping("userListData2")
     @ResponseBody
     @Operation(summary = "待办任务", description = "待办任务")
-    public RestPaging<ArticleVO> userListData(HttpServletRequest request, ArticleDto articleDto) {
+    public RestPaging<ArticleVO> userListData2(HttpServletRequest request, ArticleDto articleDto) {
         return pageArticleVO(request, articleDto, 2);
     }
 
+    @RequestMapping("userListData3")
+    @ResponseBody
+    @Operation(summary = "里程碑相关任务", description = "里程碑相关任务")
+    public RestPaging<ArticleVO> userListData3(HttpServletRequest request, ArticleDto articleDto) {
+        if (StringUtils.isBlank(articleDto.getRoadMapId())) {
+            return new RestPaging<>(0, new ArrayList<>());
+        }
+        return pageArticleVO(request, articleDto, 3);
+    }
+
+    /**
+     * @param request
+     * @param articleDto
+     * @param type       1-项目任务 2-待办任务 3-里程碑相关任务
+     * @return
+     */
     private RestPaging<ArticleVO> pageArticleVO(HttpServletRequest request, ArticleDto articleDto, Integer type) {
         List<String> categoryIds = new ArrayList<>();
         if (StringUtils.isNotBlank(articleDto.getCategoryIds())) {
@@ -80,14 +136,20 @@ public class CmsController extends BaseController {
             articleDto.setCategoryAllIds(categoryIds);
         }
         UserInfo userInfo = Utils.getUserInfo(request);
-        List<ProjectUser> userList = new ArrayList<>();
+        List<ProjectUser> pIds = new ArrayList<>();
         if (type == 1) {
-            userList = projectUserService.listProjectUser(new ProjectUserDto((String) request.getSession().getAttribute(Constant.PROJECT_SELECT_ID_KEY), null));
+            articleDto.setAtype(1);
+            pIds = projectUserService.listProjectUser(new ProjectUserDto(Utils.getProjectId(request), null));
+            articleDto.setProjectIds(pIds.stream().map(ProjectUser::getPid).toList());
         }
         if (type == 2) {
-            userList = projectUserService.listProjectUser(new ProjectUserDto(null, userInfo.getId()));
+            articleDto.setAtype(1);
+            pIds = projectUserService.listProjectUser(new ProjectUserDto(null, userInfo.getId()));
+            articleDto.setProjectIds(pIds.stream().map(ProjectUser::getPid).toList());
         }
-        articleDto.setProjectIds(userList.stream().map(ProjectUser::getPid).toList());
+        if (type == 3) {
+            articleDto.setAtype(1);
+        }
         Page<Article> data = articleService.page(articleDto.toPage(), articleDto.toQuery());
         List<ArticleVO> voList = CmsConvert.INSTANCE.toArticleVO(data.getRecords());
         articleService.setArticleVOName(voList);
@@ -142,10 +204,11 @@ public class CmsController extends BaseController {
         List<Category> categoryList = categoryService.categoryC(Constant.TASK_STATUS);
         List<Category> categoryListLevel = categoryService.categoryC(Constant.TASK_STATUS_LEVEL);
         // 成员
-        String projectId = (String) request.getSession().getAttribute(Constant.PROJECT_SELECT_ID_KEY);
+        String projectId = Utils.getProjectId(request);
         if (StringUtils.isBlank(projectId)) {
             projectId = article.getPid();
         }
+        List<RoadMap> roadMapList = roadMapService.listRoadMap(projectId);
         List<ProjectUser> projectUserList = projectUserService.list(new ProjectUserDto(projectId, null).toQuery());
         projectUserService.setProjectUserUserName(projectUserList);
         List<ArticleUser> articleUsers = articleUserService.listArticleUserBy(id);
@@ -167,15 +230,31 @@ public class CmsController extends BaseController {
         model.addAttribute("article", article);
         model.addAttribute("categoryList", categoryList);// 任务状态
         model.addAttribute("categoryListLevel", categoryListLevel);// 优先级
+        model.addAttribute("roadMapList", roadMapList);// 里程碑
         model.addAttribute("voList", voList);// 项目成员
         model.addAttribute("showFlag", showFlag);
         return "/admin/cms/articleedit2";
     }
 
+    @RequestMapping("articleEdit3")
+    public String articleEdit3(HttpServletRequest request, String id, Model model) {
+        Article article = articleService.getById(id);
+        if (article == null) {
+            article = new Article();
+        } else {
+            ArticleData articleData = articleDataService.getById(id);
+            if (articleData != null) {
+                article.setArticleData(articleData);
+            }
+        }
+        model.addAttribute("article", article);
+        return "/admin/cms/articleeditwiki";
+    }
+
     @RequestMapping("articleSave")
     @ResponseBody
     public RestResult articleSave(HttpServletRequest request, Article article, ArticleData articleData, String userlists) {
-        String projectId = (String) request.getSession().getAttribute(Constant.PROJECT_SELECT_ID_KEY);
+        String projectId = Utils.getProjectId(request);
         if (StringUtils.isBlank(projectId)) {
             return RestResult.Fail("操作失败");
         }

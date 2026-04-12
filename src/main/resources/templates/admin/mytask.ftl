@@ -139,7 +139,7 @@
     }
 
     function projectName(value, row) {
-        return '<a href="javascript:;" title="' + value + '" class="ellipsis" onclick="showProjectName(\'' + row.id + '\')">' + value + '</a>';
+        return '<a href="javascript:;" title="' + value + '" class="ellipsis-390" onclick="showProjectName(\'' + row.id + '\')">' + value + '</a>';
     }
 
     function showProjectName(id) {
@@ -147,7 +147,7 @@
     }
 
     function title(value, row) {
-        return '<a href="javascript:;" title="' + value + '" class="ellipsis" onclick="show(\'' + row.id + '\')">' + value + '</a>';
+        return '<a href="javascript:;" title="' + value + '" class="ellipsis-390" onclick="show(\'' + row.id + '\')">' + value + '</a>';
     }
     function show(id) {
         layer_show('查看', "${ctx.contextPath}/admin/cms/articleEdit2?showFlag=1&id=" + id, "90%");

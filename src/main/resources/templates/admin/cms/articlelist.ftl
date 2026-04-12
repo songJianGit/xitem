@@ -2,17 +2,6 @@
 <html lang="zh">
 <head>
     <#include "../commons/head.ftl"/>
-    <link rel="stylesheet" href="${ctx.contextPath}/static/plugins/ztree-v3/css/zTreeStyle/zTreeStyle.css"
-          type="text/css">
-    <style>
-        .ellipsis {
-            display: block;
-            white-space: nowrap; /* 确保文本在一行内显示 */
-            overflow: hidden; /* 超出容器部分的文本隐藏 */
-            text-overflow: ellipsis; /* 使用打点表示被截断的文本 */
-            width: 390px;
-        }
-    </style>
 </head>
 <body>
 <div class="lyear-layout-web">
@@ -70,7 +59,7 @@
                                            data-side-pagination="server">
                                         <thead>
                                         <tr>
-                                            <th data-field="title" data-formatter="title">任务标题</th>
+                                            <th data-field="title" data-formatter="title">标题</th>
                                             <th data-field="users" data-formatter="users">任务成员</th>
                                             <th data-field="categoryName">任务状态</th>
                                             <th data-field="levelName">优先级</th>
@@ -92,16 +81,6 @@
 </div>
 <#include "../commons/js.ftl"/>
 <script type="text/javascript">
-    function pubFlag(value, row) {
-        if (value == '1') {
-            return '发布';
-        }
-        if (value == '0') {
-            return '未发布';
-        }
-        return '';
-    }
-
     function users(value, row) {
         if (value == '' || value == null) {
             return '';
@@ -125,7 +104,7 @@
     }
 
     function title(value, row) {
-        return '<a href="javascript:;" title="' + value + '" class="ellipsis" onclick="show(\'' + row.id + '\')">' + value + '</a>';
+        return '<a href="javascript:;" title="' + value + '" class="ellipsis-390" onclick="show(\'' + row.id + '\')">' + value + '</a>';
     }
 
     function createDate(value, row) {
