@@ -76,7 +76,7 @@ public class SystemController extends BaseController {
             switch (funId) {
                 case "2" -> page = "/admin/mytask";
                 case "4" -> page = httpRedirect(request, "/admin/system/userEditByUser");
-                case "5" -> page = "/admin/cms/articlelist";
+                case "5" -> page = httpRedirect(request, "/admin/project/projectView");
             }
 
             return page;

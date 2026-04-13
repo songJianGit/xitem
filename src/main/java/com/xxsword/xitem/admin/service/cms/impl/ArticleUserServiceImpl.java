@@ -11,6 +11,7 @@ import com.xxsword.xitem.admin.service.system.UserInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -41,6 +42,9 @@ public class ArticleUserServiceImpl extends ServiceImpl<ArticleUserMapper, Artic
 
     @Override
     public Map<String, List<ArticleUser>> mapArticleUser(List<String> aid) {
+        if (aid.isEmpty()) {
+            return new HashMap<>();
+        }
         LambdaQueryWrapper<ArticleUser> q = Wrappers.lambdaQuery();
         q.eq(ArticleUser::getStatus, 1);
         q.in(ArticleUser::getAid, aid);

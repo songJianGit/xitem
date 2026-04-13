@@ -12,6 +12,7 @@ public class CommentsVO {
     private String createUserId;
     private String createUserName;
     private String createUserNameFast;
+    private String createUserAvatar;
     @Schema(title = "评论内容", description = "评论内容")
     private String content;
 

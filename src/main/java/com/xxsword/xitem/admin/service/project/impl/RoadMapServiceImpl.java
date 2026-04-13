@@ -14,6 +14,7 @@ import com.xxsword.xitem.admin.service.project.RoadMapService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -35,6 +36,9 @@ public class RoadMapServiceImpl extends ServiceImpl<RoadMapMapper, RoadMap> impl
 
     @Override
     public List<RoadMap> setRoadMapPercentage(List<RoadMap> list) {
+        if (list.isEmpty()) {
+            return new ArrayList<>();
+        }
         List<String> roadMapIds = list.stream().map(RoadMap::getId).collect(Collectors.toList());
         ArticleDto articleDto = new ArticleDto();
         articleDto.setRoadMapIds(roadMapIds);

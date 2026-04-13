@@ -5,9 +5,11 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.xxsword.xitem.admin.domain.project.dto.ProjectUserDto;
 import com.xxsword.xitem.admin.domain.project.entity.ProjectUser;
+import com.xxsword.xitem.admin.domain.project.vo.PUVO;
 import com.xxsword.xitem.admin.mapper.project.ProjectUserMapper;
 import com.xxsword.xitem.admin.service.project.ProjectUserService;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -52,14 +54,42 @@ public class ProjectUserServiceImpl extends ServiceImpl<ProjectUserMapper, Proje
     @Override
     public void setProjectUserUserName(List<ProjectUser> projectUsers) {
         List<String> userIds = projectUsers.stream().map(ProjectUser::getUserId).collect(Collectors.toList());
-        List<UserInfo> userInfos = userInfoService.listByIds(userIds);
-        Map<String, UserInfo> userInfoMap = userInfos.stream().collect(Collectors.toMap(UserInfo::getId, Function.identity()));
-        for (ProjectUser projectUser : projectUsers) {
-            UserInfo userInfo = userInfoMap.get(projectUser.getUserId());
-            if (userInfo != null) {
-                projectUser.setUserName(userInfo.getUserName());
-                projectUser.setJobTitle(userInfo.getJobTitle());
+        if (!userIds.isEmpty()) {
+            List<UserInfo> userInfos = userInfoService.listByIds(userIds);
+            Map<String, UserInfo> userInfoMap = userInfos.stream().collect(Collectors.toMap(UserInfo::getId, Function.identity()));
+            for (ProjectUser projectUser : projectUsers) {
+                UserInfo userInfo = userInfoMap.get(projectUser.getUserId());
+                if (userInfo != null) {
+                    projectUser.setUserName(userInfo.getUserName());
+                    projectUser.setJobTitle(userInfo.getJobTitle());
+                }
             }
         }
     }
+
+    @Override
+    public List<PUVO> listProjectUser(List<UserInfo> userInfoList, Map<String, ProjectUser> projectUserIds, String projectId) {
+        List<PUVO> voList = new ArrayList<>();
+        for (UserInfo user : userInfoList) {
+            PUVO projectUserVO = new PUVO();
+            projectUserVO.setId(user.getId());
+            projectUserVO.setUserId(user.getId());
+            projectUserVO.setUserNameFast(user.getUserName().substring(0, 1));
+            projectUserVO.setUserName(user.getUserName());
+            projectUserVO.setAvatar(user.getAvatar());
+            projectUserVO.setPid(projectId);
+            projectUserVO.setJobTitle(user.getJobTitle());
+            if (projectUserIds == null || !projectUserIds.containsKey(user.getId())) {
+                projectUserVO.setReadFlag(1);
+                projectUserVO.setJoinFlag(false);
+            } else {
+                ProjectUser projectUser = projectUserIds.get(user.getId());
+                projectUserVO.setReadFlag(projectUser.getReadFlag());
+                projectUserVO.setJoinFlag(projectUserIds.containsKey(user.getId()));
+            }
+            voList.add(projectUserVO);
+        }
+        return voList;
+    }
+
 }

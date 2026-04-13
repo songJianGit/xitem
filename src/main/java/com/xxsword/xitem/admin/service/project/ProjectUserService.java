@@ -6,6 +6,8 @@ import java.util.Map;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.xxsword.xitem.admin.domain.project.dto.ProjectUserDto;
 import com.xxsword.xitem.admin.domain.project.entity.ProjectUser;
+import com.xxsword.xitem.admin.domain.project.vo.PUVO;
+import com.xxsword.xitem.admin.domain.system.entity.UserInfo;
 
 
 public interface ProjectUserService extends IService<ProjectUser> {
@@ -17,5 +19,7 @@ public interface ProjectUserService extends IService<ProjectUser> {
     ProjectUser getProjectUser(String projectId, String userId);
 
     void setProjectUserUserName(List<ProjectUser> projectUsers);
+
+    List<PUVO> listProjectUser(List<UserInfo> userInfoList, Map<String, ProjectUser> projectUserIds, String projectId);
 
 }

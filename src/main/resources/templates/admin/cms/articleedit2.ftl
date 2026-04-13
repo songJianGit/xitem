@@ -3,65 +3,7 @@
 <head>
     <#include "../commons/head.ftl"/>
     <link rel="stylesheet" type="text/css" href="${ctx.contextPath}/static/admin/commons/pm-user/pm.css">
-    <style>
-        .discuss-wrap { border: 1px solid #e8ecf1; border-radius: 6px; background: #fafbfc; margin-bottom: 107px;}
-        .discuss-head { padding: 12px 16px; border-bottom: 1px solid #e8ecf1; background: #fff; border-radius: 6px 6px 0 0; }
-        .discuss-body { padding: 16px;}
-        /* 底部固定评论条：预留高度由 JS 写入 --discuss-dock-pad，随底栏实际高度变化 */
-        :root { --discuss-dock-pad: 112px; }
-        body.discuss-dock-on {
-            padding-bottom: var(--discuss-dock-pad);
-            box-sizing: border-box;
-        }
-        /* 滚动进视野时避免贴底被底栏盖住（支持 :has 的浏览器） */
-        html:has(body.discuss-dock-on) {
-            scroll-padding-bottom: var(--discuss-dock-pad);
-        }
-        .discuss-dock {
-            position: fixed; left: 0; right: 0; bottom: 0; z-index: 1080;
-            background: #fff; border-top: 1px solid #dee2e6;
-            box-shadow: 0 -4px 18px rgba(0,0,0,.06);
-        }
-        .discuss-dock-inner { max-width: 100%; padding: 10px 16px 12px; }
-        .discuss-dock-collapsed {
-            display: flex; align-items: center; min-height: 44px; padding: 0 14px;
-            border: 1px solid #ced4da; border-radius: 22px; background: #f8f9fa;
-            cursor: text; color: #6c757d; font-size: 14px; user-select: none;
-        }
-        .discuss-dock-collapsed:hover { background: #eef1f4; border-color: #adb5bd; }
-        .discuss-dock-expanded { display: none; background: #fff; border-radius: 8px; }
-        .discuss-dock-expanded.is-visible { display: block; }
-        .discuss-reply-banner {
-            display: none; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px;
-            padding: 8px 10px; margin-bottom: 8px; font-size: 13px;
-            background: #e8eaf6; border: 1px solid #c5cae9; border-radius: 6px; color: #3949ab;
-        }
-        .discuss-reply-banner.is-visible { display: flex; }
-        .discuss-dock-expanded textarea { min-height: 96px; resize: vertical; }
-        .discuss-dock-toolbar { margin-top: 8px; }
-        .discuss-list { margin-top: 16px; }
-        .discuss-thread { padding: 14px 0; border-bottom: 1px solid #eef1f5; }
-        .discuss-thread:last-child { border-bottom: 0; padding-bottom: 0; }
-        .discuss-item { display: flex; gap: 12px; padding: 0; }
-        .discuss-avatar { flex: 0 0 40px; width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(135deg, #5c6bc0, #7986cb); color: #fff; font-size: 14px; font-weight: 600; display: flex; align-items: center; justify-content: center; }
-        .discuss-avatar-sm { flex: 0 0 32px; width: 32px; height: 32px; border-radius: 50%; color: #fff; font-size: 12px; font-weight: 600; display: flex; align-items: center; justify-content: center; }
-        .discuss-meta { font-size: 12px; color: #6c757d; margin-top: 2px; }
-        .discuss-content { margin-top: 6px; font-size: 14px; line-height: 1.6; color: #212529; word-break: break-word; }
-        .discuss-actions a { font-size: 12px; color: #5c6bc0; }
-        .discuss-actions a:hover { text-decoration: none; color: #3949ab; }
-        .discuss-replies { margin-top: 12px; margin-left: 52px; padding: 4px 0 2px 16px; border-left: 3px solid #dfe3ea; background: #fff; border-radius: 0 6px 6px 0; box-shadow: inset 0 0 0 1px #f0f2f5; }
-        .discuss-reply-row { display: flex; gap: 10px; padding: 12px 12px 12px 0; border-top: 1px solid #f1f3f6; }
-        .discuss-reply-row:first-child { border-top: 0; }
-        .discuss-reply-at { color: #5c6bc0; font-weight: 500; margin-right: 4px; }
-        .discuss-reply-meta { font-size: 12px; color: #868e96; }
-        .discuss-edit-banner {
-            display: none; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px;
-            padding: 8px 10px; margin-bottom: 8px; font-size: 13px;
-            background: #fff3cd; border: 1px solid #ffe69c; border-radius: 6px; color: #664d03;
-        }
-        .discuss-edit-banner.is-visible { display: flex; }
-        .discuss-readonly .discuss-reply-btn { pointer-events: none; opacity: 0.45; cursor: default; }
-    </style>
+    <link rel="stylesheet" type="text/css" href="${ctx.contextPath}/static/admin/commons/discuss/discuss.css">
     <style>
         .card {
             -webkit-box-shadow:none;
@@ -165,7 +107,7 @@
                 <div class="discuss-head d-flex align-items-center justify-content-between flex-wrap">
                     <div class="d-flex align-items-center">
                         <span class="font-weight-bold text-dark" style="font-size:15px;">讨论</span>
-                        <span class="badge badge-light text-muted border ml-2">示例：2 条主评</span>
+                        <span class="badge badge-light text-muted border ml-2">${commentsVOList?size} 条评论</span>
                     </div>
                     <button type="button" class="btn btn-sm btn-outline-secondary" onclick="discussDockReloadHtml()" title="刷新页面">
                         <i class="mdi mdi-refresh"></i> 刷新
@@ -176,7 +118,11 @@
                         <#list commentsVOList as item>
                             <div class="discuss-thread">
                                 <div class="discuss-item">
-                                    <div class="discuss-avatar">${item.createUserNameFast!}</div>
+                                    <#if item.createUserAvatar?? && item.createUserAvatar?trim?length gt 0>
+                                        <img class="discuss-avatar discuss-avatar-img" src="${ctx.contextPath}${item.createUserAvatar}" alt="${item.createUserName!'用户头像'}">
+                                    <#else>
+                                        <div class="discuss-avatar">${item.createUserNameFast!}</div>
+                                    </#if>
                                     <div class="flex-grow-1 min-w-0">
                                         <div class="d-flex flex-wrap align-items-baseline justify-content-between">
                                             <strong class="text-dark">${item.createUserName!}</strong>
@@ -200,7 +146,11 @@
                                         <div class="discuss-replies">
                                             <#list item.voList as ite>
                                             <div class="discuss-reply-row">
-                                                <div class="discuss-avatar-sm" style="background:linear-gradient(135deg,#00897b,#26a69a);">${ite.createUserNameFast!}</div>
+                                                <#if ite.createUserAvatar?? && ite.createUserAvatar?trim?length gt 0>
+                                                    <img class="discuss-avatar-sm discuss-avatar-img" src="${ctx.contextPath}${ite.createUserAvatar}" alt="${ite.createUserName!'用户头像'}">
+                                                <#else>
+                                                    <div class="discuss-avatar-sm discuss-avatar-sm-text">${ite.createUserNameFast!}</div>
+                                                </#if>
                                                 <div class="flex-grow-1 min-w-0">
                                                     <div class="d-flex flex-wrap align-items-baseline justify-content-between">
                                                     <span>

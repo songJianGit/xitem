@@ -63,7 +63,7 @@ public class CommentsServiceImpl extends ServiceImpl<CommentsMapper, Comments> i
         if (!userIds.isEmpty()) {
             LambdaQueryWrapper<UserInfo> user = Wrappers.lambdaQuery();
             user.in(UserInfo::getId, userIds);
-            user.select(UserInfo::getId, UserInfo::getUserName);
+            user.select(UserInfo::getId, UserInfo::getUserName, UserInfo::getAvatar);
             List<UserInfo> userInfoList = userInfoService.list(user);
             Map<String, UserInfo> userInfoMap = userInfoList.stream().collect(Collectors.toMap(UserInfo::getId, Function.identity()));
 
@@ -71,12 +71,14 @@ public class CommentsServiceImpl extends ServiceImpl<CommentsMapper, Comments> i
                 UserInfo u = userInfoMap.get(item.getCreateUserId());
                 item.setCreateUserName(u == null ? "" : u.getUserName());
                 item.setCreateUserNameFast(u == null ? "" : u.getUserName().substring(0, 1));
+                item.setCreateUserAvatar(u == null ? "" : u.getAvatar());
                 List<CommentsVO> list2 = item.getVoList();
                 if (list2 != null && !list2.isEmpty()) {
                     for (CommentsVO item2 : list2) {
                         UserInfo u2 = userInfoMap.get(item2.getCreateUserId());
                         item2.setCreateUserName(u2 == null ? "" : u2.getUserName());
                         item2.setCreateUserNameFast(u2 == null ? "" : u2.getUserName().substring(0, 1));
+                        item2.setCreateUserAvatar(u2 == null ? "" : u2.getAvatar());
                     }
                 }
             }

@@ -1,12 +1,15 @@
 package com.xxsword.xitem.admin.controller;
 
 import com.alibaba.fastjson2.JSONArray;
+import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.xxsword.xitem.admin.constant.Constant;
 import com.xxsword.xitem.admin.domain.project.convert.ProjectConvert;
 import com.xxsword.xitem.admin.domain.project.dto.ProjectDto;
 import com.xxsword.xitem.admin.domain.project.dto.ProjectUserDto;
 import com.xxsword.xitem.admin.domain.project.entity.Project;
 import com.xxsword.xitem.admin.domain.project.entity.ProjectUser;
+import com.xxsword.xitem.admin.domain.project.entity.RoadMap;
 import com.xxsword.xitem.admin.domain.project.vo.PUVO;
 import com.xxsword.xitem.admin.domain.project.vo.ProjectVO;
 import com.xxsword.xitem.admin.domain.system.entity.UserInfo;
@@ -14,6 +17,7 @@ import com.xxsword.xitem.admin.model.RestPaging;
 import com.xxsword.xitem.admin.model.RestResult;
 import com.xxsword.xitem.admin.service.project.ProjectService;
 import com.xxsword.xitem.admin.service.project.ProjectUserService;
+import com.xxsword.xitem.admin.service.project.RoadMapService;
 import com.xxsword.xitem.admin.service.system.UserInfoService;
 import com.xxsword.xitem.admin.utils.Utils;
 import jakarta.servlet.http.HttpServletRequest;
@@ -37,6 +41,8 @@ public class ProjectController extends BaseController {
     private ProjectUserService projectUserService;
     @Autowired
     private UserInfoService userInfoService;
+    @Autowired
+    private RoadMapService roadMapService;
 
     @RequestMapping("data")
     @ResponseBody
@@ -62,6 +68,32 @@ public class ProjectController extends BaseController {
         UserInfo userInfo = Utils.getUserInfo(request);
         List<Project> list = projectService.listProjectBy(dto, userInfo);
         return RestResult.OK(list);
+    }
+
+    @RequestMapping("projectView")
+    public String projectView(HttpServletRequest request, String projectId, Model model) {
+        if (StringUtils.isBlank(projectId)) {
+            projectId = Utils.getProjectId(request);
+        } else {
+            request.getSession().setAttribute(Constant.PROJECT_SELECT_ID_KEY, projectId);
+        }
+        Project project = projectService.getById(projectId);
+        List<RoadMap> roadMapList = roadMapService.listRoadMap(projectId);
+        roadMapService.setRoadMapPercentage(roadMapList);
+
+        List<PUVO> puvoList = new ArrayList<>();
+        List<ProjectUser> projectUserList = projectUserService.listProjectUser(new ProjectUserDto(projectId, null));
+        if (!projectUserList.isEmpty()) {
+            List<UserInfo> userInfos = userInfoService.listByIds(projectUserList.stream().map(ProjectUser::getUserId).toList());
+            Map<String, ProjectUser> projectUserIds = projectUserList.stream().collect(Collectors.toMap(ProjectUser::getUserId, Function.identity()));
+            puvoList = projectUserService.listProjectUser(userInfos, projectUserIds, projectId);
+        }
+
+        model.addAttribute("project", project);
+        model.addAttribute("projectContent", StringEscapeUtils.unescapeHtml4(project.getContent()));
+        model.addAttribute("roadMapList", roadMapList);
+        model.addAttribute("voList", puvoList);
+        return "/admin/project/projectview";
     }
 
     @RequestMapping("projectIndex")
@@ -94,27 +126,7 @@ public class ProjectController extends BaseController {
             List<ProjectUser> projectUserList = projectUserService.list(new ProjectUserDto(id, null).toQuery());// 项目内成员
             projectUserIds = projectUserList.stream().collect(Collectors.toMap(ProjectUser::getUserId, Function.identity()));
         }
-        List<PUVO> voList = new ArrayList<>();
-        for (UserInfo user : userInfos) {
-            PUVO projectUserVO = new PUVO();
-            projectUserVO.setId(user.getId());
-            projectUserVO.setUserId(user.getId());
-            projectUserVO.setUserNameFast(user.getUserName().substring(0, 1));
-            projectUserVO.setUserName(user.getUserName());
-            projectUserVO.setAvatar(user.getAvatar());
-            projectUserVO.setPid(id);
-            projectUserVO.setJobTitle(user.getJobTitle());
-            if (projectUserIds == null || !projectUserIds.containsKey(user.getId())) {
-                projectUserVO.setReadFlag(1);
-                projectUserVO.setJoinFlag(false);
-            } else {
-                ProjectUser projectUser = projectUserIds.get(user.getId());
-                projectUserVO.setReadFlag(projectUser.getReadFlag());
-                projectUserVO.setJoinFlag(projectUserIds.containsKey(user.getId()));
-            }
-            voList.add(projectUserVO);
-        }
-        model.addAttribute("voList", voList);
+        model.addAttribute("voList", projectUserService.listProjectUser(userInfos, projectUserIds, id));
         model.addAttribute("project", project);
         model.addAttribute("showFlag", showFlag);
         return "/admin/project/edit2";

@@ -175,7 +175,7 @@
                         // 获取当前选中的值 (单选是字符串，多选是数组)
                         let selectedVal = $(this).val();
                         console.log('projectId:', selectedVal);
-                        window.location.href = "${ctx.contextPath}/admin/system/index?mclick=1880490902526779393&funId=5&projectId=" + selectedVal;
+                        window.location.href = "${ctx.contextPath}/admin/system/index?mclick=7&funId=5&projectId=" + selectedVal;
                     });
                 } else {
                     layer.msg(data.msg)
