@@ -89,7 +89,8 @@
         for (let i = 0; i < value.length; i++) {
             names.push(value[i].userName);
         }
-        return names.join("，");
+        let nameStr = names.join("，");
+        return '<div title="' + nameStr + '" class="ellipsis-300">' + nameStr + '</div>';
     }
 
     function plantime(value, row) {

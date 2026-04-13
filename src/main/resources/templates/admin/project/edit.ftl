@@ -83,7 +83,7 @@
         menubar: false, // 隐藏菜单栏
         plugins: ['image', 'code', 'table', 'lists'],
         image_uploadtab: true,
-        toolbar: 'undo redo | styles | bold italic strikethrough backcolor forecolor | alignleft aligncenter alignright alignjustify | table bullist numlist | outdent indent | image | removeformat | code',
+        toolbar: 'undo redo | styles | bold italic strikethrough forecolor | table bullist numlist | image | removeformat | code',
         file_picker_callback: (callback, value, meta) => {// 上传函数（图片，视频，文件）
             let filetype = 0;
             switch (meta.filetype) {

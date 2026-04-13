@@ -5,6 +5,9 @@ package com.xxsword.xitem.admin.constant;
  */
 public enum RoleSetting {
 
+    /**
+     * 原本想要定义一个只读角色，但是后来设计是 放到项目里面去控制只读
+     */
     ROLE_ADMIN("1", "管理员"),
     ROLE_USER("2042216182987739139", "普通用户");
 

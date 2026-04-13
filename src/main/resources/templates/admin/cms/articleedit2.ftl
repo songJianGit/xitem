@@ -3,8 +3,73 @@
 <head>
     <#include "../commons/head.ftl"/>
     <link rel="stylesheet" type="text/css" href="${ctx.contextPath}/static/admin/commons/pm-user/pm.css">
+    <style>
+        .discuss-wrap { border: 1px solid #e8ecf1; border-radius: 6px; background: #fafbfc; margin-bottom: 107px;}
+        .discuss-head { padding: 12px 16px; border-bottom: 1px solid #e8ecf1; background: #fff; border-radius: 6px 6px 0 0; }
+        .discuss-body { padding: 16px;}
+        /* 底部固定评论条：预留高度由 JS 写入 --discuss-dock-pad，随底栏实际高度变化 */
+        :root { --discuss-dock-pad: 112px; }
+        body.discuss-dock-on {
+            padding-bottom: var(--discuss-dock-pad);
+            box-sizing: border-box;
+        }
+        /* 滚动进视野时避免贴底被底栏盖住（支持 :has 的浏览器） */
+        html:has(body.discuss-dock-on) {
+            scroll-padding-bottom: var(--discuss-dock-pad);
+        }
+        .discuss-dock {
+            position: fixed; left: 0; right: 0; bottom: 0; z-index: 1080;
+            background: #fff; border-top: 1px solid #dee2e6;
+            box-shadow: 0 -4px 18px rgba(0,0,0,.06);
+        }
+        .discuss-dock-inner { max-width: 100%; padding: 10px 16px 12px; }
+        .discuss-dock-collapsed {
+            display: flex; align-items: center; min-height: 44px; padding: 0 14px;
+            border: 1px solid #ced4da; border-radius: 22px; background: #f8f9fa;
+            cursor: text; color: #6c757d; font-size: 14px; user-select: none;
+        }
+        .discuss-dock-collapsed:hover { background: #eef1f4; border-color: #adb5bd; }
+        .discuss-dock-expanded { display: none; background: #fff; border-radius: 8px; }
+        .discuss-dock-expanded.is-visible { display: block; }
+        .discuss-reply-banner {
+            display: none; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px;
+            padding: 8px 10px; margin-bottom: 8px; font-size: 13px;
+            background: #e8eaf6; border: 1px solid #c5cae9; border-radius: 6px; color: #3949ab;
+        }
+        .discuss-reply-banner.is-visible { display: flex; }
+        .discuss-dock-expanded textarea { min-height: 96px; resize: vertical; }
+        .discuss-dock-toolbar { margin-top: 8px; }
+        .discuss-list { margin-top: 16px; }
+        .discuss-thread { padding: 14px 0; border-bottom: 1px solid #eef1f5; }
+        .discuss-thread:last-child { border-bottom: 0; padding-bottom: 0; }
+        .discuss-item { display: flex; gap: 12px; padding: 0; }
+        .discuss-avatar { flex: 0 0 40px; width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(135deg, #5c6bc0, #7986cb); color: #fff; font-size: 14px; font-weight: 600; display: flex; align-items: center; justify-content: center; }
+        .discuss-avatar-sm { flex: 0 0 32px; width: 32px; height: 32px; border-radius: 50%; color: #fff; font-size: 12px; font-weight: 600; display: flex; align-items: center; justify-content: center; }
+        .discuss-meta { font-size: 12px; color: #6c757d; margin-top: 2px; }
+        .discuss-content { margin-top: 6px; font-size: 14px; line-height: 1.6; color: #212529; word-break: break-word; }
+        .discuss-actions a { font-size: 12px; color: #5c6bc0; }
+        .discuss-actions a:hover { text-decoration: none; color: #3949ab; }
+        .discuss-replies { margin-top: 12px; margin-left: 52px; padding: 4px 0 2px 16px; border-left: 3px solid #dfe3ea; background: #fff; border-radius: 0 6px 6px 0; box-shadow: inset 0 0 0 1px #f0f2f5; }
+        .discuss-reply-row { display: flex; gap: 10px; padding: 12px 12px 12px 0; border-top: 1px solid #f1f3f6; }
+        .discuss-reply-row:first-child { border-top: 0; }
+        .discuss-reply-at { color: #5c6bc0; font-weight: 500; margin-right: 4px; }
+        .discuss-reply-meta { font-size: 12px; color: #868e96; }
+        .discuss-edit-banner {
+            display: none; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px;
+            padding: 8px 10px; margin-bottom: 8px; font-size: 13px;
+            background: #fff3cd; border: 1px solid #ffe69c; border-radius: 6px; color: #664d03;
+        }
+        .discuss-edit-banner.is-visible { display: flex; }
+        .discuss-readonly .discuss-reply-btn { pointer-events: none; opacity: 0.45; cursor: default; }
+    </style>
+    <style>
+        .card {
+            -webkit-box-shadow:none;
+            box-shadow:none;
+        }
+    </style>
 </head>
-<body class="card">
+<body class="card<#if showFlag?? && showFlag==1> discuss-readonly<#else> discuss-dock-on</#if>">
 <div class="card-body">
     <form action="#!" method="post" id="articleform" class="row">
         <input type="hidden" name="id" value="${article.id!}"/>
@@ -46,7 +111,7 @@
                         <div class="input-group-prepend">
                             <span class="input-group-text">优先级</span>
                         </div>
-                        <select name="levelId" class="form-control">
+                        <select name="levelId" class="form-control selectpicker" data-title="未指定优先级">
                             <#list categoryListLevel as item>
                                 <option value="${item.id!}"
                                         <#if article.levelId??><#if article.levelId==item.id>selected</#if></#if>>
@@ -95,6 +160,81 @@
                     <button type="button" class="btn btn-default" id="saveBtn2">保存并关闭</button>
                 </div>
             </#if>
+            <hr class="my-4"/>
+            <div class="discuss-wrap">
+                <div class="discuss-head d-flex align-items-center justify-content-between flex-wrap">
+                    <div class="d-flex align-items-center">
+                        <span class="font-weight-bold text-dark" style="font-size:15px;">讨论</span>
+                        <span class="badge badge-light text-muted border ml-2">示例：2 条主评</span>
+                    </div>
+                    <button type="button" class="btn btn-sm btn-outline-secondary" onclick="discussDockReloadHtml()" title="刷新页面">
+                        <i class="mdi mdi-refresh"></i> 刷新
+                    </button>
+                </div>
+                <div class="discuss-body">
+                    <div class="discuss-list mt-3">
+                        <#list commentsVOList as item>
+                            <div class="discuss-thread">
+                                <div class="discuss-item">
+                                    <div class="discuss-avatar">${item.createUserNameFast!}</div>
+                                    <div class="flex-grow-1 min-w-0">
+                                        <div class="d-flex flex-wrap align-items-baseline justify-content-between">
+                                            <strong class="text-dark">${item.createUserName!}</strong>
+                                            <span class="discuss-meta">${item.createDate!}</span>
+                                        </div>
+                                        <div class="discuss-content">${item.content!}</div>
+                                        <div class="discuss-actions mt-1">
+                                            <a href="javascript:;" class="discuss-reply-btn" data-reply-author="${item.createUserName!}" data-reply-author-id="${item.id!}"><span class="mdi mdi-reply"></span>回复</a>
+                                            <#if item.createUserId==Session.puser.id>
+<#--                                                <span class="text-muted mx-1">·</span>-->
+                                                <a href="javascript:;" class="discuss-edit-btn"
+                                                   data-comment-id="${item.id!}"
+                                                   data-comment-type="1"
+                                                   data-comment-content="${item.content!?html}"><span class="mdi mdi-square-edit-outline"></span>编辑</a>
+<#--                                            <span class="text-muted mx-1">·</span>-->
+                                            <a href="javascript:;" class="discuss-del-btn"
+                                               data-comment-id="${item.id!}"><span class="mdi mdi-delete-outline"></span>删除</a>
+                                            </#if>
+                                        </div>
+                                        <#if item.voList?? && (item.voList?size>0)>
+                                        <div class="discuss-replies">
+                                            <#list item.voList as ite>
+                                            <div class="discuss-reply-row">
+                                                <div class="discuss-avatar-sm" style="background:linear-gradient(135deg,#00897b,#26a69a);">${ite.createUserNameFast!}</div>
+                                                <div class="flex-grow-1 min-w-0">
+                                                    <div class="d-flex flex-wrap align-items-baseline justify-content-between">
+                                                    <span>
+                                                        <strong class="text-dark">${ite.createUserName!}</strong>
+                                                    </span>
+                                                        <span class="discuss-reply-meta">${ite.createDate!}</span>
+                                                    </div>
+                                                    <div class="discuss-content" style="margin-top:4px;font-size:13px;">${ite.content!}</div>
+                                                    <div class="discuss-actions mt-1">
+                                                        <a href="javascript:;" class="discuss-reply-btn" data-reply-author="${ite.createUserName!}" data-reply-author-id="${item.id!}"><span class="mdi mdi-reply"></span>回复</a>
+                                                        <#if ite.createUserId==Session.puser.id>
+<#--                                                            <span class="text-muted mx-1">·</span>-->
+                                                            <a href="javascript:;" class="discuss-edit-btn"
+                                                               data-comment-id="${ite.id!}"
+                                                               data-comment-type="2"
+                                                               data-comment-parent-id="${ite.comId!}"
+                                                               data-comment-content="${ite.content!?html}"><span class="mdi mdi-square-edit-outline"></span>编辑</a>
+<#--                                                            <span class="text-muted mx-1">·</span>-->
+                                                            <a href="javascript:;" class="discuss-del-btn"
+                                                               data-comment-id="${ite.id!}"><span class="mdi mdi-delete-outline"></span>删除</a>
+                                                        </#if>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            </#list>
+                                        </div>
+                                        </#if>
+                                    </div>
+                                </div>
+                            </div>
+                        </#list>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <div class="col-4 pl-lg-4">
@@ -141,7 +281,35 @@
             </div>
         </div>
     </form>
-
+</div>
+<div id="discussDock" class="discuss-dock" aria-label="发表评论">
+    <div class="discuss-dock-inner">
+        <div id="discussDockCollapsed" class="discuss-dock-collapsed" role="button" tabindex="0">
+            <span>写评论…</span>
+        </div>
+        <div id="discussDockExpanded" class="discuss-dock-expanded">
+            <div id="discussEditBanner" class="discuss-edit-banner" aria-live="polite">
+                <span>正在编辑评论</span>
+                <button type="button" class="btn btn-sm btn-link p-0" id="discussCancelEditBtn" title="取消编辑">取消编辑</button>
+            </div>
+            <div id="discussReplyBanner" class="discuss-reply-banner" aria-live="polite">
+                <span>回复 <strong id="discussReplyAuthorDisplay"></strong></span>
+                <button type="button" class="btn btn-sm btn-link p-0 text-secondary" id="discussCancelReplyBtn" title="改为主评论">取消回复</button>
+            </div>
+            <label for="discussInput" class="sr-only">评论内容</label>
+            <textarea id="discussInput" class="form-control" maxlength="2000" placeholder="写下你的想法…"></textarea>
+            <div class="discuss-dock-toolbar d-flex justify-content-between align-items-center flex-wrap">
+                <small class="text-muted">xitem</small>
+                <div>
+                    <button type="button" class="btn btn-sm btn-light border mr-1" id="discussCollapseBtn">收起</button>
+<#--                    <button type="button" class="btn btn-sm btn-light border mr-1" id="discussClearBtn">清空</button>-->
+                    <button type="button" class="btn btn-sm btn-primary" id="discussSendBtn">
+                        <i class="mdi mdi-send mr-1"></i>发表
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 <#include "../commons/js.ftl"/>
 <script type="text/javascript" src="${ctx.contextPath}/static/admin/commons/pm-user/pm.js"></script>
@@ -153,6 +321,330 @@
     $("button").attr("disabled", "disabled");
     $("select").attr("disabled", "disabled");
     </#if>
+
+    function discussDockReloadHtml(){
+        window.location.reload();
+    }
+
+    (function discussDock() {
+        var $body = $('body');
+        var $dock = $('#discussDock');
+        var $collapsed = $('#discussDockCollapsed');
+        var $expanded = $('#discussDockExpanded');
+        var $editBanner = $('#discussEditBanner');
+        var $banner = $('#discussReplyBanner');
+        var $authorDisplay = $('#discussReplyAuthorDisplay');
+        var replyAuthor = '';
+        var replyAuthorId = '';
+        var editCommentId = '';
+        var editCommentType = '';
+        var editCommentParentId = '';
+        var DOCK_PAD_GAP = 24;
+
+        function updateDiscussDockPad() {
+            if (!$dock.length) {
+                return;
+            }
+            var el = $dock[0];
+            var h = el.getBoundingClientRect().height;
+            var pad = Math.ceil(h) + DOCK_PAD_GAP;
+            document.documentElement.style.setProperty('--discuss-dock-pad', pad + 'px');
+        }
+
+        function updateDiscussDockPadSoon() {
+            window.requestAnimationFrame(function () {
+                window.requestAnimationFrame(updateDiscussDockPad);
+            });
+        }
+
+        function setDockOpen(open) {
+            if (open) {
+                $expanded.addClass('is-visible');
+                $collapsed.hide();
+                $body.addClass('discuss-dock-open');
+            } else {
+                $expanded.removeClass('is-visible');
+                $collapsed.show();
+                $body.removeClass('discuss-dock-open');
+            }
+            updateDiscussDockPadSoon();
+        }
+
+        function setReplyTarget(name, authorId) {
+            replyAuthor = (name || '').trim();
+            replyAuthorId = (authorId || '').trim();
+            if (replyAuthor) {
+                $authorDisplay.text(replyAuthor);
+                $banner.addClass('is-visible');
+            } else {
+                $banner.removeClass('is-visible');
+                $authorDisplay.text('');
+            }
+            updateDiscussDockPadSoon();
+        }
+
+        function setEditTarget(commentId, commentType, parentId) {
+            editCommentId = (commentId || '').trim();
+            editCommentType = (commentType || '').trim();
+            editCommentParentId = (parentId || '').trim();
+            if (editCommentId) {
+                $editBanner.addClass('is-visible');
+                $('#discussSendBtn').html('<i class="mdi mdi-check mr-1"></i>保存修改');
+            } else {
+                $editBanner.removeClass('is-visible');
+                $('#discussSendBtn').html('<i class="mdi mdi-send mr-1"></i>发表');
+            }
+            updateDiscussDockPadSoon();
+        }
+
+        function getDiscussContent() {
+            var editor = tinymce.get('discussInput');
+            if (editor) {
+                return (editor.getContent({format: 'raw'}) || '').trim();
+            }
+            return ($('#discussInput').val() || '').trim();
+        }
+
+        function setDiscussContent(content) {
+            var text = content || '';
+            var editor = tinymce.get('discussInput');
+            if (editor) {
+                editor.setContent(text);
+            }
+            $('#discussInput').val(text);
+        }
+
+        if ($dock.length) {
+            $(window).on('resize.discussDock', updateDiscussDockPadSoon);
+            if (window.ResizeObserver) {
+                var ro = new ResizeObserver(function () {
+                    updateDiscussDockPadSoon();
+                });
+                ro.observe($dock[0]);
+            }
+            updateDiscussDockPadSoon();
+        }
+
+        function openForMainComment() {
+            setReplyTarget('','');
+            setEditTarget('', '', '');
+            setDockOpen(true);
+            $('#discussInput').trigger('focus');
+        }
+
+        function openForReply(author, authorId) {
+            setEditTarget('', '', '');
+            setReplyTarget(author, authorId);
+            setDockOpen(true);
+            $('#discussInput').trigger('focus');
+        }
+
+        function openForEdit(commentId, commentType, parentId, content) {
+            setReplyTarget('', '');
+            setEditTarget(commentId, commentType, parentId);
+            setDockOpen(true);
+            setDiscussContent(content);
+            $('#discussInput').trigger('focus');
+        }
+
+        function collapseDock() {
+            setDockOpen(false);
+            setReplyTarget('','');
+            setEditTarget('', '', '');
+            setDiscussContent('');
+        }
+
+        $collapsed.on('click', function () {
+            openForMainComment();
+        });
+        $collapsed.on('keydown', function (e) {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                openForMainComment();
+            }
+        });
+
+        $(document).on('click', '.discuss-reply-btn', function (e) {
+            e.preventDefault();
+            var author = $(this).data('reply-author');
+            var authorId = $(this).data('reply-author-id');
+            if (author) {
+                openForReply(String(author), String(authorId));
+            }
+        });
+
+        $(document).on('click', '.discuss-edit-btn', function (e) {
+            e.preventDefault();
+            var commentId = $(this).data('comment-id');
+            var commentType = $(this).data('comment-type');
+            var parentId = $(this).data('comment-parent-id');
+            var content = $(this).data('comment-content');
+            if (!commentId) {
+                layer.msg('评论ID缺失，无法编辑');
+                return;
+            }
+            openForEdit(String(commentId), String(commentType || ''), String(parentId || ''), String(content || ''));
+        });
+
+        $(document).on('click', '.discuss-del-btn', function (e) {
+            e.preventDefault();
+            var commentId = $(this).data('comment-id');
+            if (!commentId) {
+                layer.msg('评论ID缺失，无法删除');
+                return;
+            }
+            layer.confirm('确认删除该评论吗？', {icon: 3, title: '提示'}, function (index) {
+                $.ajax({
+                    url: "${ctx.contextPath}/admin/comments/delById",
+                    data: {
+                        id: commentId
+                    },
+                    success: function (d) {
+                        layer.msg(d.msg);
+                        setTimeout(function () {
+                            window.location.reload();
+                        }, 500);
+                    }
+                });
+                layer.close(index);
+            });
+        });
+
+        $('#discussCancelReplyBtn').on('click', function () {
+            setReplyTarget('','');
+        });
+        $('#discussCancelEditBtn').on('click', function () {
+            setEditTarget('', '', '');
+            setDiscussContent('');
+        });
+
+        $('#discussCollapseBtn').on('click', function () {
+            collapseDock();
+        });
+
+        $('#discussClearBtn').on('click', function () {
+            setDiscussContent('');
+        });
+
+        $('#discussSendBtn').on('click', function () {
+            let t = getDiscussContent();
+            if (!t) {
+                layer.msg('请先输入评论内容');
+                return;
+            }
+            let dataJson = {};
+            if (editCommentId) {
+                dataJson = {
+                    id: editCommentId,
+                    aid: '${article.id!}',
+                    content: t,
+                    type: Number(editCommentType || 1)
+                };
+                if (Number(editCommentType || 1) === 2) {
+                    dataJson.comId = editCommentParentId;
+                }
+            } else if (replyAuthor) {
+                // layer.msg('界面预览：将作为对「' + replyAuthor + '」的回复提交（接口待对接）');
+                dataJson = {
+                    aid: '${article.id!}',
+                    content: t,
+                    type: 2,
+                    comId: replyAuthorId
+                };
+            } else {
+                // layer.msg('界面预览：将作为主评论提交（接口待对接）');
+                dataJson = {
+                    aid: '${article.id!}',
+                    content: t,
+                    type: 1
+                };
+            }
+            $.ajax({
+                url: "${ctx.contextPath}/admin/comments/save",
+                type: "post",
+                data: dataJson,
+                success: function (d) {
+                    layer.msg(d.msg);
+                    setTimeout(function (){
+                        window.location.reload();
+                    }, 500);
+                }
+            });
+        });
+    })();
+
+    tinymce.init({
+        <#if showFlag?? && showFlag==1>readonly: true, </#if>
+        selector: '#discussInput', //容器，可使用css选择器
+        relative_urls: false,// 禁用相对路径，强制使用绝对路径
+        remove_script_host: true,// 不保留协议和主机名
+        convert_urls: true,// 将相对路径转换为绝对路径
+        language: 'zh_CN',
+        height: 500, //编辑器高度
+        resize: false, // 禁用缩放按钮
+        content_style: "img {max-width:100%;}",// 图片额外样式控制
+        branding: false,// 隐藏品牌信息和"Upgrade"图标
+        menubar: false, // 隐藏菜单栏
+        plugins: ['image', 'code', 'table', 'lists'],
+        image_uploadtab: true,
+        toolbar: 'bold italic strikethrough | bullist numlist | image | removeformat | code',
+        file_picker_callback: (callback, value, meta) => {// 上传函数（图片，视频，文件）
+            let filetype = 0;
+            switch (meta.filetype) {
+                case 'image':
+                    // filetype = '.jpg, .jpeg, .png, .gif, .webp';
+                    filetype = 1;
+                    break;
+                case 'media':
+                    // filetype = '.mp3, .mp4';
+                    filetype = 2;
+                    break;
+                case 'file':
+                    // filetype = 'file';
+                    filetype = 3;
+                    break;
+                default:
+                    filetype = 0;
+            }
+            let index = layer.open({
+                type: 2,
+                area: ['79%', ($(window).height() - 50) + 'px'],
+                shadeClose: false,// 点击遮罩区域，关闭弹层
+                title: '文件',
+                content: '${ctx.contextPath}/admin/file/fileTable?selectFlag=1',
+                end: function () {
+                    let fileWebPath = window.fileWebPath; // 从全局变量中获取数据
+                    let fileName = window.fileName; // 从全局变量中获取数据
+                    if (fileWebPath) {
+                        let json = {};
+                        switch (filetype) {
+                            case 1:
+                                json = {
+                                    alt: fileName
+                                };
+                                break;
+                            case 2:
+                                // { source2: 'alt.ogg', poster: 'image.jpg' }
+                                json = {
+                                    source2: fileWebPath,
+                                    poster: "javascript:;"
+                                }
+                                break;
+                            case 3:
+                                json = {
+                                    text: fileName
+                                };
+                                break;
+                            default:
+                                filetype = 0;
+                        }
+                        callback(fileWebPath, json);
+                    }
+                }
+            });
+        }
+    });
+
 
     $('#saveBtn').click(function () {
         save(1);
@@ -200,14 +692,14 @@
         remove_script_host: true,// 不保留协议和主机名
         convert_urls: true,// 将相对路径转换为绝对路径
         language: 'zh_CN',
-        height: 559, //编辑器高度
+        height: 509, //编辑器高度
         resize: false, // 禁用缩放按钮
         content_style: "img {max-width:100%;}",// 图片额外样式控制
         branding: false,// 隐藏品牌信息和"Upgrade"图标
         menubar: false, // 隐藏菜单栏
         plugins: ['image', 'code', 'table', 'lists'],
         image_uploadtab: true,
-        toolbar: 'undo redo | styles | bold italic strikethrough backcolor forecolor | alignleft aligncenter alignright alignjustify | table bullist numlist | outdent indent | image | removeformat | code',
+        toolbar: 'undo redo | styles | bold italic strikethrough forecolor | table bullist numlist | image | removeformat | code',
         file_picker_callback: (callback, value, meta) => {// 上传函数（图片，视频，文件）
             let filetype = 0;
             switch (meta.filetype) {

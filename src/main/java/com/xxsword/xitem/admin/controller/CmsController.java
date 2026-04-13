@@ -10,6 +10,7 @@ import com.xxsword.xitem.admin.domain.cms.entity.Article;
 import com.xxsword.xitem.admin.domain.cms.entity.ArticleData;
 import com.xxsword.xitem.admin.domain.cms.entity.ArticleUser;
 import com.xxsword.xitem.admin.domain.cms.vo.ArticleVO;
+import com.xxsword.xitem.admin.domain.cms.vo.CommentsVO;
 import com.xxsword.xitem.admin.domain.project.dto.ProjectUserDto;
 import com.xxsword.xitem.admin.domain.project.entity.ProjectUser;
 import com.xxsword.xitem.admin.domain.project.entity.RoadMap;
@@ -21,6 +22,7 @@ import com.xxsword.xitem.admin.service.category.CategoryService;
 import com.xxsword.xitem.admin.service.cms.ArticleDataService;
 import com.xxsword.xitem.admin.service.cms.ArticleService;
 import com.xxsword.xitem.admin.service.cms.ArticleUserService;
+import com.xxsword.xitem.admin.service.cms.CommentsService;
 import com.xxsword.xitem.admin.service.project.ProjectUserService;
 import com.xxsword.xitem.admin.service.project.RoadMapService;
 import com.xxsword.xitem.admin.utils.Utils;
@@ -55,6 +57,8 @@ public class CmsController extends BaseController {
     private ArticleUserService articleUserService;
     @Autowired
     private RoadMapService roadMapService;
+    @Autowired
+    private CommentsService commentsService;
 
     @RequestMapping("articleList")
     public String articleList() {
@@ -226,12 +230,14 @@ public class CmsController extends BaseController {
             auvo.setJoinFlag(articleUsersUserIds.contains(item.getUserId()));
             voList.add(auvo);
         }
-
+        // 评论
+        List<CommentsVO> commentsVOList = commentsService.listCommentsVO(id);
         model.addAttribute("article", article);
         model.addAttribute("categoryList", categoryList);// 任务状态
         model.addAttribute("categoryListLevel", categoryListLevel);// 优先级
         model.addAttribute("roadMapList", roadMapList);// 里程碑
         model.addAttribute("voList", voList);// 项目成员
+        model.addAttribute("commentsVOList", commentsVOList);// 评论
         model.addAttribute("showFlag", showFlag);
         return "/admin/cms/articleedit2";
     }
