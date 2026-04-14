@@ -137,13 +137,15 @@
 <#include "../commons/js.ftl"/>
 <script type="text/javascript" src="${ctx.contextPath}/static/admin/commons/pm-user/pm.js"></script>
 <script type="text/javascript">
-    <@projectReadFlagTag readFlag=readFlag!>
+    <@projectReadFlagOutTag readFlag=readFlag!>
+    <#if flag==0>
     // 禁用页面的input，富文本编辑器，按钮
     $("input").attr("disabled", "disabled");
     $("textarea").attr("disabled", "disabled");
     $("button").attr("disabled", "disabled");
     $("select").attr("disabled", "disabled");
-    </@projectReadFlagTag>
+    </#if>
+    </@projectReadFlagOutTag>
 
     $('#saveBtn').click(function () {
         save(1);

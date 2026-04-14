@@ -121,10 +121,6 @@
         return htm;
     }
 
-    // function title(value, row) {
-    //     return '<a href="javascript:;" title="' + value + '" class="ellipsis-390" onclick="show(\'' + row.id + '\')">' + value + '</a>';
-    // }
-
     function projectName(value, row) {
         return '<a href="${ctx.contextPath}/admin/system/index?mclick=7&funId=5&projectId='+row.id+'" title="' + value + '" class="ellipsis-390">' + value + '</a>';
     }
@@ -135,10 +131,6 @@
 
     function edit(id) {
         layer_show('编辑', "${ctx.contextPath}/admin/project/edit2?id=" + id, "90%");
-    }
-
-    function show(id) {
-        layer_show('查看', "${ctx.contextPath}/admin/project/edit2?readFlag=0&id=" + id, "90%");
     }
 
     $('#searchBtn').click(function () {
