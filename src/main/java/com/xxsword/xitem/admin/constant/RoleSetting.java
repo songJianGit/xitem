@@ -1,5 +1,12 @@
 package com.xxsword.xitem.admin.constant;
 
+import com.xxsword.xitem.admin.domain.system.entity.Role;
+import com.xxsword.xitem.admin.domain.system.entity.UserInfo;
+
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+
 /**
  * 角色配置定义
  */
@@ -49,5 +56,25 @@ public enum RoleSetting {
             }
         }
         return null;
+    }
+
+    /**
+     * 是否为 管理员
+     *
+     * @return
+     */
+    public static boolean isAdmin(UserInfo userInfo) {
+        if (userInfo == null) {
+            return false;
+        }
+        List<Role> roleList = userInfo.getRoleList();
+        if (roleList == null || roleList.isEmpty()) {
+            return false;
+        }
+        return roleList.stream().map(Role::getId).collect(Collectors.toSet()).contains(ROLE_ADMIN.getCode());
+    }
+
+    public static boolean isNotAdmin(UserInfo userInfo) {
+        return !isAdmin(userInfo);
     }
 }

@@ -15,4 +15,6 @@ public interface ProjectService extends IService<Project> {
     Page<Project> pageProjectBy(ProjectDto projectDto, UserInfo userInfo);
 
     void saveProject(Project project, JSONArray users);
+
+    void delProject(String id);
 }

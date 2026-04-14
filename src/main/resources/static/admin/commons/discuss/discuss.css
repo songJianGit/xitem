@@ -59,3 +59,6 @@ html:has(body.discuss-dock-on) {
 }
 .discuss-edit-banner.is-visible { display: flex; }
 .discuss-readonly .discuss-reply-btn { pointer-events: none; opacity: 0.45; cursor: default; }
+.discuss-readonly .discuss-edit-btn { pointer-events: none; opacity: 0.45; cursor: default; }
+.discuss-readonly .discuss-del-btn { pointer-events: none; opacity: 0.45; cursor: default; }
+.discuss-readonly #discussDock { display: none; }

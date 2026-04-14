@@ -4,6 +4,7 @@ import com.alibaba.fastjson2.JSONArray;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.xxsword.xitem.admin.constant.Constant;
+import com.xxsword.xitem.admin.constant.RoleSetting;
 import com.xxsword.xitem.admin.domain.project.convert.ProjectConvert;
 import com.xxsword.xitem.admin.domain.project.dto.ProjectDto;
 import com.xxsword.xitem.admin.domain.project.dto.ProjectUserDto;
@@ -101,22 +102,14 @@ public class ProjectController extends BaseController {
         return "/admin/project/projectindex";
     }
 
-//    @RequestMapping("show")
-//    public String show(HttpServletRequest request, String id, Model model) {
-//        Project project = projectService.getById(id);
-//        if (project == null) {
-//            project = new Project();
-//        }
-//        model.addAttribute("project", project);
-//        request.getSession().setAttribute(Constant.PROJECT_SELECT_KEY, id);
-//        return "/admin/project/show";
-//    }
-
-    /**
-     * 编辑
-     */
     @RequestMapping("edit2")
-    public String edit2(String id, Integer showFlag, Model model) {
+    public String edit2(HttpServletRequest request, String id, Integer showFlag, Model model) {
+        UserInfo userInfo = Utils.getUserInfo(request);
+        ProjectUser projectUser = projectUserService.getProjectUser(id, userInfo.getId());
+        if (projectUser == null && RoleSetting.isNotAdmin(userInfo)) {
+            return "/404";
+        }
+
         Project project = projectService.getById(id);
         List<UserInfo> userInfos = userInfoService.listUserInfo();
         Map<String, ProjectUser> projectUserIds = null;
@@ -128,6 +121,12 @@ public class ProjectController extends BaseController {
         }
         model.addAttribute("voList", projectUserService.listProjectUser(userInfos, projectUserIds, id));
         model.addAttribute("project", project);
+        if (projectUser == null || projectUser.getReadFlag().equals(0)) {
+            showFlag = 1;
+        }
+        if (RoleSetting.isAdmin(userInfo)) {
+            showFlag = 0;// 管理员，不限制
+        }
         model.addAttribute("showFlag", showFlag);
         return "/admin/project/edit2";
     }
@@ -137,9 +136,22 @@ public class ProjectController extends BaseController {
      * 保存
      */
     @RequestMapping("save")
-    public String save(HttpServletRequest request, Project project, String projectuserlists) {
+    @ResponseBody
+    public RestResult save(HttpServletRequest request, Project project, String projectuserlists) {
         JSONArray users = JSONArray.parseArray(StringEscapeUtils.unescapeHtml4(projectuserlists));
         projectService.saveProject(project, users);
-        return httpRedirect(request, "/admin/project/list");
+        return RestResult.OK();
+    }
+
+    @RequestMapping("delById")
+    @ResponseBody
+    public RestResult delById(HttpServletRequest request, String id) {
+        UserInfo userInfo = Utils.getUserInfo(request);
+        Project project = projectService.getById(id);
+        if (RoleSetting.isNotAdmin(userInfo) && !userInfo.getId().equals(project.getCreateUserId())) {
+            return RestResult.Fail("不能删除别人的数据");
+        }
+        projectService.delProject(id);
+        return RestResult.OK();
     }
 }

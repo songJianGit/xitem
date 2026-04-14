@@ -6,8 +6,8 @@
     <link rel="stylesheet" type="text/css" href="${ctx.contextPath}/static/admin/commons/discuss/discuss.css">
     <style>
         .card {
-            -webkit-box-shadow:none;
-            box-shadow:none;
+            -webkit-box-shadow: none;
+            box-shadow: none;
         }
     </style>
 </head>
@@ -109,7 +109,8 @@
                         <span class="font-weight-bold text-dark" style="font-size:15px;">讨论</span>
                         <span class="badge badge-light text-muted border ml-2">${commentsVOList?size} 条评论</span>
                     </div>
-                    <button type="button" class="btn btn-sm btn-outline-secondary" onclick="discussDockReloadHtml()" title="刷新页面">
+                    <button type="button" class="btn btn-sm btn-outline-secondary" onclick="window.location.reload();"
+                            title="刷新页面">
                         <i class="mdi mdi-refresh"></i> 刷新
                     </button>
                 </div>
@@ -119,7 +120,9 @@
                             <div class="discuss-thread">
                                 <div class="discuss-item">
                                     <#if item.createUserAvatar?? && item.createUserAvatar?trim?length gt 0>
-                                        <img class="discuss-avatar discuss-avatar-img" src="${ctx.contextPath}${item.createUserAvatar}" alt="${item.createUserName!'用户头像'}">
+                                        <img class="discuss-avatar discuss-avatar-img"
+                                             src="${ctx.contextPath}${item.createUserAvatar}"
+                                             alt="${item.createUserName!'用户头像'}">
                                     <#else>
                                         <div class="discuss-avatar">${item.createUserNameFast!}</div>
                                     </#if>
@@ -130,53 +133,65 @@
                                         </div>
                                         <div class="discuss-content">${item.content!}</div>
                                         <div class="discuss-actions mt-1">
-                                            <a href="javascript:;" class="discuss-reply-btn" data-reply-author="${item.createUserName!}" data-reply-author-id="${item.id!}"><span class="mdi mdi-reply"></span>回复</a>
+                                            <a href="javascript:;" class="discuss-reply-btn"
+                                               data-reply-author="${item.createUserName!}"
+                                               data-reply-author-id="${item.id!}"><span class="mdi mdi-reply"></span>回复</a>
                                             <#if item.createUserId==Session.puser.id>
-<#--                                                <span class="text-muted mx-1">·</span>-->
+                                            <#--                                                <span class="text-muted mx-1">·</span>-->
                                                 <a href="javascript:;" class="discuss-edit-btn"
                                                    data-comment-id="${item.id!}"
                                                    data-comment-type="1"
-                                                   data-comment-content="${item.content!?html}"><span class="mdi mdi-square-edit-outline"></span>编辑</a>
-<#--                                            <span class="text-muted mx-1">·</span>-->
-                                            <a href="javascript:;" class="discuss-del-btn"
-                                               data-comment-id="${item.id!}"><span class="mdi mdi-delete-outline"></span>删除</a>
+                                                   data-comment-content="${item.content!?html}"><span
+                                                            class="mdi mdi-square-edit-outline"></span>编辑</a>
+                                            <#--                                            <span class="text-muted mx-1">·</span>-->
+                                                <a href="javascript:;" class="discuss-del-btn"
+                                                   data-comment-id="${item.id!}"><span
+                                                            class="mdi mdi-delete-outline"></span>删除</a>
                                             </#if>
                                         </div>
                                         <#if item.voList?? && (item.voList?size>0)>
-                                        <div class="discuss-replies">
-                                            <#list item.voList as ite>
-                                            <div class="discuss-reply-row">
-                                                <#if ite.createUserAvatar?? && ite.createUserAvatar?trim?length gt 0>
-                                                    <img class="discuss-avatar-sm discuss-avatar-img" src="${ctx.contextPath}${ite.createUserAvatar}" alt="${ite.createUserName!'用户头像'}">
-                                                <#else>
-                                                    <div class="discuss-avatar-sm discuss-avatar-sm-text">${ite.createUserNameFast!}</div>
-                                                </#if>
-                                                <div class="flex-grow-1 min-w-0">
-                                                    <div class="d-flex flex-wrap align-items-baseline justify-content-between">
+                                            <div class="discuss-replies">
+                                                <#list item.voList as ite>
+                                                    <div class="discuss-reply-row">
+                                                        <#if ite.createUserAvatar?? && ite.createUserAvatar?trim?length gt 0>
+                                                            <img class="discuss-avatar-sm discuss-avatar-img"
+                                                                 src="${ctx.contextPath}${ite.createUserAvatar}"
+                                                                 alt="${ite.createUserName!'用户头像'}">
+                                                        <#else>
+                                                            <div class="discuss-avatar-sm discuss-avatar-sm-text">${ite.createUserNameFast!}</div>
+                                                        </#if>
+                                                        <div class="flex-grow-1 min-w-0">
+                                                            <div class="d-flex flex-wrap align-items-baseline justify-content-between">
                                                     <span>
                                                         <strong class="text-dark">${ite.createUserName!}</strong>
                                                     </span>
-                                                        <span class="discuss-reply-meta">${ite.createDate!}</span>
+                                                                <span class="discuss-reply-meta">${ite.createDate!}</span>
+                                                            </div>
+                                                            <div class="discuss-content"
+                                                                 style="margin-top:4px;font-size:13px;">${ite.content!}</div>
+                                                            <div class="discuss-actions mt-1">
+                                                                <a href="javascript:;" class="discuss-reply-btn"
+                                                                   data-reply-author="${ite.createUserName!}"
+                                                                   data-reply-author-id="${item.id!}"><span
+                                                                            class="mdi mdi-reply"></span>回复</a>
+                                                                <#if ite.createUserId==Session.puser.id>
+                                                                <#--                                                            <span class="text-muted mx-1">·</span>-->
+                                                                    <a href="javascript:;" class="discuss-edit-btn"
+                                                                       data-comment-id="${ite.id!}"
+                                                                       data-comment-type="2"
+                                                                       data-comment-parent-id="${ite.comId!}"
+                                                                       data-comment-content="${ite.content!?html}"><span
+                                                                                class="mdi mdi-square-edit-outline"></span>编辑</a>
+                                                                <#--                                                            <span class="text-muted mx-1">·</span>-->
+                                                                    <a href="javascript:;" class="discuss-del-btn"
+                                                                       data-comment-id="${ite.id!}"><span
+                                                                                class="mdi mdi-delete-outline"></span>删除</a>
+                                                                </#if>
+                                                            </div>
+                                                        </div>
                                                     </div>
-                                                    <div class="discuss-content" style="margin-top:4px;font-size:13px;">${ite.content!}</div>
-                                                    <div class="discuss-actions mt-1">
-                                                        <a href="javascript:;" class="discuss-reply-btn" data-reply-author="${ite.createUserName!}" data-reply-author-id="${item.id!}"><span class="mdi mdi-reply"></span>回复</a>
-                                                        <#if ite.createUserId==Session.puser.id>
-<#--                                                            <span class="text-muted mx-1">·</span>-->
-                                                            <a href="javascript:;" class="discuss-edit-btn"
-                                                               data-comment-id="${ite.id!}"
-                                                               data-comment-type="2"
-                                                               data-comment-parent-id="${ite.comId!}"
-                                                               data-comment-content="${ite.content!?html}"><span class="mdi mdi-square-edit-outline"></span>编辑</a>
-<#--                                                            <span class="text-muted mx-1">·</span>-->
-                                                            <a href="javascript:;" class="discuss-del-btn"
-                                                               data-comment-id="${ite.id!}"><span class="mdi mdi-delete-outline"></span>删除</a>
-                                                        </#if>
-                                                    </div>
-                                                </div>
+                                                </#list>
                                             </div>
-                                            </#list>
-                                        </div>
                                         </#if>
                                     </div>
                                 </div>
@@ -240,11 +255,15 @@
         <div id="discussDockExpanded" class="discuss-dock-expanded">
             <div id="discussEditBanner" class="discuss-edit-banner" aria-live="polite">
                 <span>正在编辑评论</span>
-                <button type="button" class="btn btn-sm btn-link p-0" id="discussCancelEditBtn" title="取消编辑">取消编辑</button>
+                <button type="button" class="btn btn-sm btn-link p-0" id="discussCancelEditBtn" title="取消编辑">
+                    取消编辑
+                </button>
             </div>
             <div id="discussReplyBanner" class="discuss-reply-banner" aria-live="polite">
                 <span>回复 <strong id="discussReplyAuthorDisplay"></strong></span>
-                <button type="button" class="btn btn-sm btn-link p-0 text-secondary" id="discussCancelReplyBtn" title="改为主评论">取消回复</button>
+                <button type="button" class="btn btn-sm btn-link p-0 text-secondary" id="discussCancelReplyBtn"
+                        title="改为主评论">取消回复
+                </button>
             </div>
             <label for="discussInput" class="sr-only">评论内容</label>
             <textarea id="discussInput" class="form-control" maxlength="2000" placeholder="写下你的想法…"></textarea>
@@ -252,7 +271,7 @@
                 <small class="text-muted">xitem</small>
                 <div>
                     <button type="button" class="btn btn-sm btn-light border mr-1" id="discussCollapseBtn">收起</button>
-<#--                    <button type="button" class="btn btn-sm btn-light border mr-1" id="discussClearBtn">清空</button>-->
+                    <#--                    <button type="button" class="btn btn-sm btn-light border mr-1" id="discussClearBtn">清空</button>-->
                     <button type="button" class="btn btn-sm btn-primary" id="discussSendBtn">
                         <i class="mdi mdi-send mr-1"></i>发表
                     </button>
@@ -263,265 +282,15 @@
 </div>
 <#include "../commons/js.ftl"/>
 <script type="text/javascript" src="${ctx.contextPath}/static/admin/commons/pm-user/pm.js"></script>
+<script type="text/javascript" src="${ctx.contextPath}/static/admin/commons/discuss/discuss.js"></script>
 <script type="text/javascript">
     <#if showFlag?? && showFlag==1>
     // 禁用页面的input，富文本编辑器，按钮
-    $("input").attr("disabled", "disabled");
-    $("textarea").attr("disabled", "disabled");
-    $("button").attr("disabled", "disabled");
-    $("select").attr("disabled", "disabled");
+    $(".card-body input").attr("disabled", "disabled");
+    $(".card-body textarea").attr("disabled", "disabled");
+    $(".card-body button").attr("disabled", "disabled");
+    $(".card-body select").attr("disabled", "disabled");
     </#if>
-
-    function discussDockReloadHtml(){
-        window.location.reload();
-    }
-
-    (function discussDock() {
-        var $body = $('body');
-        var $dock = $('#discussDock');
-        var $collapsed = $('#discussDockCollapsed');
-        var $expanded = $('#discussDockExpanded');
-        var $editBanner = $('#discussEditBanner');
-        var $banner = $('#discussReplyBanner');
-        var $authorDisplay = $('#discussReplyAuthorDisplay');
-        var replyAuthor = '';
-        var replyAuthorId = '';
-        var editCommentId = '';
-        var editCommentType = '';
-        var editCommentParentId = '';
-        var DOCK_PAD_GAP = 24;
-
-        function updateDiscussDockPad() {
-            if (!$dock.length) {
-                return;
-            }
-            var el = $dock[0];
-            var h = el.getBoundingClientRect().height;
-            var pad = Math.ceil(h) + DOCK_PAD_GAP;
-            document.documentElement.style.setProperty('--discuss-dock-pad', pad + 'px');
-        }
-
-        function updateDiscussDockPadSoon() {
-            window.requestAnimationFrame(function () {
-                window.requestAnimationFrame(updateDiscussDockPad);
-            });
-        }
-
-        function setDockOpen(open) {
-            if (open) {
-                $expanded.addClass('is-visible');
-                $collapsed.hide();
-                $body.addClass('discuss-dock-open');
-            } else {
-                $expanded.removeClass('is-visible');
-                $collapsed.show();
-                $body.removeClass('discuss-dock-open');
-            }
-            updateDiscussDockPadSoon();
-        }
-
-        function setReplyTarget(name, authorId) {
-            replyAuthor = (name || '').trim();
-            replyAuthorId = (authorId || '').trim();
-            if (replyAuthor) {
-                $authorDisplay.text(replyAuthor);
-                $banner.addClass('is-visible');
-            } else {
-                $banner.removeClass('is-visible');
-                $authorDisplay.text('');
-            }
-            updateDiscussDockPadSoon();
-        }
-
-        function setEditTarget(commentId, commentType, parentId) {
-            editCommentId = (commentId || '').trim();
-            editCommentType = (commentType || '').trim();
-            editCommentParentId = (parentId || '').trim();
-            if (editCommentId) {
-                $editBanner.addClass('is-visible');
-                $('#discussSendBtn').html('<i class="mdi mdi-check mr-1"></i>保存修改');
-            } else {
-                $editBanner.removeClass('is-visible');
-                $('#discussSendBtn').html('<i class="mdi mdi-send mr-1"></i>发表');
-            }
-            updateDiscussDockPadSoon();
-        }
-
-        function getDiscussContent() {
-            var editor = tinymce.get('discussInput');
-            if (editor) {
-                return (editor.getContent({format: 'raw'}) || '').trim();
-            }
-            return ($('#discussInput').val() || '').trim();
-        }
-
-        function setDiscussContent(content) {
-            var text = content || '';
-            var editor = tinymce.get('discussInput');
-            if (editor) {
-                editor.setContent(text);
-            }
-            $('#discussInput').val(text);
-        }
-
-        if ($dock.length) {
-            $(window).on('resize.discussDock', updateDiscussDockPadSoon);
-            if (window.ResizeObserver) {
-                var ro = new ResizeObserver(function () {
-                    updateDiscussDockPadSoon();
-                });
-                ro.observe($dock[0]);
-            }
-            updateDiscussDockPadSoon();
-        }
-
-        function openForMainComment() {
-            setReplyTarget('','');
-            setEditTarget('', '', '');
-            setDockOpen(true);
-            $('#discussInput').trigger('focus');
-        }
-
-        function openForReply(author, authorId) {
-            setEditTarget('', '', '');
-            setReplyTarget(author, authorId);
-            setDockOpen(true);
-            $('#discussInput').trigger('focus');
-        }
-
-        function openForEdit(commentId, commentType, parentId, content) {
-            setReplyTarget('', '');
-            setEditTarget(commentId, commentType, parentId);
-            setDockOpen(true);
-            setDiscussContent(content);
-            $('#discussInput').trigger('focus');
-        }
-
-        function collapseDock() {
-            setDockOpen(false);
-            setReplyTarget('','');
-            setEditTarget('', '', '');
-            setDiscussContent('');
-        }
-
-        $collapsed.on('click', function () {
-            openForMainComment();
-        });
-        $collapsed.on('keydown', function (e) {
-            if (e.key === 'Enter' || e.key === ' ') {
-                e.preventDefault();
-                openForMainComment();
-            }
-        });
-
-        $(document).on('click', '.discuss-reply-btn', function (e) {
-            e.preventDefault();
-            var author = $(this).data('reply-author');
-            var authorId = $(this).data('reply-author-id');
-            if (author) {
-                openForReply(String(author), String(authorId));
-            }
-        });
-
-        $(document).on('click', '.discuss-edit-btn', function (e) {
-            e.preventDefault();
-            var commentId = $(this).data('comment-id');
-            var commentType = $(this).data('comment-type');
-            var parentId = $(this).data('comment-parent-id');
-            var content = $(this).data('comment-content');
-            if (!commentId) {
-                layer.msg('评论ID缺失，无法编辑');
-                return;
-            }
-            openForEdit(String(commentId), String(commentType || ''), String(parentId || ''), String(content || ''));
-        });
-
-        $(document).on('click', '.discuss-del-btn', function (e) {
-            e.preventDefault();
-            var commentId = $(this).data('comment-id');
-            if (!commentId) {
-                layer.msg('评论ID缺失，无法删除');
-                return;
-            }
-            layer.confirm('确认删除该评论吗？', {icon: 3, title: '提示'}, function (index) {
-                $.ajax({
-                    url: "${ctx.contextPath}/admin/comments/delById",
-                    data: {
-                        id: commentId
-                    },
-                    success: function (d) {
-                        layer.msg(d.msg);
-                        setTimeout(function () {
-                            window.location.reload();
-                        }, 500);
-                    }
-                });
-                layer.close(index);
-            });
-        });
-
-        $('#discussCancelReplyBtn').on('click', function () {
-            setReplyTarget('','');
-        });
-        $('#discussCancelEditBtn').on('click', function () {
-            setEditTarget('', '', '');
-            setDiscussContent('');
-        });
-
-        $('#discussCollapseBtn').on('click', function () {
-            collapseDock();
-        });
-
-        $('#discussClearBtn').on('click', function () {
-            setDiscussContent('');
-        });
-
-        $('#discussSendBtn').on('click', function () {
-            let t = getDiscussContent();
-            if (!t) {
-                layer.msg('请先输入评论内容');
-                return;
-            }
-            let dataJson = {};
-            if (editCommentId) {
-                dataJson = {
-                    id: editCommentId,
-                    aid: '${article.id!}',
-                    content: t,
-                    type: Number(editCommentType || 1)
-                };
-                if (Number(editCommentType || 1) === 2) {
-                    dataJson.comId = editCommentParentId;
-                }
-            } else if (replyAuthor) {
-                // layer.msg('界面预览：将作为对「' + replyAuthor + '」的回复提交（接口待对接）');
-                dataJson = {
-                    aid: '${article.id!}',
-                    content: t,
-                    type: 2,
-                    comId: replyAuthorId
-                };
-            } else {
-                // layer.msg('界面预览：将作为主评论提交（接口待对接）');
-                dataJson = {
-                    aid: '${article.id!}',
-                    content: t,
-                    type: 1
-                };
-            }
-            $.ajax({
-                url: "${ctx.contextPath}/admin/comments/save",
-                type: "post",
-                data: dataJson,
-                success: function (d) {
-                    layer.msg(d.msg);
-                    setTimeout(function (){
-                        window.location.reload();
-                    }, 500);
-                }
-            });
-        });
-    })();
 
     tinymce.init({
         <#if showFlag?? && showFlag==1>readonly: true, </#if>

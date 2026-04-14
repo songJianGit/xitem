@@ -112,9 +112,9 @@
     function caozuo(value, row) {
         let htm = '';
         htm += '<div class="btn-group">';
-        htm += '<button type="button" class="btn btn-sm btn-default m-r-5" onclick="show(\'' + value + '\')" title="查看">查看</button>';
+        // htm += '<button type="button" class="btn btn-sm btn-default m-r-5" onclick="show(\'' + value + '\')" title="查看">查看</button>';
         htm += '<button type="button" class="btn btn-sm btn-default m-r-5" onclick="edit(\'' + value + '\')" title="编辑">编辑</button>';
-        <#--htm += '<a target="_blank" class="btn btn-sm btn-default" href="${ctx.contextPath}/article/detail?id=' + value + '" title="预览">预览</a>';-->
+        htm += '<button type="button" class="btn btn-sm btn-default m-r-5" onclick="delById(\'' + value + '\')" title="删除">删除</button>';
         htm += '</div>';
         return htm;
     }
@@ -138,6 +138,32 @@
     $('#searchBtn').click(function () {
         reload();
     });
+
+    function delById(id) {
+        $.confirm({
+            title: '提示',
+            content: '是否删除？',
+            buttons: {
+                confirm: {
+                    text: '确认',
+                    action: function () {
+                        $.ajax({
+                            url: "${ctx.contextPath}/admin/project/delById?id="+id,
+                            success: function (d) {
+                                reload();
+                            }
+                        });
+                    }
+                },
+                cancel: {
+                    text: '取消',
+                    action: function () {
+//                            $.alert('取消的!');
+                    }
+                }
+            }
+        });
+    }
 
     function reload() {
         $("#table-pagination").bootstrapTable('refresh', {

@@ -11,7 +11,7 @@ public interface UserInfoMapper extends BaseMapper<UserInfo> {
     @Select("<script>" +
             "select " +
             "count(c.id)" +
-            "from t_sys_user_role b left join t_sys_userinfo c on b.userid=c.id " +
+            "from t_sys_user_role b left join t_sys_userinfo c on b.user_id=c.id " +
             "where 1=1 " +
             "<if test='roleId!=null and roleId!=\"\"'>" +
             "and b.role_id=#{roleId} " +

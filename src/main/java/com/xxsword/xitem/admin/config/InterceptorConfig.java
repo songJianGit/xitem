@@ -12,8 +12,6 @@ public class InterceptorConfig implements WebMvcConfigurer {
     @Autowired
     private LoginInterceptor loginInterceptor;
     @Autowired
-    private PcLoginInterceptor pcLoginInterceptor;
-    @Autowired
     private RecordInterceptor recordInterceptor;
     @Autowired
     private MenuInterceptor menuInterceptor;
@@ -34,9 +32,6 @@ public class InterceptorConfig implements WebMvcConfigurer {
         // 后台操作日志记录拦截器
         InterceptorRegistration record = registry.addInterceptor(recordInterceptor);
         record.addPathPatterns("/admin/**");
-        // 前端拦截器
-        InterceptorRegistration pc = registry.addInterceptor(pcLoginInterceptor);
-        pc.addPathPatterns("/pc/**");
         // csrf防护
         InterceptorRegistration csrf = registry.addInterceptor(csrfRecordInterceptor);
         csrf.addPathPatterns("/pc/**");

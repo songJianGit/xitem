@@ -42,9 +42,11 @@
 <#--                                <h4 class="card-title">文章列表</h4>-->
                                 <div id="custom-toolbar">
                                     <div class="toolbar-btn-action">
+                                        <#if projectUser?? && (projectUser.readFlag==1)>
                                         <button type="button" id="add" class="btn btn-primary">
                                             新增任务
                                         </button>
+                                        </#if>
                                     </div>
                                 </div>
                                 <div class="table-responsive">
@@ -125,8 +127,10 @@
     function caozuo(value, row) {
         let htm = '';
         htm += '<div class="btn-group">';
-        htm += '<button type="button" class="btn btn-sm btn-default m-r-5" onclick="show(\'' + value + '\')" title="查看">查看</button>';
+        // htm += '<button type="button" class="btn btn-sm btn-default m-r-5" onclick="show(\'' + value + '\')" title="查看">查看</button>';
+        <#if projectUser?? && (projectUser.readFlag==1)>
         htm += '<button type="button" class="btn btn-sm btn-default m-r-5" onclick="edit(\'' + value + '\')" title="编辑">编辑</button>';
+        </#if>
         <#--htm += '<a target="_blank" class="btn btn-sm btn-default" href="${ctx.contextPath}/article/detail?id=' + value + '" title="预览">预览</a>';-->
         htm += '</div>';
         return htm;

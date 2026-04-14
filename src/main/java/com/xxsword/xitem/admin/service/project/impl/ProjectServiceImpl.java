@@ -3,6 +3,7 @@ package com.xxsword.xitem.admin.service.project.impl;
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -84,13 +85,27 @@ public class ProjectServiceImpl extends ServiceImpl<ProjectMapper, Project> impl
         projectUserService.remove(del);
     }
 
+    @Override
+    @Transactional
+    public void delProject(String id) {
+        LambdaUpdateWrapper<Project> up = Wrappers.lambdaUpdate();
+        up.eq(Project::getId, id);
+        up.eq(Project::getStatus, 1);
+        up.set(Project::getStatus, 0);
+        update(up);
+
+        LambdaUpdateWrapper<ProjectUser> upUser = Wrappers.lambdaUpdate();
+        upUser.eq(ProjectUser::getPid, id);
+        upUser.eq(ProjectUser::getStatus, 1);
+        upUser.set(ProjectUser::getStatus, 0);
+        projectUserService.update(upUser);
+    }
+
     private LambdaQueryWrapper<Project> getQ(ProjectDto projectDto, UserInfo userInfo) {
-        Set<String> roleIds = userInfo.getRoleList().stream().map(Role::getId).collect(Collectors.toSet());
-        if (roleIds.contains(RoleSetting.ROLE_USER.getCode())) {
+        if (RoleSetting.isNotAdmin(userInfo)) {
             LambdaQueryWrapper<ProjectUser> q = Wrappers.lambdaQuery();
             q.eq(ProjectUser::getUserId, userInfo.getId());
             q.eq(ProjectUser::getStatus, 1);
-
             q.select(ProjectUser::getPid);
             List<ProjectUser> projectUserList = projectUserService.list(q);
             List<String> pids = projectUserList.stream().map(ProjectUser::getPid).toList();

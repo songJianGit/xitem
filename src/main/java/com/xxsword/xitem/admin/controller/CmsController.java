@@ -3,6 +3,7 @@ package com.xxsword.xitem.admin.controller;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.xxsword.xitem.admin.constant.Constant;
+import com.xxsword.xitem.admin.constant.RoleSetting;
 import com.xxsword.xitem.admin.domain.category.entity.Category;
 import com.xxsword.xitem.admin.domain.cms.convert.CmsConvert;
 import com.xxsword.xitem.admin.domain.cms.dto.ArticleDto;
@@ -61,7 +62,13 @@ public class CmsController extends BaseController {
     private CommentsService commentsService;
 
     @RequestMapping("articleList")
-    public String articleList() {
+    public String articleList(HttpServletRequest request, Model model) {
+        String projectId = Utils.getProjectId(request);
+        UserInfo userInfo = Utils.getUserInfo(request);
+        ProjectUser projectUser = projectUserService.getProjectUser(projectId, userInfo.getId());
+        if (projectUser != null) {
+            model.addAttribute("projectUser", projectUser);
+        }
         return "admin/cms/articlelist";
     }
 
@@ -127,7 +134,7 @@ public class CmsController extends BaseController {
     /**
      * @param request
      * @param articleDto
-     * @param type       1-项目任务 2-待办任务 3-里程碑相关任务
+     * @param type       1-项目任务 2-待办任务 3-里程碑相关任务(ArticleDto里带里程碑id)
      * @return
      */
     private RestPaging<ArticleVO> pageArticleVO(HttpServletRequest request, ArticleDto articleDto, Integer type) {
@@ -142,18 +149,14 @@ public class CmsController extends BaseController {
         UserInfo userInfo = Utils.getUserInfo(request);
         List<ProjectUser> pIds = new ArrayList<>();
         if (type == 1) {
-            articleDto.setAtype(1);
             pIds = projectUserService.listProjectUser(new ProjectUserDto(Utils.getProjectId(request), null));
             articleDto.setProjectIds(pIds.stream().map(ProjectUser::getPid).toList());
         }
         if (type == 2) {
-            articleDto.setAtype(1);
             pIds = projectUserService.listProjectUser(new ProjectUserDto(null, userInfo.getId()));
             articleDto.setProjectIds(pIds.stream().map(ProjectUser::getPid).toList());
         }
-        if (type == 3) {
-            articleDto.setAtype(1);
-        }
+        articleDto.setAtype(1);
         Page<Article> data = articleService.page(articleDto.toPage(), articleDto.toQuery());
         List<ArticleVO> voList = CmsConvert.INSTANCE.toArticleVO(data.getRecords());
         articleService.setArticleVOName(voList);
@@ -171,25 +174,22 @@ public class CmsController extends BaseController {
         return new RestPaging<>(data.getTotal(), voList);
     }
 
-    /**
-     * 编辑
-     */
-    @RequestMapping("articleEdit")
-    public String articleEdit(String id, Model model) {
-        Article article = articleService.getById(id);
-        if (article == null) {
-            article = new Article();
-        } else {
-            Category category = categoryService.getById(article.getCategoryId());
-            article.setCategoryName(category == null ? "" : category.getTitle());
-            ArticleData articleData = articleDataService.getById(id);
-            if (articleData != null) {
-                article.setArticleData(articleData);
-            }
-        }
-        model.addAttribute("article", article);
-        return "/admin/cms/articleedit";
-    }
+//    @RequestMapping("articleEdit")
+//    public String articleEdit(String id, Model model) {
+//        Article article = articleService.getById(id);
+//        if (article == null) {
+//            article = new Article();
+//        } else {
+//            Category category = categoryService.getById(article.getCategoryId());
+//            article.setCategoryName(category == null ? "" : category.getTitle());
+//            ArticleData articleData = articleDataService.getById(id);
+//            if (articleData != null) {
+//                article.setArticleData(articleData);
+//            }
+//        }
+//        model.addAttribute("article", article);
+//        return "/admin/cms/articleedit";
+//    }
 
     @RequestMapping("articleEdit2")
     public String articleEdit2(HttpServletRequest request, String id, Integer showFlag, Model model) {
@@ -238,6 +238,15 @@ public class CmsController extends BaseController {
         model.addAttribute("roadMapList", roadMapList);// 里程碑
         model.addAttribute("voList", voList);// 项目成员
         model.addAttribute("commentsVOList", commentsVOList);// 评论
+
+        UserInfo userInfo = Utils.getUserInfo(request);
+        ProjectUser projectUser = projectUserService.getProjectUser(projectId, userInfo.getId());
+        if (projectUser == null || projectUser.getReadFlag().equals(0)) {
+            showFlag = 1;// 如果没有权限或者为只读，则强制限制为只读
+        }
+        if (RoleSetting.isAdmin(userInfo)) {
+            showFlag = 0;// 管理员不限制
+        }
         model.addAttribute("showFlag", showFlag);
         return "/admin/cms/articleedit2";
     }
