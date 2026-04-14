@@ -110,7 +110,7 @@
     });
 
     function show(id) {
-        layer_show('查看', "${ctx.contextPath}/admin/roadmap/edit?showFlag=1&id=" + id, "50%");
+        layer_show('查看', "${ctx.contextPath}/admin/roadmap/edit?readFlag=0&id=" + id, "50%");
     }
 
     function edit(id) {

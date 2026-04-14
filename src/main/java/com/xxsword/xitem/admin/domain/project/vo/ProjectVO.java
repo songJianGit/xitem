@@ -15,6 +15,12 @@ public class ProjectVO {
     @Schema(title = "主键id", description = "主键id")
     private String id;
 
+    @Schema(title = "创建人id", description = "创建人id")
+    private String createUserId;
+
+    @Schema(title = "创建人", description = "创建人")
+    private String createUserName;
+
     @Schema(title = "创建时间", description = "创建时间")
     private String createDate;
 
@@ -27,6 +33,9 @@ public class ProjectVO {
 
     @Schema(title = "项目成员", description = "项目成员")
     List<ProjectUser> users;
+
+    @Schema(title = "当前登录用户的项目被只读字段信息", description = "当前登录用户的项目被只读字段信息")
+    private Integer userReadFlag;
 }
 
 

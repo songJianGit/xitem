@@ -31,7 +31,7 @@ public class ProjectUser extends BaseEntity {
     private String jobTitle;
 
     @Column(defaultValue = "1")
-    @ColumnComment("用户权限（ 1-正常 0-只读）")
+    @ColumnComment("用户权限（ 1-正常可编辑 0-只读）")
     private Integer readFlag;
 }
 

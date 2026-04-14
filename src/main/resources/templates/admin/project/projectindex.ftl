@@ -61,6 +61,7 @@
                                             <th data-field="title" data-formatter="title">标题</th>
                                             <th data-field="users" data-formatter="users">项目成员</th>
                                             <th data-field="createDate" data-formatter="createDate">创建时间</th>
+                                            <th data-field="createUserName">创建人</th>
                                             <th data-field="id" data-formatter="caozuo">操作</th>
                                         </tr>
                                         </thead>
@@ -110,11 +111,18 @@
     }
 
     function caozuo(value, row) {
+        let adminFlag = 1;
+        <#if adminFlag??>
+        adminFlag = ${adminFlag};
+        </#if>
         let htm = '';
         htm += '<div class="btn-group">';
-        // htm += '<button type="button" class="btn btn-sm btn-default m-r-5" onclick="show(\'' + value + '\')" title="查看">查看</button>';
-        htm += '<button type="button" class="btn btn-sm btn-default m-r-5" onclick="edit(\'' + value + '\')" title="编辑">编辑</button>';
-        htm += '<button type="button" class="btn btn-sm btn-default m-r-5" onclick="delById(\'' + value + '\')" title="删除">删除</button>';
+        if(adminFlag==1 || (1 == row.userReadFlag)){
+            htm += '<button type="button" class="btn btn-sm btn-default m-r-5" onclick="edit(\'' + value + '\')" title="编辑">编辑</button>';
+        }
+        if(adminFlag==1 || ('${Session.puser.id}' == row.createUserId)){
+            htm += '<button type="button" class="btn btn-sm btn-default m-r-5" onclick="delById(\'' + value + '\')" title="删除">删除</button>';
+        }
         htm += '</div>';
         return htm;
     }
@@ -132,7 +140,7 @@
     }
 
     function show(id) {
-        layer_show('查看', "${ctx.contextPath}/admin/project/edit2?showFlag=1&id=" + id, "90%");
+        layer_show('查看', "${ctx.contextPath}/admin/project/edit2?readFlag=0&id=" + id, "90%");
     }
 
     $('#searchBtn').click(function () {
@@ -148,8 +156,9 @@
                     text: '确认',
                     action: function () {
                         $.ajax({
-                            url: "${ctx.contextPath}/admin/project/delById?id="+id,
+                            url: "${ctx.contextPath}/admin/project/delById?id=" + id,
                             success: function (d) {
+                                layer.msg(d.msg);
                                 reload();
                             }
                         });

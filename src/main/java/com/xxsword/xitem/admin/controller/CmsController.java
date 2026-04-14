@@ -174,25 +174,11 @@ public class CmsController extends BaseController {
         return new RestPaging<>(data.getTotal(), voList);
     }
 
-//    @RequestMapping("articleEdit")
-//    public String articleEdit(String id, Model model) {
-//        Article article = articleService.getById(id);
-//        if (article == null) {
-//            article = new Article();
-//        } else {
-//            Category category = categoryService.getById(article.getCategoryId());
-//            article.setCategoryName(category == null ? "" : category.getTitle());
-//            ArticleData articleData = articleDataService.getById(id);
-//            if (articleData != null) {
-//                article.setArticleData(articleData);
-//            }
-//        }
-//        model.addAttribute("article", article);
-//        return "/admin/cms/articleedit";
-//    }
-
     @RequestMapping("articleEdit2")
-    public String articleEdit2(HttpServletRequest request, String id, Integer showFlag, Model model) {
+    public String articleEdit2(HttpServletRequest request, String id, Integer readFlag, Model model) {
+        if (readFlag == null) {
+            readFlag = 1;
+        }
         Article article = articleService.getById(id);
         if (article == null) {
             article = new Article();
@@ -241,13 +227,17 @@ public class CmsController extends BaseController {
 
         UserInfo userInfo = Utils.getUserInfo(request);
         ProjectUser projectUser = projectUserService.getProjectUser(projectId, userInfo.getId());
-        if (projectUser == null || projectUser.getReadFlag().equals(0)) {
-            showFlag = 1;// 如果没有权限或者为只读，则强制限制为只读
+        if (RoleSetting.isNotAdmin(userInfo)) {
+            if (projectUser == null) {
+                return "/404";
+            } else {
+                if (readFlag == 1) {// 传编辑的时候，进行校验
+                    readFlag = projectUser.getReadFlag();
+                }
+            }
+            model.addAttribute("readFlagP2", projectUser.getReadFlag());
         }
-        if (RoleSetting.isAdmin(userInfo)) {
-            showFlag = 0;// 管理员不限制
-        }
-        model.addAttribute("showFlag", showFlag);
+        model.addAttribute("readFlag", readFlag);
         return "/admin/cms/articleedit2";
     }
 

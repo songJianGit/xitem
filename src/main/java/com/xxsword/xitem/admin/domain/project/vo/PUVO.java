@@ -15,7 +15,7 @@ public class PUVO {
     private String userNameFast;
     private String userName;
     private String jobTitle;
-    // 用户权限（ 1-正常 0-只读）
+    // 用户权限（ 1-正常可编辑 0-只读）
     private Integer readFlag;
     private Boolean joinFlag;
 }

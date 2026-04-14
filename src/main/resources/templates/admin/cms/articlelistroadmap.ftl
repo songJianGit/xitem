@@ -84,7 +84,7 @@
     }
 
     function show(id) {
-        layer_show('查看', "${ctx.contextPath}/admin/cms/articleEdit2?showFlag=1&id=" + id, "90%");
+        layer_show('查看', "${ctx.contextPath}/admin/cms/articleEdit2?readFlag=0&id=" + id, "90%");
     }
 
     $('#searchBtn').click(function () {

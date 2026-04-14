@@ -11,7 +11,7 @@
         }
     </style>
 </head>
-<body class="card<#if showFlag?? && showFlag==1> discuss-readonly<#else> discuss-dock-on</#if>">
+<body class="card<#if readFlagP2?? && readFlagP2==0> discuss-readonly<#else> discuss-dock-on</#if>">
 <div class="card-body">
     <form action="#!" method="post" id="articleform" class="row">
         <input type="hidden" name="id" value="${article.id!}"/>
@@ -96,7 +96,7 @@
                         <textarea id="editor" name="content"
                                   style="width:99.9%;"><#if article.articleData??>${article.articleData.content!}</#if></textarea>
             </div>
-            <#if !(showFlag?? && showFlag==1)>
+            <#if readFlag?? && readFlag==1>
                 <div class="form-group">
                     <button type="button" class="btn btn-primary" id="saveBtn">保存</button>
                     <button type="button" class="btn btn-default" id="saveBtn2">保存并关闭</button>
@@ -284,7 +284,7 @@
 <script type="text/javascript" src="${ctx.contextPath}/static/admin/commons/pm-user/pm.js"></script>
 <script type="text/javascript" src="${ctx.contextPath}/static/admin/commons/discuss/discuss.js"></script>
 <script type="text/javascript">
-    <#if showFlag?? && showFlag==1>
+    <#if readFlag?? && readFlag==0>
     // 禁用页面的input，富文本编辑器，按钮
     $(".card-body input").attr("disabled", "disabled");
     $(".card-body textarea").attr("disabled", "disabled");
@@ -293,7 +293,7 @@
     </#if>
 
     tinymce.init({
-        <#if showFlag?? && showFlag==1>readonly: true, </#if>
+        <#if readFlag?? && readFlag==0>readonly: true, </#if>
         selector: '#discussInput', //容器，可使用css选择器
         relative_urls: false,// 禁用相对路径，强制使用绝对路径
         remove_script_host: true,// 不保留协议和主机名
@@ -405,7 +405,7 @@
     }
 
     tinymce.init({
-        <#if showFlag?? && showFlag==1>readonly: true, </#if>
+        <#if readFlag?? && readFlag==0>readonly: true, </#if>
         selector: '#editor', //容器，可使用css选择器
         relative_urls: false,// 禁用相对路径，强制使用绝对路径
         remove_script_host: true,// 不保留协议和主机名

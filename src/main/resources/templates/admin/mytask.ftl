@@ -131,14 +131,14 @@
     }
 
     <#--function showProjectName(id) {-->
-    <#--    layer_show('查看', "${ctx.contextPath}/admin/project/edit2?showFlag=1&id=" + id, "90%");-->
+    <#--    layer_show('查看', "${ctx.contextPath}/admin/project/edit2?readFlag=0&id=" + id, "90%");-->
     <#--}-->
 
     function title(value, row) {
         return '<a href="javascript:;" title="' + value + '" class="ellipsis-390" onclick="show(\'' + row.id + '\')">' + value + '</a>';
     }
     function show(id) {
-        layer_show('查看', "${ctx.contextPath}/admin/cms/articleEdit2?showFlag=1&id=" + id, "90%");
+        layer_show('查看', "${ctx.contextPath}/admin/cms/articleEdit2?readFlag=0&id=" + id, "90%");
     }
     /*function caozuo(value, row) {
         let htm = '';

@@ -58,8 +58,17 @@ public class ProjectController extends BaseController {
                 List<ProjectUser> users = listMap.get(projectVO.getId());
                 projectUserService.setProjectUserUserName(users);
                 projectVO.setUsers(users);
+
+                Map<String, ProjectUser> projectUserIds = users.stream().collect(Collectors.toMap(ProjectUser::getUserId, Function.identity()));
+                ProjectUser p = projectUserIds.get(userInfo.getId());
+                if (p == null) {
+                    projectVO.setUserReadFlag(0);
+                } else {
+                    projectVO.setUserReadFlag(p.getReadFlag());
+                }
             }
         }
+        projectService.setCreateUserName(voList);
         return new RestPaging<>(data.getTotal(), voList);
     }
 
@@ -99,35 +108,39 @@ public class ProjectController extends BaseController {
 
     @RequestMapping("projectIndex")
     public String projectIndex(HttpServletRequest request, Model model) {
+        UserInfo userInfo = Utils.getUserInfo(request);
+        model.addAttribute("adminFlag", RoleSetting.isAdmin(userInfo) ? 1 : 0);
         return "/admin/project/projectindex";
     }
 
     @RequestMapping("edit2")
-    public String edit2(HttpServletRequest request, String id, Integer showFlag, Model model) {
-        UserInfo userInfo = Utils.getUserInfo(request);
-        ProjectUser projectUser = projectUserService.getProjectUser(id, userInfo.getId());
-        if (projectUser == null && RoleSetting.isNotAdmin(userInfo)) {
-            return "/404";
+    public String edit2(HttpServletRequest request, String id, Integer readFlag, Model model) {
+        if (readFlag == null) {
+            readFlag = 1;
         }
-
+        UserInfo userInfo = Utils.getUserInfo(request);
         Project project = projectService.getById(id);
         List<UserInfo> userInfos = userInfoService.listUserInfo();
         Map<String, ProjectUser> projectUserIds = null;
         if (project == null) {
             project = new Project();
-        } else {
+        } else {// 编辑
+            if (RoleSetting.isNotAdmin(userInfo)) {
+                ProjectUser projectUser = projectUserService.getProjectUser(id, userInfo.getId());
+                if (projectUser == null) {
+                    return "/404";
+                } else {
+                    if (readFlag == 1) {// 传编辑的时候，进行校验
+                        readFlag = projectUser.getReadFlag();
+                    }
+                }
+            }
             List<ProjectUser> projectUserList = projectUserService.list(new ProjectUserDto(id, null).toQuery());// 项目内成员
             projectUserIds = projectUserList.stream().collect(Collectors.toMap(ProjectUser::getUserId, Function.identity()));
         }
         model.addAttribute("voList", projectUserService.listProjectUser(userInfos, projectUserIds, id));
         model.addAttribute("project", project);
-        if (projectUser == null || projectUser.getReadFlag().equals(0)) {
-            showFlag = 1;
-        }
-        if (RoleSetting.isAdmin(userInfo)) {
-            showFlag = 0;// 管理员，不限制
-        }
-        model.addAttribute("showFlag", showFlag);
+        model.addAttribute("readFlag", readFlag);
         return "/admin/project/edit2";
     }
 
@@ -138,8 +151,9 @@ public class ProjectController extends BaseController {
     @RequestMapping("save")
     @ResponseBody
     public RestResult save(HttpServletRequest request, Project project, String projectuserlists) {
+        UserInfo userInfo = Utils.getUserInfo(request);
         JSONArray users = JSONArray.parseArray(StringEscapeUtils.unescapeHtml4(projectuserlists));
-        projectService.saveProject(project, users);
+        projectService.saveProject(project, users, userInfo);
         return RestResult.OK();
     }
 

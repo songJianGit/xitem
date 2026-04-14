@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.xxsword.xitem.admin.domain.project.dto.ProjectDto;
 import com.xxsword.xitem.admin.domain.project.entity.Project;
+import com.xxsword.xitem.admin.domain.project.vo.ProjectVO;
 import com.xxsword.xitem.admin.domain.system.entity.UserInfo;
 
 import java.util.List;
@@ -14,7 +15,9 @@ public interface ProjectService extends IService<Project> {
 
     Page<Project> pageProjectBy(ProjectDto projectDto, UserInfo userInfo);
 
-    void saveProject(Project project, JSONArray users);
+    List<ProjectVO> setCreateUserName(List<ProjectVO> list);
+
+    void saveProject(Project project, JSONArray users, UserInfo userInfo);
 
     void delProject(String id);
 }
