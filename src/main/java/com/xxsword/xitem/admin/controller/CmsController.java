@@ -314,6 +314,9 @@ public class CmsController extends BaseController {
     @RequestMapping("upLevelId")
     @ResponseBody
     public RestResult upLevelId(HttpServletRequest request, String projectId, String levelId) {
+        if (StringUtils.isBlank(projectId) || StringUtils.isBlank(levelId)) {
+            return RestResult.Fail();
+        }
         LambdaUpdateWrapper<Article> up = Wrappers.lambdaUpdate();
         up.eq(Article::getId, projectId);
         up.set(Article::getLevelId, levelId);
@@ -324,6 +327,9 @@ public class CmsController extends BaseController {
     @RequestMapping("upCategoryId")
     @ResponseBody
     public RestResult upCategoryId(HttpServletRequest request, String projectId, String categoryId) {
+        if (StringUtils.isBlank(projectId) || StringUtils.isBlank(categoryId)) {
+            return RestResult.Fail();
+        }
         LambdaUpdateWrapper<Article> up = Wrappers.lambdaUpdate();
         up.eq(Article::getId, projectId);
         up.set(Article::getCategoryId, categoryId);

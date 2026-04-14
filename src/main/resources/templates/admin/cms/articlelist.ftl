@@ -114,6 +114,9 @@
         <@projectReadFlagOutTag>
             <#if flag==1>
                 let htm = '<select class="form-control" data-project="'+row.id+'" onchange="levelNameUP(this)">';
+                if(isBlank(row.levelId)){
+                    htm += '<option value="" disabled selected>请选择</option>';
+                }
                 <#list categoryListLevel as item>
                 htm += '<option value="${item.id!}"  '+((`${item.id!}`==row.levelId)?"selected":"")+' >${item.title!}</option>';
                 </#list>

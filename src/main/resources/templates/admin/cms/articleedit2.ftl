@@ -53,7 +53,7 @@
                         <div class="input-group-prepend">
                             <span class="input-group-text">优先级</span>
                         </div>
-                        <select name="levelId" class="form-control selectpicker" data-title="未指定优先级">
+                        <select name="levelId" class="form-control selectpicker" data-title="请选择">
                             <#list categoryListLevel as item>
                                 <option value="${item.id!}"
                                         <#if article.levelId??><#if article.levelId==item.id>selected</#if></#if>>
@@ -79,9 +79,9 @@
                 <div class="form-group col-6">
                     <div class="input-group">
                         <div class="input-group-prepend">
-                            <span class="input-group-text">绑定里程碑</span>
+                            <span class="input-group-text">关联里程碑</span>
                         </div>
-                        <select name="roadmapId" class="form-control selectpicker" data-title="未绑定里程碑">
+                        <select name="roadmapId" class="form-control selectpicker" data-title="选择里程碑">
                             <#list roadMapList as item>
                                 <option value="${item.id!}"
                                         <#if article.roadmapId??><#if article.roadmapId==item.id>selected</#if></#if>>
