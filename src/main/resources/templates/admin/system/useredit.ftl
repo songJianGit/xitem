@@ -24,7 +24,8 @@
                         <div class="card">
                             <div class="card-body">
 
-                                <form action="${ctx.contextPath}/admin/system/userSave" method="post" class="row" enctype="multipart/form-data"
+                                <form action="${ctx.contextPath}/admin/system/userSave" method="post" class="row"
+                                      enctype="multipart/form-data"
                                       onsubmit="return check();">
                                     <input type="hidden" name="id" value="${user.id!}"/>
                                     <div class="form-group col-6">
@@ -57,9 +58,13 @@
                                     </div>
                                     <div class="form-group col-6">
                                         <label>头像</label>
-                                        <input type="file" class="form-control-file" name="fileinfo" accept="image/jpeg, image/png"/>
+                                        <input type="file" class="form-control-file" name="fileinfo"
+                                               accept="image/jpeg, image/png, image/webp" onchange="preview(this)"/>
+                                        <div id="preview" style="max-width: 100px"></div>
                                         <#if user.avatar?? && user.avatar?trim?length gt 0>
-                                            <img style="width: 100px" src="${ctx.contextPath}${user.avatar!'/static/admin/commons/img/defaultimg.webp'}" alt="图">
+                                            <img id="previewNone" style="width: 100px"
+                                                 src="${ctx.contextPath}${user.avatar!'/static/admin/commons/img/defaultimg.webp'}"
+                                                 alt="图">
                                         </#if>
                                     </div>
                                     <div class="form-group col-12">
@@ -93,6 +98,20 @@
             return false;
         }
         return true;
+    }
+
+    function preview(file) {
+        $("#previewNone").hide();
+        let prevDiv = document.getElementById('preview');
+        if (file.files && file.files[0]) {
+            let reader = new FileReader();
+            reader.onload = function (evt) {
+                prevDiv.innerHTML = '<img src="' + evt.target.result + '" />';
+            }
+            reader.readAsDataURL(file.files[0]);
+        } else {
+            prevDiv.innerHTML = '<div class="img" style="filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod=scale, src=\'' + file.value + '\'"></div>';
+        }
     }
 
     function checkloginname() {
