@@ -306,9 +306,9 @@
         content_style: "img {max-width:100%;}",// 图片额外样式控制
         branding: false,// 隐藏品牌信息和"Upgrade"图标
         menubar: false, // 隐藏菜单栏
-        plugins: ['image', 'code', 'table', 'lists'],
+        plugins: ['image', 'code', 'table', 'lists', 'media'],
         image_uploadtab: true,
-        toolbar: 'bold italic strikethrough | bullist numlist | image | removeformat | code',
+        toolbar: 'bold italic strikethrough | bullist numlist | image media | removeformat | code',
         file_picker_callback: (callback, value, meta) => {// 上传函数（图片，视频，文件）
             let filetype = 0;
             switch (meta.filetype) {
