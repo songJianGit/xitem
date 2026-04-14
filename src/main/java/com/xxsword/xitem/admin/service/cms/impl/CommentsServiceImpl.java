@@ -1,6 +1,7 @@
 package com.xxsword.xitem.admin.service.cms.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.xxsword.xitem.admin.domain.cms.convert.CmsConvert;
@@ -15,6 +16,7 @@ import org.apache.commons.text.StringEscapeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -28,6 +30,9 @@ public class CommentsServiceImpl extends ServiceImpl<CommentsMapper, Comments> i
 
     @Override
     public List<CommentsVO> listCommentsVO(String aid) {
+        if (StringUtils.isBlank(aid)) {
+            return new ArrayList<>();
+        }
         CommentsDto commentsDto = new CommentsDto();
         commentsDto.setAid(aid);
         commentsDto.setType(1);

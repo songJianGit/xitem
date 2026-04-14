@@ -82,6 +82,8 @@ public class ProjectController extends BaseController {
 
     @RequestMapping("projectView")
     public String projectView(HttpServletRequest request, String projectId, Model model) {
+        UserInfo userInfo = Utils.getUserInfo(request);
+
         if (StringUtils.isBlank(projectId)) {
             projectId = Utils.getProjectId(request);
         } else {
@@ -98,7 +100,6 @@ public class ProjectController extends BaseController {
             Map<String, ProjectUser> projectUserIds = projectUserList.stream().collect(Collectors.toMap(ProjectUser::getUserId, Function.identity()));
             puvoList = projectUserService.listProjectUser(userInfos, projectUserIds, projectId);
         }
-
         model.addAttribute("project", project);
         model.addAttribute("projectContent", StringEscapeUtils.unescapeHtml4(project.getContent()));
         model.addAttribute("roadMapList", roadMapList);
@@ -108,8 +109,6 @@ public class ProjectController extends BaseController {
 
     @RequestMapping("projectIndex")
     public String projectIndex(HttpServletRequest request, Model model) {
-        UserInfo userInfo = Utils.getUserInfo(request);
-        model.addAttribute("adminFlag", RoleSetting.isAdmin(userInfo) ? 1 : 0);
         return "/admin/project/projectindex";
     }
 
@@ -118,23 +117,12 @@ public class ProjectController extends BaseController {
         if (readFlag == null) {
             readFlag = 1;
         }
-        UserInfo userInfo = Utils.getUserInfo(request);
         Project project = projectService.getById(id);
         List<UserInfo> userInfos = userInfoService.listUserInfo();
         Map<String, ProjectUser> projectUserIds = null;
         if (project == null) {
             project = new Project();
-        } else {// 编辑
-            if (RoleSetting.isNotAdmin(userInfo)) {
-                ProjectUser projectUser = projectUserService.getProjectUser(id, userInfo.getId());
-                if (projectUser == null) {
-                    return "/404";
-                } else {
-                    if (readFlag == 1) {// 传编辑的时候，进行校验
-                        readFlag = projectUser.getReadFlag();
-                    }
-                }
-            }
+        } else {
             List<ProjectUser> projectUserList = projectUserService.list(new ProjectUserDto(id, null).toQuery());// 项目内成员
             projectUserIds = projectUserList.stream().collect(Collectors.toMap(ProjectUser::getUserId, Function.identity()));
         }

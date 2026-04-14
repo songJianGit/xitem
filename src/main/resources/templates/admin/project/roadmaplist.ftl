@@ -37,14 +37,15 @@
                                 </form>
                             </div>
 
-
                             <div class="card-body">
                                 <#--                                <h4 class="card-title">文章列表</h4>-->
                                 <div id="custom-toolbar">
                                     <div class="toolbar-btn-action">
-                                        <button type="button" id="add" class="btn btn-primary">
-                                            新增里程碑
-                                        </button>
+                                        <@projectReadFlagTag>
+                                            <button type="button" id="add" class="btn btn-primary">
+                                                新增里程碑
+                                            </button>
+                                        </@projectReadFlagTag>
                                     </div>
                                 </div>
                                 <div class="table-responsive">
@@ -59,10 +60,11 @@
                                            data-side-pagination="server">
                                         <thead>
                                         <tr>
-                                            <th data-field="title" data-formatter="title">标题</th>
+                                            <th data-field="title">标题</th>
                                             <th data-field="percentage" data-formatter="roadMapPercentage">进度</th>
                                             <th data-field="stime" data-formatter="plantime">计划时间</th>
                                             <th data-field="createDate" data-formatter="createDate">创建时间</th>
+                                            <th data-field="id" data-formatter="caozuo">操作</th>
                                         </tr>
                                         </thead>
                                     </table>
@@ -90,9 +92,9 @@
         return htm;
     }
 
-    function title(value, row) {
-        return '<a href="javascript:;" title="' + value + '" class="ellipsis-390" onclick="show(\'' + row.id + '\')">' + value + '</a>';
-    }
+    // function title(value, row) {
+    //     return '<a href="javascript:;" title="' + value + '" class="ellipsis-390" onclick="show(\'' + row.id + '\')">' + value + '</a>';
+    // }
 
     function roadMapPercentage(value, row) {
         return '<a href="javascript:;" title="' + value + '" onclick="showRoadMap(\'' + row.id + '\')">' + value + '</a>';
@@ -105,16 +107,54 @@
         return value.substring(0, 16);
     }
 
+    function caozuo(value, row) {
+        let htm = '';
+        htm += '<div class="btn-group">';
+        <@projectReadFlagTag>
+        htm += '<button type="button" class="btn btn-sm btn-default m-r-5" onclick="edit(\'' + value + '\')" title="编辑">编辑</button>';
+        htm += '<button type="button" class="btn btn-sm btn-default m-r-5" onclick="delById(\'' + value + '\')" title="删除">删除</button>';
+        </@projectReadFlagTag>
+        htm += '</div>';
+        return htm;
+    }
+
+    function delById(id) {
+        $.confirm({
+            title: '提示',
+            content: '是否删除？',
+            buttons: {
+                confirm: {
+                    text: '确认',
+                    action: function () {
+                        $.ajax({
+                            url: "${ctx.contextPath}/admin/roadmap/delById?id=" + id,
+                            success: function (d) {
+                                layer.msg(d.msg);
+                                reload();
+                            }
+                        });
+                    }
+                },
+                cancel: {
+                    text: '取消',
+                    action: function () {
+//                            $.alert('取消的!');
+                    }
+                }
+            }
+        });
+    }
+
     $("#add").click(function () {
-        layer_show('新增', "${ctx.contextPath}/admin/roadmap/edit", "50%");
+        layer_show('新增', "${ctx.contextPath}/admin/roadmap/edit", "40%", "260px");
     });
 
     function show(id) {
-        layer_show('查看', "${ctx.contextPath}/admin/roadmap/edit?readFlag=0&id=" + id, "50%");
+        layer_show('查看', "${ctx.contextPath}/admin/roadmap/edit?readFlag=0&id=" + id, "40%", "260px");
     }
 
     function edit(id) {
-        layer_show('编辑', "${ctx.contextPath}/admin/roadmap/edit?id=" + id, "50%");
+        layer_show('编辑', "${ctx.contextPath}/admin/roadmap/edit?id=" + id, "40%", "260px");
     }
 
     function showRoadMap(id) {

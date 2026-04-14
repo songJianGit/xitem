@@ -58,7 +58,7 @@
                                            data-side-pagination="server">
                                         <thead>
                                         <tr>
-                                            <th data-field="title" data-formatter="title">标题</th>
+                                            <th data-field="title" data-formatter="projectName">标题</th>
                                             <th data-field="users" data-formatter="users">项目成员</th>
                                             <th data-field="createDate" data-formatter="createDate">创建时间</th>
                                             <th data-field="createUserName">创建人</th>
@@ -111,24 +111,22 @@
     }
 
     function caozuo(value, row) {
-        let adminFlag = 1;
-        <#if adminFlag??>
-        adminFlag = ${adminFlag};
-        </#if>
         let htm = '';
         htm += '<div class="btn-group">';
-        if(adminFlag==1 || (1 == row.userReadFlag)){
-            htm += '<button type="button" class="btn btn-sm btn-default m-r-5" onclick="edit(\'' + value + '\')" title="编辑">编辑</button>';
-        }
-        if(adminFlag==1 || ('${Session.puser.id}' == row.createUserId)){
-            htm += '<button type="button" class="btn btn-sm btn-default m-r-5" onclick="delById(\'' + value + '\')" title="删除">删除</button>';
-        }
+        <@projectReadFlagTag>
+        htm += '<button type="button" class="btn btn-sm btn-default m-r-5" onclick="edit(\'' + value + '\')" title="编辑">编辑</button>';
+        htm += '<button type="button" class="btn btn-sm btn-default m-r-5" onclick="delById(\'' + value + '\')" title="删除">删除</button>';
+        </@projectReadFlagTag>
         htm += '</div>';
         return htm;
     }
 
-    function title(value, row) {
-        return '<a href="javascript:;" title="' + value + '" class="ellipsis-390" onclick="show(\'' + row.id + '\')">' + value + '</a>';
+    // function title(value, row) {
+    //     return '<a href="javascript:;" title="' + value + '" class="ellipsis-390" onclick="show(\'' + row.id + '\')">' + value + '</a>';
+    // }
+
+    function projectName(value, row) {
+        return '<a href="${ctx.contextPath}/admin/system/index?mclick=7&funId=5&projectId='+row.id+'" title="' + value + '" class="ellipsis-390">' + value + '</a>';
     }
 
     $("#add").click(function () {

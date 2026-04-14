@@ -33,7 +33,11 @@
             <li class="dropdown dropdown-profile">
                 <a href="javascript:void(0)" data-toggle="dropdown" class="dropdown-toggle">
                     <img class="img-avatar img-avatar-48 m-r-10"
-                         src="${ctx.contextPath}/static/admin/commons/img/defaultimg.webp" alt="头像"/>
+                         <#if Session.puser.avatar?? && Session.puser.avatar!=''>
+                             src="${ctx.contextPath}${Session.puser.avatar}"
+                             <#else>
+                             src="${ctx.contextPath}/static/admin/commons/img/defaultimg.webp"
+                         </#if> alt="头像"/>
                     <span>${Session.puser.userName!}</span>
                 </a>
                 <ul class="dropdown-menu dropdown-menu-right">

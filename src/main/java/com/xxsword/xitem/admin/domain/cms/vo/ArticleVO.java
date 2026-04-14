@@ -10,6 +10,7 @@ import java.util.List;
 public class ArticleVO {
     private String id;
     private String createDate;
+    private String createUserId;
     @Schema(title = "项目名称", description = "项目名称")
     private String projectName;
     @Schema(title = "任务状态", description = "任务状态")

@@ -37,16 +37,15 @@
                                 </form>
                             </div>
 
-
                             <div class="card-body">
 <#--                                <h4 class="card-title">文章列表</h4>-->
                                 <div id="custom-toolbar">
                                     <div class="toolbar-btn-action">
-                                        <#if projectUser?? && (projectUser.readFlag==1)>
+                                        <@projectReadFlagTag>
                                         <button type="button" id="add" class="btn btn-primary">
                                             新增任务
                                         </button>
-                                        </#if>
+                                        </@projectReadFlagTag>
                                     </div>
                                 </div>
                                 <div class="table-responsive">
@@ -127,13 +126,39 @@
     function caozuo(value, row) {
         let htm = '';
         htm += '<div class="btn-group">';
-        // htm += '<button type="button" class="btn btn-sm btn-default m-r-5" onclick="show(\'' + value + '\')" title="查看">查看</button>';
-        <#if projectUser?? && (projectUser.readFlag==1)>
+        <@projectReadFlagTag>
         htm += '<button type="button" class="btn btn-sm btn-default m-r-5" onclick="edit(\'' + value + '\')" title="编辑">编辑</button>';
-        </#if>
-        <#--htm += '<a target="_blank" class="btn btn-sm btn-default" href="${ctx.contextPath}/article/detail?id=' + value + '" title="预览">预览</a>';-->
+        htm += '<button type="button" class="btn btn-sm btn-default m-r-5" onclick="delById(\'' + value + '\')" title="删除">删除</button>';
+        </@projectReadFlagTag>
         htm += '</div>';
         return htm;
+    }
+
+    function delById(id) {
+        $.confirm({
+            title: '提示',
+            content: '是否删除？',
+            buttons: {
+                confirm: {
+                    text: '确认',
+                    action: function () {
+                        $.ajax({
+                            url: "${ctx.contextPath}/admin/cms/delById?id=" + id,
+                            success: function (d) {
+                                layer.msg(d.msg);
+                                reload();
+                            }
+                        });
+                    }
+                },
+                cancel: {
+                    text: '取消',
+                    action: function () {
+//                            $.alert('取消的!');
+                    }
+                }
+            }
+        });
     }
 
     $("#add").click(function () {

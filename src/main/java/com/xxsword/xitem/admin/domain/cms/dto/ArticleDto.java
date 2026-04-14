@@ -13,6 +13,8 @@ import java.util.List;
 @Data
 public class ArticleDto extends PageM {
     private String projectId;
+    private String projectTitle;
+    private List<String> projectTitleIds;// 标题搜索时赋值
     private List<String> projectIds;
     private String title;
     private String categoryIds;// 承接页面参数，可以逗号分隔
@@ -20,16 +22,19 @@ public class ArticleDto extends PageM {
     private Integer atype;// 1-项目任务 2-项目文章
     private String roadMapId;// 里程碑
     private List<String> roadMapIds;// 里程碑
+    private String levelId;
 
     public LambdaQueryWrapper<Article> toQuery() {
         return new LambdaQueryWrapper<Article>().eq(Article::getStatus, 1)
                 .eq(StringUtils.isNotBlank(projectId), Article::getPid, projectId)
+                .eq(StringUtils.isNotBlank(levelId), Article::getLevelId, levelId)
                 .eq(atype != null, Article::getAtype, atype)
                 .eq(StringUtils.isNotBlank(roadMapId), Article::getRoadmapId, roadMapId)
                 .like(StringUtils.isNotBlank(title), Article::getTitle, title)
                 .in(categoryAllIds != null && !categoryAllIds.isEmpty(), Article::getCategoryId, categoryAllIds)
                 .in(projectIds != null && !projectIds.isEmpty(), Article::getPid, projectIds)
                 .in(roadMapIds != null && !roadMapIds.isEmpty(), Article::getRoadmapId, roadMapIds)
+                .in(projectTitleIds != null && !projectTitleIds.isEmpty(), Article::getPid, projectTitleIds)
                 .orderByDesc(Article::getCreateDate, Article::getId);
     }
 }

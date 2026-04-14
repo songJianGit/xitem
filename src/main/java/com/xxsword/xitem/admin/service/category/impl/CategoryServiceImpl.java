@@ -113,6 +113,9 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> i
 
     @Override
     public List<String> listCategoryIdByCategoryId(String categoryId) {
+        if (StringUtils.isBlank(categoryId)) {
+            return new ArrayList<>();
+        }
         List<Category> list = categoryC(categoryId);
         List<String> stringList = list.stream().map(Category::getId).collect(Collectors.toList());
         stringList.add(categoryId);

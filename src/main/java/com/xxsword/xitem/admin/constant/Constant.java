@@ -11,6 +11,9 @@ public class Constant {
     // 用户权限(用户的全部菜单tag集合)
     public static final String USER_INFO_TAG = "pusertag";
 
+    // 用户在项目中的按钮权限(用户在项目内的一些按钮，需要根据逻辑判断显示与否)
+    public static final String USER_INFO_PROJECT_TAG = "puserprojecttag";
+
     // 用户是否有角色的键(1-有角色 0-没有角色)
     public static final String USER_INFO_ROLE = "puserrole";
 

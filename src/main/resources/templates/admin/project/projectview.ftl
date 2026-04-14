@@ -139,7 +139,11 @@
                 <div class="row">
                     <div class="col-8">
                         <div class="card pv-card">
-                            <div class="card-header">${project.title!}<button type="button" class="btn btn-default" onclick="edit()">编辑</button></div>
+                            <div class="card-header">${project.title!}
+                                <@projectReadFlagTag>
+                                <button type="button" class="btn btn-primary" onclick="edit()">编辑</button>
+                                </@projectReadFlagTag>
+                            </div>
                             <div class="card-body">
                                 <#if projectContent?? && projectContent?trim?length gt 0>
                                     <div class="pv-content-wrap">${projectContent}</div>

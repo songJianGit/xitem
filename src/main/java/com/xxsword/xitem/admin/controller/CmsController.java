@@ -1,6 +1,8 @@
 package com.xxsword.xitem.admin.controller;
 
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.xxsword.xitem.admin.constant.Constant;
 import com.xxsword.xitem.admin.constant.RoleSetting;
@@ -12,7 +14,9 @@ import com.xxsword.xitem.admin.domain.cms.entity.ArticleData;
 import com.xxsword.xitem.admin.domain.cms.entity.ArticleUser;
 import com.xxsword.xitem.admin.domain.cms.vo.ArticleVO;
 import com.xxsword.xitem.admin.domain.cms.vo.CommentsVO;
+import com.xxsword.xitem.admin.domain.project.dto.ProjectDto;
 import com.xxsword.xitem.admin.domain.project.dto.ProjectUserDto;
+import com.xxsword.xitem.admin.domain.project.entity.Project;
 import com.xxsword.xitem.admin.domain.project.entity.ProjectUser;
 import com.xxsword.xitem.admin.domain.project.entity.RoadMap;
 import com.xxsword.xitem.admin.domain.project.vo.AUVO;
@@ -24,6 +28,7 @@ import com.xxsword.xitem.admin.service.cms.ArticleDataService;
 import com.xxsword.xitem.admin.service.cms.ArticleService;
 import com.xxsword.xitem.admin.service.cms.ArticleUserService;
 import com.xxsword.xitem.admin.service.cms.CommentsService;
+import com.xxsword.xitem.admin.service.project.ProjectService;
 import com.xxsword.xitem.admin.service.project.ProjectUserService;
 import com.xxsword.xitem.admin.service.project.RoadMapService;
 import com.xxsword.xitem.admin.utils.Utils;
@@ -53,6 +58,8 @@ public class CmsController extends BaseController {
     @Autowired
     private CategoryService categoryService;
     @Autowired
+    private ProjectService projectService;
+    @Autowired
     private ProjectUserService projectUserService;
     @Autowired
     private ArticleUserService articleUserService;
@@ -61,14 +68,17 @@ public class CmsController extends BaseController {
     @Autowired
     private CommentsService commentsService;
 
+    @RequestMapping("mytask")
+    public String mytask(HttpServletRequest request, Model model) {
+        List<Category> categoryList = categoryService.categoryC(Constant.TASK_STATUS);
+        List<Category> categoryListLevel = categoryService.categoryC(Constant.TASK_STATUS_LEVEL);
+        model.addAttribute("categoryList", categoryList);
+        model.addAttribute("categoryListLevel", categoryListLevel);
+        return "admin/mytask";
+    }
+
     @RequestMapping("articleList")
     public String articleList(HttpServletRequest request, Model model) {
-        String projectId = Utils.getProjectId(request);
-        UserInfo userInfo = Utils.getUserInfo(request);
-        ProjectUser projectUser = projectUserService.getProjectUser(projectId, userInfo.getId());
-        if (projectUser != null) {
-            model.addAttribute("projectUser", projectUser);
-        }
         return "admin/cms/articlelist";
     }
 
@@ -86,6 +96,7 @@ public class CmsController extends BaseController {
             Article article = articleList.get(0);
             model.addAttribute("articleId", article.getId());
         }
+        UserInfo userInfo = Utils.getUserInfo(request);
         return "admin/cms/articlelistwiki";
     }
 
@@ -146,6 +157,18 @@ public class CmsController extends BaseController {
             }
             articleDto.setCategoryAllIds(categoryIds);
         }
+
+        if (StringUtils.isNotBlank(articleDto.getProjectTitle())) {
+            ProjectDto projectDto = new ProjectDto();
+            projectDto.setTitle(articleDto.getProjectTitle());
+            List<Project> lp = projectService.list(projectDto.toQuery());
+            if (lp.isEmpty()) {
+                return new RestPaging<>(0L, new ArrayList<>());
+            } else {
+                articleDto.setProjectTitleIds(lp.stream().map(Project::getId).toList());
+            }
+        }
+
         UserInfo userInfo = Utils.getUserInfo(request);
         List<ProjectUser> pIds = new ArrayList<>();
         if (type == 1) {
@@ -228,14 +251,7 @@ public class CmsController extends BaseController {
         UserInfo userInfo = Utils.getUserInfo(request);
         ProjectUser projectUser = projectUserService.getProjectUser(projectId, userInfo.getId());
         if (RoleSetting.isNotAdmin(userInfo)) {
-            if (projectUser == null) {
-                return "/404";
-            } else {
-                if (readFlag == 1) {// 传编辑的时候，进行校验
-                    readFlag = projectUser.getReadFlag();
-                }
-            }
-            model.addAttribute("readFlagP2", projectUser.getReadFlag());
+            model.addAttribute("readFlagP2", projectUser == null ? 0 : projectUser.getReadFlag());
         }
         model.addAttribute("readFlag", readFlag);
         return "/admin/cms/articleedit2";
@@ -265,6 +281,21 @@ public class CmsController extends BaseController {
         }
         article.setPid(projectId);
         articleService.saveArticle(article, articleData, userlists);
+        return RestResult.OK();
+    }
+
+    @RequestMapping("delById")
+    @ResponseBody
+    public RestResult delById(HttpServletRequest request, String id) {
+        UserInfo userInfo = Utils.getUserInfo(request);
+        Article article = articleService.getById(id);
+        if (RoleSetting.isNotAdmin(userInfo) && !userInfo.getId().equals(article.getCreateUserId())) {
+            return RestResult.Fail("不能删除别人的数据");
+        }
+        LambdaUpdateWrapper<Article> up = Wrappers.lambdaUpdate();
+        up.eq(Article::getId, id);
+        up.set(Article::getStatus, 0);
+        articleService.update(up);
         return RestResult.OK();
     }
 }

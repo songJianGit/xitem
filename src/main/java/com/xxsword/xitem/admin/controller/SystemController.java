@@ -74,7 +74,7 @@ public class SystemController extends BaseController {
             session.setAttribute(Constant.TREE_MENU_LIST_LEFT, session.getAttribute(Constant.TREE_MENU_LIST_LEFT + funId));// 左侧菜单
 
             switch (funId) {
-                case "2" -> page = "/admin/mytask";
+                case "2" -> page = httpRedirect(request, "/admin/cms/mytask");
                 case "4" -> page = httpRedirect(request, "/admin/system/userEditByUser");
                 case "5" -> page = httpRedirect(request, "/admin/project/projectView");
             }
@@ -85,7 +85,7 @@ public class SystemController extends BaseController {
             session.setAttribute(Constant.TREE_MENU_LIST_LEFT, session.getAttribute(Constant.TREE_MENU_LIST_LEFT + Constant.TREE_MENU_LIST_TOP_FLAG_DEF));// 左侧菜单
         }
 
-        return "/admin/mytask";
+        return httpRedirect(request, "/admin/cms/mytask");
     }
 
 

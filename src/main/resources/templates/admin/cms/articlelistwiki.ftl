@@ -23,13 +23,16 @@
                         <div class="card">
                             <div class="card-header">
                                 文章列表
-                                <button class="btn btn-primary" type="button" onclick="addBtn()">添加文章</button>
+                                <@projectReadFlagTag>
+                                    <button class="btn btn-primary" type="button" onclick="addBtn()">添加文章</button>
+                                </@projectReadFlagTag>
                             </div>
                             <div class="card-body">
                                 <ul class="list-group">
                                     <#list alist as item>
-                                        <li class="list-group-item"><a target="contentFrame"
-                                                                       href="${ctx.contextPath}/admin/cms/articlelistwikishow?id=${item.id!}">${item.title}</a>
+                                        <li class="list-group-item">
+                                            <a target="contentFrame"
+                                               href="${ctx.contextPath}/admin/cms/articlelistwikishow?id=${item.id!}">${item.title}</a>
                                         </li>
                                     </#list>
                                 </ul>
@@ -55,12 +58,41 @@
 <#include "../commons/js.ftl"/>
 <script type="text/javascript">
 
-    function addBtn(id) {
+    function addBtn() {
         layer_show('新增', "${ctx.contextPath}/admin/cms/articleEdit3", "80%");
     }
 
     function editBtn(id) {
-        layer_show('边际', "${ctx.contextPath}/admin/cms/articleEdit3?id=" + id, "80%");
+        layer_show('编辑', "${ctx.contextPath}/admin/cms/articleEdit3?id=" + id, "80%");
+    }
+
+    function delById(id) {
+        $.confirm({
+            title: '提示',
+            content: '是否删除？',
+            buttons: {
+                confirm: {
+                    text: '确认',
+                    action: function () {
+                        $.ajax({
+                            url: "${ctx.contextPath}/admin/cms/delById?id=" + id,
+                            success: function (d) {
+                                layer.msg(d.msg);
+                                setTimeout(function () {
+                                    reload();
+                                }, 500)
+                            }
+                        });
+                    }
+                },
+                cancel: {
+                    text: '取消',
+                    action: function () {
+//                            $.alert('取消的!');
+                    }
+                }
+            }
+        });
     }
 
     function reload() {
@@ -75,6 +107,14 @@
                 height = 600;
             }
             document.getElementById('myIframe').style.height = height + 'px';
+        }
+        if (event.data.type === 'editBtnFun') {
+            let id = event.data.id;
+            editBtn(id);
+        }
+        if (event.data.type === 'delBtnFun') {
+            let id = event.data.id;
+            delById(id);
         }
     });
 </script>

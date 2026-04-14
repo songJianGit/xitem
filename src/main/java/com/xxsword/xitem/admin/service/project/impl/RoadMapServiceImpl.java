@@ -58,6 +58,8 @@ public class RoadMapServiceImpl extends ServiceImpl<RoadMapMapper, RoadMap> impl
                     p[i] = category.getTitle() + " : " + (num == null ? 0 : num);
                 }
                 roadMap.setPercentage(String.join(" ", p));
+            } else {
+                roadMap.setPercentage("无");
             }
         }
         return null;

@@ -96,12 +96,12 @@
                         <textarea id="editor" name="content"
                                   style="width:99.9%;"><#if article.articleData??>${article.articleData.content!}</#if></textarea>
             </div>
-            <#if readFlag?? && readFlag==1>
+            <@projectReadFlagTag readFlag=readFlag!>
                 <div class="form-group">
                     <button type="button" class="btn btn-primary" id="saveBtn">保存</button>
                     <button type="button" class="btn btn-default" id="saveBtn2">保存并关闭</button>
                 </div>
-            </#if>
+            </@projectReadFlagTag>
             <hr class="my-4"/>
             <div class="discuss-wrap">
                 <div class="discuss-head d-flex align-items-center justify-content-between flex-wrap">
@@ -284,16 +284,18 @@
 <script type="text/javascript" src="${ctx.contextPath}/static/admin/commons/pm-user/pm.js"></script>
 <script type="text/javascript" src="${ctx.contextPath}/static/admin/commons/discuss/discuss.js"></script>
 <script type="text/javascript">
-    <#if readFlag?? && readFlag==0>
+    <@projectReadFlagOutTag readFlag=readFlag!>
+    <#if flag==0>
     // 禁用页面的input，富文本编辑器，按钮
     $(".card-body input").attr("disabled", "disabled");
     $(".card-body textarea").attr("disabled", "disabled");
     $(".card-body button").attr("disabled", "disabled");
     $(".card-body select").attr("disabled", "disabled");
     </#if>
+    </@projectReadFlagOutTag>
 
     tinymce.init({
-        <#if readFlag?? && readFlag==0>readonly: true, </#if>
+        <@projectReadFlagOutTag readFlag=readFlag!><#if flag==0>readonly: true, </#if></@projectReadFlagOutTag>
         selector: '#discussInput', //容器，可使用css选择器
         relative_urls: false,// 禁用相对路径，强制使用绝对路径
         remove_script_host: true,// 不保留协议和主机名
@@ -405,7 +407,7 @@
     }
 
     tinymce.init({
-        <#if readFlag?? && readFlag==0>readonly: true, </#if>
+        <@projectReadFlagOutTag readFlag=readFlag!><#if flag==0>readonly: true, </#if></@projectReadFlagOutTag>
         selector: '#editor', //容器，可使用css选择器
         relative_urls: false,// 禁用相对路径，强制使用绝对路径
         remove_script_host: true,// 不保留协议和主机名

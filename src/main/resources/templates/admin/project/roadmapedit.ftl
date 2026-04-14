@@ -32,10 +32,12 @@
             </div>
         </div>
 
-        <div class="form-group">
-            <button type="button" class="btn btn-primary" id="saveBtn">保存</button>
-            <button type="button" class="btn btn-default" id="saveBtn2">保存并关闭</button>
-        </div>
+        <@projectReadFlagTag>
+            <div class="form-group">
+                <button type="button" class="btn btn-primary" id="saveBtn">保存</button>
+                <button type="button" class="btn btn-default" id="saveBtn2">保存并关闭</button>
+            </div>
+        </@projectReadFlagTag>
     </form>
 
 </div>

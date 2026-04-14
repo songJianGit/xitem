@@ -29,6 +29,16 @@
     <#if article??>
         <div class="card-header">
             ${article.title!}
+            <@projectReadFlagTag>
+            <ul class="card-actions">
+                <li>
+                    <a class="delBtn" href="#!" data-id="${article.id!}" data-toggle="tooltip" title="" data-original-title="删除"><i class="mdi mdi-delete-outline"></i></a>
+                </li>
+                <li>
+                    <a class="editBtn" href="#!" data-id="${article.id!}" data-toggle="tooltip" title="" data-original-title="编辑"><i class="mdi mdi-square-edit-outline"></i></a>
+                </li>
+            </ul>
+            </@projectReadFlagTag>
         </div>
     </#if>
     <div class="card-body">
@@ -43,6 +53,23 @@
         type: 'resize',
         height: document.getElementById('maxHeight').scrollHeight + 3
     }, '*');
+
+    $(function (){
+        $(".delBtn").click(function (){
+            let id = $(this).data("id");
+            window.parent.postMessage({// 向父级页面发送高度信息
+                type: 'delBtnFun',
+                id: id
+            }, '*');
+        });
+        $(".editBtn").click(function (){
+            let id = $(this).data("id");
+            window.parent.postMessage({// 向父级页面发送高度信息
+                type: 'editBtnFun',
+                id: id
+            }, '*');
+        });
+    });
 </script>
 </body>
 </html>

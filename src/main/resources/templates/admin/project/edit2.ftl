@@ -25,12 +25,12 @@
                           style="width:99.9%;">${project.content!}</textarea>
             </div>
 
-            <#if readFlag?? && readFlag==1>
+            <@projectReadFlagTag readFlag=readFlag!>
                 <div class="form-group col-12">
                     <button type="button" class="btn btn-primary" id="saveBtn">保存</button>
                     <button type="button" class="btn btn-default" id="saveBtn2">保存并关闭</button>
                 </div>
-            </#if>
+            </@projectReadFlagTag>
         </div>
 
         <div class="col-4 pl-lg-4">
@@ -137,13 +137,13 @@
 <#include "../commons/js.ftl"/>
 <script type="text/javascript" src="${ctx.contextPath}/static/admin/commons/pm-user/pm.js"></script>
 <script type="text/javascript">
-    <#if readFlag?? && readFlag==0>
+    <@projectReadFlagTag readFlag=readFlag!>
     // 禁用页面的input，富文本编辑器，按钮
     $("input").attr("disabled", "disabled");
     $("textarea").attr("disabled", "disabled");
     $("button").attr("disabled", "disabled");
     $("select").attr("disabled", "disabled");
-    </#if>
+    </@projectReadFlagTag>
 
     $('#saveBtn').click(function () {
         save(1);
@@ -186,7 +186,7 @@
     }
 
     tinymce.init({
-        <#if readFlag?? && readFlag==0>readonly: true, </#if>
+        <@projectReadFlagOutTag readFlag=readFlag!><#if flag==0>readonly: true, </#if></@projectReadFlagOutTag>
         selector: '#editor', //容器，可使用css选择器
         relative_urls: false,// 禁用相对路径，强制使用绝对路径
         remove_script_host: true,// 不保留协议和主机名

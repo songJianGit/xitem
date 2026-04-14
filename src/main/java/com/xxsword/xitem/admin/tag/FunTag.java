@@ -19,7 +19,7 @@ public class FunTag implements TemplateDirectiveModel {
     private HttpServletRequest request;
 
     /**
-     * <@funTag tag="aaa">${fun.tag!}</@funTag>
+     * <@funTag tag="aaa">${tag!}</@funTag>
      *
      * @param environment
      * @param map
