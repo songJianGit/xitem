@@ -9,27 +9,32 @@
             box-shadow: 0 2px 12px rgba(31, 45, 61, .05);
             margin-bottom: 16px;
         }
+
         .pv-card .card-header {
             background: #fff;
             border-bottom: 1px solid #eef1f4;
             font-weight: 600;
             color: #343a40;
         }
+
         .pv-content-wrap {
             line-height: 1.8;
             color: #495057;
             word-break: break-word;
         }
+
         .pv-empty {
             padding: 12px 0;
             color: #868e96;
             font-size: 13px;
         }
+
         .pv-member-grid {
             display: grid;
             grid-template-columns: repeat(5, minmax(0, 1fr));
             gap: 10px;
         }
+
         .pv-member-item {
             border: 1px solid #e9ecef;
             border-radius: 8px;
@@ -42,6 +47,7 @@
             align-items: center;
             text-align: center;
         }
+
         .pv-member-avatar {
             width: 36px;
             height: 36px;
@@ -50,6 +56,7 @@
             margin-bottom: 6px;
             border: 1px solid #e9ecef;
         }
+
         .pv-member-avatar-text {
             display: flex;
             align-items: center;
@@ -59,6 +66,7 @@
             font-size: 13px;
             font-weight: 600;
         }
+
         .pv-member-name {
             font-weight: 600;
             color: #212529;
@@ -69,6 +77,7 @@
             overflow: hidden;
             text-overflow: ellipsis;
         }
+
         .pv-member-role {
             font-size: 12px;
             color: #6c757d;
@@ -80,20 +89,34 @@
             overflow: hidden;
             text-overflow: ellipsis;
         }
+
         @media (max-width: 1400px) {
-            .pv-member-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+            .pv-member-grid {
+                grid-template-columns: repeat(4, minmax(0, 1fr));
+            }
         }
+
         @media (max-width: 1200px) {
-            .pv-member-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+            .pv-member-grid {
+                grid-template-columns: repeat(3, minmax(0, 1fr));
+            }
         }
+
         @media (max-width: 768px) {
-            .pv-member-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+            .pv-member-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
         }
+
         .pv-milestone-item {
             padding: 10px 0 12px;
             border-bottom: 1px dashed #eceff3;
         }
-        .pv-milestone-item:last-child { border-bottom: 0; }
+
+        .pv-milestone-item:last-child {
+            border-bottom: 0;
+        }
+
         .pv-milestone-head {
             display: flex;
             align-items: center;
@@ -101,11 +124,13 @@
             margin-bottom: 8px;
             gap: 10px;
         }
+
         .pv-milestone-title {
             font-weight: 600;
             color: #212529;
             margin: 0;
         }
+
         .pv-milestone-stats {
             margin: 0;
             padding: 8px 10px;
@@ -141,7 +166,7 @@
                         <div class="card pv-card">
                             <div class="card-header">${project.title!}
                                 <@projectReadFlagTag>
-                                <button type="button" class="btn btn-primary" onclick="edit()">编辑</button>
+                                    <button type="button" class="btn btn-primary" onclick="edit()">编辑</button>
                                 </@projectReadFlagTag>
                             </div>
                             <div class="card-body">
@@ -160,7 +185,8 @@
                                         <#list voList as item>
                                             <div class="pv-member-item">
                                                 <#if item.avatar?? && item.avatar?trim?length gt 0>
-                                                    <img class="pv-member-avatar" src="${ctx.contextPath}${item.avatar}" alt="${item.userName!'用户头像'}">
+                                                    <img class="pv-member-avatar" src="${ctx.contextPath}${item.avatar}"
+                                                         alt="${item.userName!'用户头像'}">
                                                 <#else>
                                                     <div class="pv-member-avatar pv-member-avatar-text">${item.userNameFast!}</div>
                                                 </#if>
@@ -207,9 +233,15 @@
     function edit() {
         layer_show('编辑', "${ctx.contextPath}/admin/project/edit2?id=${project.id!}", "90%");
     }
-    function reload(){
+
+    function reload() {
         window.location.reload();
     }
+
+    // 进入项目概述页面时，自动展开任务菜单
+    setTimeout(function () {
+        $("#1880490630882680833").addClass("open");
+    }, 100)
 </script>
 </body>
 </html>

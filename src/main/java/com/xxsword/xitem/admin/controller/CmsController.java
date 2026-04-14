@@ -79,6 +79,10 @@ public class CmsController extends BaseController {
 
     @RequestMapping("articleList")
     public String articleList(HttpServletRequest request, Model model) {
+        List<Category> categoryList = categoryService.categoryC(Constant.TASK_STATUS);
+        List<Category> categoryListLevel = categoryService.categoryC(Constant.TASK_STATUS_LEVEL);
+        model.addAttribute("categoryList", categoryList);
+        model.addAttribute("categoryListLevel", categoryListLevel);
         return "admin/cms/articlelist";
     }
 
@@ -96,7 +100,6 @@ public class CmsController extends BaseController {
             Article article = articleList.get(0);
             model.addAttribute("articleId", article.getId());
         }
-        UserInfo userInfo = Utils.getUserInfo(request);
         return "admin/cms/articlelistwiki";
     }
 
@@ -179,6 +182,15 @@ public class CmsController extends BaseController {
             pIds = projectUserService.listProjectUser(new ProjectUserDto(null, userInfo.getId()));
             articleDto.setProjectIds(pIds.stream().map(ProjectUser::getPid).toList());
         }
+        if (articleDto.getTaskSearchFlag() != null && articleDto.getTaskSearchFlag() == 2) {
+            List<ArticleUser> articleUserList = articleUserService.listArticleUserByUserId(userInfo.getId());
+            List<String> aIds = articleUserList.stream().map(ArticleUser::getAid).toList();
+            if (aIds.isEmpty()) {
+                return new RestPaging<>(0L, new ArrayList<>());
+            } else {
+                articleDto.setArticleIds(aIds);
+            }
+        }
         articleDto.setAtype(1);
         Page<Article> data = articleService.page(articleDto.toPage(), articleDto.toQuery());
         List<ArticleVO> voList = CmsConvert.INSTANCE.toArticleVO(data.getRecords());
@@ -224,7 +236,7 @@ public class CmsController extends BaseController {
         List<RoadMap> roadMapList = roadMapService.listRoadMap(projectId);
         List<ProjectUser> projectUserList = projectUserService.list(new ProjectUserDto(projectId, null).toQuery());
         projectUserService.setProjectUserUserName(projectUserList);
-        List<ArticleUser> articleUsers = articleUserService.listArticleUserBy(id);
+        List<ArticleUser> articleUsers = articleUserService.listArticleUserByAid(id);
         Set<String> articleUsersUserIds = articleUsers.stream().map(ArticleUser::getUserId).collect(Collectors.toSet());
 
         List<AUVO> voList = new ArrayList<>();
@@ -295,6 +307,26 @@ public class CmsController extends BaseController {
         LambdaUpdateWrapper<Article> up = Wrappers.lambdaUpdate();
         up.eq(Article::getId, id);
         up.set(Article::getStatus, 0);
+        articleService.update(up);
+        return RestResult.OK();
+    }
+
+    @RequestMapping("upLevelId")
+    @ResponseBody
+    public RestResult upLevelId(HttpServletRequest request, String projectId, String levelId) {
+        LambdaUpdateWrapper<Article> up = Wrappers.lambdaUpdate();
+        up.eq(Article::getId, projectId);
+        up.set(Article::getLevelId, levelId);
+        articleService.update(up);
+        return RestResult.OK();
+    }
+
+    @RequestMapping("upCategoryId")
+    @ResponseBody
+    public RestResult upCategoryId(HttpServletRequest request, String projectId, String categoryId) {
+        LambdaUpdateWrapper<Article> up = Wrappers.lambdaUpdate();
+        up.eq(Article::getId, projectId);
+        up.set(Article::getCategoryId, categoryId);
         articleService.update(up);
         return RestResult.OK();
     }

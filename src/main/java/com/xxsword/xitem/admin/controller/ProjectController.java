@@ -82,8 +82,6 @@ public class ProjectController extends BaseController {
 
     @RequestMapping("projectView")
     public String projectView(HttpServletRequest request, String projectId, Model model) {
-        UserInfo userInfo = Utils.getUserInfo(request);
-
         if (StringUtils.isBlank(projectId)) {
             projectId = Utils.getProjectId(request);
         } else {

@@ -24,10 +24,18 @@ public class ArticleUserServiceImpl extends ServiceImpl<ArticleUserMapper, Artic
     private UserInfoService userInfoService;
 
     @Override
-    public List<ArticleUser> listArticleUserBy(String aid) {
+    public List<ArticleUser> listArticleUserByAid(String aid) {
         LambdaQueryWrapper<ArticleUser> q = Wrappers.lambdaQuery();
         q.eq(ArticleUser::getStatus, 1);
         q.eq(ArticleUser::getAid, aid);
+        return list(q);
+    }
+
+    @Override
+    public List<ArticleUser> listArticleUserByUserId(String userId) {
+        LambdaQueryWrapper<ArticleUser> q = Wrappers.lambdaQuery();
+        q.eq(ArticleUser::getStatus, 1);
+        q.eq(ArticleUser::getUserId, userId);
         return list(q);
     }
 

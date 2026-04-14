@@ -6,7 +6,6 @@
 <body class="card">
 <div class="card-header">
     <form class="form-inline" method="post" id="searchform" action="#!" role="form">
-        <input type="hidden" id="categoryIds" name="categoryIds">
         <div class="input-group m-r-5">
             <div class="input-group-prepend">
                 <span class="input-group-text">标题</span>

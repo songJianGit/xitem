@@ -23,6 +23,8 @@ public class ArticleDto extends PageM {
     private String roadMapId;// 里程碑
     private List<String> roadMapIds;// 里程碑
     private String levelId;
+    private Integer taskSearchFlag;// 1-全部任务 2-我参与的任务
+    private List<String> articleIds;
 
     public LambdaQueryWrapper<Article> toQuery() {
         return new LambdaQueryWrapper<Article>().eq(Article::getStatus, 1)
@@ -35,6 +37,7 @@ public class ArticleDto extends PageM {
                 .in(projectIds != null && !projectIds.isEmpty(), Article::getPid, projectIds)
                 .in(roadMapIds != null && !roadMapIds.isEmpty(), Article::getRoadmapId, roadMapIds)
                 .in(projectTitleIds != null && !projectTitleIds.isEmpty(), Article::getPid, projectTitleIds)
+                .in(articleIds != null && !articleIds.isEmpty(), Article::getId, articleIds)
                 .orderByDesc(Article::getCreateDate, Article::getId);
     }
 }

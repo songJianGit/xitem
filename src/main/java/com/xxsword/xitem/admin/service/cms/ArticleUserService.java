@@ -7,7 +7,9 @@ import java.util.List;
 import java.util.Map;
 
 public interface ArticleUserService extends IService<ArticleUser> {
-    List<ArticleUser> listArticleUserBy(String aid);
+    List<ArticleUser> listArticleUserByAid(String aid);
+
+    List<ArticleUser> listArticleUserByUserId(String userId);
 
     ArticleUser getArticleUser(String aid, String userId);
 

@@ -127,6 +127,7 @@ public class ProjectServiceImpl extends ServiceImpl<ProjectMapper, Project> impl
 
     private LambdaQueryWrapper<Project> getQ(ProjectDto projectDto, UserInfo userInfo) {
         if (RoleSetting.isNotAdmin(userInfo)) {
+            // 非管理员，则筛选其参与的项目
             LambdaQueryWrapper<ProjectUser> q = Wrappers.lambdaQuery();
             q.eq(ProjectUser::getUserId, userInfo.getId());
             q.eq(ProjectUser::getStatus, 1);
