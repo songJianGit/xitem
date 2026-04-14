@@ -11,16 +11,19 @@ import com.xxsword.xitem.admin.domain.system.vo.UserInfoRoleVO;
 import com.xxsword.xitem.admin.model.*;
 import com.xxsword.xitem.admin.service.system.*;
 import com.xxsword.xitem.admin.utils.MenuUtil;
+import com.xxsword.xitem.admin.utils.UpLoadUtil;
 import com.xxsword.xitem.admin.utils.Utils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -143,12 +146,19 @@ public class SystemController extends BaseController {
      * 保存用户
      */
     @RequestMapping("userSave")
-    public String userSave(HttpServletRequest request, UserInfo userInfo) {
+    public String userSave(HttpServletRequest request, UserInfo userInfo, @RequestParam(value = "fileinfo") MultipartFile multipartFile) {
         long num = userInfoService.count(new LambdaQueryWrapper<UserInfo>().eq(UserInfo::getStatus, 1));
         if (num <= maxUserNum()) {
+            String path = UpLoadUtil.upload(multipartFile, "/useravatar");
+            if (StringUtils.isNotBlank(path)) {
+                userInfo.setAvatar(path);
+            }
             userInfoService.saveOrUpdate(userInfo);
         } else {
             log.warn("已达到最大用户数限制 UserNum:{}", num);
+        }
+        if (request.getHeader("referer").contains("admin/system/userEditByUser")) {
+            return httpRedirect(request, "/admin/system/userEditByUser");
         }
         return httpRedirect(request, "/admin/system/userList");
     }

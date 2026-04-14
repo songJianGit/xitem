@@ -107,7 +107,7 @@
                 area: ['79%', ($(window).height() - 50) + 'px'],
                 shadeClose: false,// 点击遮罩区域，关闭弹层
                 title: '文件',
-                content: '${ctx.contextPath}/admin/file/fileTable?selectFlag=1',
+                content: '${ctx.contextPath}/admin/file/fileTableProject?selectFlag=1',
                 end: function () {
                     let fileWebPath = window.fileWebPath; // 从全局变量中获取数据
                     let fileName = window.fileName; // 从全局变量中获取数据

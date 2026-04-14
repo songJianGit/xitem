@@ -24,7 +24,7 @@
                         <div class="card">
                             <div class="card-body">
 
-                                <form action="${ctx.contextPath}/admin/system/userSave" method="post" class="row"
+                                <form action="${ctx.contextPath}/admin/system/userSave" method="post" class="row" enctype="multipart/form-data"
                                       onsubmit="return check();">
                                     <input type="hidden" name="id" value="${user.id!}"/>
                                     <div class="form-group col-6">
@@ -54,6 +54,13 @@
                                                autocomplete="off"
                                                onClick="WdatePicker({el:this,dateFmt:'yyyy-MM-dd HH:mm:ss'})"
                                                value="${user.lifeDate!}" placeholder="账号有效期" required/>
+                                    </div>
+                                    <div class="form-group col-6">
+                                        <label>头像</label>
+                                        <input type="file" class="form-control-file" name="fileinfo" accept="image/jpeg, image/png"/>
+                                        <#if user.avatar?? && user.avatar?trim?length gt 0>
+                                            <img style="width: 100px" src="${ctx.contextPath}${user.avatar!'/static/admin/commons/img/defaultimg.webp'}" alt="图">
+                                        </#if>
                                     </div>
                                     <div class="form-group col-12">
                                         <button type="submit" class="btn btn-primary">确 定</button>

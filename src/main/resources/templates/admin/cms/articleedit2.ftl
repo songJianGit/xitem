@@ -332,7 +332,7 @@
                 area: ['79%', ($(window).height() - 50) + 'px'],
                 shadeClose: false,// 点击遮罩区域，关闭弹层
                 title: '文件',
-                content: '${ctx.contextPath}/admin/file/fileTable?selectFlag=1',
+                content: '${ctx.contextPath}/admin/file/fileTableProject?selectFlag=1',
                 end: function () {
                     let fileWebPath = window.fileWebPath; // 从全局变量中获取数据
                     let fileName = window.fileName; // 从全局变量中获取数据
@@ -418,9 +418,9 @@
         content_style: "img {max-width:100%;}",// 图片额外样式控制
         branding: false,// 隐藏品牌信息和"Upgrade"图标
         menubar: false, // 隐藏菜单栏
-        plugins: ['image', 'code', 'table', 'lists'],
+        plugins: ['image', 'code', 'table', 'lists', 'media'],
         image_uploadtab: true,
-        toolbar: 'undo redo | styles | bold italic strikethrough forecolor | table bullist numlist | image | removeformat | code',
+        toolbar: 'undo redo | styles | bold italic strikethrough forecolor | table bullist numlist | image media | removeformat | code',
         file_picker_callback: (callback, value, meta) => {// 上传函数（图片，视频，文件）
             let filetype = 0;
             switch (meta.filetype) {
@@ -444,7 +444,7 @@
                 area: ['79%', ($(window).height() - 50) + 'px'],
                 shadeClose: false,// 点击遮罩区域，关闭弹层
                 title: '文件',
-                content: '${ctx.contextPath}/admin/file/fileTable?selectFlag=1',
+                content: '${ctx.contextPath}/admin/file/fileTableProject?selectFlag=1',
                 end: function () {
                     let fileWebPath = window.fileWebPath; // 从全局变量中获取数据
                     let fileName = window.fileName; // 从全局变量中获取数据

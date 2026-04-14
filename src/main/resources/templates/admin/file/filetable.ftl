@@ -43,7 +43,7 @@
                             <#if item.type==1><a target="_blank"
                                                  href="${fileWebPath!}">${item.name!}</a></#if>
                             <#if item.type==2><a
-                                href="${ctx.contextPath}/admin/file/fileTable?delFlag=${fileTableDto.delFlag!}&selectFlag=${fileTableDto.selectFlag!}&path=${path!}/${item.name!}">${item.name!}</a></#if>
+                                href="${ctx.contextPath}/admin/file/${lastPath}?delFlag=${fileTableDto.delFlag!}&selectFlag=${fileTableDto.selectFlag!}&path=${path!}/${item.name!}">${item.name!}</a></#if>
                         </td>
                         <td>${item.size!}</td>
                         <td>

@@ -43,7 +43,7 @@ public class FileController {
     public String fileTable(HttpServletRequest request, FileTableDto fileTableDto, Model model) {
         UserInfo userInfo = Utils.getUserInfo(request);
         String upath_relative = UpLoadUtil.PATH_INFO + UpLoadUtil.getUserPath(userInfo.getId());// 用户基础文件夹(相对路径)
-        return fileTableAll(request, fileTableDto, upath_relative, model);
+        return fileTableAll(request, fileTableDto, upath_relative, model, "fileTable");
     }
 
     /**
@@ -63,10 +63,10 @@ public class FileController {
         }
         UserInfo userInfo = Utils.getUserInfo(request);
         String upath_relative = UpLoadUtil.PATH_INFO + UpLoadUtil.getUserPath(userInfo.getId()) + "/projectFile/" + projectId;// 用户基础文件夹(相对路径)
-        return fileTableAll(request, fileTableDto, upath_relative, model);
+        return fileTableAll(request, fileTableDto, upath_relative, model, "fileTableProject");
     }
 
-    private String fileTableAll(HttpServletRequest request, FileTableDto fileTableDto, String upath_relative, Model model) {
+    private String fileTableAll(HttpServletRequest request, FileTableDto fileTableDto, String upath_relative, Model model, String lastPath) {
         String path = fileTableDto.getPath();
 //        if (path != null && path.contains("..")) {
 //            model.addAttribute("fileData", UpLoadUtil.fileData(null));
@@ -85,6 +85,7 @@ public class FileController {
         model.addAttribute("upathRelative", upath_relative);
         model.addAttribute("path", path);
         model.addAttribute("fileTableDto", fileTableDto);
+        model.addAttribute("lastPath", lastPath);
         UpLoadUtil.doUpathAbsolute(request.getSession(), upath_absolute);
         return "/admin/file/filetable";
     }
