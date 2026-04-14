@@ -47,7 +47,7 @@ public class FileController {
     }
 
     /**
-     * 项目目录
+     * 各个项目单独的目录
      *
      * @param request
      * @param fileTableDto
@@ -62,7 +62,7 @@ public class FileController {
             return "/admin/file/filetable";
         }
         UserInfo userInfo = Utils.getUserInfo(request);
-        String upath_relative = UpLoadUtil.PATH_INFO + UpLoadUtil.getUserPath(userInfo.getId()) + "/projectFile/" + projectId;// 用户基础文件夹(相对路径)
+        String upath_relative = UpLoadUtil.PATH_INFO + "/projectFile/" + projectId;// 用户基础文件夹(相对路径)
         return fileTableAll(request, fileTableDto, upath_relative, model, "fileTableProject");
     }
 
