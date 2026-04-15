@@ -42,10 +42,10 @@
                                 <div id="custom-toolbar">
                                     <div class="toolbar-btn-action">
                                         <button type="button" id="add" class="btn btn-primary">
-                                            新增
+                                            <i class="mdi mdi-plus"></i>新增
                                         </button>
                                         <button type="button" id="del" class="btn btn-primary">
-                                            删除
+                                            <i class="mdi mdi-delete"></i>删除
                                         </button>
                                     </div>
                                 </div>
@@ -90,8 +90,8 @@
     function caozuo(value, row) {
         let htm = '';
         htm += '<div class="btn-group">';
-        htm += '<button type="button" class="btn btn-sm btn-default m-r-5" onclick="edit(\'' + value + '\')" title="编辑">编辑</button>';
-        htm += '<a class="btn btn-sm btn-default m-r-5" href="${ctx.contextPath}/admin/system/roleFunction?roleId=' + value + '" title="权限设置">权限设置</a>';
+        htm += '<button type="button" class="btn btn-sm btn-default m-r-5" onclick="edit(\'' + value + '\')" title="编辑"><i class="mdi mdi-square-edit-outline"></i>编辑</button>';
+        htm += '<a class="btn btn-sm btn-default m-r-5" href="${ctx.contextPath}/admin/system/roleFunction?roleId=' + value + '" title="权限设置"><i class="mdi mdi-settings-outline"></i>权限设置</a>';
         htm += '<button type="button" class="btn btn-sm btn-default" onclick="userListByRole(\'' + value + '\')" title="分配用户">分配用户</button>';
         htm += '</div>';
         return htm;

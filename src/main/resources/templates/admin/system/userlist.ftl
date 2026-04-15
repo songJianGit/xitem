@@ -53,9 +53,9 @@
 
                                     <div class="input-group">
                                         <div class="btn-group">
-                                            <button type="button" id="searchBtn" class="btn btn-primary m-r-5">搜索
+                                            <button type="button" id="searchBtn" class="btn btn-primary m-r-5"><i class="mdi mdi-filter-outline"></i>搜索
                                             </button>
-                                            <button type="reset" class="btn btn-default">重置</button>
+                                            <button type="reset" class="btn btn-default"><i class="mdi mdi-reload"></i>重置</button>
                                         </div>
                                     </div>
                                 </form>
@@ -66,12 +66,12 @@
                                     <div class="toolbar-btn-action">
                                         <@funTag tag="sys:user:add">
                                             <button type="button" id="add" class="btn btn-primary">
-                                                新增
+                                                <i class="mdi mdi-plus"></i>新增
                                             </button>
                                         </@funTag>
                                         <@funTag tag="sys:user:del">
                                             <button type="button" id="del" class="btn btn-primary">
-                                                删除
+                                                <i class="mdi mdi-delete"></i>删除
                                             </button>
                                         </@funTag>
                                         <@funTag tag="sys:user:status">

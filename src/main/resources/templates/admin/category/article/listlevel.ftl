@@ -25,7 +25,7 @@
                                 <div id="custom-toolbar">
                                     <div class="toolbar-btn-action">
                                         <button type="button" id="add" class="btn btn-primary">
-                                            新增
+                                            <i class="mdi mdi-plus"></i>新增
                                         </button>
                                     </div>
                                 </div>
@@ -61,8 +61,8 @@
     function caozuo(value, row) {
         let htm = '';
         htm += '<div class="btn-group">';
-        htm += '<button type="button" class="btn btn-sm btn-default m-r-5" onclick="edit(' + "\'" + row.id + "\'" + ')">编辑</button>';
-        htm += '<button type="button" class="btn btn-sm btn-default m-r-5" onclick="del(' + "\'" + row.id + "\'" + ')">删除</button>';
+        htm += '<button type="button" class="btn btn-sm btn-default m-r-5" onclick="edit(' + "\'" + row.id + "\'" + ')"><i class="mdi mdi-square-edit-outline"></i>编辑</button>';
+        htm += '<button type="button" class="btn btn-sm btn-default m-r-5" onclick="del(' + "\'" + row.id + "\'" + ')"><i class="mdi mdi-delete"></i>删除</button>';
         htm += '<button type="button" class="btn btn-sm btn-default" title="拖动排序" draggable="true" ondragstart="dragStart(event,\'' + value + '\')" ondrop="drop(event,\'' + value + '\')" ondragover="allowDrop(event)">';
         htm += '<span class="mdi mdi-cursor-move"></span>';
         htm += '</button>';

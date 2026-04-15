@@ -190,7 +190,7 @@ public class OrganServiceImpl extends ServiceImpl<OrganMapper, Organ> implements
             permissionIdsAll = listOrganIdByOrganId(permissionIds);
         }
         switch (permissionType) {
-            case USERINFO:
+            case USERINFO -> {
                 LambdaQueryWrapper<UserInfo> qUser = query;
                 if (userPermissionType.equals(0)) {
                     qUser.eq(UserInfo::getCreateUserId, userId);
@@ -198,8 +198,8 @@ public class OrganServiceImpl extends ServiceImpl<OrganMapper, Organ> implements
                 if (userPermissionType.equals(1)) {
                     qUser.in(UserInfo::getOrganId, permissionIdsAll);
                 }
-                break;
-            case ORGAN:
+            }
+            case ORGAN -> {
                 LambdaQueryWrapper<Organ> qOrgan = query;
                 if (userPermissionType.equals(0)) {
                     qOrgan.eq(Organ::getCreateUserId, userId);
@@ -207,10 +207,8 @@ public class OrganServiceImpl extends ServiceImpl<OrganMapper, Organ> implements
                 if (userPermissionType.equals(1)) {
                     qOrgan.in(Organ::getId, permissionIdsAll);
                 }
-                break;
-            default:
-                log.warn("未匹配到权限类型");
-                break;
+            }
+            default -> log.warn("未匹配到权限类型");
         }
     }
 
