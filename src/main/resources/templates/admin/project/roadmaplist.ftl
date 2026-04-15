@@ -31,8 +31,8 @@
                                         </div>
                                         <input type="text" class="form-control" name="title" placeholder="标题">
                                     </div>
-                                    <button type="button" id="searchBtn" class="btn btn-primary m-r-5">搜索</button>
-                                    <button type="reset" class="btn btn-default">重置</button>
+                                    <button type="button" id="searchBtn" class="btn btn-primary m-r-5"><i class="mdi mdi-filter-outline"></i>搜索</button>
+                                    <button type="reset" class="btn btn-default"><i class="mdi mdi-reload"></i>重置</button>
                                 </form>
                             </div>
 
@@ -42,7 +42,7 @@
                                     <div class="toolbar-btn-action">
                                         <@projectReadFlagTag>
                                             <button type="button" id="add" class="btn btn-primary">
-                                                新增里程碑
+                                                <i class="mdi mdi-plus"></i>新增里程碑
                                             </button>
                                         </@projectReadFlagTag>
                                     </div>
@@ -110,8 +110,8 @@
         let htm = '';
         htm += '<div class="btn-group">';
         <@projectReadFlagTag>
-        htm += '<button type="button" class="btn btn-sm btn-default m-r-5" onclick="edit(\'' + value + '\')" title="编辑">编辑</button>';
-        htm += '<button type="button" class="btn btn-sm btn-default m-r-5" onclick="delById(\'' + value + '\')" title="删除">删除</button>';
+        htm += '<button type="button" class="btn btn-sm btn-default m-r-5" onclick="edit(\'' + value + '\')" title="编辑"><i class="mdi mdi-square-edit-outline"></i>编辑</button>';
+        htm += '<button type="button" class="btn btn-sm btn-default m-r-5" onclick="delById(\'' + value + '\')" title="删除"><i class="mdi mdi-delete"></i>删除</button>';
         </@projectReadFlagTag>
         htm += '</div>';
         return htm;

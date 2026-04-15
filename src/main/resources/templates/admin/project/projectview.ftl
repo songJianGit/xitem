@@ -166,7 +166,7 @@
                         <div class="card pv-card">
                             <div class="card-header">${project.title!}
                                 <@projectReadFlagTag>
-                                    <button type="button" class="btn btn-primary" onclick="edit()">编辑</button>
+                                    <button type="button" class="btn btn-primary" onclick="edit()"><i class="mdi mdi-square-edit-outline"></i>编辑</button>
                                 </@projectReadFlagTag>
                             </div>
                             <div class="card-body">

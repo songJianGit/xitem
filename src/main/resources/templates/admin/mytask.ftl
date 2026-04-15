@@ -59,8 +59,8 @@
                                                 </#list>
                                             </select>
                                         </div>
-                                        <button type="button" id="searchBtn" class="btn btn-primary m-r-5">搜索</button>
-                                        <button type="reset" class="btn btn-default">重置</button>
+                                        <button type="button" id="searchBtn" class="btn btn-primary m-r-5"><i class="mdi mdi-filter-outline"></i>搜索</button>
+                                        <button type="reset" class="btn btn-default"><i class="mdi mdi-reload"></i>重置</button>
                                     </form>
 
                                 </div>

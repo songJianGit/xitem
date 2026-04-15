@@ -21,7 +21,13 @@
                         <div class="topbar-left-task">
                             <a class="btn btn-link"
                                <#if menu.target??>target="${menu.target!}"</#if>
-                               href="<#if menu.url?starts_with("/")>${ctx.contextPath+menu.url!}<#else>${menu.url!}</#if>">${menu.name}</a>
+                               href="<#if menu.url?starts_with("/")>${ctx.contextPath+menu.url!}<#else>${menu.url!}</#if>">
+                                <#if menu.icon??>
+                                    <i class="${menu.icon!}"></i>
+                                <#else>
+                                    <i class="mdi mdi-format-align-justify"></i>
+                                </#if>
+                                ${menu.name}</a>
                         </div>
                     </#if>
                 </#list>

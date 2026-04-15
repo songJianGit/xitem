@@ -31,9 +31,9 @@
                                     </div>
                                     <div class="input-group">
                                         <div class="btn-group">
-                                            <button type="button" id="searchBtn" class="btn btn-primary m-r-5">搜索
+                                            <button type="button" id="searchBtn" class="btn btn-primary m-r-5"><i class="mdi mdi-filter-outline"></i>搜索
                                             </button>
-                                            <button type="reset" class="btn btn-default">重置</button>
+                                            <button type="reset" class="btn btn-default"><i class="mdi mdi-reload"></i>重置</button>
                                         </div>
                                     </div>
                                 </form>
@@ -42,7 +42,7 @@
                                 <div id="custom-toolbar">
                                     <div class="toolbar-btn-action">
                                         <button type="button" id="add" class="btn btn-primary">
-                                            开始新项目
+                                            <i class="mdi mdi-star mdi-spin"></i>开始新项目
                                         </button>
                                     </div>
                                 </div>

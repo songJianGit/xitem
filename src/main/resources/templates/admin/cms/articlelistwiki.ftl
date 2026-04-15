@@ -24,7 +24,7 @@
                             <div class="card-header">
                                 文章列表
                                 <@projectReadFlagTag>
-                                    <button class="btn btn-primary" type="button" onclick="addBtn()">添加文章</button>
+                                    <button class="btn btn-primary" type="button" onclick="addBtn()"><i class="mdi mdi-plus"></i>添加文章</button>
                                 </@projectReadFlagTag>
                             </div>
                             <div class="card-body">

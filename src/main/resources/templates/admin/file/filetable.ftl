@@ -9,10 +9,10 @@
         <div id="custom-toolbar">
             <div class="toolbar-btn-action">
                 <button type="button" id="upload" class="btn btn-primary">
-                    上传文件
+                    <i class="mdi mdi-upload"></i>上传文件
                 </button>
                 <button type="button" id="createFolder" class="btn btn-primary">
-                    新建文件夹
+                    <i class="mdi mdi-folder-plus"></i>新建文件夹
                 </button>
             </div>
         </div>

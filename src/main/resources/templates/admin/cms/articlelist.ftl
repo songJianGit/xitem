@@ -52,8 +52,8 @@
                                             </#list>
                                         </select>
                                     </div>
-                                    <button type="button" id="searchBtn" class="btn btn-primary m-r-5">搜索</button>
-                                    <button type="reset" class="btn btn-default m-r-5">重置</button>
+                                    <button type="button" id="searchBtn" class="btn btn-primary m-r-5"><i class="mdi mdi-filter-outline"></i>搜索</button>
+                                    <button type="reset" class="btn btn-default m-r-5"><i class="mdi mdi-reload"></i>重置</button>
                                 </form>
                             </div>
 
@@ -62,9 +62,9 @@
                                     <div class="toolbar-btn-action" style="display: flex; align-items: center; gap: 10px; flex-wrap: nowrap;">
                                         <@projectReadFlagTag>
                                             <button type="button" id="add" class="btn btn-primary">
-                                                新增任务
+                                                <i class="mdi mdi-plus"></i>新增任务
                                             </button>
-                                            <button type="button" class="btn btn-default" onclick="exportData()">导出全部</button>
+                                            <button type="button" class="btn btn-default" onclick="exportData()"><i class="mdi mdi-download"></i>导出全部</button>
                                         </@projectReadFlagTag>
                                         <div class="form-inline view-btn-group" style="display: flex; align-items: center; margin-bottom: 0; margin-left: 8px; padding-left: 12px; border-left: 1px solid #e9ecef;">
                                             <div class="custom-control custom-checkbox mr-sm-2">
@@ -203,8 +203,8 @@
         let htm = '';
         htm += '<div class="btn-group">';
         <@projectReadFlagTag>
-        htm += '<button type="button" class="btn btn-sm btn-default m-r-5" onclick="edit(\'' + value + '\')" title="编辑">编辑</button>';
-        htm += '<button type="button" class="btn btn-sm btn-default m-r-5" onclick="delById(\'' + value + '\')" title="删除">删除</button>';
+        htm += '<button type="button" class="btn btn-sm btn-default m-r-5" onclick="edit(\'' + value + '\')" title="编辑"><i class="mdi mdi-square-edit-outline"></i>编辑</button>';
+        htm += '<button type="button" class="btn btn-sm btn-default m-r-5" onclick="delById(\'' + value + '\')" title="删除"><i class="mdi mdi-delete"></i>删除</button>';
         </@projectReadFlagTag>
         htm += '</div>';
         return htm;
