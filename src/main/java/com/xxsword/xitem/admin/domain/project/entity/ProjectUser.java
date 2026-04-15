@@ -17,7 +17,7 @@ public class ProjectUser extends BaseEntity {
     private static final long serialVersionUID = 1L;
 
     @Unique(columns = {"pid", "user_id"})
-    @Column
+    @Column(length = 50)
     @ColumnComment("项目Id")
     private String pid;
 

@@ -25,14 +25,6 @@
 
                             <div class="card-header">
                                 <form class="form-inline" method="post" id="searchform" action="#!" role="form">
-                                    <div class="custom-control custom-checkbox mr-sm-2">
-                                        <input value="1" type="radio" name="taskSearchFlag" class="custom-control-input" id="allTask" checked>
-                                        <label class="custom-control-label" for="allTask">全部任务</label>
-                                    </div>
-                                    <div class="custom-control custom-checkbox mr-sm-2">
-                                        <input value="2" type="radio" name="taskSearchFlag" class="custom-control-input" id="myTask">
-                                        <label class="custom-control-label" for="myTask">我参与的</label>
-                                    </div>
                                     <div class="input-group m-r-5">
                                         <div class="input-group-prepend">
                                             <span class="input-group-text">标题</span>
@@ -43,7 +35,7 @@
                                         <div class="input-group-prepend">
                                             <span class="input-group-text">任务状态</span>
                                         </div>
-                                        <select class="form-control selectpicker" name="categoryIds" data-title="任务状态" data-width="120px">
+                                        <select class="form-control selectpicker" name="categoryIds" data-title="任务状态" data-width="220px" multiple>
                                             <#list categoryList as item>
                                                 <option value="${item.id!}">${item.title!}</option>
                                             </#list>
@@ -54,26 +46,36 @@
                                         <div class="input-group-prepend">
                                             <span class="input-group-text">优先级</span>
                                         </div>
-                                        <select class="form-control selectpicker" name="levelId" data-title="优先级" data-width="100px">
+                                        <select class="form-control selectpicker" name="levelIds" data-title="优先级" data-width="130px" multiple>
                                             <#list categoryListLevel as item>
                                                 <option value="${item.id!}">${item.title!}</option>
                                             </#list>
                                         </select>
                                     </div>
                                     <button type="button" id="searchBtn" class="btn btn-primary m-r-5">搜索</button>
-                                    <button type="reset" class="btn btn-default">重置</button>
+                                    <button type="reset" class="btn btn-default m-r-5">重置</button>
                                 </form>
                             </div>
 
                             <div class="card-body">
-                                <#--                                <h4 class="card-title">文章列表</h4>-->
                                 <div id="custom-toolbar">
-                                    <div class="toolbar-btn-action">
+                                    <div class="toolbar-btn-action" style="display: flex; align-items: center; gap: 10px; flex-wrap: nowrap;">
                                         <@projectReadFlagTag>
                                             <button type="button" id="add" class="btn btn-primary">
                                                 新增任务
                                             </button>
+                                            <button type="button" class="btn btn-default" onclick="exportData()">导出全部</button>
                                         </@projectReadFlagTag>
+                                        <div class="form-inline view-btn-group" style="display: flex; align-items: center; margin-bottom: 0; margin-left: 8px; padding-left: 12px; border-left: 1px solid #e9ecef;">
+                                            <div class="custom-control custom-checkbox mr-sm-2">
+                                                <input value="1" type="radio" name="taskSearchFlag" class="custom-control-input" id="allTask" checked>
+                                                <label class="custom-control-label" for="allTask">全部任务</label>
+                                            </div>
+                                            <div class="custom-control custom-checkbox mr-sm-2">
+                                                <input value="2" type="radio" name="taskSearchFlag" class="custom-control-input" id="myTask">
+                                                <label class="custom-control-label" for="myTask">我参与的</label>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="table-responsive">
@@ -235,6 +237,10 @@
         });
     }
 
+    function exportData() {
+        window.open('${ctx.contextPath}/admin/cms/export', '_blank');
+    }
+
     $("#add").click(function () {
         layer_show('新增', "${ctx.contextPath}/admin/cms/articleEdit2", "90%");
     });
@@ -252,8 +258,9 @@
     });
 
     function reload() {
+        let taskSearchFlag = $("input[name='taskSearchFlag']:checked").val() || "1";
         $("#table-pagination").bootstrapTable('refresh', {
-            url: "${ctx.contextPath}/admin/cms/userListData1?" + $("#searchform").serialize()
+            url: "${ctx.contextPath}/admin/cms/userListData1?" + $("#searchform").serialize()+"&taskSearchFlag="+taskSearchFlag
         });
     }
     $('.selectpicker').selectpicker();

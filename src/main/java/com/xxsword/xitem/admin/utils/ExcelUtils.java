@@ -10,7 +10,9 @@ import org.apache.poi.xssf.usermodel.XSSFClientAnchor;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import javax.imageio.ImageIO;
+
 import jakarta.servlet.http.HttpServletRequest;
+
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.net.URLEncoder;
@@ -45,6 +47,10 @@ public class ExcelUtils {
      */
     public static SXSSFWorkbook writeExcelcolXlsx(OutputStream out, List<List<EVO>> datas, List<String> title) {
         return writeExcelcolXlsx(out, datas, title.toArray(new String[0]));
+    }
+
+    public static SXSSFWorkbook writeExcelcolXlsx(OutputStream out, List<List<EVO>> datas) {
+        return writeExcelcolXlsx(out, datas, new String[0]);
     }
 
     /**
@@ -83,7 +89,7 @@ public class ExcelUtils {
 //        XSSFCellStyle xssfCellStyleHeader = getAndSetXSSFCellStyleHeader(sxssfWorkbook);
 //        XSSFCellStyle xssfCellStyleOne = getAndSetXSSFCellStyleOne(sxssfWorkbook);
 //        XSSFCellStyle xssfCellStyleTwo = getAndSetXSSFCellStyleTwo(sxssfWorkbook);
-        if (title != null) {// title 不为空则填充title
+        if (title != null && title.length > 0) {// title 不为空则填充title
             for (int cellnum = 0; cellnum < title.length; cellnum++) {
                 Cell cell = header.createCell(cellnum);
 //            cell.setCellStyle(xssfCellStyleHeader);
@@ -92,10 +98,10 @@ public class ExcelUtils {
         }
         for (int rownum = 1; rownum <= datas.size(); rownum++) {
             Row row;
-            if (title == null) {// 没有title，则从第一行开始
-                row = sheet.createRow(rownum - 1);
-            } else {
+            if (title != null && title.length > 0) {
                 row = sheet.createRow(rownum);
+            } else {
+                row = sheet.createRow(rownum - 1);
             }
             // 循环创建单元格
             List<EVO> questionSumList = datas.get(rownum - 1);

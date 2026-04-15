@@ -1,5 +1,6 @@
 package com.xxsword.xitem.admin.controller;
 
+import cn.hutool.core.date.DateTime;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
@@ -21,6 +22,7 @@ import com.xxsword.xitem.admin.domain.project.entity.ProjectUser;
 import com.xxsword.xitem.admin.domain.project.entity.RoadMap;
 import com.xxsword.xitem.admin.domain.project.vo.AUVO;
 import com.xxsword.xitem.admin.domain.system.entity.UserInfo;
+import com.xxsword.xitem.admin.model.EVO;
 import com.xxsword.xitem.admin.model.RestPaging;
 import com.xxsword.xitem.admin.model.RestResult;
 import com.xxsword.xitem.admin.service.category.CategoryService;
@@ -32,8 +34,11 @@ import com.xxsword.xitem.admin.service.project.ProjectService;
 import com.xxsword.xitem.admin.service.project.ProjectUserService;
 import com.xxsword.xitem.admin.service.project.RoadMapService;
 import com.xxsword.xitem.admin.service.system.UserInfoService;
+import com.xxsword.xitem.admin.utils.DateUtil;
+import com.xxsword.xitem.admin.utils.ExcelUtils;
 import com.xxsword.xitem.admin.utils.Utils;
 import io.swagger.v3.oas.annotations.Operation;
+import jakarta.servlet.http.HttpServletResponse;
 import org.apache.commons.text.StringEscapeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -43,6 +48,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import jakarta.servlet.http.HttpServletRequest;
 
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -138,7 +145,7 @@ public class CmsController extends BaseController {
 
     @RequestMapping("userListData2")
     @ResponseBody
-    @Operation(summary = "待办任务", description = "待办任务")
+    @Operation(summary = "待办任务", description = "我的待办任务")
     public RestPaging<ArticleVO> userListData2(HttpServletRequest request, ArticleDto articleDto) {
         return pageArticleVO(request, articleDto, 2);
     }
@@ -156,7 +163,7 @@ public class CmsController extends BaseController {
     /**
      * @param request
      * @param articleDto
-     * @param type       1-项目任务 2-待办任务 3-里程碑相关任务(ArticleDto里带里程碑id)
+     * @param type       1-项目任务(某个项目中的所有任务) 2-待办任务(我参与的项目，且我参与的任务) 3-里程碑相关任务(ArticleDto里带里程碑id)
      * @return
      */
     private RestPaging<ArticleVO> pageArticleVO(HttpServletRequest request, ArticleDto articleDto, Integer type) {
@@ -167,6 +174,10 @@ public class CmsController extends BaseController {
                 categoryIds.addAll(categoryService.listCategoryIdByCategoryId(id));
             }
             articleDto.setCategoryAllIds(categoryIds);
+        }
+
+        if(StringUtils.isNotBlank(articleDto.getLevelIds())){
+            articleDto.setLevelAllIds(List.of(articleDto.getLevelIds().split(",")));
         }
 
         if (StringUtils.isNotBlank(articleDto.getProjectTitle())) {
@@ -183,12 +194,12 @@ public class CmsController extends BaseController {
         UserInfo userInfo = Utils.getUserInfo(request);
         List<ProjectUser> pIds = new ArrayList<>();
         if (type == 1) {
-            pIds = projectUserService.listProjectUser(new ProjectUserDto(Utils.getProjectId(request), null));
-            articleDto.setProjectIds(pIds.stream().map(ProjectUser::getPid).toList());
+            articleDto.setProjectId(Utils.getProjectId(request));
         }
         if (type == 2) {
             pIds = projectUserService.listProjectUser(new ProjectUserDto(null, userInfo.getId()));
             articleDto.setProjectIds(pIds.stream().map(ProjectUser::getPid).toList());
+            articleDto.setTaskSearchFlag(2);
         }
         if (articleDto.getTaskSearchFlag() != null && articleDto.getTaskSearchFlag() == 2) {
             List<ArticleUser> articleUserList = articleUserService.listArticleUserByUserId(userInfo.getId());
@@ -347,5 +358,25 @@ public class CmsController extends BaseController {
         up.set(Article::getCategoryId, categoryId);
         articleService.update(up);
         return RestResult.OK();
+    }
+
+    @RequestMapping("export")
+    @ResponseBody
+    public void export(HttpServletRequest request, HttpServletResponse response) {
+        ArticleDto articleDto = new ArticleDto();
+        articleDto.setSize(5000);// 最多5千条
+        RestPaging<ArticleVO> paging = pageArticleVO(request, articleDto, 1);
+        List<List<EVO>> datas = articleService.exportData(paging.getRows(), Utils.getProjectId(request));
+        if (datas.size() > 0) {
+            try {
+                OutputStream stream = response.getOutputStream();
+                response.setHeader("Content-disposition", "attachment; filename=" + ExcelUtils.encodeFileName("任务" + DateUtil.now(DateUtil.sdfB1) + ".xlsx", request));
+                response.setContentType("application/msexcel");
+                ExcelUtils.writeExcelcolXlsx(stream, datas);
+                stream.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }

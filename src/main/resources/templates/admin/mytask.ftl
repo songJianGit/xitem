@@ -21,45 +21,49 @@
                     <div class="col-12">
                         <div class="card">
                             <div class="card-header">
-                                <form class="form-inline" method="post" id="searchform" action="#!" role="form">
-                                    <div class="input-group m-r-5">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text">项目标题</span>
-                                        </div>
-                                        <input type="text" class="form-control" name="projectTitle" placeholder="项目标题">
-                                    </div>
-                                    <div class="input-group m-r-5">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text">任务标题</span>
-                                        </div>
-                                        <input type="text" class="form-control" name="title" placeholder="任务标题">
-                                    </div>
-                                    <div class="input-group m-r-5">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text">任务状态</span>
-                                        </div>
-                                        <select class="form-control selectpicker" name="categoryIds" data-title="任务状态" data-width="120px">
-                                            <#list categoryList as item>
-                                                <option value="${item.id!}">${item.title!}</option>
-                                            </#list>
-                                        </select>
-                                    </div>
-
-                                    <div class="input-group m-r-5">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text">优先级</span>
-                                        </div>
-                                        <select class="form-control selectpicker" name="levelId" data-title="优先级" data-width="100px">
-                                            <#list categoryListLevel as item>
-                                                <option value="${item.id!}">${item.title!}</option>
-                                            </#list>
-                                        </select>
-                                    </div>
-                                    <button type="button" id="searchBtn" class="btn btn-primary m-r-5">搜索</button>
-                                    <button type="reset" class="btn btn-default">重置</button>
-                                </form>
+                                我的待办
                             </div>
                             <div class="card-body">
+                                <div id="custom-toolbar">
+                                    <form class="form-inline" method="post" id="searchform" action="#!" role="form">
+                                        <div class="input-group m-r-5">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text">项目标题</span>
+                                            </div>
+                                            <input type="text" class="form-control" name="projectTitle" placeholder="项目标题">
+                                        </div>
+                                        <div class="input-group m-r-5">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text">任务标题</span>
+                                            </div>
+                                            <input type="text" class="form-control" name="title" placeholder="任务标题">
+                                        </div>
+                                        <div class="input-group m-r-5">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text">任务状态</span>
+                                            </div>
+                                            <select class="form-control selectpicker" name="categoryIds" data-title="任务状态" data-width="220px" multiple>
+                                                <#list categoryList as item>
+                                                    <option value="${item.id!}">${item.title!}</option>
+                                                </#list>
+                                            </select>
+                                        </div>
+
+                                        <div class="input-group m-r-5">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text">优先级</span>
+                                            </div>
+                                            <select class="form-control selectpicker" name="levelIds" data-title="优先级" data-width="130px" multiple>
+                                                <#list categoryListLevel as item>
+                                                    <option value="${item.id!}">${item.title!}</option>
+                                                </#list>
+                                            </select>
+                                        </div>
+                                        <button type="button" id="searchBtn" class="btn btn-primary m-r-5">搜索</button>
+                                        <button type="reset" class="btn btn-default">重置</button>
+                                    </form>
+
+                                </div>
                                 <div class="table-responsive">
                                     <table id="table-pagination"
                                            data-toolbar="#custom-toolbar"
@@ -74,10 +78,11 @@
                                         <tr>
                                             <th data-field="projectName" data-formatter="projectName">项目标题</th>
                                             <th data-field="title" data-formatter="title">任务标题</th>
+                                            <th data-field="users" data-formatter="users">任务成员</th>
                                             <th data-field="categoryName">任务状态</th>
                                             <th data-field="levelName">优先级</th>
                                             <th data-field="stime" data-formatter="plantime">计划时间</th>
-                                            <th data-field="createDate" data-formatter="createDate">任务创建时间</th>
+                                            <th data-field="createDate" data-formatter="createDate">创建时间</th>
 <#--                                            <th data-field="id" data-formatter="caozuo">操作</th>-->
                                         </tr>
                                         </thead>
@@ -98,7 +103,19 @@
         if (value == '') {
             return '';
         }
-        return value.substring(0, 16);
+        return value.substring(0, 10);
+    }
+
+    function users(value, row) {
+        if (value == '' || value == null) {
+            return '';
+        }
+        let names = [];
+        for (let i = 0; i < value.length; i++) {
+            names.push(value[i].userName);
+        }
+        let nameStr = names.join("，");
+        return '<div title="' + nameStr + '" class="ellipsis-300">' + nameStr + '</div>';
     }
 
     function plantime(value, row) {

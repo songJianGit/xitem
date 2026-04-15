@@ -19,7 +19,7 @@ public class RoadMap extends BaseEntity {
     @ColumnComment("标题")
     private String title;
 
-    @Column
+    @Column(length = 50)
     @ColumnComment("项目Id")
     private String pid;
 

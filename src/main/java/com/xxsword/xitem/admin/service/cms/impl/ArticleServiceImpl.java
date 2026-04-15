@@ -1,10 +1,10 @@
 package com.xxsword.xitem.admin.service.cms.impl;
 
+import cn.hutool.http.HtmlUtil;
 import com.alibaba.fastjson2.JSONArray;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.xxsword.xitem.admin.domain.category.entity.Category;
 import com.xxsword.xitem.admin.domain.cms.dto.ArticleDto;
@@ -13,13 +13,18 @@ import com.xxsword.xitem.admin.domain.cms.entity.ArticleData;
 import com.xxsword.xitem.admin.domain.cms.entity.ArticleUser;
 import com.xxsword.xitem.admin.domain.cms.vo.ArticleVO;
 import com.xxsword.xitem.admin.domain.project.entity.Project;
-import com.xxsword.xitem.admin.domain.project.entity.ProjectUser;
+import com.xxsword.xitem.admin.domain.project.entity.RoadMap;
 import com.xxsword.xitem.admin.mapper.cms.ArticleMapper;
+import com.xxsword.xitem.admin.mapper.project.RoadMapMapper;
+import com.xxsword.xitem.admin.model.EVO;
 import com.xxsword.xitem.admin.service.category.CategoryService;
 import com.xxsword.xitem.admin.service.cms.ArticleDataService;
 import com.xxsword.xitem.admin.service.cms.ArticleService;
 import com.xxsword.xitem.admin.service.cms.ArticleUserService;
 import com.xxsword.xitem.admin.service.project.ProjectService;
+import com.xxsword.xitem.admin.service.project.RoadMapService;
+import com.xxsword.xitem.admin.utils.Utils;
+import org.apache.commons.compress.utils.Lists;
 import org.apache.commons.text.StringEscapeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -40,6 +45,8 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
     private ArticleUserService articleUserService;
     @Autowired
     private ProjectService projectService;
+    @Autowired
+    private RoadMapMapper roadMapMapper;
 
     @Override
     public void setCategoryName(List<Article> list) {
@@ -144,5 +151,63 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
             }
             articleUserService.remove(del);
         }
+    }
+
+    @Override
+    public List<List<EVO>> exportData(List<ArticleVO> voList, String projectId) {
+        if (voList.isEmpty()) {
+            return new ArrayList<>();
+        }
+        List<List<EVO>> listList = Lists.newArrayList();
+        List<EVO> evoListTitle = Lists.newArrayList();
+        evoListTitle.add(EVO.newCell("标题"));
+        evoListTitle.add(EVO.newCell("任务成员"));
+        evoListTitle.add(EVO.newCell("任务状态"));
+        evoListTitle.add(EVO.newCell("优先级"));
+        evoListTitle.add(EVO.newCell("计划时间(开始)"));
+        evoListTitle.add(EVO.newCell("计划时间(结束)"));
+        evoListTitle.add(EVO.newCell("创建时间"));
+        evoListTitle.add(EVO.newCell("里程碑"));
+        evoListTitle.add(EVO.newCell("任务内容"));
+        listList.add(evoListTitle);
+
+        List<ArticleData> dataList = articleDataService.listByIds(voList.stream().map(ArticleVO::getId).toList());
+        Map<String, ArticleData> dataMap = dataList.stream().collect(Collectors.toMap(ArticleData::getId, Function.identity()));
+
+        List<RoadMap> dataRoadList = roadMapMapper.selectByIds(voList.stream().map(ArticleVO::getRoadmapId).toList());
+        Map<String, RoadMap> dataRoadListMap = dataRoadList.stream().collect(Collectors.toMap(RoadMap::getId, Function.identity()));
+
+        for (ArticleVO articleVO : voList) {
+            List<EVO> evoList = Lists.newArrayList();
+            evoList.add(EVO.newCell(articleVO.getTitle()));
+            if (articleVO.getUsers() == null || articleVO.getUsers().isEmpty()) {
+                evoList.add(EVO.newCell(""));
+            } else {
+                evoList.add(EVO.newCell(String.join(",", articleVO.getUsers().stream().map(ArticleUser::getUserName).toList())));
+            }
+            evoList.add(EVO.newCell(articleVO.getCategoryName()));
+            evoList.add(EVO.newCell(StringUtils.isBlank(articleVO.getLevelName()) ? "" : articleVO.getLevelName()));
+            evoList.add(EVO.newCell(StringUtils.isBlank(articleVO.getStime()) ? "" : articleVO.getStime()));
+            evoList.add(EVO.newCell(StringUtils.isBlank(articleVO.getEtime()) ? "" : articleVO.getEtime()));
+            evoList.add(EVO.newCell(articleVO.getCreateDate()));
+            RoadMap rm = dataRoadListMap.get(articleVO.getRoadmapId());
+            if (rm == null) {
+                evoList.add(EVO.newCell(""));
+            } else {
+                evoList.add(EVO.newCell(rm.getTitle()));
+            }
+            ArticleData ad = dataMap.get(articleVO.getId());
+            if (ad == null) {
+                evoList.add(EVO.newCell(""));
+            } else {
+                if (StringUtils.isBlank(ad.getContent())) {
+                    evoList.add(EVO.newCell(""));
+                } else {
+                    evoList.add(EVO.newCell(HtmlUtil.cleanHtmlTag(StringEscapeUtils.unescapeHtml4(ad.getContent()))));
+                }
+            }
+            listList.add(evoList);
+        }
+        return listList;
     }
 }

@@ -1,5 +1,6 @@
 package com.xxsword.xitem.admin.domain.cms.vo;
 
+import com.gitee.sunchenbin.mybatis.actable.annotation.ColumnComment;
 import com.xxsword.xitem.admin.domain.cms.entity.ArticleUser;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
@@ -19,8 +20,6 @@ public class ArticleVO {
     private String categoryName;
     @Schema(title = "标题", description = "标题")
     private String title;
-    @Schema(title = "描述、摘要", description = "描述、摘要")
-    private String description;
     @Schema(title = "优先级", description = "优先级")
     private String levelId;
     @Schema(title = "优先级名称", description = "优先级名称")
@@ -31,6 +30,9 @@ public class ArticleVO {
     private String stime;
     @Schema(title = "计划结束时间", description = "计划结束时间")
     private String etime;
+
+    @Schema(title = "里程碑id", description = "里程碑id")
+    private String roadmapId;
 
     @Schema(title = "任务成员", description = "任务成员")
     List<ArticleUser> users;

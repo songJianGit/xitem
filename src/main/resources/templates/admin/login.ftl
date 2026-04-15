@@ -51,7 +51,7 @@
         <div class="form-group has-feedback row">
             <div class="col-7">
                 <span class="mdi mdi-check-all form-control-feedback" aria-hidden="true"></span>
-                <input type="text" id="captchaInput" class="form-control" placeholder="验证码" value="1234">
+                <input type="text" id="captchaInput" class="form-control" placeholder="验证码" value="">
             </div>
             <div class="col-5 text-right">
                 <img src="${ctx.contextPath}/getCaptcha" class="pull-right" id="captchaImg" style="cursor: pointer;"

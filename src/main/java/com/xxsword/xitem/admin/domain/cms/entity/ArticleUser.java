@@ -24,7 +24,7 @@ public class ArticleUser extends BaseEntity {
     @TableField(exist = false)
     private String userName;
 
-    @Column
+    @Column(length = 50)
     @ColumnComment("任务id")
     private String aid;
 }

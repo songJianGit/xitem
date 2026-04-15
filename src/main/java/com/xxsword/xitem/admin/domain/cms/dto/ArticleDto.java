@@ -23,6 +23,8 @@ public class ArticleDto extends PageM {
     private String roadMapId;// 里程碑
     private List<String> roadMapIds;// 里程碑
     private String levelId;
+    private String levelIds;// 承接页面参数，可以逗号分隔
+    private List<String> levelAllIds;// levelIds分隔后的ids
     private Integer taskSearchFlag;// 1-全部任务 2-我参与的任务
     private List<String> articleIds;
 
@@ -34,6 +36,7 @@ public class ArticleDto extends PageM {
                 .eq(StringUtils.isNotBlank(roadMapId), Article::getRoadmapId, roadMapId)
                 .like(StringUtils.isNotBlank(title), Article::getTitle, title)
                 .in(categoryAllIds != null && !categoryAllIds.isEmpty(), Article::getCategoryId, categoryAllIds)
+                .in(levelAllIds != null && !levelAllIds.isEmpty(), Article::getLevelId, levelAllIds)
                 .in(projectIds != null && !projectIds.isEmpty(), Article::getPid, projectIds)
                 .in(roadMapIds != null && !roadMapIds.isEmpty(), Article::getRoadmapId, roadMapIds)
                 .in(projectTitleIds != null && !projectTitleIds.isEmpty(), Article::getPid, projectTitleIds)
