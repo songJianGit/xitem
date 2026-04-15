@@ -46,6 +46,9 @@
             ${articleDataContent!}
         </#if>
     </div>
+    <div class="card-footer">
+        <div style="font-size: 11px;">${article.createUserName!} <span style="color: #808080">创建于 ${article.createDate!}，最后更新于 ${article.lastUpdate!}</span></div>
+    </div>
 </div>
 <#include "../commons/js.ftl"/>
 <script type="text/javascript">

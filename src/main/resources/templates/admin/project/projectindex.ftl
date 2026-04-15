@@ -60,8 +60,8 @@
                                         <tr>
                                             <th data-field="title" data-formatter="projectName">标题</th>
                                             <th data-field="users" data-formatter="users">项目成员</th>
-                                            <th data-field="createDate" data-formatter="createDate">创建时间</th>
                                             <th data-field="createUserName">创建人</th>
+                                            <th data-field="createDate" data-formatter="createDate">创建时间</th>
                                             <th data-field="id" data-formatter="caozuo">操作</th>
                                         </tr>
                                         </thead>
@@ -107,7 +107,7 @@
         if (value == '') {
             return '';
         }
-        return value.substring(0, 10);
+        return value.substring(0, 16);
     }
 
     function caozuo(value, row) {

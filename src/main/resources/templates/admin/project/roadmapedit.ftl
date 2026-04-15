@@ -13,7 +13,7 @@
                 <div class="input-group-prepend">
                     <span class="input-group-text">标题</span>
                 </div>
-                <input type="text" class="form-control" name="title" value="${roadMap.title!}" maxlength="250"
+                <input type="text" class="form-control" name="title" id="title" value="${roadMap.title!}" maxlength="250"
                        placeholder="标题" required>
             </div>
         </div>
@@ -52,6 +52,11 @@
     });
 
     function save(type) {
+        let title = $("#title").val();
+        if(isBlank(title)){
+            layer.msg("请填写标题");
+            return false;
+        }
         $.ajax({
             url: "${ctx.contextPath}/admin/roadmap/save",
             cache: false,// 不缓存

@@ -77,7 +77,7 @@
                                             <th data-field="categoryName">任务状态</th>
                                             <th data-field="levelName">优先级</th>
                                             <th data-field="stime" data-formatter="plantime">计划时间</th>
-                                            <th data-field="createDate" data-formatter="createDate">创建时间</th>
+                                            <th data-field="createDate" data-formatter="createDate">任务创建时间</th>
 <#--                                            <th data-field="id" data-formatter="caozuo">操作</th>-->
                                         </tr>
                                         </thead>
@@ -98,7 +98,7 @@
         if (value == '') {
             return '';
         }
-        return value.substring(0, 10);
+        return value.substring(0, 16);
     }
 
     function plantime(value, row) {

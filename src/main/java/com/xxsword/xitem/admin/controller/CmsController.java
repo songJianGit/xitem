@@ -31,6 +31,7 @@ import com.xxsword.xitem.admin.service.cms.CommentsService;
 import com.xxsword.xitem.admin.service.project.ProjectService;
 import com.xxsword.xitem.admin.service.project.ProjectUserService;
 import com.xxsword.xitem.admin.service.project.RoadMapService;
+import com.xxsword.xitem.admin.service.system.UserInfoService;
 import com.xxsword.xitem.admin.utils.Utils;
 import io.swagger.v3.oas.annotations.Operation;
 import org.apache.commons.text.StringEscapeUtils;
@@ -67,6 +68,8 @@ public class CmsController extends BaseController {
     private RoadMapService roadMapService;
     @Autowired
     private CommentsService commentsService;
+    @Autowired
+    private UserInfoService userInfoService;
 
     @RequestMapping("mytask")
     public String mytask(HttpServletRequest request, Model model) {
@@ -90,6 +93,7 @@ public class CmsController extends BaseController {
     public String articlelistwiki(HttpServletRequest request, Model model) {
         ArticleDto articleDto = new ArticleDto();
         articleDto.setAtype(2);
+        articleDto.setProjectId(Utils.getProjectId(request));
         articleDto.setCurrent(1);
         articleDto.setSize(500);// 只拿500篇文章
         Page<Article> data = articleService.page(articleDto.toPage(), articleDto.toQuery());
@@ -116,6 +120,10 @@ public class CmsController extends BaseController {
         }
         Article article = articleService.getById(id);
         ArticleData articleData = articleDataService.getById(article.getId());
+        UserInfo createUser = userInfoService.getById(article.getCreateUserId());
+        if (createUser != null) {
+            article.setCreateUserName(createUser.getUserName());
+        }
         model.addAttribute("article", article);
         model.addAttribute("articleDataContent", StringEscapeUtils.unescapeHtml4(articleData.getContent()));
         return "admin/cms/articlelistwikishow";
@@ -223,6 +231,10 @@ public class CmsController extends BaseController {
             ArticleData articleData = articleDataService.getById(id);
             if (articleData != null) {
                 article.setArticleData(articleData);
+            }
+            UserInfo createUser = userInfoService.getById(article.getCreateUserId());
+            if (createUser != null) {
+                article.setCreateUserName(createUser.getUserName());
             }
         }
 

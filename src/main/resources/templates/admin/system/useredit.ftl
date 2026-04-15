@@ -29,12 +29,12 @@
                                       onsubmit="return check();">
                                     <input type="hidden" name="id" value="${user.id!}"/>
                                     <div class="form-group col-6">
-                                        <label for="username">姓名</label>
+                                        <label for="username">* 姓名</label>
                                         <input type="text" class="form-control" id="username" name="userName"
                                                value="${user.userName!}" placeholder="姓名" maxlength="100" required/>
                                     </div>
                                     <div class="form-group col-6">
-                                        <label for="loginname">登录名</label>
+                                        <label for="loginname">* 登录名</label>
                                         <input type="text" class="form-control" id="loginname" name="loginName"
                                                value="${user.loginName!}" placeholder="登录名" maxlength="50" required/>
                                     </div>
@@ -44,13 +44,18 @@
                                                value="${user.email!}" placeholder="邮箱"/>
                                     </div>
                                     <div class="form-group col-6">
-                                        <label for="phoneno">手机号码</label>
+                                        <label for="phoneno">* 手机号码</label>
                                         <input type="text" class="form-control" id="phoneno" name="phoneNo"
                                                pattern="[1-9]\d{10}" maxlength="20"
                                                value="${user.phoneNo!}" placeholder="手机号码" required/>
                                     </div>
                                     <div class="form-group col-6">
-                                        <label for="lifedate">账号有效期</label>
+                                        <label for="jobTitle">* 用户职位</label>
+                                        <input type="text" class="form-control" id="jobTitle" name="jobTitle"
+                                               maxlength="50" value="${user.jobTitle!}" placeholder="用户职位" required/>
+                                    </div>
+                                    <div class="form-group col-6">
+                                        <label for="lifedate">* 账号有效期</label>
                                         <input type="text" class="form-control" id="lifedate" name="lifeDate"
                                                autocomplete="off"
                                                onClick="WdatePicker({el:this,dateFmt:'yyyy-MM-dd HH:mm:ss'})"
@@ -68,7 +73,7 @@
                                         </#if>
                                     </div>
                                     <div class="form-group col-12">
-                                        <button type="submit" class="btn btn-primary">确 定</button>
+                                        <button type="submit" class="btn btn-primary">保 存</button>
                                         <#if backBtn??>
                                             <button type="button" class="btn btn-default"
                                                     onclick="history.back(-1);return false;">返 回
@@ -169,6 +174,9 @@
         $("#organid").val(data.id);
         $("#organname").val(data.name);
     }
+    <#if saveMsg??>
+        layer.msg("保存成功");
+    </#if>
 </script>
 </body>
 </html>

@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
@@ -133,12 +134,15 @@ public class SystemController extends BaseController {
      * 个人设置
      */
     @RequestMapping("userEditByUser")
-    public String userEditByUser(HttpServletRequest request, Model model) {
+    public String userEditByUser(HttpServletRequest request, String saveMsg, Model model) {
         UserInfo u = Utils.getUserInfo(request);
         UserInfo userInfo = userInfoService.getById(u.getId());
         Organ organ = organService.getById(userInfo.getOrganId());
         userInfo.setOrganName(organ == null ? "" : organ.getName());
         model.addAttribute("user", userInfo);
+        if (StringUtils.isNotBlank(saveMsg)) {
+            model.addAttribute("saveMsg", saveMsg);
+        }
         return "/admin/system/useredit";
     }
 
@@ -146,7 +150,7 @@ public class SystemController extends BaseController {
      * 保存用户
      */
     @RequestMapping("userSave")
-    public String userSave(HttpServletRequest request, UserInfo userInfo, @RequestParam(value = "fileinfo") MultipartFile multipartFile) {
+    public String userSave(HttpServletRequest request, UserInfo userInfo, @RequestParam(value = "fileinfo") MultipartFile multipartFile, RedirectAttributes attr) {
         long num = userInfoService.count(new LambdaQueryWrapper<UserInfo>().eq(UserInfo::getStatus, 1));
         if (num <= maxUserNum()) {
             String path = UpLoadUtil.upload(multipartFile, "/useravatar");
@@ -158,6 +162,7 @@ public class SystemController extends BaseController {
             log.warn("已达到最大用户数限制 UserNum:{}", num);
         }
         if (request.getHeader("referer").contains("admin/system/userEditByUser")) {
+            attr.addAttribute("saveMsg", 1);
             return httpRedirect(request, "/admin/system/userEditByUser");
         }
         return httpRedirect(request, "/admin/system/userList");

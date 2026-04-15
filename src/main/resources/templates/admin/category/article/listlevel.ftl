@@ -41,7 +41,7 @@
                                            data-side-pagination="server">
                                         <thead>
                                         <tr>
-                                            <th data-field="title">标题</th>
+                                            <th data-field="title">名称</th>
                                             <th data-field="createDate">创建时间</th>
                                             <th data-field="id" data-formatter="caozuo">操作</th>
                                         </tr>

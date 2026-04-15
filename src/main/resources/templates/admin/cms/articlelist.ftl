@@ -194,14 +194,7 @@
         if (value == '') {
             return '';
         }
-        return value.substring(0, 16);
-    }
-
-    function lastUpdate(value, row) {
-        if (value == '') {
-            return '';
-        }
-        return value.substring(0, 16);
+        return value.substring(0, 10);
     }
 
     function caozuo(value, row) {

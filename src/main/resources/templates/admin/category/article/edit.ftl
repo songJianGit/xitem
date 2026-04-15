@@ -9,9 +9,9 @@
     <div class="card">
         <div class="card-body">
             <div class="form-group col-6">
-                <label for="title">分类名称</label>
+                <label for="title">* 名称</label>
                 <input type="text" class="form-control" id="title" name="title"
-                       value="${category.title!}" placeholder="分类名称" maxlength="100" required/>
+                       value="${category.title!}" placeholder="名称" maxlength="100" required/>
             </div>
 
             <div class="form-group col-6">
@@ -32,6 +32,11 @@
 <#include "../../commons/js.ftl"/>
 <script type="text/javascript">
     $('#saveBtn').click(function () {
+        let title = $("#title").val();
+        if(isBlank(title)){
+            layer.msg("请填写名称");
+            return false;
+        }
         $.ajax({
             url: "${ctx.contextPath}/admin/category/article/saveCategory",
             cache: false,// 不缓存

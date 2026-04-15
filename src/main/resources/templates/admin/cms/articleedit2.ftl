@@ -23,9 +23,9 @@
                 <div class="form-group col-12">
                     <div class="input-group">
                         <div class="input-group-prepend">
-                            <span class="input-group-text">标题</span>
+                            <span class="input-group-text">* 标题</span>
                         </div>
-                        <input type="text" class="form-control" name="title" value="${article.title!}" maxlength="250"
+                        <input type="text" class="form-control" id="title" name="title" value="${article.title!}" maxlength="250"
                                placeholder="标题" required>
                     </div>
                 </div>
@@ -33,9 +33,9 @@
                 <div class="form-group col-6">
                     <div class="input-group">
                         <div class="input-group-prepend">
-                            <span class="input-group-text">任务状态</span>
+                            <span class="input-group-text">* 任务状态</span>
                         </div>
-                        <select name="categoryId" class="form-control">
+                        <select name="categoryId" id="categoryId" class="form-control">
                             <#if categoryList??>
                                 <#list categoryList as item>
                                     <option value="${item.id!}"
@@ -96,13 +96,14 @@
                         <textarea id="editor" name="content"
                                   style="width:99.9%;"><#if article.articleData??>${article.articleData.content!}</#if></textarea>
             </div>
+            <div class="form-group" style="font-size: 11px;">${article.createUserName!} <span style="color: #808080">创建于 ${article.createDate!}，最后更新于 ${article.lastUpdate!}</span></div>
             <@projectReadFlagTag readFlag=readFlag!>
                 <div class="form-group">
                     <button type="button" class="btn btn-primary" id="saveBtn">保存</button>
                     <button type="button" class="btn btn-default" id="saveBtn2">保存并关闭</button>
                 </div>
             </@projectReadFlagTag>
-            <hr class="my-4"/>
+            <hr/>
             <div class="discuss-wrap">
                 <div class="discuss-head d-flex align-items-center justify-content-between flex-wrap">
                     <div class="d-flex align-items-center">
@@ -375,6 +376,17 @@
     });
 
     function save(type) {
+        let title = $("#title").val();
+        if(isBlank(title)){
+            layer.msg("请填写标题");
+            return false;
+        }
+        let categoryId = $("#categoryId").val();
+        if(isBlank(categoryId)){
+            layer.msg("请选择任务状态");
+            return false;
+        }
+
         let editor = tinymce.get('editor');
         if (editor) {
             editor.save();// 在提交前手动保存(TinyMCE 在初始化时会隐藏原始的 <textarea>,原始 <textarea> 的值并不会自动实时更新)

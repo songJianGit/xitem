@@ -1,5 +1,6 @@
 package com.xxsword.xitem.admin.service.project.impl;
 
+import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.xxsword.xitem.admin.constant.Constant;
 import com.xxsword.xitem.admin.domain.category.entity.Category;
@@ -29,6 +30,9 @@ public class RoadMapServiceImpl extends ServiceImpl<RoadMapMapper, RoadMap> impl
 
     @Override
     public List<RoadMap> listRoadMap(String projectId) {
+        if (StringUtils.isBlank(projectId)) {
+            return new ArrayList<>();
+        }
         RoadMapDto roadMapDto = new RoadMapDto();
         roadMapDto.setProjectId(projectId);
         return list(roadMapDto.toQuery());

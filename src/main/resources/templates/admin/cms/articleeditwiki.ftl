@@ -11,9 +11,9 @@
         <div class="form-group">
             <div class="input-group">
                 <div class="input-group-prepend">
-                    <span class="input-group-text">标题</span>
+                    <span class="input-group-text">* 标题</span>
                 </div>
-                <input type="text" class="form-control" name="title" value="${article.title!}" maxlength="250"
+                <input type="text" class="form-control" id="title" name="title" value="${article.title!}" maxlength="250"
                        placeholder="标题" required>
             </div>
         </div>
@@ -40,6 +40,11 @@
     });
 
     function save(type) {
+        let title = $("#title").val();
+        if(isBlank(title)){
+            layer.msg("请填写标题");
+            return false;
+        }
         let editor = tinymce.get('editor');
         if (editor) {
             editor.save();// 在提交前手动保存(TinyMCE 在初始化时会隐藏原始的 <textarea>,原始 <textarea> 的值并不会自动实时更新)
