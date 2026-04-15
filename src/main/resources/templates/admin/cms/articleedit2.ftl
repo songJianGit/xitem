@@ -271,7 +271,7 @@
             <div class="discuss-dock-toolbar d-flex justify-content-between align-items-center flex-wrap">
                 <small class="text-muted">xitem</small>
                 <div>
-                    <button type="button" class="btn btn-sm btn-light border mr-1" id="discussCollapseBtn">收起</button>
+                    <button type="button" class="btn btn-sm btn-light border mr-1" id="discussCollapseBtn"><i class="mdi mdi-arrow-collapse"></i>收起</button>
                     <#--                    <button type="button" class="btn btn-sm btn-light border mr-1" id="discussClearBtn">清空</button>-->
                     <button type="button" class="btn btn-sm btn-primary" id="discussSendBtn">
                         <i class="mdi mdi-send mr-1"></i>发表
