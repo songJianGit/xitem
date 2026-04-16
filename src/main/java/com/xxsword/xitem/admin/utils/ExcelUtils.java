@@ -1,5 +1,6 @@
 package com.xxsword.xitem.admin.utils;
 
+import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.xxsword.xitem.admin.model.EVO;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -154,7 +155,14 @@ public class ExcelUtils {
                         drawing.createPicture(anchor, sxssfWorkbook.addPicture(byteArrayOut.toByteArray(), XSSFWorkbook.PICTURE_TYPE_PNG));
                     }
                 } else {
-                    cell.setCellValue(questionSum.getValue() == null ? "" : questionSum.getValue());
+                    String vl = questionSum.getValue();
+                    if (StringUtils.isBlank(vl)) {
+                        vl = "";
+                    }
+                    if (vl.length() > 30000) {// 最多3万字符(在 Excel 中，‌单个单元格最多可容纳的字符数为 32767 个字符)
+                        vl = vl.substring(0, 30000);
+                    }
+                    cell.setCellValue(vl);
                 }
             }
         }
