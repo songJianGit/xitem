@@ -46,7 +46,6 @@ public class UserInfo extends BaseEntity implements Serializable {
     @ColumnComment("邮箱")
     private String email;
 
-    @Unique
     @Column(length = 20)
     @ColumnComment("联系电话")
     private String phoneNo;
@@ -77,5 +76,13 @@ public class UserInfo extends BaseEntity implements Serializable {
     @Column(length = 50)
     @ColumnComment("用户职位")
     private String jobTitle;
+
+    @Column(defaultValue = "0")
+    @ColumnComment("是否初始化(0-没有初始化 1-已初始化)")
+    private Integer initFlag;
+
+    @Column(length = 50)
+    @ColumnComment("邀请标识")
+    private String joinKey;
 
 }

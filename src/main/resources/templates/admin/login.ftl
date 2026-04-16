@@ -129,6 +129,18 @@
         }
         return false;
     }
+
+    $(function (){
+        $.ajax({
+            url: '${ctx.contextPath}/getInitFlag',
+            cache: false,
+            success: function (d) {
+                if (d.data==0) {
+                    window.location.href = '${ctx.contextPath}/systemInit';
+                }
+            }
+        });
+    });
 </script>
 </body>
 </html>

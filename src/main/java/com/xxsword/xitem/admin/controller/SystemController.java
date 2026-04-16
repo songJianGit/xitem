@@ -157,6 +157,22 @@ public class SystemController extends BaseController {
             if (StringUtils.isNotBlank(path)) {
                 userInfo.setAvatar(path);
             }
+            if (StringUtils.isNotBlank(userInfo.getId())) {
+                userInfo.setJoinKey(Utils.getMD5(userInfo.getId()));
+            }
+            String password = userInfo.getPassword();
+            if (StringUtils.isNotBlank(password)) {
+                if (password.length() > 100) {
+                    log.warn("密码过长");
+                    return "/404";
+                }
+                if (Utils.isValidPassword(password)) {
+                    userInfo.setPassword(Utils.passwordEN(userInfo.getPassword()));
+                } else {
+                    log.warn("密码复杂度不够");
+                    return "/404";
+                }
+            }
             userInfoService.saveOrUpdate(userInfo);
         } else {
             log.warn("已达到最大用户数限制 UserNum:{}", num);
@@ -164,6 +180,10 @@ public class SystemController extends BaseController {
         if (request.getHeader("referer").contains("admin/system/userEditByUser")) {
             attr.addAttribute("saveMsg", 1);
             return httpRedirect(request, "/admin/system/userEditByUser");
+        }
+        if (request.getHeader("referer").contains("systemInit")) {
+            request.getSession().removeAttribute(Constant.USER_INFO);// 退出，重新登录
+            return httpRedirect(request, "/login");
         }
         return httpRedirect(request, "/admin/system/userList");
     }

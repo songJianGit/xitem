@@ -44,7 +44,7 @@
                                                value="${user.email!}" placeholder="邮箱"/>
                                     </div>
                                     <div class="form-group col-6">
-                                        <label for="phoneno">* 手机号码</label>
+                                        <label for="phoneno">手机号码</label>
                                         <input type="text" class="form-control" id="phoneno" name="phoneNo"
                                                pattern="[1-9]\d{10}" maxlength="20"
                                                value="${user.phoneNo!}" placeholder="手机号码" required/>
@@ -99,9 +99,9 @@
         if (!checkloginname()) {
             return false;
         }
-        if (!checkphoneno()) {
-            return false;
-        }
+        // if (!checkphoneno()) {
+        //     return false;
+        // }
         return true;
     }
 
