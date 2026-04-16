@@ -26,7 +26,7 @@
                             <label for="loginname"><span class="text-danger">*</span> 登录名</label>
                             <input type="text" class="form-control" id="loginname" name="loginName"
                                    value="${user.loginName!}" placeholder="请输入登录名" maxlength="50" required/>
-                            <small class="form-text text-muted">建议使用字母和数字组合，便于记忆与管理。</small>
+                            <small class="form-text text-muted">建议使用手机号，便于记忆。</small>
                         </div>
                         <div class="form-group col-md-6">
                             <label for="password"><span class="text-danger">*</span> 密码</label>
@@ -44,11 +44,17 @@
                             <input type="text" class="form-control" id="jobTitle" name="jobTitle"
                                    maxlength="50" value="${user.jobTitle!}" placeholder="请输入职位名称" required/>
                         </div>
+                        <div class="form-group col-6">
+                            <label for="phoneno">手机号码</label>
+                            <input type="text" class="form-control" id="phoneno" name="phoneNo"
+                                   pattern="[1-9]\d{10}" maxlength="20"
+                                   value="${user.phoneNo!}" placeholder="手机号码"/>
+                        </div>
                         <div class="form-group col-md-6">
                             <label>头像</label>
                             <input type="file" class="form-control-file" name="fileinfo"
                                    accept="image/jpeg, image/png, image/webp" onchange="preview(this)"/>
-                            <small class="form-text text-muted">支持 JPG、PNG、WEBP 格式，建议使用方形头像。</small>
+                            <small class="form-text text-muted">支持 JPG、PNG、WEBP 格式。</small>
                             <div id="preview" style="max-width: 100px; margin-top: 8px;"></div>
                             <#if user.avatar?? && user.avatar?trim?length gt 0>
                                 <img id="previewNone" style="width: 100px; margin-top: 6px;"
@@ -57,7 +63,7 @@
                             </#if>
                         </div>
                         <div class="form-group col-12" style="margin-top: 12px;">
-                            <button type="submit" class="btn btn-primary">保存</button>
+                            <button type="submit" class="btn btn-primary">保 存</button>
                             <#if backBtn??>
                                 <button type="button" class="btn btn-default"
                                         onclick="history.back(-1);return false;">返 回
