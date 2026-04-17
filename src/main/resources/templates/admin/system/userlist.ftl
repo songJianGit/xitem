@@ -53,9 +53,11 @@
 
                                     <div class="input-group">
                                         <div class="btn-group">
-                                            <button type="button" id="searchBtn" class="btn btn-primary m-r-5"><i class="mdi mdi-filter-outline"></i>搜索
+                                            <button type="button" id="searchBtn" class="btn btn-primary m-r-5"><i
+                                                        class="mdi mdi-filter-outline"></i>搜索
                                             </button>
-                                            <button type="reset" class="btn btn-default"><i class="mdi mdi-reload"></i>重置</button>
+                                            <button type="reset" class="btn btn-default"><i class="mdi mdi-reload"></i>重置
+                                            </button>
                                         </div>
                                     </div>
                                 </form>
@@ -96,9 +98,9 @@
                                             <th data-checkbox="true"></th>
                                             <th data-field="userName">姓名</th>
                                             <th data-field="loginName">登录名</th>
-                                            <th data-field="email">邮箱</th>
+                                            <#--                                            <th data-field="email">邮箱</th>-->
                                             <th data-field="phoneNo">手机号码</th>
-                                            <th data-field="status" data-formatter="status">状态</th>
+                                            <th data-field="status" data-formatter="userStatus">状态</th>
                                             <th data-field="createDate">创建时间</th>
                                             <th data-field="id" data-formatter="caozuo">操作</th>
                                         </tr>
@@ -118,6 +120,20 @@
 </div>
 <#include "../commons/js.ftl"/>
 <script type="text/javascript">
+    function userStatus(value, row) {
+        let initFlag = row.initFlag == 1 ? "" : "(未激活)";
+        if (value == 0) {
+            return '删除' + initFlag;
+        }
+        if (value == 1) {
+            return '启用' + initFlag;
+        }
+        if (value == 2) {
+            return '停用' + initFlag;
+        }
+        return value;
+    }
+
     function caozuo(value, row) {
         let htm = '';
         htm += '<div class="btn-group">';
@@ -125,10 +141,23 @@
         htm += '<button type="button" class="btn btn-sm btn-default m-r-5" onclick="edit(\'' + value + '\')" title="编辑">编辑</button>';
         </@funTag>
         <@funTag tag="sys:user:resetpwd">
-        htm += '<button type="button" class="btn btn-sm btn-default" onclick="resetpassword(\'' + value + '\')" title="重置密码">重置密码</button>';
+        htm += '<button type="button" class="btn btn-sm btn-default m-r-5" onclick="resetpassword(\'' + value + '\')" title="重置密码">重置密码</button>';
         </@funTag>
+        if (row.initFlag == 0) {
+            htm += '<button type="button" class="btn btn-sm btn-default" onclick="showLink(\'' + row.joinKey + '\')" title="激活链接">激活链接</button>';
+        }
         htm += '</div>';
         return htm;
+    }
+
+    function showLink(joinKey) {
+        const hostname = window.location.hostname;
+        const protocol = location.protocol;
+        let port = window.location.port;
+        if (port != "") {
+            port = ":" + port;
+        }
+        layer.alert(protocol + "//" + hostname + port + "/userInvite/" + joinKey,{title:'访问此链接进行账号激活'});
     }
 
     $('#add').click(function () {

@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import jakarta.servlet.http.HttpServletRequest;
+
 import java.io.IOException;
 import java.util.Map;
 import java.util.Set;
@@ -38,11 +39,13 @@ public class FunTag implements TemplateDirectiveModel {
         boolean b = false;
         if (StringUtils.isNotBlank(tags)) {
             Set<String> set = (Set<String>) request.getSession().getAttribute(Constant.USER_INFO_TAG);
-            String[] tag = tags.split(",");
-            for (String ite : tag) {
-                if (set.contains(ite)) {
-                    b = true;// 有该权限
-                    break;
+            if (set != null && !set.isEmpty()) {
+                String[] tag = tags.split(",");
+                for (String ite : tag) {
+                    if (set.contains(ite)) {
+                        b = true;// 有该权限
+                        break;
+                    }
                 }
             }
         }

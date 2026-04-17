@@ -2,9 +2,10 @@ package com.xxsword.xitem.admin.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.xxsword.xitem.admin.constant.Constant;
-import com.xxsword.xitem.admin.constant.PermissionType;
+import com.xxsword.xitem.admin.constant.RoleSetting;
 import com.xxsword.xitem.admin.domain.system.dto.*;
 import com.xxsword.xitem.admin.domain.system.entity.*;
 import com.xxsword.xitem.admin.domain.system.vo.UserInfoRoleVO;
@@ -106,9 +107,9 @@ public class SystemController extends BaseController {
     @RequestMapping("userListData")
     @ResponseBody
     public RestPaging<UserInfo> userListData(HttpServletRequest request, Page<UserInfo> page, UserInfoDto userInfoDto) {
-        UserInfo userInfo = Utils.getUserInfo(request);
+//        UserInfo userInfo = Utils.getUserInfo(request);
         LambdaQueryWrapper<UserInfo> query = userInfoDto.toQuery();
-        organService.permissionHandle(userInfo, PermissionType.USERINFO, query);
+//        organService.permissionHandle(userInfo, PermissionType.USERINFO, query);
         Page<UserInfo> userInfoPage = userInfoService.page(page, query);
         return new RestPaging<>(userInfoPage.getTotal(), userInfoPage.getRecords());
     }
@@ -117,15 +118,19 @@ public class SystemController extends BaseController {
      * 编辑用户
      */
     @RequestMapping("userEdit")
-    public String userEdit(String userId, Model model) {
+    public String userEdit(HttpServletRequest request, String userId, Model model) {
         UserInfo userInfo = userInfoService.getById(userId);
         if (userInfo == null) {
             userInfo = new UserInfo();
-        } else {
-            Organ organ = organService.getById(userInfo.getOrganId());
-            userInfo.setOrganName(organ == null ? "" : organ.getName());
         }
+        userInfoService.setUserInfoRoleAndFun(userInfo, true, false);
         model.addAttribute("user", userInfo);
+        if (RoleSetting.isAdmin(Utils.getUserInfo(request))) {
+            if (userInfo.getRoleList() != null && !userInfo.getRoleList().isEmpty()) {
+                model.addAttribute("roleId", userInfo.getRoleList().get(0).getId());
+            }
+            model.addAttribute("roleList", roleService.roleAll());
+        }
         model.addAttribute("backBtn", true);
         return "/admin/system/useredit";
     }
@@ -143,6 +148,13 @@ public class SystemController extends BaseController {
         if (StringUtils.isNotBlank(saveMsg)) {
             model.addAttribute("saveMsg", saveMsg);
         }
+        userInfoService.setUserInfoRoleAndFun(userInfo, true, false);
+        if (RoleSetting.isAdmin(Utils.getUserInfo(request))) {
+            if (userInfo.getRoleList() != null && !userInfo.getRoleList().isEmpty()) {
+                model.addAttribute("roleId", userInfo.getRoleList().get(0).getId());
+            }
+            model.addAttribute("roleList", roleService.roleAll());
+        }
         return "/admin/system/useredit";
     }
 
@@ -150,7 +162,7 @@ public class SystemController extends BaseController {
      * 保存用户
      */
     @RequestMapping("userSave")
-    public String userSave(HttpServletRequest request, UserInfo userInfo, @RequestParam(value = "fileinfo") MultipartFile multipartFile, RedirectAttributes attr) {
+    public String userSave(HttpServletRequest request, UserInfo userInfo, String roleId, @RequestParam(value = "fileinfo") MultipartFile multipartFile, RedirectAttributes attr) {
         long num = userInfoService.count(new LambdaQueryWrapper<UserInfo>().eq(UserInfo::getStatus, 1));
         if (num <= maxUserNum()) {
             String path = UpLoadUtil.upload(multipartFile, "/useravatar");
@@ -174,6 +186,14 @@ public class SystemController extends BaseController {
                 }
             }
             userInfoService.saveOrUpdate(userInfo);
+
+            if (StringUtils.isNotBlank(roleId) && RoleSetting.isAdmin(Utils.getUserInfo(request))) {
+                userInfoRoleService.userLinkRole(roleId, userInfo.getId());
+                LambdaQueryWrapper<UserInfoRole> up = Wrappers.lambdaQuery();
+                up.eq(UserInfoRole::getUserId, userInfo.getId());
+                up.ne(UserInfoRole::getRoleId, roleId);
+                userInfoRoleService.remove(up);
+            }
         } else {
             log.warn("已达到最大用户数限制 UserNum:{}", num);
         }
@@ -182,6 +202,10 @@ public class SystemController extends BaseController {
             return httpRedirect(request, "/admin/system/userEditByUser");
         }
         if (request.getHeader("referer").contains("systemInit")) {
+            request.getSession().removeAttribute(Constant.USER_INFO);// 退出，重新登录
+            return httpRedirect(request, "/login");
+        }
+        if (request.getHeader("referer").contains("/userInvite/")) {
             request.getSession().removeAttribute(Constant.USER_INFO);// 退出，重新登录
             return httpRedirect(request, "/login");
         }

@@ -39,17 +39,6 @@
                                                value="${user.loginName!}" placeholder="登录名" maxlength="50" required/>
                                     </div>
                                     <div class="form-group col-6">
-                                        <label for="email">邮箱</label>
-                                        <input type="email" class="form-control" id="email" name="email" maxlength="100"
-                                               value="${user.email!}" placeholder="邮箱"/>
-                                    </div>
-                                    <div class="form-group col-6">
-                                        <label for="phoneno">手机号码</label>
-                                        <input type="text" class="form-control" id="phoneno" name="phoneNo"
-                                               pattern="[1-9]\d{10}" maxlength="20"
-                                               value="${user.phoneNo!}" placeholder="手机号码" required/>
-                                    </div>
-                                    <div class="form-group col-6">
                                         <label for="jobTitle">* 用户职位</label>
                                         <input type="text" class="form-control" id="jobTitle" name="jobTitle"
                                                maxlength="50" value="${user.jobTitle!}" placeholder="用户职位" required/>
@@ -60,6 +49,27 @@
                                                autocomplete="off"
                                                onClick="WdatePicker({el:this,dateFmt:'yyyy-MM-dd HH:mm:ss'})"
                                                value="${user.lifeDate!}" placeholder="账号有效期" required/>
+                                    </div>
+                                    <#if roleList??>
+                                        <div class="form-group col-6">
+                                            <label for="roleId">* 角色</label>
+                                            <select class="form-control" name="roleId">
+                                                <#list roleList as item>
+                                                    <option value="${item.id!}" <#if roleId??><#if roleId==item.id>selected</#if></#if> >${item.name!}</option>
+                                                </#list>
+                                            </select>
+                                        </div>
+                                    </#if>
+                                    <div class="form-group col-6">
+                                        <label for="email">邮箱</label>
+                                        <input type="email" class="form-control" id="email" name="email" maxlength="100"
+                                               value="${user.email!}" placeholder="邮箱"/>
+                                    </div>
+                                    <div class="form-group col-6">
+                                        <label for="phoneno">手机号码</label>
+                                        <input type="text" class="form-control" id="phoneno" name="phoneNo"
+                                               pattern="[1-9]\d{10}" maxlength="20"
+                                               value="${user.phoneNo!}" placeholder="手机号码"/>
                                     </div>
                                     <div class="form-group col-6">
                                         <label>头像</label>

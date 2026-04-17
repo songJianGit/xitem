@@ -1,6 +1,8 @@
 package com.xxsword.xitem.admin.controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.xxsword.xitem.admin.constant.Constant;
 import com.xxsword.xitem.admin.domain.system.entity.Function;
 import com.xxsword.xitem.admin.domain.system.entity.UserInfo;
@@ -76,6 +78,9 @@ public class LoginController extends BaseController {
             httpSession.removeAttribute(Constant.CAPTCHA);
             return RestResult.Codes(Codes.LOGIN_FAIL);
         }
+        if (userInfo.getInitFlag().equals(0)) {
+            return RestResult.Fail("账号未激活");
+        }
         userInfoService.setUserInfoRoleAndFun(userInfo, true, true);
 
         httpSession.setAttribute(Constant.USER_INFO, userInfo);// 将用户信息，存入session
@@ -123,6 +128,7 @@ public class LoginController extends BaseController {
         userInfoService.setUserInfoRoleAndFun(userInfo, true, false);
         model.addAttribute("user", userInfo);
         request.getSession().setAttribute(Constant.USER_INFO, userInfo);// 将用户信息，存入session，保证save成功
+        model.addAttribute("title", "欢迎使用系统，请完成管理员初始化设置");
         return "/admin/init";
     }
 
@@ -148,5 +154,25 @@ public class LoginController extends BaseController {
             return userInfo;// 没有初始化
         }
         return null;
+    }
+
+    /**
+     * 邀请链接进来
+     */
+    @GetMapping("userInvite/{key}")
+    public String userInvite(HttpServletRequest request, @PathVariable("key") String key, Model model) {
+        LambdaQueryWrapper<UserInfo> q = Wrappers.lambdaQuery();
+        q.eq(UserInfo::getJoinKey, key);
+        q.eq(UserInfo::getStatus, 1);
+        q.eq(UserInfo::getInitFlag, 0);
+        UserInfo userInfo = userInfoService.getOne(q);
+        if (userInfo == null) {
+            return httpRedirect(request, "/admin/login");
+        }
+        userInfoService.setUserInfoRoleAndFun(userInfo, true, false);
+        model.addAttribute("user", userInfo);
+        request.getSession().setAttribute(Constant.USER_INFO, userInfo);// 将用户信息，存入session，保证save成功
+        model.addAttribute("title", "欢迎使用系统，请完成您的初始化设置");
+        return "/admin/init";
     }
 }

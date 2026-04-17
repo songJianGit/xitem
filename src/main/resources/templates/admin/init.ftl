@@ -9,7 +9,7 @@
         <div class="col-lg-10 col-xl-8">
             <div class="card">
                 <div class="card-header">
-                    <h4 class="card-title mb-0">欢迎使用系统，请完成管理员初始化设置</h4>
+                    <h4 class="card-title mb-0">${title!}</h4>
                     <p class="text-muted mb-0" style="margin-top: 8px;">带 <span class="text-danger">*</span> 为必填项。该信息将用于首次登录和个人资料展示。</p>
                 </div>
                 <div class="card-body">

@@ -71,7 +71,7 @@ public class UserInfo extends BaseEntity implements Serializable {
     private String lifeDate;
 
     @TableField(exist = false)
-    private List<Role> roleList;
+    private List<Role> roleList;// 拿第一个（设计上是多角色，删繁就简，一个人只设置一个角色算了）
 
     @Column(length = 50)
     @ColumnComment("用户职位")
@@ -81,8 +81,9 @@ public class UserInfo extends BaseEntity implements Serializable {
     @ColumnComment("是否初始化(0-没有初始化 1-已初始化)")
     private Integer initFlag;
 
+    @Index
     @Column(length = 50)
-    @ColumnComment("邀请标识")
+    @ColumnComment("邀请标识(用户id的MD5)")
     private String joinKey;
 
 }

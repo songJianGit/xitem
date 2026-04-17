@@ -1,6 +1,7 @@
 package com.xxsword.xitem.admin.service.system.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -48,6 +49,9 @@ public class UserInfoRoleServiceImpl extends ServiceImpl<UserInfoRoleMapper, Use
 
     @Override
     public void userLinkRole(String roleId, String userIds) {
+        if (StringUtils.isBlank(roleId) || StringUtils.isBlank(userIds)) {
+            return;
+        }
         String[] ids = userIds.split(",");
         List<UserInfoRole> userInfoRoles = listUserInfoRoleByRoleId(roleId);
         Set<String> userIdsS = userInfoRoles.stream().map(UserInfoRole::getUserId).collect(Collectors.toSet());// 该角色已关联的用户信息
