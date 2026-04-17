@@ -107,6 +107,7 @@ public class ProjectController extends BaseController {
 
     @RequestMapping("projectIndex")
     public String projectIndex(HttpServletRequest request, Model model) {
+        model.addAttribute("adminFlag", RoleSetting.isAdmin(Utils.getUserInfo(request)) ? 1 : 0);
         return "/admin/project/projectindex";
     }
 

@@ -2,8 +2,10 @@ package com.xxsword.xitem.admin.tag;
 
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.xxsword.xitem.admin.constant.RoleSetting;
+import com.xxsword.xitem.admin.domain.project.entity.Project;
 import com.xxsword.xitem.admin.domain.project.entity.ProjectUser;
 import com.xxsword.xitem.admin.domain.system.entity.UserInfo;
+import com.xxsword.xitem.admin.service.project.ProjectService;
 import com.xxsword.xitem.admin.service.project.ProjectUserService;
 import com.xxsword.xitem.admin.utils.Utils;
 import freemarker.core.Environment;
@@ -22,6 +24,8 @@ public class ProjectReadFlagTag implements TemplateDirectiveModel {
     private HttpServletRequest request;
     @Autowired
     private ProjectUserService projectUserService;
+    @Autowired
+    private ProjectService projectService;
 
     /**
      * <@projectReadFlagTag readFlag="aaa">${flag!}</@projectReadFlagTag>
@@ -39,10 +43,15 @@ public class ProjectReadFlagTag implements TemplateDirectiveModel {
             if (request.getRequestURI().contains("/admin/project/edit2") && StringUtils.isBlank(request.getParameter("id"))) {
                 b = true;// 新增，直接输出
             } else {
-                ProjectUser projectUser = projectUserService.getProjectUser(Utils.getProjectId(request), userInfo.getId());
-                if (projectUser != null) {
-                    if (projectUser.getReadFlag() != null) {
-                        b = projectUser.getReadFlag() == 1;
+                Project project = projectService.getById(request.getParameter("id"));
+                if (project.getCreateUserId().equals(userInfo.getId())) {
+                    b = true;// 我创建的
+                } else {
+                    ProjectUser projectUser = projectUserService.getProjectUser(Utils.getProjectId(request), userInfo.getId());
+                    if (projectUser != null) {
+                        if (projectUser.getReadFlag() != null) {
+                            b = projectUser.getReadFlag() == 1;
+                        }
                     }
                 }
             }

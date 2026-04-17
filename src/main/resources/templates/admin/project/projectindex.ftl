@@ -113,10 +113,10 @@
     function caozuo(value, row) {
         let htm = '';
         htm += '<div class="btn-group">';
-        <@projectReadFlagTag>
-        htm += '<button type="button" class="btn btn-sm btn-default m-r-5" onclick="edit(\'' + value + '\')" title="编辑">编辑</button>';
-        htm += '<button type="button" class="btn btn-sm btn-default m-r-5" onclick="delById(\'' + value + '\')" title="删除">删除</button>';
-        </@projectReadFlagTag>
+        if(row.createUserId=='${Session.puser.id}' || '${adminFlag}'=='1'){
+            htm += '<button type="button" class="btn btn-sm btn-default m-r-5" onclick="edit(\'' + value + '\')" title="编辑">编辑</button>';
+            htm += '<button type="button" class="btn btn-sm btn-default m-r-5" onclick="delById(\'' + value + '\')" title="删除">删除</button>';
+        }
         htm += '</div>';
         return htm;
     }

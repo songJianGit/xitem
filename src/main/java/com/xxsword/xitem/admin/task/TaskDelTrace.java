@@ -11,11 +11,11 @@ import org.springframework.stereotype.Component;
 public class TaskDelTrace {
 
 
-    @Scheduled(cron = "0 0 5 * * ?")
-    public void delTrace() {
-        log.info("delTrace-begin");
+//    @Scheduled(cron = "0 0 5 * * ?")
+//    public void delTrace() {
+//        log.info("delTrace-begin");
 //        traceService.delTrace();
-        log.info("delTrace-end");
-    }
+//        log.info("delTrace-end");
+//    }
 
 }
