@@ -37,7 +37,7 @@ public class ProjectUserServiceImpl extends ServiceImpl<ProjectUserMapper, Proje
         LambdaQueryWrapper<ProjectUser> q = Wrappers.lambdaQuery();
         q.in(ProjectUser::getPid, projectId);
         q.eq(ProjectUser::getStatus, 1);
-        q.orderByAsc(ProjectUser::getCreateDate, ProjectUser::getId);
+        q.orderByAsc(ProjectUser::getUserId, ProjectUser::getId);
         List<ProjectUser> projectUsers = list(q);
         return projectUsers.stream().collect(Collectors.groupingBy(ProjectUser::getPid));
     }

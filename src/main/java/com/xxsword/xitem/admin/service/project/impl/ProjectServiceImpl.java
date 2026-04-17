@@ -85,6 +85,9 @@ public class ProjectServiceImpl extends ServiceImpl<ProjectMapper, Project> impl
             pu.setUserId(userIdItem);
             pu.setPid(project.getId());
             pu.setReadFlag(readFlagItem);
+            if (addFlag && userInfo.getId().equals(userIdItem)) {
+                continue;// 自动加入的，就不再重复添加
+            }
             ps.add(pu);
         }
         if (addFlag) {// 新建项目时，需要自动加入新项目
