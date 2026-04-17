@@ -28,6 +28,7 @@
                                       enctype="multipart/form-data"
                                       onsubmit="return check();">
                                     <input type="hidden" name="id" value="${user.id!}"/>
+                                    <input type="hidden" name="joinKey" value="${user.joinKey!}"/>
                                     <div class="form-group col-6">
                                         <label for="username">* 姓名</label>
                                         <input type="text" class="form-control" id="username" name="userName"
@@ -37,6 +38,7 @@
                                         <label for="loginname">* 登录名</label>
                                         <input type="text" class="form-control" id="loginname" name="loginName"
                                                value="${user.loginName!}" placeholder="登录名" maxlength="50" required/>
+                                        <small class="form-text text-muted">建议使用手机号，便于记忆。</small>
                                     </div>
                                     <div class="form-group col-6">
                                         <label for="jobTitle">* 用户职位</label>

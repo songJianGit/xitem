@@ -1,5 +1,6 @@
 package com.xxsword.xitem.admin.tag;
 
+import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.xxsword.xitem.admin.constant.RoleSetting;
 import com.xxsword.xitem.admin.domain.project.entity.ProjectUser;
 import com.xxsword.xitem.admin.domain.system.entity.UserInfo;
@@ -35,10 +36,14 @@ public class ProjectReadFlagTag implements TemplateDirectiveModel {
         boolean b = false;
         UserInfo userInfo = Utils.getUserInfo(request);
         if (RoleSetting.isNotAdmin(userInfo)) {
-            ProjectUser projectUser = projectUserService.getProjectUser(Utils.getProjectId(request), userInfo.getId());
-            if (projectUser != null) {
-                if (projectUser.getReadFlag() != null) {
-                    b = projectUser.getReadFlag() == 1;
+            if (request.getRequestURI().contains("/admin/project/edit2") && StringUtils.isBlank(request.getParameter("id"))) {
+                b = true;// 新增，直接输出
+            } else {
+                ProjectUser projectUser = projectUserService.getProjectUser(Utils.getProjectId(request), userInfo.getId());
+                if (projectUser != null) {
+                    if (projectUser.getReadFlag() != null) {
+                        b = projectUser.getReadFlag() == 1;
+                    }
                 }
             }
         } else {

@@ -169,9 +169,6 @@ public class SystemController extends BaseController {
             if (StringUtils.isNotBlank(path)) {
                 userInfo.setAvatar(path);
             }
-            if (StringUtils.isNotBlank(userInfo.getId())) {
-                userInfo.setJoinKey(Utils.getMD5(userInfo.getId()));
-            }
             String password = userInfo.getPassword();
             if (StringUtils.isNotBlank(password)) {
                 if (password.length() > 100) {
@@ -184,6 +181,9 @@ public class SystemController extends BaseController {
                     log.warn("密码复杂度不够");
                     return "/404";
                 }
+            }
+            if (StringUtils.isBlank(userInfo.getJoinKey())) {
+                userInfo.setJoinKey(Utils.getuuid());
             }
             userInfoService.saveOrUpdate(userInfo);
 
@@ -202,11 +202,13 @@ public class SystemController extends BaseController {
             return httpRedirect(request, "/admin/system/userEditByUser");
         }
         if (request.getHeader("referer").contains("systemInit")) {
-            request.getSession().removeAttribute(Constant.USER_INFO);// 退出，重新登录
+            request.getSession().invalidate();
+            request.getSession();
             return httpRedirect(request, "/login");
         }
         if (request.getHeader("referer").contains("/userInvite/")) {
-            request.getSession().removeAttribute(Constant.USER_INFO);// 退出，重新登录
+            request.getSession().invalidate();
+            request.getSession();
             return httpRedirect(request, "/login");
         }
         return httpRedirect(request, "/admin/system/userList");
