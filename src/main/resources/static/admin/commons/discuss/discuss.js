@@ -6,6 +6,7 @@
     var $editBanner = $('#discussEditBanner');
     var $banner = $('#discussReplyBanner');
     var $authorDisplay = $('#discussReplyAuthorDisplay');
+    var articleId = String($dock.data('aid') || '').trim();
     var replyAuthor = '';
     var replyAuthorId = '';
     var editCommentId = '';
@@ -167,7 +168,7 @@
         }
         layer.confirm('确认删除该评论吗？', {icon: 3, title: '提示'}, function (index) {
             $.ajax({
-                url: "${ctx.contextPath}/admin/comments/delById",
+                url: contextPath + "/admin/comments/delById",
                 data: {
                     id: commentId
                 },
@@ -208,7 +209,7 @@
         if (editCommentId) {
             dataJson = {
                 id: editCommentId,
-                aid: '${article.id!}',
+                aid: articleId,
                 content: t,
                 type: Number(editCommentType || 1)
             };
@@ -218,7 +219,7 @@
         } else if (replyAuthor) {
             // layer.msg('界面预览：将作为对「' + replyAuthor + '」的回复提交（接口待对接）');
             dataJson = {
-                aid: '${article.id!}',
+                aid: articleId,
                 content: t,
                 type: 2,
                 comId: replyAuthorId
@@ -226,13 +227,13 @@
         } else {
             // layer.msg('界面预览：将作为主评论提交（接口待对接）');
             dataJson = {
-                aid: '${article.id!}',
+                aid: articleId,
                 content: t,
                 type: 1
             };
         }
         $.ajax({
-            url: "${ctx.contextPath}/admin/comments/save",
+            url: contextPath + "/admin/comments/save",
             type: "post",
             data: dataJson,
             success: function (d) {

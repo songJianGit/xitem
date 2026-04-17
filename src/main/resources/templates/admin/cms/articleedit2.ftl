@@ -248,7 +248,7 @@
         </div>
     </form>
 </div>
-<div id="discussDock" class="discuss-dock" aria-label="发表评论">
+<div id="discussDock" class="discuss-dock" data-aid="${article.id!}" aria-label="发表评论">
     <div class="discuss-dock-inner">
         <div id="discussDockCollapsed" class="discuss-dock-collapsed" role="button" tabindex="0">
             <span>写评论…</span>
