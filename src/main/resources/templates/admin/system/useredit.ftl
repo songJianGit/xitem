@@ -30,23 +30,23 @@
                                     <input type="hidden" name="id" value="${user.id!}"/>
                                     <input type="hidden" name="joinKey" value="${user.joinKey!}"/>
                                     <div class="form-group col-6">
-                                        <label for="username">* 姓名</label>
+                                        <label for="username"><span class="text-danger">*</span> 姓名</label>
                                         <input type="text" class="form-control" id="username" name="userName"
                                                value="${user.userName!}" placeholder="姓名" maxlength="100" required/>
                                     </div>
                                     <div class="form-group col-6">
-                                        <label for="loginname">* 登录名</label>
+                                        <label for="loginname"><span class="text-danger">*</span> 登录名</label>
                                         <input type="text" class="form-control" id="loginname" name="loginName"
                                                value="${user.loginName!}" placeholder="登录名" maxlength="50" required/>
                                         <small class="form-text text-muted">建议使用手机号，便于记忆。</small>
                                     </div>
                                     <div class="form-group col-6">
-                                        <label for="jobTitle">* 用户职位</label>
+                                        <label for="jobTitle"><span class="text-danger">*</span> 用户职位</label>
                                         <input type="text" class="form-control" id="jobTitle" name="jobTitle"
                                                maxlength="50" value="${user.jobTitle!}" placeholder="用户职位" required/>
                                     </div>
                                     <div class="form-group col-6">
-                                        <label for="lifedate">* 账号有效期</label>
+                                        <label for="lifedate"><span class="text-danger">*</span> 账号有效期</label>
                                         <input type="text" class="form-control" id="lifedate" name="lifeDate"
                                                autocomplete="off"
                                                onClick="WdatePicker({el:this,dateFmt:'yyyy-MM-dd HH:mm:ss'})"
@@ -54,7 +54,7 @@
                                     </div>
                                     <#if roleList??>
                                         <div class="form-group col-6">
-                                            <label for="roleId">* 角色</label>
+                                            <label for="roleId"><span class="text-danger">*</span> 角色</label>
                                             <select class="form-control" name="roleId">
                                                 <#list roleList as item>
                                                     <option value="${item.id!}" <#if roleId??><#if roleId==item.id>selected</#if></#if> >${item.name!}</option>

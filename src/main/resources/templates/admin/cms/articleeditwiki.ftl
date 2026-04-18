@@ -11,7 +11,7 @@
         <div class="form-group">
             <div class="input-group">
                 <div class="input-group-prepend">
-                    <span class="input-group-text">* 标题</span>
+                    <span class="input-group-text"><span class="text-danger">*</span> 标题</span>
                 </div>
                 <input type="text" class="form-control" id="title" name="title" value="${article.title!}" maxlength="250"
                        placeholder="标题" required>

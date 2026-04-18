@@ -9,7 +9,7 @@
     <div class="card">
         <div class="card-body">
             <div class="form-group col-6">
-                <label for="title">* 名称</label>
+                <label for="title"><span class="text-danger">*</span> 名称</label>
                 <input type="text" class="form-control" id="title" name="title"
                        value="${category.title!}" placeholder="名称" maxlength="100" required/>
             </div>
