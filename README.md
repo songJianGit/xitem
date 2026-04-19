@@ -13,7 +13,16 @@ xitem是一个轻量级项目管理和任务协同系统，适合中小团队。
 - **我的工作**：仪表盘（我的待办）、项目中心
 - **设置**：个人设置、用户管理、角色管理、日志查询、任务状态、任务优先级
 
-## 环境准备
+## 通过 docker-compose 快速开始
+```
+下载文件：wget https://github.com/songJianGit/xitem/releases/download/v0.1/xitem_docker.zip
+解压文件：unzip xitem_docker.zip
+进入目录：cd xitem_docker
+启动项目：docker-compose up -d
+```
+部署完毕后，浏览器访问：http://ip:9095/
+
+## 项目环境
 
 - JDK 17
 - MySQL 8.0+
