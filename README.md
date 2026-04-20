@@ -27,3 +27,10 @@ xitem是一个轻量级项目管理和任务协同系统，适合中小团队。
 - JDK 17
 - MySQL 8.0+
 - Maven 3+
+
+## 页面截图
+<figure class="half">
+<img width="430" alt="01656f9f-18a1-4a47-a56c-42906d82e0fc" src="https://github.com/user-attachments/assets/6af83f59-bd75-40c4-ac10-35ef3d453817" />
+<img width="430" alt="50bfca78-7126-455d-b8c3-e4f31bf5dfb5" src="https://github.com/user-attachments/assets/fecbd9c5-039e-477c-ab77-683dc7669781" />
+</figure>
+
